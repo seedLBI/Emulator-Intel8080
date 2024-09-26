@@ -87,7 +87,9 @@ void SaveSystemManager::Load() {
 		FileSave.close();
 	}
 	else {
+#ifdef WITH_DEBUG_OUTPUT
 		std::cout << "File save [not exist]\n";
+#endif
 	}
 }
 

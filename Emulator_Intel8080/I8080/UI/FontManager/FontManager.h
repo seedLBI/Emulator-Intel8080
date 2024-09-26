@@ -13,6 +13,10 @@
 #include "Utils/ImGui.Utils.h"
 #include "SaveSystem\SaveSystem.h"
 #include "nfd.h"
+
+#include "FontsData/IconsFont.h"
+#include "FontsData/MainFont.h"
+
 #include <string>
 #include <vector>
 #include <iostream>
@@ -69,6 +73,11 @@ private:
 	std::vector<uint8_t> MainFontData;
 
 	void LoadFontFromFile(std::string Path2File);
+
+	void LoadDefaultMainFont_fromMemory();
+	void LoadIconsFont_fromMemory();
+
+
 };
 
 

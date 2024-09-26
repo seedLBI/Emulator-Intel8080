@@ -206,6 +206,12 @@
     <ClCompile Include="I8080\Emulator\Compilier\Stable\Compiler.Stable.cpp">
       <Filter>I8080\Emulator\Compiler\Stable</Filter>
     </ClCompile>
+    <ClCompile Include="I8080\FontsData\MainFont.cpp">
+      <Filter>I8080\FontsData</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\FontsData\IconsFont.cpp">
+      <Filter>I8080\FontsData</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Third-Person\UTF8_2_CP1251\bit.h">
@@ -484,6 +490,12 @@
     <ClInclude Include="I8080\Emulator\Compilier\Stable\Compiler.Stable.h">
       <Filter>I8080\Emulator\Compiler\Stable</Filter>
     </ClInclude>
+    <ClInclude Include="I8080\FontsData\MainFont.h">
+      <Filter>I8080\FontsData</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\FontsData\IconsFont.h">
+      <Filter>I8080\FontsData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Third-Party">
@@ -647,6 +659,9 @@
     </Filter>
     <Filter Include="I8080\Emulator\Compiler\Stable">
       <UniqueIdentifier>{3868dba9-bd02-4248-be97-5311ff4e1eb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\FontsData">
+      <UniqueIdentifier>{ca3d4caf-cb5b-4785-9e0a-6296520b4583}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

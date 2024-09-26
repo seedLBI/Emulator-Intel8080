@@ -1,4 +1,4 @@
-﻿//#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+﻿#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
 #include "Config_Compilier.h"
 #include "I8080/UI/I8080.UI.h"

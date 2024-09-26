@@ -7,12 +7,11 @@ FontManager::FontManager():SaveSystem("Font") {
 	std::cout << "Reading icon font: Fonts\\fa-solid-900.ttf\n";
 #endif
 
-	IconsFontData = readFileToByteArray("Fonts\\fa-solid-900.ttf");
+	LoadIconsFont_fromMemory();
+	LoadDefaultMainFont_fromMemory();
 
-	//std::cout << "Reading main font: Fonts\\JetBrainsMonoNL-Regular.ttf\n";
-	//LoadFontFromFile("Fonts\\JetBrainsMonoNL-Regular.ttf");
+	SetFont("JetBrainsMonoNL");
 
-	//SetFont("JetBrainsMonoNL-Regular");
 }
 
 FontManager::~FontManager() {
@@ -95,12 +94,22 @@ void FontManager::SetFont(const std::string& NameFont) {
 			Index_Font = i;
 		}
 	}
-	Name_Font_Selected = NameFont;
+	
+	if (Index_Font == -1){
 
-	MainFontData = List_Fonts[Index_Font].Data;
+		Name_Font_Selected = "JetBrainsMonoNL";
+		MainFontData = Default_MainFont;
+	}
+	else{
+		Name_Font_Selected = NameFont;
+
+		MainFontData = List_Fonts[Index_Font].Data;
 #ifdef WITH_DEBUG_OUTPUT
-	std::cout << "set data: " << MainFontData.size() << std::endl;
+		std::cout << "set data: " << MainFontData.size() << std::endl;
 #endif
+	}
+
+	
 	NeedReloadFontSize = true;
 }
 
@@ -220,10 +229,12 @@ std::vector<FontInfo> FontManager::GetList_FontInfo() {
 }
 
 std::string FontManager::Save() {
-	std::string result = MakeBegin(2 + List_Fonts.size());
+	std::string result = MakeBegin(2 + List_Fonts.size() - 1);
 
-	for (int i = 0; i < List_Fonts.size(); i++)
-		result += MakeSaveItem("Path", List_Fonts[i].Path);
+	for (int i = 0; i < List_Fonts.size(); i++) {
+		if (!List_Fonts[i].Path.empty())
+			result += MakeSaveItem("Path", List_Fonts[i].Path);
+	}
 
 	result += MakeSaveItem("Scale", std::to_string(Current_Scale));
 	result += MakeSaveItem("Font selected", Name_Font_Selected);
@@ -256,4 +267,19 @@ void FontManager::Load(const std::string& Data) {
 		}
 	}
 
+}
+
+
+
+void FontManager::LoadDefaultMainFont_fromMemory() {
+	FontInfo new_font;
+	new_font.Path = "";
+	new_font.Name = u8"JetBrainsMonoNL";
+	new_font.Data = Default_MainFont;
+
+	List_Fonts.push_back(new_font);
+}
+
+void FontManager::LoadIconsFont_fromMemory() {
+	IconsFontData = fa_solid_900;
 }

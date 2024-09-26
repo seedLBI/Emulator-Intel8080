@@ -148,6 +148,8 @@
     <ClCompile Include="I8080\Emulator\Compilier\Compiler.cpp" />
     <ClCompile Include="I8080\Emulator\Compilier\Stable\Compiler.Stable.cpp" />
     <ClCompile Include="I8080\Emulator\I8080.cpp" />
+    <ClCompile Include="I8080\FontsData\IconsFont.cpp" />
+    <ClCompile Include="I8080\FontsData\MainFont.cpp" />
     <ClCompile Include="I8080\ImagesData\Image_LogoApplicationArrayPngBytes.cpp" />
     <ClCompile Include="I8080\ImagesData\Image_MSDF_ATLAS.cpp" />
     <ClCompile Include="I8080\ImagesData\Image_MSDF_DESIGN_8080.cpp" />
@@ -224,6 +226,8 @@
     <ClInclude Include="I8080\Emulator\Compilier\Compiler.h" />
     <ClInclude Include="I8080\Emulator\Compilier\Stable\Compiler.Stable.h" />
     <ClInclude Include="I8080\Emulator\I8080.h" />
+    <ClInclude Include="I8080\FontsData\IconsFont.h" />
+    <ClInclude Include="I8080\FontsData\MainFont.h" />
     <ClInclude Include="I8080\ImagesData\Image_LogoApplicationArrayPngBytes.h" />
     <ClInclude Include="I8080\ImagesData\Image_MSDF_ATLAS.h" />
     <ClInclude Include="I8080\ImagesData\Image_MSDF_DESIGN_8080.h" />
