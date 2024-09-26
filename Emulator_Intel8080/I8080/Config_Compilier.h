@@ -1,0 +1,10 @@
+#ifndef CONFIG_COMPILIER_H
+#define CONFIG_COMPILIER_H
+
+
+//#define WITH_DEBUG_OUTPUT
+
+
+
+#endif // !CONFIG_COMPILIER_H
+

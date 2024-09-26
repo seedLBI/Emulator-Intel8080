@@ -1,0 +1,21 @@
+#pragma once
+const char* VelocityObject_vertex =
+"#version 330 core\n"
+"layout(location = 0) in vec2 aPosition;\n"
+"layout(location = 1) in vec2 aTexCoord;\n"
+"layout(std140) uniform MatrixBlock\n"
+"{\n"
+"    mat4 view;\n"
+"    mat4 proj;\n"
+"};\n"
+"uniform mat4 model;\n"
+"uniform mat4 prev_model;\n"
+"out vec2 TexCoord;\n"
+"out vec4 fragPrevPos;\n"
+"out vec4 fragCurrPos;\n"
+"void main() {\n"
+"    fragCurrPos = proj * view * model * vec4(aPosition, 0.0, 1.0);\n"
+"    fragPrevPos = proj * view * prev_model * vec4(aPosition, 0.0, 1.0);\n"
+"    TexCoord = vec2(aTexCoord.x, aTexCoord.y);\n"
+"    gl_Position = fragCurrPos;\n"
+"}\n";

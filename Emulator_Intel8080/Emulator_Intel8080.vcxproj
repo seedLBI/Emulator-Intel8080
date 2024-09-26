@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{946ae55a-db46-42a4-a7b2-ddfe0956d6fc}</ProjectGuid>
+    <RootNamespace>Emulator_Intel8080</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>I8080 Emulator</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LibraryPath>$(SolutionDir)\Emulator_Intel8080\Third-Person\Opengl\lib\Release;$(LibraryPath)</LibraryPath>
+    <SourcePath>$(SolutionDir)\Emulator_Intel8080\Third-Person\Opengl\include;$(SolutionDir)\Emulator_Intel8080\I8080;$(SolutionDir)\Emulator_Intel8080\Third-Person\;$(SourcePath)</SourcePath>
+    <ExcludePath>$(ExcludePath)</ExcludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Emulator_Intel8080\Third-Person\Opengl\include;$(SolutionDir)\Emulator_Intel8080\I8080;$(SolutionDir)\Emulator_Intel8080\Third-Person;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>MaxSpeed</Optimization>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <OmitFramePointers>true</OmitFramePointers>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32s.lib;SOIL.lib;gdi32.lib;shell32.lib;nfd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="I8080\DataStructures\TypesCommand.cpp" />
+    <ClCompile Include="I8080\DataStructures\TypeTranslatorError.cpp" />
+    <ClCompile Include="I8080\Emulator\Compilier\Compiler.cpp" />
+    <ClCompile Include="I8080\Emulator\Compilier\Stable\Compiler.Stable.cpp" />
+    <ClCompile Include="I8080\Emulator\I8080.cpp" />
+    <ClCompile Include="I8080\ImagesData\Image_LogoApplicationArrayPngBytes.cpp" />
+    <ClCompile Include="I8080\ImagesData\Image_MSDF_ATLAS.cpp" />
+    <ClCompile Include="I8080\ImagesData\Image_MSDF_DESIGN_8080.cpp" />
+    <ClCompile Include="I8080\ImagesData\Image_MSDF_DESIGN_seedLBI_production.cpp" />
+    <ClCompile Include="I8080\Notification\interface\Notification.Element.cpp" />
+    <ClCompile Include="I8080\Notification\Notification.cpp" />
+    <ClCompile Include="I8080\Notification\Notification.Message.cpp" />
+    <ClCompile Include="I8080\Notification\Notification.Progress.cpp" />
+    <ClCompile Include="I8080\Notification\NotificationManager.cpp" />
+    <ClCompile Include="I8080\OpenglWindow\OpenglWindow.cpp" />
+    <ClCompile Include="I8080\Port\I8080.Port.AsyncKeyboard.cpp" />
+    <ClCompile Include="I8080\Port\I8080.Port.cpp" />
+    <ClCompile Include="I8080\Port\I8080.Port.GeneratorRandomValues.cpp" />
+    <ClCompile Include="I8080\Port\I8080.Port.PixelScreen.cpp" />
+    <ClCompile Include="I8080\Port\I8080.Port.PixelScreenTwoBuffers.cpp" />
+    <ClCompile Include="I8080\Port\I8080.Port.SymbolScreen.cpp" />
+    <ClCompile Include="I8080\Port\I8080.Port.Timer.cpp" />
+    <ClCompile Include="I8080\SaveSystem\SaveSystem.cpp" />
+    <ClCompile Include="I8080\SaveSystem\SaveSystemManager.cpp" />
+    <ClCompile Include="I8080\UI\EmulationThread\EmulationThread.cpp" />
+    <ClCompile Include="I8080\UI\FontManager\FontManager.cpp" />
+    <ClCompile Include="I8080\UI\I8080.UI.cpp" />
+    <ClCompile Include="I8080\UI\LastPathManager\LastPathManager.cpp" />
+    <ClCompile Include="I8080\UI\Setting\Setting.cpp" />
+    <ClCompile Include="I8080\UI\Widgets\I8080.UI.CodeEditor.cpp" />
+    <ClCompile Include="I8080\UI\Widgets\I8080.UI.ColorPicker.cpp" />
+    <ClCompile Include="I8080\UI\Widgets\I8080.UI.ConstList.cpp" />
+    <ClCompile Include="I8080\UI\Widgets\I8080.UI.EmulatorInfo.cpp" />
+    <ClCompile Include="I8080\UI\Widgets\I8080.UI.Help.cpp" />
+    <ClCompile Include="I8080\UI\Widgets\I8080.UI.HexViewer.cpp" />
+    <ClCompile Include="I8080\UI\Widgets\I8080.UI.Input0x08.cpp" />
+    <ClCompile Include="I8080\UI\Widgets\I8080.UI.Keyboard.cpp" />
+    <ClCompile Include="I8080\UI\Widgets\I8080.UI.MarkerList.cpp" />
+    <ClCompile Include="I8080\UI\Widgets\I8080.UI.MnemoCodeViewer.cpp" />
+    <ClCompile Include="I8080\UI\Widgets\I8080.UI.Output0x02.cpp" />
+    <ClCompile Include="I8080\UI\Widgets\I8080.UI.PixelScreen.cpp" />
+    <ClCompile Include="I8080\UI\Widgets\I8080.UI.PixelScreenTwoBuffers.cpp" />
+    <ClCompile Include="I8080\UI\Widgets\I8080.UI.RegisterFlagsInfo.cpp" />
+    <ClCompile Include="I8080\UI\Widgets\I8080.UI.SymbolPicker.cpp" />
+    <ClCompile Include="I8080\UI\Widgets\I8080.UI.SymbolScreen.cpp" />
+    <ClCompile Include="I8080\UI\Widgets\I8080.UI.Timer.cpp" />
+    <ClCompile Include="I8080\UI\Widgets\I8080.UI.VarList.cpp" />
+    <ClCompile Include="I8080\UI\Widget\I8080.Widget.cpp" />
+    <ClCompile Include="I8080\UI\Widget\I8080.WidgetManager.cpp" />
+    <ClCompile Include="I8080\UI\WindowManager\WindowManager.cpp" />
+    <ClCompile Include="I8080\UI\Workspaces\I8080.Workspace.cpp" />
+    <ClCompile Include="I8080\UI\Workspaces\I8080.WorkspaceManager.cpp" />
+    <ClCompile Include="I8080\Utils\ColorUtilities.cpp" />
+    <ClCompile Include="I8080\Utils\File_Utils.cpp" />
+    <ClCompile Include="I8080\Utils\ImGui.Utils.cpp" />
+    <ClCompile Include="I8080\Utils\MathUtils.cpp" />
+    <ClCompile Include="I8080\Utils\TextUtils.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Third-Person\imgui.cpp" />
+    <ClCompile Include="Third-Person\imgui_demo.cpp" />
+    <ClCompile Include="Third-Person\imgui_draw.cpp" />
+    <ClCompile Include="Third-Person\imgui_impl_glfw.cpp" />
+    <ClCompile Include="Third-Person\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="Third-Person\imgui_tables.cpp" />
+    <ClCompile Include="Third-Person\imgui_widgets.cpp" />
+    <ClCompile Include="Third-Person\lodepng.cpp" />
+    <ClCompile Include="Third-Person\PBO.cpp" />
+    <ClCompile Include="Third-Person\TextEditor.cpp" />
+    <ClCompile Include="Third-Person\UTF8_2_CP1251\utf8_to_cp1251.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="I8080\Config_Compilier.h" />
+    <ClInclude Include="I8080\DataStructures\CurrentStateProcessor.h" />
+    <ClInclude Include="I8080\DataStructures\OpcodeAdressed.h" />
+    <ClInclude Include="I8080\DataStructures\TranslatorOutput.h" />
+    <ClInclude Include="I8080\DataStructures\TypesCommand.h" />
+    <ClInclude Include="I8080\DataStructures\TypeTranslatorError.h" />
+    <ClInclude Include="I8080\DataStructures\VarsDebug.h" />
+    <ClInclude Include="I8080\Emulator\Compilier\Compiler.h" />
+    <ClInclude Include="I8080\Emulator\Compilier\Stable\Compiler.Stable.h" />
+    <ClInclude Include="I8080\Emulator\I8080.h" />
+    <ClInclude Include="I8080\ImagesData\Image_LogoApplicationArrayPngBytes.h" />
+    <ClInclude Include="I8080\ImagesData\Image_MSDF_ATLAS.h" />
+    <ClInclude Include="I8080\ImagesData\Image_MSDF_DESIGN_8080.h" />
+    <ClInclude Include="I8080\ImagesData\Image_MSDF_DESIGN_seedLBI_production.h" />
+    <ClInclude Include="I8080\Notification\interface\Notification.Element.h" />
+    <ClInclude Include="I8080\Notification\Notification.h" />
+    <ClInclude Include="I8080\Notification\Notification.Message.h" />
+    <ClInclude Include="I8080\Notification\Notification.Progress.h" />
+    <ClInclude Include="I8080\Notification\NotificationManager.h" />
+    <ClInclude Include="I8080\OpenglWindow\OpenglWindow.h" />
+    <ClInclude Include="I8080\Port\I8080.Port.AsyncKeyboard.h" />
+    <ClInclude Include="I8080\Port\I8080.Port.GeneratorRandomValues.h" />
+    <ClInclude Include="I8080\Port\I8080.Port.h" />
+    <ClInclude Include="I8080\Port\I8080.Port.PixelScreen.h" />
+    <ClInclude Include="I8080\Port\I8080.Port.PixelScreenTwoBuffers.h" />
+    <ClInclude Include="I8080\Port\I8080.Port.SymbolScreen.h" />
+    <ClInclude Include="I8080\Port\I8080.Port.Timer.h" />
+    <ClInclude Include="I8080\SaveSystem\SaveSystem.h" />
+    <ClInclude Include="I8080\SaveSystem\SaveSystemManager.h" />
+    <ClInclude Include="I8080\Scene_Intro\I8080.Scene.Intro.h" />
+    <ClInclude Include="I8080\Scene_Intro\Shaders\Intro.Shader.Fragment.CreatingVelocity.h" />
+    <ClInclude Include="I8080\Scene_Intro\Shaders\Intro.Shader.Fragment.FinalImage.h" />
+    <ClInclude Include="I8080\Scene_Intro\Shaders\Intro.Shader.Fragment.GradientMSDF.h" />
+    <ClInclude Include="I8080\Scene_Intro\Shaders\Intro.Shader.Fragment.Solid.h" />
+    <ClInclude Include="I8080\Scene_Intro\Shaders\Intro.Shader.Fragment.SolidMSDF.h" />
+    <ClInclude Include="I8080\Scene_Intro\Shaders\Intro.Shader.Vertex.DefaultObject.h" />
+    <ClInclude Include="I8080\Scene_Intro\Shaders\Intro.Shader.Vertex.VelocityObject.h" />
+    <ClInclude Include="I8080\Scene_Intro\Shaders\Intro.Shaders.h" />
+    <ClInclude Include="I8080\Shader\Shader.h" />
+    <ClInclude Include="I8080\UI\EmulationThread\EmulationThread.h" />
+    <ClInclude Include="I8080\UI\FontManager\FontManager.h" />
+    <ClInclude Include="I8080\UI\I8080.UI.h" />
+    <ClInclude Include="I8080\UI\LastPathManager\LastPathManager.h" />
+    <ClInclude Include="I8080\UI\Setting\Setting.h" />
+    <ClInclude Include="I8080\UI\Theme\Theme.h" />
+    <ClInclude Include="I8080\UI\Widgets\I8080.UI.CodeEditor.h" />
+    <ClInclude Include="I8080\UI\Widgets\I8080.UI.ColorPicker.h" />
+    <ClInclude Include="I8080\UI\Widgets\I8080.UI.ConstList.h" />
+    <ClInclude Include="I8080\UI\Widgets\I8080.UI.EmulatorInfo.h" />
+    <ClInclude Include="I8080\UI\Widgets\I8080.UI.Help.h" />
+    <ClInclude Include="I8080\UI\Widgets\I8080.UI.HexViewer.h" />
+    <ClInclude Include="I8080\UI\Widgets\I8080.UI.Input0x08.h" />
+    <ClInclude Include="I8080\UI\Widgets\I8080.UI.Keyboard.h" />
+    <ClInclude Include="I8080\UI\Widgets\I8080.UI.MarkerList.h" />
+    <ClInclude Include="I8080\UI\Widgets\I8080.UI.MnemoCodeViewer.h" />
+    <ClInclude Include="I8080\UI\Widgets\I8080.UI.Output0x02.h" />
+    <ClInclude Include="I8080\UI\Widgets\I8080.UI.PixelScreen.h" />
+    <ClInclude Include="I8080\UI\Widgets\I8080.UI.PixelScreenTwoBuffers.h" />
+    <ClInclude Include="I8080\UI\Widgets\I8080.UI.RegisterFlagsInfo.h" />
+    <ClInclude Include="I8080\UI\Widgets\I8080.UI.SymbolPicker.h" />
+    <ClInclude Include="I8080\UI\Widgets\I8080.UI.SymbolScreen.h" />
+    <ClInclude Include="I8080\UI\Widgets\I8080.UI.Timer.h" />
+    <ClInclude Include="I8080\UI\Widgets\I8080.UI.VarList.h" />
+    <ClInclude Include="I8080\UI\Widget\I8080.Widget.h" />
+    <ClInclude Include="I8080\UI\Widget\I8080.WidgetManager.h" />
+    <ClInclude Include="I8080\UI\WindowManager\WindowManager.h" />
+    <ClInclude Include="I8080\UI\Workspaces\I8080.Workspace.h" />
+    <ClInclude Include="I8080\UI\Workspaces\I8080.WorkspaceManager.h" />
+    <ClInclude Include="I8080\Utils\ColorUtilities.h" />
+    <ClInclude Include="I8080\Utils\File_Utils.h" />
+    <ClInclude Include="I8080\Utils\ImGui.Utils.h" />
+    <ClInclude Include="I8080\Utils\MathUtils.h" />
+    <ClInclude Include="I8080\Utils\TextUtils.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Third-Person\IconFontCppHeaders\IconsFontAwesome6.h" />
+    <ClInclude Include="Third-Person\imconfig.h" />
+    <ClInclude Include="Third-Person\imgui.h" />
+    <ClInclude Include="Third-Person\imgui_impl_glfw.h" />
+    <ClInclude Include="Third-Person\imgui_impl_opengl3.h" />
+    <ClInclude Include="Third-Person\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="Third-Person\imgui_internal.h" />
+    <ClInclude Include="Third-Person\imgui_markdown.h" />
+    <ClInclude Include="Third-Person\imgui_memory_editor.h" />
+    <ClInclude Include="Third-Person\imstb_rectpack.h" />
+    <ClInclude Include="Third-Person\imstb_textedit.h" />
+    <ClInclude Include="Third-Person\imstb_truetype.h" />
+    <ClInclude Include="Third-Person\linmath.h" />
+    <ClInclude Include="Third-Person\lodepng.h" />
+    <ClInclude Include="Third-Person\PBO.h" />
+    <ClInclude Include="Third-Person\TextEditor.h" />
+    <ClInclude Include="Third-Person\UTF8_2_CP1251\bit.h" />
+    <ClInclude Include="Third-Person\UTF8_2_CP1251\utf8_to_cp1251.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="I8080_Emulator.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="logo512_otd_icon512.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

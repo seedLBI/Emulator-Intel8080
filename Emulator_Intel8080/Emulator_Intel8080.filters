@@ -1,0 +1,580 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080">
+      <UniqueIdentifier>{f3cd0529-9a39-4860-a26b-2a5e7eacdbda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Third-Party">
+      <UniqueIdentifier>{74a6728f-de4f-45b3-a8af-c9ec6600e524}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Third-Party\UTF8_TO_CP1251">
+      <UniqueIdentifier>{d329d811-bef6-4389-a85a-d3142c0aaf96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Third-Party\Imgui">
+      <UniqueIdentifier>{575f6ccc-ae41-43e3-b93b-26c8092c4286}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Third-Party\Imgui\MemoryEditor">
+      <UniqueIdentifier>{bc711423-235a-4b18-aa01-65e79e1b75d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Third-Party\Imgui\TextEditor">
+      <UniqueIdentifier>{b8c2b07d-4d7c-4e63-a36f-32d2fb29c17b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Third-Party\Imgui\Markdown">
+      <UniqueIdentifier>{b10df8e8-eb0e-4cb2-a35b-3893bcf14d83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Third-Party\Imgui\IconsFontAwesome">
+      <UniqueIdentifier>{4e1f61ba-247d-47d3-8376-0cc561c3e273}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\Port">
+      <UniqueIdentifier>{a7c320ff-3f3e-4568-b78c-97f072a9f465}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI">
+      <UniqueIdentifier>{81432ea4-2126-468c-b1c8-df3d1cf4c2c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\Intro">
+      <UniqueIdentifier>{d2f1ccb0-5eed-46a2-a90d-7846a1583f95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\Intro\Shaders">
+      <UniqueIdentifier>{e159d275-32b1-44bb-ad39-d9b49010fca6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\OpenGL">
+      <UniqueIdentifier>{b53fbb0f-ab3a-444a-857e-d394da1df7b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\Structures">
+      <UniqueIdentifier>{1596003c-f199-47a1-aadb-3881cb165512}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\Widgets">
+      <UniqueIdentifier>{f6a0124e-03b3-4212-87db-b4dd7b54a4f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\Widgets\ColorPicker">
+      <UniqueIdentifier>{176749b8-18ab-4654-b146-c838040ecf81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\Widgets\Input0x08">
+      <UniqueIdentifier>{a1760ac9-e9dd-40c3-b2f5-9873a0b361cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\Widgets\Output0x02">
+      <UniqueIdentifier>{35ff4022-e30c-45a3-89c1-eacb2f516d13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\Widgets\Keyboard">
+      <UniqueIdentifier>{f206ba4a-9ff9-4751-973d-1b3875ad0e3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\Widgets\VarList">
+      <UniqueIdentifier>{bd89277b-f1f9-448b-8c85-a0109d2b1715}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\Widgets\ConstList">
+      <UniqueIdentifier>{779c4f53-5a1a-4e45-a8df-c7e28ce62aad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\Widgets\CodeEditor">
+      <UniqueIdentifier>{85d8de5f-ae68-46a6-91bc-ad90d7be9e99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\Widgets\Timer">
+      <UniqueIdentifier>{88ea2bda-8014-42fe-b945-d2489cbaf931}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\Widgets\HexViewer">
+      <UniqueIdentifier>{3f347ecc-786a-4a6a-a3a7-79498c8ec8fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\Widgets\MarkerList">
+      <UniqueIdentifier>{5c6be960-2680-4f49-a8a3-c53a16a8c738}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\Widgets\MnemoCodeViewer">
+      <UniqueIdentifier>{eef9953f-6b37-4d40-a1ae-bd874b333757}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\Utils">
+      <UniqueIdentifier>{fa505c98-01ec-453d-8593-b54408690a15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\Widgets\RegisterFlagsInfo">
+      <UniqueIdentifier>{9cbd4962-9f1e-4d3f-adba-f80f2d35d8eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\Widgets\SymbolPicker">
+      <UniqueIdentifier>{1555bf08-20c5-4726-bd69-9153b8b08a20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\Widgets\SymbolScreen">
+      <UniqueIdentifier>{ce1af426-3cf9-4e38-90f3-935ace01df9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\Widgets\Help">
+      <UniqueIdentifier>{7eeee10d-85fc-416d-9108-849e23def68a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\Widgets\PixelScreen">
+      <UniqueIdentifier>{662aeb48-0114-4c3d-bb58-ac63bba22bf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\Widgets\PixelScreenTwoBuffers">
+      <UniqueIdentifier>{5af96164-2392-44a3-9ca9-54299aa28cff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\Workspace">
+      <UniqueIdentifier>{65f47ab7-0f9f-4b08-b1ce-426a9b1eb41f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\LastPath Manager">
+      <UniqueIdentifier>{9b17ae3f-d3ae-4b72-94ec-7f7d2e77a1de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\SaveSystem">
+      <UniqueIdentifier>{fe05d325-47bd-42aa-8503-65700f9dbf3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\Port\AsyncKeyboard">
+      <UniqueIdentifier>{9201eb0f-ea2e-4cb3-8479-b4fa18c1969f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\Port\GeneratorRandomValues">
+      <UniqueIdentifier>{add7a7d7-0064-4631-ada2-8086c2ccd523}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\Port\PixelScreen">
+      <UniqueIdentifier>{684a573e-f7f8-4591-a115-9f6db6af2e73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\Port\PixelScreenTwoBuffers">
+      <UniqueIdentifier>{5cf1b1da-3088-4092-87a4-02b719f8be92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\Port\SymbolScreen">
+      <UniqueIdentifier>{b74ccfe7-9710-4307-953a-9e3a84d7feba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\Port\Timer">
+      <UniqueIdentifier>{5262cb1c-b276-4cfd-8d3b-a380ca4ee366}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\Intro\Images">
+      <UniqueIdentifier>{c3de183a-085d-4aed-9db2-af4f7dd676ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\Widgets\EmulatorInfo">
+      <UniqueIdentifier>{80c3f82d-f66c-4b34-9be5-b30e037136a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\Setting">
+      <UniqueIdentifier>{e8f9d222-75e6-4400-94dc-1add99e6667e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\I8080\UI\FontManager">
+      <UniqueIdentifier>{4517ecfe-f68b-4cf7-b0e3-7c4a177b74ce}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Third-Person\imgui.cpp">
+      <Filter>Исходные файлы\Third-Party\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Third-Person\imgui_demo.cpp">
+      <Filter>Исходные файлы\Third-Party\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Third-Person\imgui_draw.cpp">
+      <Filter>Исходные файлы\Third-Party\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Third-Person\imgui_impl_glfw.cpp">
+      <Filter>Исходные файлы\Third-Party\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Third-Person\imgui_impl_opengl3.cpp">
+      <Filter>Исходные файлы\Third-Party\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Third-Person\imgui_tables.cpp">
+      <Filter>Исходные файлы\Third-Party\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Third-Person\imgui_widgets.cpp">
+      <Filter>Исходные файлы\Third-Party\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Third-Person\TextEditor.cpp">
+      <Filter>Исходные файлы\Third-Party\Imgui\TextEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Third-Person\UTF8_2_CP1251\utf8_to_cp1251.c">
+      <Filter>Исходные файлы\Third-Party\UTF8_TO_CP1251</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.cpp">
+      <Filter>Исходные файлы\I8080</Filter>
+    </ClCompile>
+    <ClCompile Include="Third-Person\PBO.cpp">
+      <Filter>Исходные файлы\Third-Party</Filter>
+    </ClCompile>
+    <ClCompile Include="Third-Person\lodepng.cpp">
+      <Filter>Исходные файлы\Third-Party</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\Image_MSDF_ATLAS.cpp">
+      <Filter>Исходные файлы\I8080\Intro\Images</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\Image_MSDF_DESIGN_8080.cpp">
+      <Filter>Исходные файлы\I8080\Intro\Images</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\Image_MSDF_DESIGN_seedLBI_production.cpp">
+      <Filter>Исходные файлы\I8080\Intro\Images</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\TypeTranslatorError.cpp">
+      <Filter>Исходные файлы\I8080\Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\Image_LogoApplicationArrayPngBytes.cpp">
+      <Filter>Исходные файлы\I8080\Intro\Images</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\TypesCommand.cpp">
+      <Filter>Исходные файлы\I8080\Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.UI.cpp">
+      <Filter>Исходные файлы\I8080\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\OpenglWindow.cpp">
+      <Filter>Исходные файлы\I8080\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.UI.ColorPicker.cpp">
+      <Filter>Исходные файлы\I8080\UI\Widgets\ColorPicker</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.UI.Input0x08.cpp">
+      <Filter>Исходные файлы\I8080\UI\Widgets\Input0x08</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.UI.Output0x02.cpp">
+      <Filter>Исходные файлы\I8080\UI\Widgets\Output0x02</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.UI.Keyboard.cpp">
+      <Filter>Исходные файлы\I8080\UI\Widgets\Keyboard</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.UI.MarkerList.cpp">
+      <Filter>Исходные файлы\I8080\UI\Widgets\MarkerList</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.UI.VarList.cpp">
+      <Filter>Исходные файлы\I8080\UI\Widgets\VarList</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.UI.ConstList.cpp">
+      <Filter>Исходные файлы\I8080\UI\Widgets\ConstList</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.UI.CodeEditor.cpp">
+      <Filter>Исходные файлы\I8080\UI\Widgets\CodeEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.UI.Timer.cpp">
+      <Filter>Исходные файлы\I8080\UI\Widgets\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.UI.HexViewer.cpp">
+      <Filter>Исходные файлы\I8080\UI\Widgets\HexViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.UI.MnemoCodeViewer.cpp">
+      <Filter>Исходные файлы\I8080\UI\Widgets\MnemoCodeViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\ImGui.Utils.cpp">
+      <Filter>Исходные файлы\I8080\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\ColorUtilities.cpp">
+      <Filter>Исходные файлы\I8080\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.UI.RegisterFlagsInfo.cpp">
+      <Filter>Исходные файлы\I8080\UI\Widgets\RegisterFlagsInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.UI.SymbolPicker.cpp">
+      <Filter>Исходные файлы\I8080\UI\Widgets\SymbolPicker</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.UI.SymbolScreen.cpp">
+      <Filter>Исходные файлы\I8080\UI\Widgets\SymbolScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.UI.Help.cpp">
+      <Filter>Исходные файлы\I8080\UI\Widgets\Help</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.UI.PixelScreen.cpp">
+      <Filter>Исходные файлы\I8080\UI\Widgets\PixelScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.UI.PixelScreenTwoBuffers.cpp">
+      <Filter>Исходные файлы\I8080\UI\Widgets\PixelScreenTwoBuffers</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.Workspace.cpp">
+      <Filter>Исходные файлы\I8080\UI\Workspace</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.WorkspaceManager.cpp">
+      <Filter>Исходные файлы\I8080\UI\Workspace</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.WidgetManager.cpp">
+      <Filter>Исходные файлы\I8080\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\LastPathManager.cpp">
+      <Filter>Исходные файлы\I8080\UI\LastPath Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\TextUtils.cpp">
+      <Filter>Исходные файлы\I8080\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\DefaultDataWorkspace.cpp">
+      <Filter>Исходные файлы\I8080\UI\Workspace</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\SaveSystem.cpp">
+      <Filter>Исходные файлы\I8080\UI\SaveSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\SaveSystemManager.cpp">
+      <Filter>Исходные файлы\I8080\UI\SaveSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.Port.AsyncKeyboard.cpp">
+      <Filter>Исходные файлы\I8080\Port\AsyncKeyboard</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.Port.GeneratorRandomValues.cpp">
+      <Filter>Исходные файлы\I8080\Port\GeneratorRandomValues</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.Port.PixelScreen.cpp">
+      <Filter>Исходные файлы\I8080\Port\PixelScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.Port.PixelScreenTwoBuffers.cpp">
+      <Filter>Исходные файлы\I8080\Port\PixelScreenTwoBuffers</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.Port.SymbolScreen.cpp">
+      <Filter>Исходные файлы\I8080\Port\SymbolScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.Port.Timer.cpp">
+      <Filter>Исходные файлы\I8080\Port\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.Port.cpp">
+      <Filter>Исходные файлы\I8080\Port</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.Widget.cpp">
+      <Filter>Исходные файлы\I8080\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\I8080.UI.EmulatorInfo.cpp">
+      <Filter>Исходные файлы\I8080\UI\Widgets\EmulatorInfo</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="I8080\I8080.h">
+      <Filter>Исходные файлы\I8080</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Person\imconfig.h">
+      <Filter>Исходные файлы\Third-Party\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Person\imgui.h">
+      <Filter>Исходные файлы\Third-Party\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Person\imgui_impl_glfw.h">
+      <Filter>Исходные файлы\Third-Party\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Person\imgui_impl_opengl3.h">
+      <Filter>Исходные файлы\Third-Party\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Person\imgui_impl_opengl3_loader.h">
+      <Filter>Исходные файлы\Third-Party\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Person\imgui_internal.h">
+      <Filter>Исходные файлы\Third-Party\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Person\imstb_rectpack.h">
+      <Filter>Исходные файлы\Third-Party\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Person\imstb_textedit.h">
+      <Filter>Исходные файлы\Third-Party\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Person\imstb_truetype.h">
+      <Filter>Исходные файлы\Third-Party\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Person\linmath.h">
+      <Filter>Исходные файлы\Third-Party\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Person\imgui_memory_editor.h">
+      <Filter>Исходные файлы\Third-Party\Imgui\MemoryEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Person\TextEditor.h">
+      <Filter>Исходные файлы\Third-Party\Imgui\TextEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Person\imgui_markdown.h">
+      <Filter>Исходные файлы\Third-Party\Imgui\Markdown</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Person\UTF8_2_CP1251\bit.h">
+      <Filter>Исходные файлы\Third-Party\UTF8_TO_CP1251</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Person\UTF8_2_CP1251\utf8_to_cp1251.h">
+      <Filter>Исходные файлы\Third-Party\UTF8_TO_CP1251</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Person\IconFontCppHeaders\IconsFontAwesome6.h">
+      <Filter>Исходные файлы\Third-Party\Imgui\IconsFontAwesome</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.Port.h">
+      <Filter>Исходные файлы\I8080\Port</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.UI.h">
+      <Filter>Исходные файлы\I8080\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Person\PBO.h">
+      <Filter>Исходные файлы\Third-Party</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Person\lodepng.h">
+      <Filter>Исходные файлы\Third-Party</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.Scene.Intro.h">
+      <Filter>Исходные файлы\I8080\Intro</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Shader.h">
+      <Filter>Исходные файлы\I8080\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Image_MSDF_ATLAS.h">
+      <Filter>Исходные файлы\I8080\Intro\Images</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Image_MSDF_DESIGN_8080.h">
+      <Filter>Исходные файлы\I8080\Intro\Images</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Image_MSDF_DESIGN_seedLBI_production.h">
+      <Filter>Исходные файлы\I8080\Intro\Images</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Intro.Shaders.h">
+      <Filter>Исходные файлы\I8080\Intro\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Intro.Shader.Fragment.CreatingVelocity.h">
+      <Filter>Исходные файлы\I8080\Intro\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Intro.Shader.Fragment.FinalImage.h">
+      <Filter>Исходные файлы\I8080\Intro\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Intro.Shader.Fragment.GradientMSDF.h">
+      <Filter>Исходные файлы\I8080\Intro\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Intro.Shader.Fragment.Solid.h">
+      <Filter>Исходные файлы\I8080\Intro\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Intro.Shader.Fragment.SolidMSDF.h">
+      <Filter>Исходные файлы\I8080\Intro\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Intro.Shader.Vertex.DefaultObject.h">
+      <Filter>Исходные файлы\I8080\Intro\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Intro.Shader.Vertex.VelocityObject.h">
+      <Filter>Исходные файлы\I8080\Intro\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\OpenglWindow.h">
+      <Filter>Исходные файлы\I8080\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\OpcodeAdressed.h">
+      <Filter>Исходные файлы\I8080\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\TranslatorOutput.h">
+      <Filter>Исходные файлы\I8080\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\TypeTranslatorError.h">
+      <Filter>Исходные файлы\I8080\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\VarsDebug.h">
+      <Filter>Исходные файлы\I8080\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Image_LogoApplicationArrayPngBytes.h">
+      <Filter>Исходные файлы\I8080\Intro\Images</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\TypesCommand.h">
+      <Filter>Исходные файлы\I8080\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.Widget.h">
+      <Filter>Исходные файлы\I8080\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.UI.ColorPicker.h">
+      <Filter>Исходные файлы\I8080\UI\Widgets\ColorPicker</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.UI.Input0x08.h">
+      <Filter>Исходные файлы\I8080\UI\Widgets\Input0x08</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.UI.Output0x02.h">
+      <Filter>Исходные файлы\I8080\UI\Widgets\Output0x02</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.UI.Keyboard.h">
+      <Filter>Исходные файлы\I8080\UI\Widgets\Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.UI.MarkerList.h">
+      <Filter>Исходные файлы\I8080\UI\Widgets\MarkerList</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.UI.VarList.h">
+      <Filter>Исходные файлы\I8080\UI\Widgets\VarList</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.UI.ConstList.h">
+      <Filter>Исходные файлы\I8080\UI\Widgets\ConstList</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.UI.CodeEditor.h">
+      <Filter>Исходные файлы\I8080\UI\Widgets\CodeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.UI.Timer.h">
+      <Filter>Исходные файлы\I8080\UI\Widgets\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.UI.HexViewer.h">
+      <Filter>Исходные файлы\I8080\UI\Widgets\HexViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.UI.MnemoCodeViewer.h">
+      <Filter>Исходные файлы\I8080\UI\Widgets\MnemoCodeViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\CurrentStateProcessor.h">
+      <Filter>Исходные файлы\I8080\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\ImGui.Utils.h">
+      <Filter>Исходные файлы\I8080\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\ColorUtilities.h">
+      <Filter>Исходные файлы\I8080\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.UI.RegisterFlagsInfo.h">
+      <Filter>Исходные файлы\I8080\UI\Widgets\RegisterFlagsInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.UI.SymbolPicker.h">
+      <Filter>Исходные файлы\I8080\UI\Widgets\SymbolPicker</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.UI.SymbolScreen.h">
+      <Filter>Исходные файлы\I8080\UI\Widgets\SymbolScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.UI.Help.h">
+      <Filter>Исходные файлы\I8080\UI\Widgets\Help</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.UI.PixelScreen.h">
+      <Filter>Исходные файлы\I8080\UI\Widgets\PixelScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.UI.PixelScreenTwoBuffers.h">
+      <Filter>Исходные файлы\I8080\UI\Widgets\PixelScreenTwoBuffers</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.Workspace.h">
+      <Filter>Исходные файлы\I8080\UI\Workspace</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.WorkspaceManager.h">
+      <Filter>Исходные файлы\I8080\UI\Workspace</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\TextUtils.h">
+      <Filter>Исходные файлы\I8080\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.WidgetManager.h">
+      <Filter>Исходные файлы\I8080\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\LastPathManager.h">
+      <Filter>Исходные файлы\I8080\UI\LastPath Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\DefaultDataWorkspace.h">
+      <Filter>Исходные файлы\I8080\UI\Workspace</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\SaveSystem.h">
+      <Filter>Исходные файлы\I8080\UI\SaveSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\SaveSystemManager.h">
+      <Filter>Исходные файлы\I8080\UI\SaveSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.Port.AsyncKeyboard.h">
+      <Filter>Исходные файлы\I8080\Port\AsyncKeyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.Port.GeneratorRandomValues.h">
+      <Filter>Исходные файлы\I8080\Port\GeneratorRandomValues</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.Port.PixelScreen.h">
+      <Filter>Исходные файлы\I8080\Port\PixelScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.Port.PixelScreenTwoBuffers.h">
+      <Filter>Исходные файлы\I8080\Port\PixelScreenTwoBuffers</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.Port.SymbolScreen.h">
+      <Filter>Исходные файлы\I8080\Port\SymbolScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.Port.Timer.h">
+      <Filter>Исходные файлы\I8080\Port\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\I8080.UI.EmulatorInfo.h">
+      <Filter>Исходные файлы\I8080\UI\Widgets\EmulatorInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Setting.h">
+      <Filter>Исходные файлы\I8080\UI\Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\FontManager.h">
+      <Filter>Исходные файлы\I8080\UI\FontManager</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="I8080_Emulator.rc">
+      <Filter>Файлы ресурсов</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="logo512_otd_icon512.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
