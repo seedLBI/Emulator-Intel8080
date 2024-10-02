@@ -58,8 +58,6 @@ ImVec2 N_Progress::GetSize() {
 	size_UnitName = ImGui::CalcTextSize(TempFullUnit.c_str(), 0);
 	size_ProgressName = ImGui::CalcTextSize(NameProgress, 0);
 
-	ImVec2 size_Progress = ImVec2(ImGui::CalcItemWidth(), ImGui::GetFrameHeight());
-
 	return ImVec2(size_UnitName.x + 25.f + size_ProgressName.x, size_UnitName.y*2.f);
 }
 

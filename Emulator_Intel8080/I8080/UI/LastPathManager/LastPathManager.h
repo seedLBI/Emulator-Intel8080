@@ -2,6 +2,7 @@
 #define LAST_PATH_MANAGER_H
 
 #include "OpenglWindow\OpenglWindow.h"
+#include "Utils/File_Utils.h"
 #include "SaveSystem\SaveSystem.h"
 #include <string>
 #include <vector>
@@ -30,7 +31,6 @@ private:
 
 	int IndexChoosed = 0;
 
-	bool PathIsExist(const std::string& name);
 	int PathIsNotEqual(const std::string& name);
 
 };

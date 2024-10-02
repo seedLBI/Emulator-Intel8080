@@ -26,6 +26,7 @@ public:
 
 	void		LoadChoosed();
 	void		LoadNext();
+	void		LoadPrevious();
 
 
 	std::string Save() override;

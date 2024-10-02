@@ -7,7 +7,7 @@
 #include "UI\FontManager\FontManager.h"
 #include "UI\WindowManager\WindowManager.h"
 #include "Notification/NotificationManager.h"
-#include "UI/EmulationThread/EmulationThread.h"
+#include "Emulator/EmulationThread/EmulationThread.h"
 #include "Utils\TextUtils.h"
 
 

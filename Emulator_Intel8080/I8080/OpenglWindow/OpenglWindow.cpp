@@ -37,7 +37,7 @@ namespace OpenglWindow {
 			while (glfwGetTime() < OpenglWindow::Vars::lasttime + 1.0 / OpenglWindow::Vars::FPS_target) {
 
 				//static auto next_frame = std::chrono::steady_clock::now();
-				//next_frame += std::chrono::nanoseconds(100);
+				//next_frame += std::chrono::nanoseconds(10);
 				//std::this_thread::sleep_until(next_frame);
 
 			}

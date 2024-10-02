@@ -1,4 +1,4 @@
-﻿#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+﻿//#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
 #include "Config_Compilier.h"
 #include "I8080/UI/I8080.UI.h"
@@ -10,11 +10,8 @@ using namespace std;
 
 I8080_UserInterface* i8080_ui = nullptr;
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
 	OpenglWindow::Init();
-
-
 
 	i8080_ui = new I8080_UserInterface(OpenglWindow::Vars::window);
 
@@ -39,8 +36,6 @@ int main(int argc, char* argv[])
 		Intro::Update();
 		Intro::Draw();
 		OpenglWindow::EndDraw();
-
-		
 	}
 
 	Intro::Destructor();
@@ -54,7 +49,6 @@ int main(int argc, char* argv[])
 		OpenglWindow::EndDraw();
 
 	}
-
 
 	i8080_ui->~I8080_UserInterface();
 	ImGui_ImplOpenGL3_Shutdown();

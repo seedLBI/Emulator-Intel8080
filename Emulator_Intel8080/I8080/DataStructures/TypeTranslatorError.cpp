@@ -81,11 +81,11 @@ std::string GetErrorInfo(const int& type) {
     case ERROR_COLLISION_BETWEEN_NAMES_MARKER_AND_CONST:
         return u8"У тебя имя константы с именем маркера совпало, не допускай этого.";
         break;
-    case ERROR_WHERE_SECOND_SINGLE_QUOTE:
-        return u8"Нужно всегда закрывать одинарные ковычки!";
-        break;
     case ERROR_WHERE_SECOND_DOUBLE_QUOTE:
         return u8"Нужно всегда закрывать двойные ковычки!";
+        break;
+    case ERROR_UNSUPPORTED_SYMBOL:
+        return u8"Этот символ не поддерживается компилятором.";
         break;
     default:
         return u8"Неизвестная ошибка\n";

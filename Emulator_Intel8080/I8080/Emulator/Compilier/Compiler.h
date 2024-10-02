@@ -19,10 +19,12 @@ public:
 	~Compiler();
 	virtual TranslatorOutput Compile(const std::vector<std::string>& Code);
 
+    virtual void Clear();
+
 protected:
     TranslatorOutput CompilerOutput;
 
-	std::vector<std::string> split_line(std::string line);
+	std::vector<std::string> split_line(const std::string& line);
 	std::vector<std::vector<std::string>> split_code (const std::vector<std::string>& code);
 
 
@@ -38,16 +40,26 @@ protected:
 
     std::pair<uint64_t, TypeValue> FromString2Int(const std::string& value);
 
+
+    bool CheckName(const string& name);
+
+    int GetCountBytes(const string& cmd);
+    int GetCountParams(const string& cmd);
+
+
+    vector<uint8_t> TranslateInstruction(const vector<string>& splitted_command);
+
+
 private:
 
 
-    inline bool IsHexValue(const string& value);
-    inline bool IsDecValue(const string& value);
-    inline bool IsBinValue(const string& value);
+     bool IsHexValue(const string& value);
+     bool IsDecValue(const string& value);
+     bool IsBinValue(const string& value);
 
-    inline uint64_t StrHex2int(const std::string& value);
-    inline uint64_t StrDec2int(const std::string& value);
-    inline uint64_t StrBin2int(const std::string& value);
+     uint64_t StrHex2int(const std::string& value);
+     uint64_t StrDec2int(const std::string& value);
+     uint64_t StrBin2int(const std::string& value);
 
 
 };

@@ -481,6 +481,14 @@ void I8080_WorkspaceManager::Update() {
 void I8080_WorkspaceManager::SetNeedLoad() {
 	NeedLoadIni = true;
 }
+void I8080_WorkspaceManager::LoadPrevious() {
+
+	if (IndexChoosed - 1 < 0)
+		IndexChoosed = workspaces.size() - 1;
+	else
+		IndexChoosed = (IndexChoosed - 1) % workspaces.size();
+	LoadChoosed();
+}
 void I8080_WorkspaceManager::LoadNext() {
 	IndexChoosed = (IndexChoosed + 1) % workspaces.size();
 	LoadChoosed();

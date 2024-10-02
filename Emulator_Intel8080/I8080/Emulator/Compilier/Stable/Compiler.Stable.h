@@ -1,10 +1,12 @@
 #ifndef COMPILER_STABLE_H
 #define COMPILER_STABLE_H
 
+#include "Config_Compilier.h"
 #include "Emulator/Compilier/Compiler.h"
 #include "robin_hood.h"
 #include <vector>
 #include <string>
+#include <iostream>
 
 
 class CompilerStable : public Compiler
@@ -14,16 +16,33 @@ public:
 	~CompilerStable();
 
 	TranslatorOutput Compile(const std::vector<std::string>& Code) override;
+	void Clear() override;
 
 private:
 	std::vector<std::vector<std::string>> splited_code;
-	std::vector<int> adressed_code;
+	std::vector<std::vector<std::string>> splited_code_raw;
 
+	std::vector<int> adressed_code;
+	int CounterForNeedCheck = 0;
+	std::vector<int> NeedCheckThatLineIndex;
+
+
+
+
+	struct PosDotInfo {
+		size_t pos_dot = 0;
+		size_t pos_2dot = 0;
+		bool flag_have_dot = false;
+		bool flag_have_2dot = false;
+	};
+
+	std::vector<PosDotInfo> PosDotForNeedLine;
+
+
+	std::vector<std::pair<std::string, uint16_t>> ConstsVector;
 	robin_hood::unordered_flat_map<std::string, uint16_t> Consts;
 	robin_hood::unordered_flat_map<std::string, uint16_t> Markers;
 	std::vector<VarsDebug> Vars;
-
-	void ClearAllArrays();
 
 
 	bool Step1_MarkingAdresses();

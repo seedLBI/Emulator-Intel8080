@@ -929,7 +929,7 @@ namespace Intro {
 		float TimeBegin = 0.f;
 		CurveBezier* curve_seedLBI_move = nullptr;
 
-		const glm::vec3 color_Whiteyellow = { 1.f, 1.f, 0.91f };
+		const glm::vec3 color_Whiteyellow = { 1.f, 1.f, 0.82f };
 		const glm::vec3 color_Black = { 0.f,0.f,0.f };
 		const glm::vec3 color_Blue = { 0.29f, 0.5f, 0.73f };
 
@@ -1231,8 +1231,8 @@ namespace Intro {
 			glBindTexture(GL_TEXTURE_2D, Vars::BufferVelocity.GetTextureID());
 		}
 		void InitWords() {
-			Vars::Word_Lentnyaya_Praktika = utf8_to_utf16(u8"Alpha version");
-			Vars::Word_Edition = utf8_to_utf16(u8"Для Науч. рука");
+			Vars::Word_Lentnyaya_Praktika = utf8_to_utf16(u8"Special version");
+			Vars::Word_Edition = utf8_to_utf16(u8"Для Владоса");
 			Vars::Word_Emulator = utf8_to_utf16(u8"Эмулятор");
 			Vars::Word_Processora = utf8_to_utf16(u8"Процессора");
 			Vars::Word_Intel_8080 = utf8_to_utf16(u8"Intel 8080");

@@ -22,42 +22,47 @@ void Widget_Help::Draw() {
 
 	if (ImGui::Begin(GetName_c_str(), GetPtrFlagShow(), ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_AlwaysHorizontalScrollbar)) {
 
-		DrawRightMousePopup();
-		for (int i = 0; i < categories.size(); i++){
+		if (!isDataLoaded)
+		{
+			ImGui::Text(u8"Я не смог обнаружить файл Help.data рядом с исполняемым файлом :(\nТы куда его дел? Возвращай обратно.");
+		}
+		else {
+			DrawRightMousePopup();
+			for (int i = 0; i < categories.size(); i++) {
 
-			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.f, 0.95f, 0.75f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.f, 0.95f, 0.75f, 1.f));
 
-			if (ImGui::TreeNode(categories[i].name.c_str())) {
-				ImGui::PopStyleColor();
+				if (ImGui::TreeNode(categories[i].name.c_str())) {
+					ImGui::PopStyleColor();
 
-				if (categories[i].categories.size() > 1) {
-					for (int k = 0; k < categories[i].categories.size(); k++) {
+					if (categories[i].categories.size() > 1) {
+						for (int k = 0; k < categories[i].categories.size(); k++) {
 
-						ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.65f, 0.65f, 1.f, 1.f));
-						if (ImGui::TreeNode(categories[i].categories[k].name.c_str())) {
-							ImGui::PopStyleColor();
-							DrawTextWithAbbrivs(categories[i].categories[k].text_with_index);
+							ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.65f, 0.65f, 1.f, 1.f));
+							if (ImGui::TreeNode(categories[i].categories[k].name.c_str())) {
+								ImGui::PopStyleColor();
+								DrawTextWithAbbrivs(categories[i].categories[k].text_with_index);
 
-							ImGui::TreePop();
+								ImGui::TreePop();
+							}
+							else {
+								ImGui::PopStyleColor();
+							}
+
 						}
-						else {
-							ImGui::PopStyleColor();
-						}
-						
 					}
+					else {
+						DrawTextWithAbbrivs(categories[i].categories[0].text_with_index);
+					}
+
+					ImGui::TreePop();
 				}
 				else {
-					DrawTextWithAbbrivs(categories[i].categories[0].text_with_index);
+					ImGui::PopStyleColor();
 				}
 
-				ImGui::TreePop();
 			}
-			else {
-				ImGui::PopStyleColor();
-			}
-
 		}
-
 
 		ImGui::End();
 	}
@@ -164,6 +169,13 @@ void Widget_Help::DrawTextWithAbbrivs(const std::vector < std::vector< std::any 
 					ImGui::End();
 				}
 			}
+			else if (Text[line][element].type() == typeid(CodeBlock)) {
+
+				CodeBlock elem_code = std::any_cast<CodeBlock>(Text[line][element]);
+
+				ImGui::InputTextMultiline((u8"CodeBlock_"+elem_code.name).c_str(), elem_code.text.data(), elem_code.text.size(), ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * (GetCountLines(elem_code.text) + 1)*1.1f), ImGuiInputTextFlags_ReadOnly);
+			}
+
 
 			if (element != Text[line].size() - 1)
 				ImGui::SameLine(0,0);
@@ -184,13 +196,18 @@ std::any Widget_Help::GetIndexAbbriv(const std::string& name) {
 }
 void Widget_Help::ReadFromFile(const std::string& Path2File) {
 
-	if (!isFileExist(Path2File)) {
+
+
+	std::ifstream input;
+	input.open(stringUTF8_to_wstring(Path2File));
+
+
+	if (!isFileExist(input)) {
 		std::cout << "File for help not exist. Path seted: [" << Path2File << "]\n";
 		return;
 	}
+	isDataLoaded = true;
 
-	std::ifstream input;
-	input.open(Path2File);
 
 	std::string line;
 
@@ -203,6 +220,7 @@ void Widget_Help::ReadFromFile(const std::string& Path2File) {
 
 	std::vector<std::vector<std::any>> temp_text;
 
+	CodeBlock temp_CodeBlock;
 
 	while (getline(input, line)) {
 		auto begin = line.find_first_of("[") + 1;
@@ -258,6 +276,23 @@ void Widget_Help::ReadFromFile(const std::string& Path2File) {
 			temp_subCategory.text_with_index.clear();
 			temp_text.clear();
 		}
+		else if (stage == "BEGIN_CODE") {
+			line = line.substr(end + 1);
+
+			begin = line.find_first_of("[") + 1;
+			end = line.find_first_of("]");
+
+			temp_CodeBlock.name = line.substr(begin, end - begin);
+
+		}
+		else if (stage == "END_CODE") {
+
+			temp_text.back().push_back(temp_CodeBlock);
+
+			temp_CodeBlock.name = "";
+			temp_CodeBlock.text = "";
+
+		}
 		else if (stage == "END") {
 
 			if (Current_SubCategory.empty() == false){
@@ -290,26 +325,32 @@ void Widget_Help::ReadFromFile(const std::string& Path2File) {
 		else if (stage.empty()){
 			std::vector<std::any> temp_line;
 
-			if (line.find_first_of("<") != std::string::npos){
 
-				while (line.find_first_of("<") != std::string::npos) {
-					temp_line.push_back(line.substr(0, line.find_first_of("<")));
-					begin = line.find_first_of("<") + 1;
-					end = line.find_first_of(">");
-					std::string abr_name = line.substr(begin, end - begin);
-					temp_line.push_back(GetIndexAbbriv(abr_name));
-
-					line = line.substr(end + 1);
-				}
-				
-				temp_line.push_back(line);
+			if (temp_CodeBlock.name.empty() == false) {
+				temp_CodeBlock.text += line + "\n";
 			}
 			else {
-				temp_line.push_back(line);
+				if (line.find_first_of("<") != std::string::npos) {
+
+					while (line.find_first_of("<") != std::string::npos) {
+						temp_line.push_back(line.substr(0, line.find_first_of("<")));
+						begin = line.find_first_of("<") + 1;
+						end = line.find_first_of(">");
+						std::string abr_name = line.substr(begin, end - begin);
+						temp_line.push_back(GetIndexAbbriv(abr_name));
+
+						line = line.substr(end + 1);
+					}
+
+					temp_line.push_back(line);
+				}
+				else {
+					temp_line.push_back(line);
+				}
+
+
+				temp_text.push_back(temp_line);
 			}
-
-
-			temp_text.push_back(temp_line);
 		}
 	}
 

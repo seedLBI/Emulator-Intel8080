@@ -3,8 +3,11 @@
 
 #include <string>
 #include <fstream>
+#include "Utils/TextUtils.h"
 
-bool isFileExist(const std::string& PathFile);
+
+bool isFileExist(std::string& PathFile);
+bool isFileExist(std::ifstream& Fstream_File);
 
 bool isFileNotEmpty(std::ifstream& Fstream_File);
 

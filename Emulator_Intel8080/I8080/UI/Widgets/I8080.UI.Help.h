@@ -8,7 +8,6 @@
 #include "Utils/ImGui.Utils.h"
 #include "Utils/TextUtils.h"
 
-#include <UTF8_2_CP1251/utf8_to_cp1251.h>
 #include <string>
 #include <fstream>
 #include <vector>
@@ -30,11 +29,18 @@ public:
 
 private:
 
+	bool isDataLoaded = false;
+
 	bool EnableWrapedText = true;
 
 	struct Abbriv {
 		std::string name;
 		std::string mean;
+	};
+
+	struct CodeBlock {
+		std::string name;
+		std::string text;
 	};
 
 	struct SubCategory {

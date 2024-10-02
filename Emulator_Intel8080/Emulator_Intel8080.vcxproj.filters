@@ -28,9 +28,6 @@
     <ClCompile Include="Third-Person\PBO.cpp">
       <Filter>Third-Party</Filter>
     </ClCompile>
-    <ClCompile Include="Third-Person\UTF8_2_CP1251\utf8_to_cp1251.c">
-      <Filter>Third-Party</Filter>
-    </ClCompile>
     <ClCompile Include="I8080\DataStructures\TypesCommand.cpp">
       <Filter>I8080\DataStructures</Filter>
     </ClCompile>
@@ -61,15 +58,6 @@
     <ClCompile Include="I8080\SaveSystem\SaveSystemManager.cpp">
       <Filter>I8080\UI\SaveSystem</Filter>
     </ClCompile>
-    <ClCompile Include="I8080\Utils\ColorUtilities.cpp">
-      <Filter>I8080\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="I8080\Utils\ImGui.Utils.cpp">
-      <Filter>I8080\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="I8080\Utils\TextUtils.cpp">
-      <Filter>I8080\Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="I8080\UI\I8080.UI.cpp">
       <Filter>I8080\UI</Filter>
@@ -97,9 +85,6 @@
     </ClCompile>
     <ClCompile Include="I8080\UI\WindowManager\WindowManager.cpp">
       <Filter>I8080\UI\Setting\WindowManager</Filter>
-    </ClCompile>
-    <ClCompile Include="I8080\Utils\File_Utils.cpp">
-      <Filter>I8080\Utils</Filter>
     </ClCompile>
     <ClCompile Include="I8080\UI\Widgets\I8080.UI.CodeEditor.cpp">
       <Filter>I8080\UI\Widgets\CodeEditor</Filter>
@@ -161,9 +146,6 @@
     <ClCompile Include="I8080\Notification\Notification.cpp">
       <Filter>I8080\UI\Notification</Filter>
     </ClCompile>
-    <ClCompile Include="I8080\Utils\MathUtils.cpp">
-      <Filter>I8080\Utils</Filter>
-    </ClCompile>
     <ClCompile Include="I8080\Notification\NotificationManager.cpp">
       <Filter>I8080\UI\Notification</Filter>
     </ClCompile>
@@ -175,30 +157,6 @@
     </ClCompile>
     <ClCompile Include="I8080\Notification\interface\Notification.Element.cpp">
       <Filter>I8080\UI\Notification\Elements\interface</Filter>
-    </ClCompile>
-    <ClCompile Include="I8080\UI\EmulationThread\EmulationThread.cpp">
-      <Filter>I8080\Emulator\EmulationThread</Filter>
-    </ClCompile>
-    <ClCompile Include="I8080\Port\I8080.Port.AsyncKeyboard.cpp">
-      <Filter>I8080\Emulator\Port\AsyncKeyboard</Filter>
-    </ClCompile>
-    <ClCompile Include="I8080\Port\I8080.Port.PixelScreen.cpp">
-      <Filter>I8080\Emulator\Port\PixelScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="I8080\Port\I8080.Port.SymbolScreen.cpp">
-      <Filter>I8080\Emulator\Port\SymbolScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="I8080\Port\I8080.Port.Timer.cpp">
-      <Filter>I8080\Emulator\Port\Timer</Filter>
-    </ClCompile>
-    <ClCompile Include="I8080\Port\I8080.Port.GeneratorRandomValues.cpp">
-      <Filter>I8080\Emulator\Port\GeneratorRandomValues</Filter>
-    </ClCompile>
-    <ClCompile Include="I8080\Port\I8080.Port.PixelScreenTwoBuffers.cpp">
-      <Filter>I8080\Emulator\Port\PixelScreenTwoBuffers</Filter>
-    </ClCompile>
-    <ClCompile Include="I8080\Port\I8080.Port.cpp">
-      <Filter>I8080\Emulator\Port</Filter>
     </ClCompile>
     <ClCompile Include="I8080\Emulator\Compilier\Compiler.cpp">
       <Filter>I8080\Emulator\Compiler</Filter>
@@ -212,11 +170,53 @@
     <ClCompile Include="I8080\FontsData\IconsFont.cpp">
       <Filter>I8080\FontsData</Filter>
     </ClCompile>
+    <ClCompile Include="I8080\Emulator\EmulationThread\EmulationThread.cpp">
+      <Filter>I8080\Emulator\EmulationThread</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\UI\KeyCombination\KeyCombinationHandler.cpp">
+      <Filter>I8080\UI\KeyCombination</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\Emulator\Port\I8080.Port.cpp">
+      <Filter>I8080\Emulator\Port</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\Emulator\Port\I8080.Port.AsyncKeyboard.cpp">
+      <Filter>I8080\Emulator\Port\AsyncKeyboard</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\Emulator\Port\I8080.Port.GeneratorRandomValues.cpp">
+      <Filter>I8080\Emulator\Port\GeneratorRandomValues</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\Emulator\Port\I8080.Port.PixelScreen.cpp">
+      <Filter>I8080\Emulator\Port\PixelScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\Emulator\Port\I8080.Port.SymbolScreen.cpp">
+      <Filter>I8080\Emulator\Port\SymbolScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\Emulator\Port\I8080.Port.Timer.cpp">
+      <Filter>I8080\Emulator\Port\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\Emulator\Port\I8080.Port.PixelScreenTwoBuffers.cpp">
+      <Filter>I8080\Emulator\Port\PixelScreenTwoBuffers</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\Utils\Keyboard.Utils.cpp">
+      <Filter>I8080\Utils\Keyboard</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\Utils\File_Utils.cpp">
+      <Filter>I8080\Utils\File</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\Utils\ImGui.Utils.cpp">
+      <Filter>I8080\Utils\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\Utils\MathUtils.cpp">
+      <Filter>I8080\Utils\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\Utils\TextUtils.cpp">
+      <Filter>I8080\Utils\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\Utils\ColorUtilities.cpp">
+      <Filter>I8080\Utils\Color</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Third-Person\UTF8_2_CP1251\bit.h">
-      <Filter>Third-Party</Filter>
-    </ClInclude>
     <ClInclude Include="Third-Person\IconFontCppHeaders\IconsFontAwesome6.h">
       <Filter>Third-Party</Filter>
     </ClInclude>
@@ -263,9 +263,6 @@
       <Filter>Third-Party</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>Third-Party</Filter>
-    </ClInclude>
-    <ClInclude Include="Third-Person\UTF8_2_CP1251\utf8_to_cp1251.h">
       <Filter>Third-Party</Filter>
     </ClInclude>
     <ClInclude Include="I8080\DataStructures\CurrentStateProcessor.h">
@@ -340,15 +337,6 @@
     <ClInclude Include="I8080\Scene_Intro\Shaders\Intro.Shaders.h">
       <Filter>I8080\Scene_Intro\Shaders</Filter>
     </ClInclude>
-    <ClInclude Include="I8080\Utils\ColorUtilities.h">
-      <Filter>I8080\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="I8080\Utils\ImGui.Utils.h">
-      <Filter>I8080\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="I8080\Utils\TextUtils.h">
-      <Filter>I8080\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="I8080\UI\I8080.UI.h">
       <Filter>I8080\UI</Filter>
     </ClInclude>
@@ -375,9 +363,6 @@
     </ClInclude>
     <ClInclude Include="I8080\UI\WindowManager\WindowManager.h">
       <Filter>I8080\UI\Setting\WindowManager</Filter>
-    </ClInclude>
-    <ClInclude Include="I8080\Utils\File_Utils.h">
-      <Filter>I8080\Utils</Filter>
     </ClInclude>
     <ClInclude Include="I8080\Config_Compilier.h">
       <Filter>I8080</Filter>
@@ -442,9 +427,6 @@
     <ClInclude Include="Third-Person\TextEditor.h">
       <Filter>I8080\UI\Widgets\CodeEditor\ThirdParty</Filter>
     </ClInclude>
-    <ClInclude Include="I8080\Utils\MathUtils.h">
-      <Filter>I8080\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="I8080\Notification\NotificationManager.h">
       <Filter>I8080\UI\Notification</Filter>
     </ClInclude>
@@ -456,30 +438,6 @@
     </ClInclude>
     <ClInclude Include="I8080\Notification\Notification.Progress.h">
       <Filter>I8080\UI\Notification\Elements\Progress</Filter>
-    </ClInclude>
-    <ClInclude Include="I8080\UI\EmulationThread\EmulationThread.h">
-      <Filter>I8080\Emulator\EmulationThread</Filter>
-    </ClInclude>
-    <ClInclude Include="I8080\Port\I8080.Port.AsyncKeyboard.h">
-      <Filter>I8080\Emulator\Port\AsyncKeyboard</Filter>
-    </ClInclude>
-    <ClInclude Include="I8080\Port\I8080.Port.PixelScreen.h">
-      <Filter>I8080\Emulator\Port\PixelScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="I8080\Port\I8080.Port.SymbolScreen.h">
-      <Filter>I8080\Emulator\Port\SymbolScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="I8080\Port\I8080.Port.Timer.h">
-      <Filter>I8080\Emulator\Port\Timer</Filter>
-    </ClInclude>
-    <ClInclude Include="I8080\Port\I8080.Port.GeneratorRandomValues.h">
-      <Filter>I8080\Emulator\Port\GeneratorRandomValues</Filter>
-    </ClInclude>
-    <ClInclude Include="I8080\Port\I8080.Port.PixelScreenTwoBuffers.h">
-      <Filter>I8080\Emulator\Port\PixelScreenTwoBuffers</Filter>
-    </ClInclude>
-    <ClInclude Include="I8080\Port\I8080.Port.h">
-      <Filter>I8080\Emulator\Port</Filter>
     </ClInclude>
     <ClInclude Include="I8080\UI\Theme\Theme.h">
       <Filter>I8080\UI\Theme</Filter>
@@ -495,6 +453,57 @@
     </ClInclude>
     <ClInclude Include="I8080\FontsData\IconsFont.h">
       <Filter>I8080\FontsData</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Emulator\EmulationThread\EmulationThread.h">
+      <Filter>I8080\Emulator\EmulationThread</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Person\utf8.h">
+      <Filter>Third-Party</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\UI\KeyCombination\KeyCombinationHandler.h">
+      <Filter>I8080\UI\KeyCombination</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Emulator\Port\I8080.Port.h">
+      <Filter>I8080\Emulator\Port</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Emulator\Port\I8080.Port.AsyncKeyboard.h">
+      <Filter>I8080\Emulator\Port\AsyncKeyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Emulator\Port\I8080.Port.GeneratorRandomValues.h">
+      <Filter>I8080\Emulator\Port\GeneratorRandomValues</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Emulator\Port\I8080.Port.PixelScreen.h">
+      <Filter>I8080\Emulator\Port\PixelScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Emulator\Port\I8080.Port.SymbolScreen.h">
+      <Filter>I8080\Emulator\Port\SymbolScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Emulator\Port\I8080.Port.Timer.h">
+      <Filter>I8080\Emulator\Port\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Emulator\Port\I8080.Port.PixelScreenTwoBuffers.h">
+      <Filter>I8080\Emulator\Port\PixelScreenTwoBuffers</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Utils\Keyboard.Utils.h">
+      <Filter>I8080\Utils\Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Utils\File_Utils.h">
+      <Filter>I8080\Utils\File</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Utils\ImGui.Utils.h">
+      <Filter>I8080\Utils\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Utils\MathUtils.h">
+      <Filter>I8080\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Utils\TextUtils.h">
+      <Filter>I8080\Utils\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Utils\ColorUtilities.h">
+      <Filter>I8080\Utils\Color</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\UI\KeyCombination\KeyCombination.h">
+      <Filter>I8080\UI\KeyCombination</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -633,24 +642,6 @@
     <Filter Include="I8080\Emulator\Port">
       <UniqueIdentifier>{4c9f2cae-57db-4cbc-a619-7018b6ea09cd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="I8080\Emulator\Port\AsyncKeyboard">
-      <UniqueIdentifier>{671c089e-3099-499e-8c4e-43901a562e90}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="I8080\Emulator\Port\PixelScreen">
-      <UniqueIdentifier>{390a2a1d-0dd3-4200-9d03-2426b69d5a2a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="I8080\Emulator\Port\SymbolScreen">
-      <UniqueIdentifier>{4e7a9f6a-45d1-4bca-b3dc-feae697f3c70}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="I8080\Emulator\Port\Timer">
-      <UniqueIdentifier>{ce063d11-4e14-4351-b4ed-241ecb6befba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="I8080\Emulator\Port\GeneratorRandomValues">
-      <UniqueIdentifier>{2273024b-0228-4fa4-ac5f-7115c350f1c4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="I8080\Emulator\Port\PixelScreenTwoBuffers">
-      <UniqueIdentifier>{855ca17c-f964-494d-83db-34f1a9ac84f3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="I8080\Emulator\EmulationThread">
       <UniqueIdentifier>{2774dcb8-7116-4f73-acb9-e3d88c69053d}</UniqueIdentifier>
     </Filter>
@@ -662,6 +653,45 @@
     </Filter>
     <Filter Include="I8080\FontsData">
       <UniqueIdentifier>{ca3d4caf-cb5b-4785-9e0a-6296520b4583}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\UI\KeyCombination">
+      <UniqueIdentifier>{36530921-2855-4e30-990f-0b88f9391c98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\Emulator\Port\AsyncKeyboard">
+      <UniqueIdentifier>{796a2af2-b2b7-4d2a-b481-da9d164dde8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\Emulator\Port\GeneratorRandomValues">
+      <UniqueIdentifier>{1df691da-fde3-483d-a642-32ee99ce8127}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\Emulator\Port\PixelScreen">
+      <UniqueIdentifier>{34bf1b77-cace-4d95-a113-9472bf8774c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\Emulator\Port\SymbolScreen">
+      <UniqueIdentifier>{3ab298f1-33cb-4583-bba6-5cbe3fcd2bb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\Emulator\Port\Timer">
+      <UniqueIdentifier>{cb177d81-d8cb-4772-a29a-639dc7afd7b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\Emulator\Port\PixelScreenTwoBuffers">
+      <UniqueIdentifier>{f9b42f67-e9ef-4303-ba0e-2ee1e947b58e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\Utils\Keyboard">
+      <UniqueIdentifier>{96f62cba-a890-4371-b0cd-fa243559ba4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\Utils\File">
+      <UniqueIdentifier>{31151a44-70b2-4e06-9c2c-728f0d9f0a65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\Utils\ImGui">
+      <UniqueIdentifier>{c8039fc2-1e46-42fc-8ac3-3f5460f22200}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\Utils\Math">
+      <UniqueIdentifier>{2e387d38-bea3-4fc7-b224-b0e657ccb6be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\Utils\Text">
+      <UniqueIdentifier>{069ff76c-5a19-4c6d-803c-467c5e644125}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\Utils\Color">
+      <UniqueIdentifier>{1eb44efd-1ad6-4b39-a8fd-c89f6f92e788}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

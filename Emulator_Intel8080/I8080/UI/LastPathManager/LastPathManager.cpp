@@ -41,7 +41,8 @@ std::string LastPathManager::GetChoosedPath() {
 
 
 void LastPathManager::AddPath(std::string path) {
-	if (!PathIsExist(path))
+
+	if (!isFileExist(path))
 		return;
 
 	int index = PathIsNotEqual(path);
@@ -54,15 +55,7 @@ void LastPathManager::AddPath(std::string path) {
 	}
 }
 
-bool LastPathManager::PathIsExist(const std::string& name) {
-	if (FILE* file = fopen(name.c_str(), "r")) {
-		fclose(file);
-		return true;
-	}
-	else {
-		return false;
-	}
-}
+
 int LastPathManager::PathIsNotEqual(const std::string& name) {
 	for (int i = 0; i < paths.size(); i++) {
 		if (paths[i] == name)

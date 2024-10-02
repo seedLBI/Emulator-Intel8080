@@ -9,6 +9,9 @@
 #include <bitset>
 #include <Windows.h>
 #include <fstream>
+#include "utf8.h"
+#include "robin_hood.h"
+
 
 #ifndef TEXTUTILS_H
 #define TEXTUTILS_H
@@ -18,6 +21,8 @@
 using namespace std;
 using namespace std::string_literals;
 
+
+std::string ConvertCP1251ToUTF8(const std::string& str);
 
 std::string GetExeFileName();
 
@@ -82,6 +87,29 @@ string OpenFileDialog();
 string SaveFileDialogI8080();
 string SaveFileDialogPNG();
 string SaveFileDialogTXT();
+
+
+
+std::wstring stringUTF8_to_wstring(const std::string& str);
+std::string wstring_to_stringUTF8(const std::wstring& str);
+
+
+
+enum class UTF8_SPLITER_ERROR {
+	NOTHING,
+	NOT_HAVE_ENOUGH_SIZE,
+	UNSUPORTED_SYMBOL,
+};
+
+std::vector<std::string> utf8_splitter(const std::string& line, UTF8_SPLITER_ERROR& error);
+
+
+enum class UTF8_to_CP1251_CONVERTER_ERROR {
+    NOTHING,
+    UNSUPPORTED_SYMBOL
+};
+
+std::pair<uint8_t, UTF8_to_CP1251_CONVERTER_ERROR> convert_utf8_toUTF8cp1251(const std::string& symbol);
 
 
 #endif // !TEXTUTILS_H

@@ -32,8 +32,8 @@ enum TypeTranslatorError {
     ERROR_OVERFLOW_ADRESS,                          // USED
     ERROR_OVERFLOW_VALUE_8BIT,                      // USED
     ERROR_OVERFLOW_VALUE_16BIT,                     // USED
-    ERROR_WHERE_SECOND_SINGLE_QUOTE,                // USED
     ERROR_WHERE_SECOND_DOUBLE_QUOTE,                // USED
+    ERROR_UNSUPPORTED_SYMBOL,
 };
 
 

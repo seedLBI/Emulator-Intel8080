@@ -135,6 +135,9 @@ void FontManager::LoadFontFromFile(std::string Path2File) {
 	new_font.Name = name;
 	new_font.Data = readFileToByteArray(Path2File);
 
+	if (new_font.Data.empty())
+		return;
+
 #ifdef WITH_DEBUG_OUTPUT
 	std::cout << "Loading new font:\n";
 	std::cout << "Path: [" << new_font.Path << "]" << std::endl;
