@@ -1,8 +1,8 @@
 #include "I8080.UI.CodeEditor.h"
 
 
-Widget_CodeEditor::Widget_CodeEditor(TextEditor* editor) : I8080_Widget(u8"Редактор кода") {
-	this->editor = editor;
+Widget_CodeEditor::Widget_CodeEditor() : I8080_Widget(u8"Редактор кода") {
+	editor = new TextEditor();
 }
 Widget_CodeEditor::~Widget_CodeEditor() {
 
@@ -60,4 +60,8 @@ void Widget_CodeEditor::Load(const std::string& Data) {
 		else
 			std::cout << "Unknown name argument for widget: " << name_arg << std::endl;
 	}
+}
+
+TextEditor* Widget_CodeEditor::GetPtrTextEditor() {
+	return editor;
 }

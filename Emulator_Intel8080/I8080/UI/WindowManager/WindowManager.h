@@ -43,6 +43,10 @@ private:
 
 
 	bool VSync_state = false;
+
+
+	void CheckPosition(int& Position_X, int& Position_Y);
+	void CheckSize(int& Size_X, int& Size_Y);
 };
 
 

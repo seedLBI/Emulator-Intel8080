@@ -2,7 +2,7 @@
 #define CONFIG_COMPILIER_H
 
 
-//#define WITH_DEBUG_OUTPUT
+#define WITH_DEBUG_OUTPUT
 
 
 

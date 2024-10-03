@@ -11,7 +11,7 @@
 class Widget_CodeEditor : public I8080_Widget
 {
 public:
-	Widget_CodeEditor(TextEditor* editor);
+	Widget_CodeEditor();
 	~Widget_CodeEditor();
 	void Draw() override;
 	void Update() override;
@@ -22,6 +22,7 @@ public:
 	void SetFlagWindow(int flag_value);
 	bool GetFlagWindow();
 
+	TextEditor* GetPtrTextEditor();
 
 private:
 	TextEditor* editor;

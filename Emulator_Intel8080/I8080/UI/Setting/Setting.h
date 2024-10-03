@@ -6,6 +6,8 @@
 #include "OpenglWindow\OpenglWindow.h"
 #include "UI\FontManager\FontManager.h"
 #include "UI\WindowManager\WindowManager.h"
+#include "UI\ProjectManager\ProjectManager.h"
+#include "UI\KeyCombination\KeyCombinationHandler.h"
 #include "Notification/NotificationManager.h"
 #include "Emulator/EmulationThread/EmulationThread.h"
 #include "Utils\TextUtils.h"
@@ -14,7 +16,7 @@
 class Setting : public SaveSystem
 {
 public:
-	Setting(FontManager* font, WindowManager* window,NotificationManager* notification, EmulationThread* emulation);
+	Setting(FontManager* font, WindowManager* window,NotificationManager* notification, EmulationThread* emulation,KeyCombinationHandler* keyCombinationHandler, ProjectManager* projectManager);
 	~Setting();
 
 
@@ -31,9 +33,15 @@ private:
 	WindowManager* window = nullptr;
 	NotificationManager* notification = nullptr;
 	EmulationThread* emulation = nullptr;
-
+	KeyCombinationHandler* keyCombinationHandler = nullptr;
+	ProjectManager* projectManager = nullptr;
 
 	bool Popup_Open = false;
+
+
+
+	void DrawNotificationSetting();
+	void DrawEmulationSetting();
 };
 
 #endif // !SETTING_H

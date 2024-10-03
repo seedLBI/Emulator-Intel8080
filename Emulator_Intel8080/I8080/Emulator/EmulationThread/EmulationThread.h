@@ -37,6 +37,9 @@ public:
 
 	bool isThreadWorking();
 
+	void WaitThread();
+
+
 
 	std::string Save() override;
 	void Load(const std::string& Data) override;

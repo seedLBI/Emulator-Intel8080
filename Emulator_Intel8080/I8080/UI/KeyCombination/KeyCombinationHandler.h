@@ -23,7 +23,8 @@ public:
 
 	void Update();
 
-	
+
+	void DrawSetting();
 
 
 private:

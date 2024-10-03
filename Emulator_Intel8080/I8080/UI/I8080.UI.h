@@ -61,6 +61,7 @@
 #include "UI\FontManager\FontManager.h"
 #include "UI\WindowManager\WindowManager.h"
 #include "UI\KeyCombination\KeyCombinationHandler.h"
+#include "UI\ProjectManager\ProjectManager.h"
 #include "UI\Setting\Setting.h"
 
 #include "Notification/NotificationManager.h"
@@ -95,37 +96,7 @@ private:
 	void Emulator_Stop();
 	void Emulator_Next_step();
 	void Emulator_FullReset();
-	void Compile();
-	
 
-
-	string pathLoadedFile;
-	vector<string> lines_of_code;
-	TranslatorOutput translator;
-	int line_error = -2;
-	int type_erorr = -2;
-
-	void InitLineCodes(string path);
-	void TranslateCode();
-
-
-
-
-
-
-	void WaitThread();
-
-	void Setting_ManagerColor();
-
-	bool Popup_NewFile_withUnsave = false;
-	bool Popup_OpenFile_withUnsave = false;
-
-	bool CheckFile_isUnsaved();
-
-	void NewFile();
-	void OpenFile();
-	void SaveFile();
-	void SaveFileAs();
 
 	void DrawMainMenu();
 
@@ -140,17 +111,16 @@ private:
 	CompilerStable*				  Compiler = nullptr;
 	EmulationThread*			  emulationThread = nullptr;
 
-	TextEditor					  editor;
-
 	SaveSystemManager*			  saveSystemManager = nullptr;
 
 	NotificationManager*		  notificationManager = nullptr;
 	FontManager*			      font_manager = nullptr;
 	WindowManager*				  window_manager = nullptr;
 	KeyCombinationHandler*		  keyCombination_handler = nullptr;
+	ProjectManager*				  projectManager = nullptr;
 	Setting*					  settings = nullptr;
 
-	LastPathManager				  LastPathManager;
+	LastPathManager*			  lastPathManager = nullptr;
 	I8080_WorkspaceManager*		  WorkspaceManager = nullptr;
 	I8080_WidgetManager			  WidgetManager;
 

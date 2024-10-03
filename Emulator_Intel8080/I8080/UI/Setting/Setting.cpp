@@ -1,11 +1,13 @@
 #include "Setting.h"
 
 
-Setting::Setting(FontManager* font, WindowManager* window, NotificationManager* notification, EmulationThread* emulation) : SaveSystem("Setting") {
+Setting::Setting(FontManager* font, WindowManager* window, NotificationManager* notification, EmulationThread* emulation, KeyCombinationHandler* keyCombinationHandler, ProjectManager* projectManager) : SaveSystem("Setting") {
 	this->font = font;
 	this->window = window;
 	this->notification = notification;
 	this->emulation = emulation;
+	this->keyCombinationHandler = keyCombinationHandler;
+	this->projectManager = projectManager;
 }
 
 Setting::~Setting() {
@@ -30,122 +32,70 @@ void Setting::Draw() {
 	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 
 	ImVec2 size = ImGui::GetMainViewport()->WorkSize;
-	ImGui::SetNextWindowSize(ImVec2(size.x / 2.f, size.y / 2.f));
+	ImGui::SetNextWindowSize(ImVec2(size.x / 1.5f, size.y / 1.5f));
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, ImVec2(0.5, 0.5));
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
 	if (ImGui::BeginPopupModal(u8"Настройки", &Popup_Open, flagsWindow)) {
 
+
 		center.x -= ImGui::GetCurrentWindow()->Size.x / 2;
 		center.y -= ImGui::GetCurrentWindow()->Size.y / 2;
 		ImGui::GetCurrentWindow()->Pos = center;
 
 		ImVec2 pos = ImGui::GetCursorScreenPos();
-		ImVec2 avail_size = ImGui::GetContentRegionAvail();
 
-		pos.y += 7.f;
-		float x_without_padding = pos.x;
-
-		ImGui::Columns(2, NULL, false);
 
 		static int selected_setting_type = 0;
-		const char* names_setting_types[4] = { u8" Изображение",u8" Менеджер цветов",u8" Управление",u8" Эмуляция" };
+		const char* names_setting_types[2] = { u8"    Общие",u8"  Управление" };
 
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 17.0f));
 
-		ImGui::SetColumnWidth(0, ImGui::CalcTextSize(names_setting_types[0]).x * 1.5f);
-		ImGui::SetCursorScreenPos(pos);
+		ImGui::BeginChild("left pane", ImVec2(ImGui::CalcTextSize(u8"  Управление  ").x, 0));
 
-		for (int i = 0; i < 4; i++) {
-
-			if (ImGui::Selectable(names_setting_types[i], selected_setting_type == i, ImGuiSelectableFlags_DontClosePopups))
+		for (int i = 0; i < 2; i++) {
+			if (ImGui::Selectable(names_setting_types[i], selected_setting_type == i, 0, ImVec2(0, ImGui::GetTextLineHeight() * 2.f)))
 				selected_setting_type = i;
-			ImGui::SetCursorScreenPos(ImVec2(x_without_padding, ImGui::GetCursorScreenPos().y));
 		}
-		ImGui::PopStyleVar();
-		ImGui::NextColumn();
 
 
-		ImVec2 avail_size_temp = ImGui::GetContentRegionAvail();
-		ImVec2 pos_temp = ImGui::GetCursorScreenPos();
 
-		ImGui::SetCursorScreenPos(ImVec2(pos_temp.x, pos_temp.y + 10));
-		string Selected = "";
+		ImGui::EndChild();
+
+		ImGui::SameLine();
+		ImGui::BeginChild("right pane");
 
 		switch (selected_setting_type) {
 		case 0:
 			font->Draw();
 			window->Draw();
-
-			ImGui::SeparatorText(u8"Уведомления");
-
-			if (ImGui::RadioButton(u8"Показывать", notification->GetFlag_Enable())) {
-				notification->ToggleFlag_Enabled();
-			}
-
-			ImGui::SeparatorText(u8"Эмуляция");
-
-
-
-			if (emulation->GetSpeedMode() == SpeedMode::Infinity)
-				Selected = u8"Неограниченная";
-			if (emulation->GetSpeedMode() == SpeedMode::Intel8080)
-				Selected = u8"Intel8080 (3 Мгц)";
-			if (emulation->GetSpeedMode() == SpeedMode::Intel8085)
-				Selected = u8"Intel8085 (6 Мгц)";
-
-			if (ImGui::BeginCombo(u8"Скорость", Selected.c_str(), ImGuiComboFlags_WidthFitPreview)) {
-
-
-				bool selected = Selected == u8"Неограниченная";
-
-				if (ImGui::Selectable(u8"Неограниченная", &selected)) {
-					emulation->SetSpeedMode(SpeedMode::Infinity);
-				}
-				if (selected)
-					ImGui::SetItemDefaultFocus();
-
-				selected = Selected == u8"Intel8080 (3 Мгц)";
-
-				if (ImGui::Selectable(u8"Intel8080 (3 Мгц)", &selected)) {
-					emulation->SetSpeedMode(SpeedMode::Intel8080);
-				}
-				if (selected)
-					ImGui::SetItemDefaultFocus();
-
-				selected = Selected == u8"Intel8085 (6 Мгц)";
-
-				if (ImGui::Selectable(u8"Intel8085 (6 Мгц)", &selected)) {
-					emulation->SetSpeedMode(SpeedMode::Intel8085);
-				}
-				if (selected)
-					ImGui::SetItemDefaultFocus();
-
-
-				ImGui::EndCombo();
-			}
-
-
+			DrawNotificationSetting();
+			DrawEmulationSetting();
+			projectManager->DrawSetting();
 			break;
 		case 1:
-			break;
-		case 2:
-			break;
-		case 3:
+			keyCombinationHandler->DrawSetting();
 			break;
 		default:
 			break;
 		}
 
+		ImGui::Dummy(ImVec2(0,ImGui::GetTextLineHeight()));
+
+		ImGui::EndChild();
 
 
 
 
 
+
+
+		/*
 		string WaterMark = "seedLBI 2024";
 		ImGui::SetCursorScreenPos(ImVec2((pos.x + avail_size.x) - ImGui::CalcTextSize(WaterMark.c_str()).x - 2.f, (pos.y + avail_size.y) - ImGui::CalcTextSize(WaterMark.c_str()).y - 7.f - 2.f));
 		ImGui::TextColored(ImVec4(1, 1, 1, 0.2), WaterMark.c_str());
+		*/
+
 
 		ImGui::EndPopup();
 	}
@@ -154,6 +104,61 @@ void Setting::Draw() {
 	ImGui::PopStyleVar();
 
 }
+
+
+void Setting::DrawNotificationSetting() {
+
+	ImGui::SeparatorText(u8"Уведомления");
+
+	if (ImGui::RadioButton(u8"Показывать", notification->GetFlag_Enable())) {
+		notification->ToggleFlag_Enabled();
+	}
+}
+void Setting::DrawEmulationSetting() {
+	ImGui::SeparatorText(u8"Эмуляция");
+
+	string Selected = "";
+
+	if (emulation->GetSpeedMode() == SpeedMode::Infinity)
+		Selected = u8"Неограниченная";
+	if (emulation->GetSpeedMode() == SpeedMode::Intel8080)
+		Selected = u8"Intel8080 (3 Мгц)";
+	if (emulation->GetSpeedMode() == SpeedMode::Intel8085)
+		Selected = u8"Intel8085 (6 Мгц)";
+
+	if (ImGui::BeginCombo(u8"Скорость", Selected.c_str(), ImGuiComboFlags_WidthFitPreview)) {
+
+
+		bool selected = Selected == u8"Неограниченная";
+
+		if (ImGui::Selectable(u8"Неограниченная", &selected)) {
+			emulation->SetSpeedMode(SpeedMode::Infinity);
+		}
+		if (selected)
+			ImGui::SetItemDefaultFocus();
+
+		selected = Selected == u8"Intel8080 (3 Мгц)";
+
+		if (ImGui::Selectable(u8"Intel8080 (3 Мгц)", &selected)) {
+			emulation->SetSpeedMode(SpeedMode::Intel8080);
+		}
+		if (selected)
+			ImGui::SetItemDefaultFocus();
+
+		selected = Selected == u8"Intel8085 (6 Мгц)";
+
+		if (ImGui::Selectable(u8"Intel8085 (6 Мгц)", &selected)) {
+			emulation->SetSpeedMode(SpeedMode::Intel8085);
+		}
+		if (selected)
+			ImGui::SetItemDefaultFocus();
+
+
+		ImGui::EndCombo();
+	}
+}
+
+
 
 void Setting::Open() {
 #ifdef WITH_DEBUG_OUTPUT
@@ -175,6 +180,7 @@ std::string Setting::Save() {
 	data += window->Save();
 	data += notification->Save();
 	data += emulation->Save();
+	data += projectManager->Save();
 
 	std::string output = MakeBegin(GetCountLines(data));
 
@@ -238,6 +244,9 @@ void Setting::Load(const std::string& Data) {
 			}
 			else if (Name_Object == notification->GetName()) {
 				notification->Load(Data_save_object);
+			}
+			else if (Name_Object == projectManager->GetName()) {
+				projectManager->Load(Data_save_object);
 			}
 		}
 

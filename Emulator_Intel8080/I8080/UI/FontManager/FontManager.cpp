@@ -120,7 +120,18 @@ void FontManager::SetSize(const int& sizeFont) {
 		Current_Scale = Max_Scale;
 	else
 		Current_Scale = sizeFont;
+
+	NeedReloadFontSize = true;
 }
+
+
+void FontManager::SetOneStepBigger() {
+	SetSize(Current_Scale + 1);
+}
+void FontManager::SetOneStepSmaller() {
+	SetSize(Current_Scale - 1);
+}
+
 
 void FontManager::LoadNewFont() {
 

@@ -228,6 +228,10 @@ void WindowManager::Load(const std::string& Data) {
 			std::cout << "Unknowed save element founded: [" << Name_Element << "] [" << Data_Element << "]\n";
 		}
 	}
+
+	CheckPosition(Position_X, Position_Y);
+	CheckSize(Size_Width, Size_Height);
+
 	if (Position_X != -1 && Position_Y != -1) {
 		SetPosition(Position_X, Position_Y);
 	}
@@ -236,5 +240,21 @@ void WindowManager::Load(const std::string& Data) {
 	}
 
 
+}
+
+void WindowManager::CheckPosition(int& Position_X, int& Position_Y) {
+	if (Position_X < 0)
+		Position_X = 100;
+
+	if (Position_Y < 0)
+		Position_Y = 100;
+}
+
+void WindowManager::CheckSize(int& Size_X, int& Size_Y) {
+	if (Size_X < 1280)
+		Size_X = 1280;
+
+	if (Size_Y < 720)
+		Size_Y = 720;
 }
 

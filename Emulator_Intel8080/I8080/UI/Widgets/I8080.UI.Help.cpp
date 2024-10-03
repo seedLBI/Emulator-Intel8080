@@ -173,6 +173,8 @@ void Widget_Help::DrawTextWithAbbrivs(const std::vector < std::vector< std::any 
 
 				CodeBlock elem_code = std::any_cast<CodeBlock>(Text[line][element]);
 
+				ImGui::SeparatorText(elem_code.name.c_str());
+
 				ImGui::InputTextMultiline((u8"CodeBlock_"+elem_code.name).c_str(), elem_code.text.data(), elem_code.text.size(), ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * (GetCountLines(elem_code.text) + 1)*1.1f), ImGuiInputTextFlags_ReadOnly);
 			}
 

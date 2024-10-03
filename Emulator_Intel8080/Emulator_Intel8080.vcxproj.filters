@@ -63,7 +63,7 @@
       <Filter>I8080\UI</Filter>
     </ClCompile>
     <ClCompile Include="I8080\UI\FontManager\FontManager.cpp">
-      <Filter>I8080\UI\Setting\FontManager</Filter>
+      <Filter>I8080\UI\FontManager</Filter>
     </ClCompile>
     <ClCompile Include="I8080\UI\LastPathManager\LastPathManager.cpp">
       <Filter>I8080\UI\LastPathManager</Filter>
@@ -84,7 +84,7 @@
       <Filter>I8080\UI\Setting</Filter>
     </ClCompile>
     <ClCompile Include="I8080\UI\WindowManager\WindowManager.cpp">
-      <Filter>I8080\UI\Setting\WindowManager</Filter>
+      <Filter>I8080\UI\WindowManager</Filter>
     </ClCompile>
     <ClCompile Include="I8080\UI\Widgets\I8080.UI.CodeEditor.cpp">
       <Filter>I8080\UI\Widgets\CodeEditor</Filter>
@@ -215,6 +215,9 @@
     <ClCompile Include="I8080\Utils\ColorUtilities.cpp">
       <Filter>I8080\Utils\Color</Filter>
     </ClCompile>
+    <ClCompile Include="I8080\UI\ProjectManager\ProjectManager.cpp">
+      <Filter>I8080\UI\ProjectManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Third-Person\IconFontCppHeaders\IconsFontAwesome6.h">
@@ -341,7 +344,7 @@
       <Filter>I8080\UI</Filter>
     </ClInclude>
     <ClInclude Include="I8080\UI\FontManager\FontManager.h">
-      <Filter>I8080\UI\Setting\FontManager</Filter>
+      <Filter>I8080\UI\FontManager</Filter>
     </ClInclude>
     <ClInclude Include="I8080\UI\LastPathManager\LastPathManager.h">
       <Filter>I8080\UI\LastPathManager</Filter>
@@ -362,7 +365,7 @@
       <Filter>I8080\UI\Setting</Filter>
     </ClInclude>
     <ClInclude Include="I8080\UI\WindowManager\WindowManager.h">
-      <Filter>I8080\UI\Setting\WindowManager</Filter>
+      <Filter>I8080\UI\WindowManager</Filter>
     </ClInclude>
     <ClInclude Include="I8080\Config_Compilier.h">
       <Filter>I8080</Filter>
@@ -505,6 +508,9 @@
     <ClInclude Include="I8080\UI\KeyCombination\KeyCombination.h">
       <Filter>I8080\UI\KeyCombination</Filter>
     </ClInclude>
+    <ClInclude Include="I8080\UI\ProjectManager\ProjectManager.h">
+      <Filter>I8080\UI\ProjectManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Third-Party">
@@ -612,12 +618,6 @@
     <Filter Include="I8080\UI\Widgets\CodeEditor\ThirdParty">
       <UniqueIdentifier>{20a56ff7-597d-46a8-a7e4-f1149b5a5182}</UniqueIdentifier>
     </Filter>
-    <Filter Include="I8080\UI\Setting\WindowManager">
-      <UniqueIdentifier>{03fbc963-ace3-4e95-b259-3a68a1cafbf2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="I8080\UI\Setting\FontManager">
-      <UniqueIdentifier>{e23f3c73-6bf0-438d-9a82-12f2066112e3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="I8080\UI\Notification">
       <UniqueIdentifier>{8974f234-bcf2-440b-8b25-94a7fde21313}</UniqueIdentifier>
     </Filter>
@@ -692,6 +692,15 @@
     </Filter>
     <Filter Include="I8080\Utils\Color">
       <UniqueIdentifier>{1eb44efd-1ad6-4b39-a8fd-c89f6f92e788}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\UI\ProjectManager">
+      <UniqueIdentifier>{a1945532-9d64-4e04-bace-e1a42b8b443c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\UI\FontManager">
+      <UniqueIdentifier>{e23f3c73-6bf0-438d-9a82-12f2066112e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\UI\WindowManager">
+      <UniqueIdentifier>{03fbc963-ace3-4e95-b259-3a68a1cafbf2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

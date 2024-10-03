@@ -38,6 +38,11 @@ void EmulationThread::SetSpeedMode(const SpeedMode& mode) {
 	Speed = mode;
 }
 
+
+void EmulationThread::WaitThread() {
+	while (isThreadWorking()) {}
+}
+
 bool EmulationThread::isThreadWorking() {
 	return flag_ThreadWorking;
 }

@@ -37,6 +37,10 @@ public:
 	void SetFont(const std::string& NameFont);
 	void SetSize(const int& sizeFont);
 
+
+	void SetOneStepBigger();
+	void SetOneStepSmaller();
+
 	// TODO: Put it in setting
 	void Draw();
 

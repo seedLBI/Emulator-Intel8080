@@ -188,14 +188,47 @@ std::vector<Key> KeyCombinationHandler::GetUniqueKeys() {
 }
 
 
+void KeyCombinationHandler::DrawSetting() {
+
+
+	ImGui::BeginTable("CombinationsTable", 2);
+
+
+
+	for (int i = 0; i < combinations.size(); i++)
+	{
+		ImGui::TableNextRow();
+
+		ImGui::TableSetColumnIndex(0);
+		ImGui::Text(combinations[i].first.c_str());
+
+		ImGui::TableSetColumnIndex(1);
+		std::string Keys;
+		for (int j = 0; j < combinations[i].second.keys.size(); j++) {
+			if (j != combinations[i].second.keys.size() - 1)
+				Keys += KeyToStr(combinations[i].second.keys[j]) + " + ";
+			else
+				Keys += KeyToStr(combinations[i].second.keys[j]);
+		}
+		ImGui::Text(Keys.c_str());
+	}
+
+	ImGui::EndTable();
+
+
+}
+
 
 int KeyCombinationHandler::GetIndexCollision(const KeyCombination& comb) {
+
+
+	if (comb.keys.empty())
+		return -1;
 
 	for (int i = 0; i < combinations.size(); i++) {
 
 		if (comb.keys.size() != combinations[i].second.keys.size())
 			continue;
-
 
 		bool AllEqual = true;
 		for (int j = 0; j < combinations[i].second.keys.size(); j++) {
