@@ -16,7 +16,7 @@ I8080_UserInterface::I8080_UserInterface(GLFWwindow* window) {
 	Compiler = new CompilerStable();
 	emulationThread = new EmulationThread(processor);
 
-	keyCombination_handler = new KeyCombinationHandler();
+	keyCombination_handler = new KeyCombinationHandler(notificationManager);
 	font_manager = new FontManager();
 	window_manager = new WindowManager();
 
@@ -59,8 +59,6 @@ void I8080_UserInterface::Draw() {
 	WidgetManager.Draw();
 	notificationManager->Draw();
 	settings->Draw();
-
-	ImGui::ShowDemoWindow(); // Show demo window! :)
 
 #ifdef WITH_DEBUG_OUTPUT
 	ImGui::ShowDemoWindow(); // Show demo window! :)
@@ -176,16 +174,16 @@ void I8080_UserInterface::DrawMainMenu() {
 	ImGuiWindow* wind = nullptr;
 	if (ImGui::BeginMainMenuBar()) {
 		if (ImGui::BeginMenu((string(ICON_FA_FILE) + u8" Файл").c_str())) {
-			if (ImGui::MenuItem((string(ICON_FA_FILE) + u8" Новый файл").c_str(), "Ctrl + N")) {
+			if (ImGui::MenuItem((string(ICON_FA_FILE) + u8" Новый файл").c_str(), keyCombination_handler->GetStrCombinationByName(u8"Новый файл").c_str())) {
 				projectManager->NewFile();
 			}
-			if (ImGui::MenuItem((string(ICON_FA_FOLDER_OPEN) + u8" Открыть").c_str(), "Ctrl + O")) {
+			if (ImGui::MenuItem((string(ICON_FA_FOLDER_OPEN) + u8" Открыть").c_str(), keyCombination_handler->GetStrCombinationByName(u8"Открыть файл").c_str())) {
 				projectManager->OpenFile();
 			}
-			if (ImGui::MenuItem((string(ICON_FA_BOX_ARCHIVE) + u8" Сохранить").c_str(), "Ctrl + S")) {
+			if (ImGui::MenuItem((string(ICON_FA_BOX_ARCHIVE) + u8" Сохранить").c_str(), keyCombination_handler->GetStrCombinationByName(u8"Сохранить").c_str())) {
 				projectManager->SaveFile();
 			}
-			if (ImGui::MenuItem((string(ICON_FA_FILE_EXPORT) + u8" Сохранить как...").c_str())) {
+			if (ImGui::MenuItem((string(ICON_FA_FILE_EXPORT) + u8" Сохранить как...").c_str(), keyCombination_handler->GetStrCombinationByName(u8"Сохранить как").c_str())) {
 				projectManager->SaveFileAs();
 			}
 			if (ImGui::BeginMenu(string(string(ICON_FA_COPY) + u8" Последние проекты").c_str())) {
@@ -208,33 +206,33 @@ void I8080_UserInterface::DrawMainMenu() {
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu((string(ICON_FA_CALCULATOR) + u8" Эмулятор").c_str())) {
-			if (ImGui::MenuItem((string(ICON_FA_MICROCHIP) + u8" Компилировать").c_str(), "F2")) {
+			if (ImGui::MenuItem((string(ICON_FA_MICROCHIP) + u8" Компилировать").c_str(), keyCombination_handler->GetStrCombinationByName(u8"Компилировать").c_str())  ) {
 				projectManager->Compile();
 			}
 			ImGui::Separator();
-			if (ImGui::MenuItem((string(ICON_FA_PLAY) + u8" Запуск").c_str(), "F5")) {
+			if (ImGui::MenuItem((string(ICON_FA_PLAY) + u8" Запуск").c_str(), keyCombination_handler->GetStrCombinationByName(u8"Запуск").c_str())) {
 				Emulator_Play();
 			}
 
-			if (ImGui::MenuItem((string(ICON_FA_FORWARD_STEP) + u8" Шаг вперёд").c_str(), "F9")) {
+			if (ImGui::MenuItem((string(ICON_FA_FORWARD_STEP) + u8" Шаг вперёд").c_str(), keyCombination_handler->GetStrCombinationByName(u8"Шаг вперёд").c_str())) {
 				Emulator_Next_step();
 			}
-			if (ImGui::MenuItem((string(ICON_FA_PAUSE) + u8" Пауза").c_str(), "F12")) {
+			if (ImGui::MenuItem((string(ICON_FA_PAUSE) + u8" Пауза").c_str(), keyCombination_handler->GetStrCombinationByName(u8"Пауза").c_str())) {
 				Emulator_Pause();
 			}
-			if (ImGui::MenuItem((string(ICON_FA_STOP) + u8" Стоп").c_str(), "Esc")) {
+			if (ImGui::MenuItem((string(ICON_FA_STOP) + u8" Стоп").c_str(), keyCombination_handler->GetStrCombinationByName(u8"Стоп").c_str())) {
 				Emulator_Stop();
 			}
 			ImGui::Separator();
-			if (ImGui::MenuItem((string(ICON_FA_ROTATE_RIGHT) + u8" Сбросить состояние").c_str())) {
+			if (ImGui::MenuItem((string(ICON_FA_ROTATE_RIGHT) + u8" Сбросить состояние").c_str(), keyCombination_handler->GetStrCombinationByName(u8"Сбросить состояние").c_str())) {
 				Emulator_FullReset();
 			}
-			if (ImGui::MenuItem((string(ICON_FA_ERASER) + u8" Удалить точки останова").c_str())) {
+			if (ImGui::MenuItem((string(ICON_FA_ERASER) + u8" Удалить точки останова").c_str(), keyCombination_handler->GetStrCombinationByName(u8"Удалить точки останова").c_str())) {
 				processor->RemoveAllBreakPoints();
 			}
 			ImGui::Separator();
 
-			if (ImGui::MenuItem((string(ICON_FA_GEAR) + u8" Настройки").c_str())) {
+			if (ImGui::MenuItem((string(ICON_FA_GEAR) + u8" Настройки").c_str(), keyCombination_handler->GetStrCombinationByName(u8"Настройки").c_str())) {
 				settings->Open();
 			}
 
@@ -429,7 +427,7 @@ void I8080_UserInterface::InitKeyCombinationHandler() {
 	keyCombination_handler->AddCombination(u8"Открыть файл", KeyCombination({}, std::bind(&ProjectManager::OpenFile, projectManager)));
 
 
-	keyCombination_handler->AddCombination(u8"Настройки", KeyCombination({}, std::bind(&Setting::Open, settings)));
+	keyCombination_handler->AddCombination(u8"Настройки", KeyCombination({}, std::bind(&Setting::Toggle, settings)));
 
 	keyCombination_handler->AddCombination(u8"Полноэкранный\\Оконный", KeyCombination({ GLFW_KEY_F11 }, std::bind(&WindowManager::ToggleFullscreen, window_manager)));
 

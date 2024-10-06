@@ -2,9 +2,12 @@
 #define SAVE_SYSTEM_MANAGER_H
 
 #include "Config_Compilier.h"
+#include "SaveSystem/DefaultSaveData.h"
 #include "SaveSystem\SaveSystem.h"
 #include "Utils/File_Utils.h"
 #include <vector>
+#include <string>
+#include <sstream>
 #include <fstream>
 #include <iostream>
 
@@ -26,6 +29,11 @@ private:
 	std::vector<SaveSystem*> objects;
 
 	int GetIndexSaveObject(const std::string& NameObject);
+
+
+	void ReadFromFile(std::ifstream& FileSave);
+
+	void ReadFromMemory(const std::string& Data);
 };
 
 #endif // !SAVE_SYSTEM_MANAGER_H

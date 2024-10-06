@@ -18,6 +18,29 @@ void Widget_VarList::Draw() {
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 3));
 	if (ImGui::Begin(GetName_c_str(), GetPtrFlagShow())) {
 
+		static char* input = new char[120];
+
+		static bool flag_first_init = false;
+
+		if (flag_first_init == false) {
+			flag_first_init = true;
+			for (int i = 0; i < 120; i++)
+				input[i] = 0;
+		}
+
+		ImGui::InputTextEx(u8"Поиск постоянных", u8"Поиск", input, 120, ImVec2(ImGui::GetWindowSize().x, 0), ImGuiInputTextFlags_NoLabel);
+
+		int count_chars = 0;
+
+
+		for (int i = 0; i < 120; i++){
+			if (input[i] == 0){
+				count_chars = i;
+				break;
+			}
+		}
+
+
 		static ImGuiTableFlags flags =
 			ImGuiTableFlags_RowBg |
 			ImGuiTableFlags_Borders | ImGuiTableFlags_Reorderable | ImGuiTableFlags_ScrollY;
@@ -29,8 +52,25 @@ void Widget_VarList::Draw() {
 
 			ImGui::TableHeadersRow();
 
-			for (int i = 0; i < translator->Vars.size(); i++)
-			{
+			for (int i = 0; i < translator->Vars.size(); i++){
+
+				if (count_chars != 0)
+				{
+					bool flag_AllGood = true;
+					if (translator->Vars[i].name_marker.size() < count_chars)
+						continue;
+
+					for (int j = 0; j < count_chars; j++)
+					{
+						if (translator->Vars[i].name_marker[j] != input[j]){
+							flag_AllGood = false;
+							break;
+						}
+					}
+					if (flag_AllGood == false)
+						continue;
+				}
+
 
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);

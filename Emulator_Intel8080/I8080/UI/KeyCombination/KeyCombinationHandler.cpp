@@ -1,11 +1,15 @@
 #include "KeyCombinationHandler.h"
 
+
+KeyCombinationHandler::KeyCombinationHandler(NotificationManager* notificationManager) : SaveSystem("KeyCombination") {
+	this->notificationManager = notificationManager;
+}
+
 bool KeyCombinationHandler::GetCollision(const KeyCombination& comb) {
 	if (GetIndexCollision(comb) != -1)
 		return true;
 	return false;
 }
-
 
 bool KeyCombinationHandler::AddCombination(const std::string& Name, const KeyCombination& comb) {
 #ifdef WITH_DEBUG_OUTPUT
@@ -53,16 +57,12 @@ bool KeyCombinationHandler::AddCombination(const std::string& Name, const KeyCom
 
 }
 
-
 void KeyCombinationHandler::Update() {
-	if (flag_StopProcess == false) {
+	if (flag_StopProcess == false && PopupSetKeyIsOpen == false) {
 		ProcessAllUniqueKeys();
 		ProcessAllFunctions();
 	}
 }
-
-
-
 
 int KeyCombinationHandler::GetIndexKeyByNumber(const int& number) {
 	for (int i = 0; i < KeysToCheck.size(); i++) {
@@ -72,8 +72,6 @@ int KeyCombinationHandler::GetIndexKeyByNumber(const int& number) {
 	return -1;
 }
 
-
-//TODO: Добавить проверку колво зажатий и нажатий
 void KeyCombinationHandler::ProcessAllFunctions() {
 	int Value_maxequal = -1;
 	int Index_maxequal = -1;
@@ -157,8 +155,6 @@ void KeyCombinationHandler::ProcessAllUniqueKeys() {
 	}
 }
 
-
-
 std::vector<Key> KeyCombinationHandler::GetUniqueKeys() {
 
 	std::vector<Key> result;
@@ -187,37 +183,328 @@ std::vector<Key> KeyCombinationHandler::GetUniqueKeys() {
 	return result;
 }
 
-
 void KeyCombinationHandler::DrawSetting() {
 
 
-	ImGui::BeginTable("CombinationsTable", 2);
+
+	ImGui::BeginTable("CombinationsTable", 2,ImGuiTableFlags_ScrollY | ImGuiTableFlags_Borders | ImGuiTableFlags_HighlightHoveredColumn);
+	
+	ImGui::TableSetupScrollFreeze(1, 1);
+
+	ImGui::TableSetupColumn(u8"Название команды", ImGuiTableColumnFlags_WidthStretch);
+	ImGui::TableSetupColumn(u8"Комбинация клавиш");
+	ImGui::TableHeadersRow();
 
 
+	static int selected = -1;
 
-	for (int i = 0; i < combinations.size(); i++)
-	{
-		ImGui::TableNextRow();
+	for (int i = 0; i < combinations.size(); i++) {
+		ImGui::TableNextRow(0,2.f * ImGui::GetTextLineHeight());
 
 		ImGui::TableSetColumnIndex(0);
-		ImGui::Text(combinations[i].first.c_str());
+		TextCenteredOnLine(combinations[i].first.c_str(),0,i,0.5f,true);
+
+
 
 		ImGui::TableSetColumnIndex(1);
-		std::string Keys;
-		for (int j = 0; j < combinations[i].second.keys.size(); j++) {
-			if (j != combinations[i].second.keys.size() - 1)
-				Keys += KeyToStr(combinations[i].second.keys[j]) + " + ";
-			else
-				Keys += KeyToStr(combinations[i].second.keys[j]);
+
+		bool s = selected == i;
+
+
+		std::string key_name = combinations[i].second.GetKeysStr();
+
+		if (key_name.empty()){
+			for (int j = 0; j < i; j++)
+				key_name += " ";
 		}
-		ImGui::Text(Keys.c_str());
+
+		if(ImGui::Selectable(key_name.c_str(), &s, ImGuiSelectableFlags_Centered, ImVec2(0, 2.f * ImGui::GetTextLineHeight()))) {
+			selected = i;
+			SelectedCombination_For_setting = i;
+			PopupSetKeyIsOpen = true;
+
+		}
+		
+
+		if (PopupSetKeyIsOpen == false) {
+			selected = -1;
+			SelectedCombination_For_setting = -1;
+		}
+
+
 	}
 
 	ImGui::EndTable();
 
-
+	DrawPopupSetKey();
 }
 
+void KeyCombinationHandler::DrawPopupSetKey() {
+
+	static const ImGuiWindowFlags flagsWindow =
+		ImGuiWindowFlags_NoDocking |
+		ImGuiWindowFlags_NoMove |
+		ImGuiWindowFlags_NoResize |
+		ImGuiWindowFlags_NoCollapse |
+		ImGuiWindowFlags_NoScrollbar;
+
+	static std::vector<int> LastPressedKeys;
+	static float TimePressed = 0.f;
+
+
+
+	if (PopupSetKeyIsOpen){
+		ImGui::OpenPopup(u8"Установка новой комбинации");
+
+
+		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+
+		ImVec2 size = ImGui::GetMainViewport()->WorkSize;
+
+		float HeightWindow = ImGui::GetTextLineHeight() * 10.5f;
+		if (combinations[SelectedCombination_For_setting].second.keys.empty() == false)
+			HeightWindow = ImGui::GetTextLineHeight() * 12.5f;
+
+		ImGui::SetNextWindowSize(ImVec2(ImGui::CalcTextSize(u8"        Удерживай нужную комбинацию клавиш        ").x, HeightWindow));
+
+
+		if (ImGui::BeginPopupModal(u8"Установка новой комбинации", &PopupSetKeyIsOpen, flagsWindow)) {
+
+
+			if (combinations[SelectedCombination_For_setting].second.keys.empty() == false){
+				ImGui::Dummy(ImVec2(0, 10));
+				if (ButtonCenteredOnLine(u8"Стереть текущую комбинацию", 0.5f)) {
+					PopupSetKeyIsOpen = false;
+					TimePressed = 0.f;
+					LastPressedKeys.clear();
+
+					combinations[SelectedCombination_For_setting].second.ChangeKeys({});
+
+					KeysToCheck = GetUniqueKeys();
+
+				}
+			}
+
+
+			ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+			center.x -= ImGui::GetCurrentWindow()->Size.x / 2;
+			center.y -= ImGui::GetCurrentWindow()->Size.y / 2;
+			ImGui::GetCurrentWindow()->Pos = center;
+
+			ImGui::Dummy(ImVec2(0, 10));
+
+			TextCenteredOnLine(u8"Удерживай нужную комбинацию клавиш", 0, 0);
+			TextCenteredOnLine(u8"в течение одной секунды.", 0, 0);
+
+
+
+
+
+			std::vector<int> kkk = GetNumberPressedKeys(OpenglWindow::Vars::window);
+			std::sort(kkk.begin(), kkk.end(), std::greater<int>());
+
+			ErrorCombination error = GetErrorOfThisCombination(kkk);
+
+
+
+			bool flag_error_orange = error != ErrorCombination::NOTHING && error != ErrorCombination::ERROR_COLLISION && error != ErrorCombination::ERROR_IDENTICAL;
+
+
+			if (kkk != LastPressedKeys || kkk.empty() == true || (flag_error_orange)) {
+				TimePressed = 0.f;
+			}
+			else {
+				TimePressed += OpenglWindow::GetDeltaTime();
+			}
+			LastPressedKeys = kkk;
+
+
+			std::string Keys;
+			for (int j = 0; j < kkk.size(); j++) {
+				if (j != kkk.size() - 1)
+					Keys += KeyToStr(kkk[j]) + " + ";
+				else
+					Keys += KeyToStr(kkk[j]);
+			}
+
+			TextCenteredOnLine(Keys.c_str(), 0, 0, 0.5f, true);
+
+
+			ImGui::Dummy(ImVec2(0,5));
+
+			ImVec2 p = ImGui::GetCursorScreenPos();
+			ImVec2 window_size = ImGui::GetWindowSize();
+
+			p.x += 10;
+
+			window_size.x -= 20;
+
+			float width = window_size.x;
+			float height = 20.f;
+
+			draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), IM_COL32(50, 50, 50, 255));
+
+			if (flag_error_orange){
+				draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), IM_COL32(100, 50, 50, 255));
+			}
+			else if(error == ErrorCombination::ERROR_COLLISION || error == ErrorCombination::ERROR_IDENTICAL) {
+				float progress_width = width * TimePressed;
+				draw_list->AddRectFilled(p, ImVec2(p.x + progress_width, p.y + height), ImColor{ 1.f,0.5f,0.2f,1.f });
+			}
+			else {
+				float progress_width = width * TimePressed;
+				draw_list->AddRectFilled(p, ImVec2(p.x + progress_width, p.y + height), ImColor{ 0.5f,1.f,0.5f,1.f });
+			}
+
+			ImGui::Dummy(ImVec2(0, 10));
+
+			if (error == ErrorCombination::ERROR_COLLISION || error == ErrorCombination::ERROR_IDENTICAL)
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.f, 0.5f, 0.2f, 1.f));
+			else
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.f, 0.2f, 0.2f, 1.f));
+			TextCenteredOnLine(ErrorCombination_To_string(error).c_str(), 0, 0, 0.5f, true);
+			ImGui::PopStyleColor();
+
+
+
+			if (TimePressed > 1.f)
+			{
+				if (error == ErrorCombination::ERROR_COLLISION)
+				{
+					int index = GetIndexCollision(kkk);
+					combinations[index].second.keys.clear();
+
+
+					static const ImVec4 color_Orange{ 0.45f,0.35f,0.1f,1.0f };
+					static const ImVec4 color_WHITE{ 1.f,1.f,1.f,1.f };
+
+					string Text = u8"Возникло совпадение комбинаций.\nДля разрешения проблемы у следующей команды\nкомбинация будет стёрта:";
+
+					string Text2 = "[" + combinations[index].first + "]";
+
+					notificationManager->AddNottification(Notification(color_Orange, 8.f, std::vector<N_Element*>{
+						new N_Message(color_WHITE, Text),
+						new N_Message(color_WHITE, Text2)
+					},
+						nullptr));
+
+				}
+				else if (error == ErrorCombination::ERROR_IDENTICAL)
+				{
+
+					static const ImVec4 color_Orange{ 0.45f,0.35f,0.1f,1.0f };
+					static const ImVec4 color_WHITE{ 1.f,1.f,1.f,1.f };
+
+
+					static uint8_t type_message = 0;
+
+					const static std::vector<std::string> variants{
+	 u8"Ну и ладно....",
+	 u8"Ок...",
+	 u8"Странно...",
+	 u8"А зачем?",
+	 u8"Для чего ты это делаешь?",
+	 u8"может ХВАТИТ?!!?!?!?!",
+	 u8"ты хочешь проверить все фразы?",
+	 u8"упорный",
+	 u8"ну давай давай.",
+	 u8"что не кончаются?",
+	 u8"но ты близок",
+	 u8"вот вот",
+	 u8"скоро",
+	 u8"я устал их делать...",
+	 u8"...",u8"......",u8".........",u8"..................",
+	 u8"ты чемпион."
+					};
+					
+					string Text = variants[type_message];
+
+
+
+
+
+					notificationManager->AddNottification(Notification(color_Orange, 3.f, std::vector<N_Element*>{
+						new N_Message(color_WHITE, Text)
+					},
+						nullptr));
+
+					type_message++;
+					if (type_message > 19)
+						type_message = 0;
+
+				}
+
+
+
+
+				PopupSetKeyIsOpen = false;
+				TimePressed = 0.f;
+				LastPressedKeys.clear();
+
+				combinations[SelectedCombination_For_setting].second.ChangeKeys(kkk);
+
+				KeysToCheck = GetUniqueKeys();
+
+
+				for (int i = 0; i < KeysToCheck.size(); i++)
+				{
+					KeysToCheck[i].isDown = true;
+					KeysToCheck[i].isDownLastState = true;
+				}
+
+
+			}
+
+		}
+
+
+	}
+	else {
+		if (LastPressedKeys.empty() == false)
+			LastPressedKeys.clear();
+
+		TimePressed = 0.f;
+	}
+}
+
+bool KeyCombinationHandler::PopupIsOpen() {
+	return PopupSetKeyIsOpen;
+}
+
+std::string KeyCombinationHandler::GetStrCombinationByName(const std::string& name) {
+	for (int i = 0; i < combinations.size(); i++){
+		if (combinations[i].first == name)
+			return combinations[i].second.GetKeysStr();
+	}
+	return "";
+}
+
+int KeyCombinationHandler::GetIndexCollision(const std::vector<int>& comb) {
+
+	if (comb.empty())
+		return -1;
+
+	for (int i = 0; i < combinations.size(); i++) {
+
+		if (comb.size() != combinations[i].second.keys.size())
+			continue;
+
+		bool AllEqual = true;
+		for (int j = 0; j < combinations[i].second.keys.size(); j++) {
+			if (combinations[i].second.keys[j] != comb[j]) {
+				AllEqual = false;
+				break;
+			}
+		}
+		if (AllEqual)
+			return i;
+
+	}
+
+
+	return -1;
+}
 
 int KeyCombinationHandler::GetIndexCollision(const KeyCombination& comb) {
 
@@ -246,11 +533,115 @@ int KeyCombinationHandler::GetIndexCollision(const KeyCombination& comb) {
 	return -1;
 }
 
-
 int KeyCombinationHandler::GetIndexCombinationByName(const std::string& name) {
 	for (int i = 0; i < combinations.size(); i++) {
 		if (combinations[i].first == name)
 			return i;
 	}
 	return -1;
+}
+
+KeyCombinationHandler::ErrorCombination KeyCombinationHandler::GetErrorOfThisCombination(const std::vector<int>& Keys) {
+	if (Keys.empty())
+		return ErrorCombination::NOTHING;
+
+	if (Keys.size() > 4)
+		return ErrorCombination::ERROR_TOO_MUCH_COUNT;
+
+	bool AllNumbersAndSymbols = true;
+
+	for (int i = 0; i < Keys.size(); i++){
+		if (Keys[i] < 39 || Keys[i] > 96)
+		{
+			AllNumbersAndSymbols = false;
+			break;
+		}
+	}
+
+	if (AllNumbersAndSymbols)
+		return ErrorCombination::ERROR_ONLY_SYMBOLS_AND_NUMBERS;
+
+
+	int indexCollision = GetIndexCollision(Keys);
+
+
+	if (indexCollision == SelectedCombination_For_setting)
+		return ErrorCombination::ERROR_IDENTICAL;
+
+	if (indexCollision != -1)
+		return ErrorCombination::ERROR_COLLISION;
+
+
+
+	return ErrorCombination::NOTHING;
+
+}
+
+std::string KeyCombinationHandler::ErrorCombination_To_string(const ErrorCombination& error) {
+	switch (error)
+	{
+	case ErrorCombination::NOTHING:
+		return "";
+		break;
+	case ErrorCombination::ERROR_COLLISION:
+		return u8"Такая комбинация существует.";
+		break;
+	case ErrorCombination::ERROR_ONLY_SYMBOLS_AND_NUMBERS:
+		return u8"Нельзя использовать только символы.";
+		break;
+	case ErrorCombination::ERROR_TOO_MUCH_COUNT:
+		return u8"Клавиш слишком много.";
+		break;
+	case ErrorCombination::ERROR_IDENTICAL:
+		return u8"Зачем устанавливать ту же самую комбинацию?";
+		break;
+	default:
+		break;
+	}
+}
+
+std::string KeyCombinationHandler::Save() {
+	std::string data = "";
+	
+	for (int i = 0; i < combinations.size(); i++)
+	{
+		std::string Keys;
+		for (int j = 0; j < combinations[i].second.keys.size(); j++) {
+			if (j != combinations[i].second.keys.size() - 1)
+				Keys += KeyToStr(combinations[i].second.keys[j]) + " + ";
+			else
+				Keys += KeyToStr(combinations[i].second.keys[j]);
+		}
+
+		data += MakeSaveItem(combinations[i].first, Keys);
+	}
+
+	int countLines = GetCountLines(data);
+
+	std::string result = MakeBegin(countLines);
+
+	result += data;
+
+	return result;
+}
+
+void KeyCombinationHandler::Load(const std::string& Data) {
+	PrintDebugInfoAboutData(Data);
+
+	auto save_info = SplitData(Data);
+
+	for (int i = 0; i < save_info.size(); i++) {
+
+		std::string Name_Element = save_info[i].first;
+		std::string Data_Element = save_info[i].second;
+
+		int indexNameCombination = GetIndexCombinationByName(Name_Element);
+
+		if (indexNameCombination != -1)
+			combinations[indexNameCombination].second.SetKeysByStr(Data_Element);
+		else
+			std::cout << "Unknowed save element founded: [" << Name_Element << "] [" << Data_Element << "]\n";
+	}
+
+	KeysToCheck = GetUniqueKeys();
 }

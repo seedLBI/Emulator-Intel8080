@@ -6809,7 +6809,17 @@ bool ImGui::Selectable(const char* label, bool selected, ImGuiSelectableFlags fl
             PopColumnsBackground();
     }
 
-    RenderTextClipped(text_min, text_max, label, NULL, &label_size, style.SelectableTextAlign, &bb);
+
+    if (flags & ImGuiSelectableFlags_Centered){
+        ImVec2 text_min = ImVec2(bb.Min.x, bb.Min.y + (bb.Max.y - bb.Min.y) * 0.5f - label_size.y * 0.5f);
+        ImVec2 text_max = ImVec2(bb.Max.x, text_min.y + label_size.y);
+        RenderTextClipped(text_min, text_max, label, NULL, &label_size, ImVec2(0.5f, 0.5f), &bb); // (0.5f, 0.5f) для центрирования
+    }
+    else{
+        RenderTextClipped(text_min, text_max, label, NULL, &label_size, style.SelectableTextAlign, &bb);
+    }
+
+    //RenderTextClipped(text_min, text_max, label, NULL, &label_size, style.SelectableTextAlign, &bb);
 
     // Automatically close popups
     if (pressed && (window->Flags & ImGuiWindowFlags_Popup) && !(flags & ImGuiSelectableFlags_DontClosePopups) && !(g.LastItemData.InFlags & ImGuiItemFlags_SelectableDontClosePopup))

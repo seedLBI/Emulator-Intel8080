@@ -20,7 +20,7 @@ void Widget_Help::Draw() {
 
 	ImU32 colorName = ImGui::GetColorU32(ImVec4(1.f, 0.5f, 0.5f, 1.f));
 
-	if (ImGui::Begin(GetName_c_str(), GetPtrFlagShow(), ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_AlwaysHorizontalScrollbar)) {
+	if (ImGui::Begin(GetName_c_str(), GetPtrFlagShow(),  ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_AlwaysHorizontalScrollbar)) {
 
 		if (!isDataLoaded)
 		{

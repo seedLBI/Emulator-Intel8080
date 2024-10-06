@@ -108,8 +108,14 @@ void ProjectManager::SaveFile() {
 		widget_CodeEditor->SetFlagWindow(0);
 		ofstream ofn;
 		ofn.open(stringUTF8_to_wstring(Path_LoadedFile));
-		for (string line : LinesCode)
-			ofn << line << endl;
+
+		for (int i = 0; i < LinesCode.size(); i++){
+			if (i == LinesCode.size() - 1)
+				ofn << LinesCode[i];
+			else
+				ofn << LinesCode[i] << endl;
+		}
+
 		ofn.close();
 
 		if (wasFirstUpdate)
@@ -143,8 +149,16 @@ void ProjectManager::SaveFileAs() {
 	LinesCode = widget_CodeEditor->GetPtrTextEditor()->GetTextLines();
 	ofstream ofn;
 	ofn.open(stringUTF8_to_wstring(Path2NewFile));
-	for (string line : LinesCode)
-		ofn << line << endl;
+
+
+	for (int i = 0; i < LinesCode.size(); i++) {
+		if (i == LinesCode.size() - 1)
+			ofn << LinesCode[i];
+		else
+			ofn << LinesCode[i] << endl;
+	}
+
+
 	ofn.close();
 
 
@@ -321,6 +335,15 @@ void ProjectManager::TryTranslateCode() {
 
 	translatorOutput = Compiler->Compile(LinesCode);
 
+
+	emulationThread->SetControlMode(ControlMode::Stop);
+	emulationThread->WaitThread();
+
+	processor->ActiveFlagStop();
+	processor->Reset();
+	processor->EraseMemory();
+
+
 	if (translatorOutput.Error != TypeTranslatorError::NOTHING) {
 		translatorOutput.Opcodes.clear();
 
@@ -351,11 +374,7 @@ void ProjectManager::TryTranslateCode() {
 		}
 	}
 
-	emulationThread->SetControlMode(ControlMode::Stop);
-	emulationThread->WaitThread();
 
-	processor->ActiveFlagStop();
-	processor->Reset();
 
 	widget_RegisterFlagsInfo->InitLastState();
 	widget_MnemocodeViewer->FollowCursorPC();
@@ -450,7 +469,7 @@ void ProjectManager::Load(const std::string& Data) {
 			std::cout << "Unknown name argument for widget: " << name_arg << std::endl;
 	}
 
-	if (path_temp.empty() == false && flag_CompileAfterOpen == true) {
+	if (path_temp.empty() == false && flag_OpenLastFileWithOpenProgramm == true) {
 
 		if(isFileExist(path_temp))
 			OpenFileWithPath(path_temp);

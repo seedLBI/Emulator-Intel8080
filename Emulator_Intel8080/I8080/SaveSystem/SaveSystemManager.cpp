@@ -32,8 +32,10 @@ void SaveSystemManager::Load() {
 #ifdef WITH_DEBUG_OUTPUT
 		std::cout << "File save [not exist]\n";
 #endif
+		ReadFromMemory(DefaultSaveData);
+
 	}
-	if (isFileNotEmpty(FileSave) == false)
+	else if (isFileNotEmpty(FileSave) == false)
 	{
 		std::cout << "File save [empty]\n";
 	}
@@ -41,49 +43,7 @@ void SaveSystemManager::Load() {
 #ifdef WITH_DEBUG_OUTPUT
 		std::cout << "File save [Begin Reading]:\n";
 #endif
-		while (!FileSave.eof()) {
-			std::string line;
-			getline(FileSave, line);
-			if (line.empty())
-				continue;
-
-			auto begin = line.find_first_of('[') + 1;
-			auto end = line.find_first_of(']');
-
-			std::string FirstArgument = line.substr(begin, end - begin);
-#ifdef WITH_DEBUG_OUTPUT
-			std::cout << "-------------------------" << FirstArgument << std::endl;
-#endif
-			if (FirstArgument == "BEGIN") {
-
-				begin = line.find_last_of('[') + 1;
-				end = line.find_last_of(']');
-
-				std::string Name_Object = line.substr(begin, end - begin);
-
-				begin = line.find_last_of('(') + 1;
-				end = line.find_last_of(')');
-				int CountLines = stoi(line.substr(begin, end - begin));
-#ifdef WITH_DEBUG_OUTPUT
-				std::cout << "-------------------------" << CountLines << std::endl;
-#endif
-				int index_save_object = GetIndexSaveObject(Name_Object);
-
-				std::string Data_save_object = "";
-
-
-				for (int i = 0; i < CountLines; i++) {
-					getline(FileSave, line);
-
-					if (i == CountLines - 1)
-						Data_save_object += line;
-					else
-						Data_save_object += line + '\n';
-				}
-
-				objects[index_save_object]->Load(Data_save_object);
-			}
-		}
+		ReadFromFile(FileSave);
 	}
 
 	FileSave.close();
@@ -108,5 +68,100 @@ SaveSystemManager::SaveSystemManager(const std::string& SavingPath) {
 }
 
 SaveSystemManager::~SaveSystemManager() {
+
+}
+
+
+void SaveSystemManager::ReadFromFile(std::ifstream& FileSave) {
+	while (!FileSave.eof()) {
+		std::string line;
+		getline(FileSave, line);
+		if (line.empty())
+			continue;
+
+		auto begin = line.find_first_of('[') + 1;
+		auto end = line.find_first_of(']');
+
+		std::string FirstArgument = line.substr(begin, end - begin);
+
+		if (FirstArgument == "BEGIN") {
+
+			begin = line.find_last_of('[') + 1;
+			end = line.find_last_of(']');
+
+			std::string Name_Object = line.substr(begin, end - begin);
+
+			begin = line.find_last_of('(') + 1;
+			end = line.find_last_of(')');
+			int CountLines = stoi(line.substr(begin, end - begin));
+
+			int index_save_object = GetIndexSaveObject(Name_Object);
+
+			std::string Data_save_object = "";
+
+
+			for (int i = 0; i < CountLines; i++) {
+				getline(FileSave, line);
+
+				if (i == CountLines - 1)
+					Data_save_object += line;
+				else
+					Data_save_object += line + '\n';
+			}
+
+			objects[index_save_object]->Load(Data_save_object);
+		}
+	}
+
+}
+
+void SaveSystemManager::ReadFromMemory(const std::string& Data) {
+
+
+	std::istringstream input;
+	input.str(Data);
+
+
+	for (std::string line; std::getline(input, line);) {
+		if (line.empty())
+			continue;
+
+
+		auto begin = line.find_first_of('[') + 1;
+		auto end = line.find_first_of(']');
+
+		std::string FirstArgument = line.substr(begin, end - begin);
+
+		if (FirstArgument == "BEGIN") {
+
+			begin = line.find_last_of('[') + 1;
+			end = line.find_last_of(']');
+
+			std::string Name_Object = line.substr(begin, end - begin);
+
+			begin = line.find_last_of('(') + 1;
+			end = line.find_last_of(')');
+			int CountLines = stoi(line.substr(begin, end - begin));
+
+			int index_save_object = GetIndexSaveObject(Name_Object);
+
+			std::string Data_save_object = "";
+
+
+			for (int i = 0; i < CountLines; i++) {
+				std::getline(input, line);
+
+				if (i == CountLines - 1)
+					Data_save_object += line;
+				else
+					Data_save_object += line + '\n';
+			}
+
+			objects[index_save_object]->Load(Data_save_object);
+		}
+	}
+
+
+
 
 }

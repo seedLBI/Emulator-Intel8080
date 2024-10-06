@@ -48,13 +48,13 @@ void Setting::Draw() {
 
 
 		static int selected_setting_type = 0;
-		const char* names_setting_types[2] = { u8"    Общие",u8"  Управление" };
+		const char* names_setting_types[2] = { u8"Общие",u8"Управление" };
 
 
 		ImGui::BeginChild("left pane", ImVec2(ImGui::CalcTextSize(u8"  Управление  ").x, 0));
 
 		for (int i = 0; i < 2; i++) {
-			if (ImGui::Selectable(names_setting_types[i], selected_setting_type == i, 0, ImVec2(0, ImGui::GetTextLineHeight() * 2.f)))
+			if (ImGui::Selectable(names_setting_types[i], selected_setting_type == i, ImGuiSelectableFlags_Centered, ImVec2(0, ImGui::GetTextLineHeight() * 2.f)))
 				selected_setting_type = i;
 		}
 
@@ -72,6 +72,9 @@ void Setting::Draw() {
 			DrawNotificationSetting();
 			DrawEmulationSetting();
 			projectManager->DrawSetting();
+
+			ImGui::Dummy(ImVec2(0, ImGui::GetTextLineHeight()));
+
 			break;
 		case 1:
 			keyCombinationHandler->DrawSetting();
@@ -80,7 +83,6 @@ void Setting::Draw() {
 			break;
 		}
 
-		ImGui::Dummy(ImVec2(0,ImGui::GetTextLineHeight()));
 
 		ImGui::EndChild();
 
@@ -166,8 +168,13 @@ void Setting::Open() {
 #endif
 
 	Popup_Open = true;
-	ImGui::OpenPopup(u8"Настройки");
 }
+
+
+void Setting::Toggle() {
+	Popup_Open = !Popup_Open;
+}
+
 
 bool Setting::isOpen() {
 	return Popup_Open;
@@ -180,6 +187,7 @@ std::string Setting::Save() {
 	data += window->Save();
 	data += notification->Save();
 	data += emulation->Save();
+	data += keyCombinationHandler->Save();
 	data += projectManager->Save();
 
 	std::string output = MakeBegin(GetCountLines(data));
@@ -247,6 +255,9 @@ void Setting::Load(const std::string& Data) {
 			}
 			else if (Name_Object == projectManager->GetName()) {
 				projectManager->Load(Data_save_object);
+			}
+			else if (Name_Object == keyCombinationHandler->GetName()) {
+				keyCombinationHandler->Load(Data_save_object);
 			}
 		}
 

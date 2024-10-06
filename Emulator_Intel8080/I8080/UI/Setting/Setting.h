@@ -22,6 +22,8 @@ public:
 
 	void Draw();
 
+
+	void Toggle();
 	void Open();
 	bool isOpen();
 

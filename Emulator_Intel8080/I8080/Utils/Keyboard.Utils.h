@@ -9,6 +9,10 @@
 
 std::string KeyToStr(const int& key);
 
+int StrToKey(const std::string& str);
+
+std::vector<int> GetNumberPressedKeys(GLFWwindow* window);
+
 
 
 #endif // !KEYBOARD_UTILS_H

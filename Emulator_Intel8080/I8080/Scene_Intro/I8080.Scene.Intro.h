@@ -1231,12 +1231,12 @@ namespace Intro {
 			glBindTexture(GL_TEXTURE_2D, Vars::BufferVelocity.GetTextureID());
 		}
 		void InitWords() {
-			Vars::Word_Lentnyaya_Praktika = utf8_to_utf16(u8"Special version");
-			Vars::Word_Edition = utf8_to_utf16(u8"Для Владоса");
+			Vars::Word_Lentnyaya_Praktika = utf8_to_utf16(u8"PreRelease edition");
+			Vars::Word_Edition = utf8_to_utf16(u8"a.k.a еще чуть чуть...");
 			Vars::Word_Emulator = utf8_to_utf16(u8"Эмулятор");
 			Vars::Word_Processora = utf8_to_utf16(u8"Процессора");
 			Vars::Word_Intel_8080 = utf8_to_utf16(u8"Intel 8080");
-			Vars::Word_Version = utf8_to_utf16(u8"Версия от 20.09.2024");
+			Vars::Word_Version = utf8_to_utf16(u8"Версия от 06.10.2024");
 			Vars::Word_Avtor_Korzhunov_a_c = utf8_to_utf16(u8"Автор:  Коржунов А. С.");
 			Vars::Word_Gruppa_IM2105B = utf8_to_utf16(u8"Группа:  ИМ21-05Б");
 			Vars::Word_Nauch_ruk_CheridnichenkoOM = utf8_to_utf16(u8"Научный  руководитель:  Чередниченко О. М.");

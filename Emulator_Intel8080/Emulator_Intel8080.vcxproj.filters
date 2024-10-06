@@ -218,6 +218,9 @@
     <ClCompile Include="I8080\UI\ProjectManager\ProjectManager.cpp">
       <Filter>I8080\UI\ProjectManager</Filter>
     </ClCompile>
+    <ClCompile Include="I8080\SaveSystem\DefaultSaveData.cpp">
+      <Filter>I8080\UI\SaveSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Third-Person\IconFontCppHeaders\IconsFontAwesome6.h">
@@ -510,6 +513,9 @@
     </ClInclude>
     <ClInclude Include="I8080\UI\ProjectManager\ProjectManager.h">
       <Filter>I8080\UI\ProjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\SaveSystem\DefaultSaveData.h">
+      <Filter>I8080\UI\SaveSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

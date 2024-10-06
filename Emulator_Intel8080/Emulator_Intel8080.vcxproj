@@ -125,7 +125,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\Emulator_Intel8080\Third-Person\Opengl\include;$(SolutionDir)\Emulator_Intel8080\I8080;$(SolutionDir)\Emulator_Intel8080\Third-Person;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <Optimization>Disabled</Optimization>
+      <Optimization>MaxSpeed</Optimization>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
@@ -168,6 +168,7 @@
     <ClCompile Include="I8080\Notification\Notification.Progress.cpp" />
     <ClCompile Include="I8080\Notification\NotificationManager.cpp" />
     <ClCompile Include="I8080\OpenglWindow\OpenglWindow.cpp" />
+    <ClCompile Include="I8080\SaveSystem\DefaultSaveData.cpp" />
     <ClCompile Include="I8080\SaveSystem\SaveSystem.cpp" />
     <ClCompile Include="I8080\SaveSystem\SaveSystemManager.cpp" />
     <ClCompile Include="I8080\UI\FontManager\FontManager.cpp" />
@@ -248,6 +249,7 @@
     <ClInclude Include="I8080\Notification\Notification.Progress.h" />
     <ClInclude Include="I8080\Notification\NotificationManager.h" />
     <ClInclude Include="I8080\OpenglWindow\OpenglWindow.h" />
+    <ClInclude Include="I8080\SaveSystem\DefaultSaveData.h" />
     <ClInclude Include="I8080\SaveSystem\SaveSystem.h" />
     <ClInclude Include="I8080\SaveSystem\SaveSystemManager.h" />
     <ClInclude Include="I8080\Scene_Intro\I8080.Scene.Intro.h" />
