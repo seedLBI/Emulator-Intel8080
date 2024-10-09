@@ -26,6 +26,32 @@ std::string KeyToStr(const int& key) {
 	return KeyMeans[key];
 
 }
+std::string KeyToHumanReadbleStr(const int& key){
+	robin_hood::unordered_flat_map<int, std::string> KeyMeans = {
+		{GLFW_KEY_0, "0"},{GLFW_KEY_1, "1"},{GLFW_KEY_2,"2"},{GLFW_KEY_3,"3"},{GLFW_KEY_4,"4"},{GLFW_KEY_5,"5"},{GLFW_KEY_6, "6"},{GLFW_KEY_7,"7"},{GLFW_KEY_8,"8"},{GLFW_KEY_9,"9"},
+		{GLFW_KEY_SPACE, "Space"},{GLFW_KEY_APOSTROPHE, "\'"}, {GLFW_KEY_COMMA, ","}, {GLFW_KEY_MINUS,"-"}, {GLFW_KEY_PERIOD,"."}, {GLFW_KEY_SLASH, "/"},
+		{GLFW_KEY_SEMICOLON, ";"},{GLFW_KEY_EQUAL,"="},{GLFW_KEY_A,"A"},{GLFW_KEY_B,"B"},{GLFW_KEY_C,"C"},{GLFW_KEY_D,"D"}, {GLFW_KEY_E,"E"}, {GLFW_KEY_F,"F"},
+		{GLFW_KEY_G,"G"},{GLFW_KEY_H,"H"},{GLFW_KEY_I,"I"},{GLFW_KEY_J,"J"},{GLFW_KEY_K,"K"},{GLFW_KEY_L,"L"},{GLFW_KEY_M,"M"},{GLFW_KEY_N,"N"},{GLFW_KEY_O,"O"},{GLFW_KEY_P,"P"},
+		{GLFW_KEY_Q,"Q"}, {GLFW_KEY_R,"R"},{GLFW_KEY_S,"S"}, {GLFW_KEY_T,"T"}, {GLFW_KEY_U,"U"}, {GLFW_KEY_V,"V"}, {GLFW_KEY_W,"W"}, {GLFW_KEY_X,"X"}, {GLFW_KEY_Y,"Y"}, {GLFW_KEY_Z,"Z"},
+		{GLFW_KEY_LEFT_BRACKET,"["}, {GLFW_KEY_BACKSLASH,"\\"}, {GLFW_KEY_RIGHT_BRACKET,"]"}, {GLFW_KEY_GRAVE_ACCENT,"Grave accent"},
+		{GLFW_KEY_ESCAPE,"Esc"}, {GLFW_KEY_ENTER,"Enter"}, {GLFW_KEY_TAB,"TAB"}, {GLFW_KEY_BACKSPACE,"Backspace"}, {GLFW_KEY_INSERT,"Insert"}, {GLFW_KEY_DELETE,"Delete"},
+		{GLFW_KEY_RIGHT,"Right"}, {GLFW_KEY_LEFT,"Left"}, {GLFW_KEY_DOWN,"Down"}, {GLFW_KEY_UP,"Up"}, {GLFW_KEY_PAGE_UP,"Page up"}, {GLFW_KEY_PAGE_DOWN, "Page down"},
+		{GLFW_KEY_HOME,"Home"}, {GLFW_KEY_END,"End"}, {GLFW_KEY_CAPS_LOCK,"Caps lock"},{GLFW_KEY_PAUSE, "Pause"}, {GLFW_KEY_F1,"F1"}, {GLFW_KEY_F2,"F2"}, {GLFW_KEY_F3,"F3"},
+		{GLFW_KEY_F4,"F4"},{GLFW_KEY_F5,"F5"},{GLFW_KEY_F6,"F6"},{GLFW_KEY_F7,"F7"},{GLFW_KEY_F8,"F8"},{GLFW_KEY_F9,"F9"},{GLFW_KEY_F10,"F10"},{GLFW_KEY_F11,"F11"},{GLFW_KEY_F12,"F12"},
+		{GLFW_KEY_KP_0, "NUM_0"},{GLFW_KEY_KP_1,"NUM_1"},{GLFW_KEY_KP_2,"NUM_2"},{GLFW_KEY_KP_3,"NUM_3"}, {GLFW_KEY_KP_4,"NUM_4"},{GLFW_KEY_KP_5,"NUM_5"}, {GLFW_KEY_KP_6,"NUM_6"},
+		{GLFW_KEY_KP_7, "NUM_7"},{GLFW_KEY_KP_8,"NUM_8"},{GLFW_KEY_KP_9,"NUM_9"}, {GLFW_KEY_KP_DECIMAL,"NUM_DECIMAL"},{GLFW_KEY_KP_DIVIDE,"NUM_DIVIDE"}, {GLFW_KEY_KP_MULTIPLY, "NUM_MULTIPLY"},
+		{GLFW_KEY_KP_SUBTRACT,"NUM_SUBTRACT"}, {GLFW_KEY_KP_ADD,"NUM_ADD"}, {GLFW_KEY_KP_ENTER,"NUM_ENTER"}, {GLFW_KEY_KP_EQUAL,"NUM_EQUAL"}, {GLFW_KEY_LEFT_SHIFT,"LShift"},
+		{GLFW_KEY_LEFT_CONTROL,"LCtrl"}, {GLFW_KEY_LEFT_ALT,"LAlt"}, {GLFW_KEY_LEFT_SUPER,"L_SUPER"}, {GLFW_KEY_RIGHT_SHIFT,"RShift"}, {GLFW_KEY_RIGHT_CONTROL,"RCtrl"},
+		{GLFW_KEY_RIGHT_ALT,"RAlt"}, {GLFW_KEY_RIGHT_SUPER,"R_SUPER"}
+	};
+
+	if (KeyMeans.contains(key) == false)
+		return "UNSUPPORTED";
+
+	return KeyMeans[key];
+}
+
+
 
 int StrToKey(const std::string& str) {
 	robin_hood::unordered_flat_map<std::string,int> StrMeans = {

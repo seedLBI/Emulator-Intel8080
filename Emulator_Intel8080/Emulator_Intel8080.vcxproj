@@ -158,6 +158,12 @@
     <ClCompile Include="I8080\Emulator\Port\I8080.Port.Timer.cpp" />
     <ClCompile Include="I8080\FontsData\IconsFont.cpp" />
     <ClCompile Include="I8080\FontsData\MainFont.cpp" />
+    <ClCompile Include="I8080\ImagesData\AuthorPicture\Image.Author.Backend.cpp" />
+    <ClCompile Include="I8080\ImagesData\AuthorPicture\Image.Author.Close.cpp" />
+    <ClCompile Include="I8080\ImagesData\AuthorPicture\Image.Author.EyeTransparent.cpp" />
+    <ClCompile Include="I8080\ImagesData\AuthorPicture\Image.Author.Front.cpp" />
+    <ClCompile Include="I8080\ImagesData\AuthorPicture\Image.Author.LeftEye.cpp" />
+    <ClCompile Include="I8080\ImagesData\AuthorPicture\Image.Author.RightEye.cpp" />
     <ClCompile Include="I8080\ImagesData\Image_LogoApplicationArrayPngBytes.cpp" />
     <ClCompile Include="I8080\ImagesData\Image_MSDF_ATLAS.cpp" />
     <ClCompile Include="I8080\ImagesData\Image_MSDF_DESIGN_8080.cpp" />
@@ -171,6 +177,8 @@
     <ClCompile Include="I8080\SaveSystem\DefaultSaveData.cpp" />
     <ClCompile Include="I8080\SaveSystem\SaveSystem.cpp" />
     <ClCompile Include="I8080\SaveSystem\SaveSystemManager.cpp" />
+    <ClCompile Include="I8080\UI\AuthorPopup\AuthorPopup.cpp" />
+    <ClCompile Include="I8080\UI\AuthorPopup\OpenglTexture.h" />
     <ClCompile Include="I8080\UI\FontManager\FontManager.cpp" />
     <ClCompile Include="I8080\UI\I8080.UI.cpp" />
     <ClCompile Include="I8080\UI\KeyCombination\KeyCombinationHandler.cpp" />
@@ -239,6 +247,12 @@
     <ClInclude Include="I8080\Emulator\Port\I8080.Port.Timer.h" />
     <ClInclude Include="I8080\FontsData\IconsFont.h" />
     <ClInclude Include="I8080\FontsData\MainFont.h" />
+    <ClInclude Include="I8080\ImagesData\AuthorPicture\Image.Author.Backend.h" />
+    <ClInclude Include="I8080\ImagesData\AuthorPicture\Image.Author.Close.h" />
+    <ClInclude Include="I8080\ImagesData\AuthorPicture\Image.Author.EyeTransparent.h" />
+    <ClInclude Include="I8080\ImagesData\AuthorPicture\Image.Author.Front.h" />
+    <ClInclude Include="I8080\ImagesData\AuthorPicture\Image.Author.LeftEye.h" />
+    <ClInclude Include="I8080\ImagesData\AuthorPicture\Image.Author.RightEye.h" />
     <ClInclude Include="I8080\ImagesData\Image_LogoApplicationArrayPngBytes.h" />
     <ClInclude Include="I8080\ImagesData\Image_MSDF_ATLAS.h" />
     <ClInclude Include="I8080\ImagesData\Image_MSDF_DESIGN_8080.h" />
@@ -262,6 +276,7 @@
     <ClInclude Include="I8080\Scene_Intro\Shaders\Intro.Shader.Vertex.VelocityObject.h" />
     <ClInclude Include="I8080\Scene_Intro\Shaders\Intro.Shaders.h" />
     <ClInclude Include="I8080\Shader\Shader.h" />
+    <ClInclude Include="I8080\UI\AuthorPopup\AuthorPopup.h" />
     <ClInclude Include="I8080\UI\FontManager\FontManager.h" />
     <ClInclude Include="I8080\UI\I8080.UI.h" />
     <ClInclude Include="I8080\UI\KeyCombination\KeyCombination.h" />
@@ -323,6 +338,13 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="logo512_otd_icon512.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Help.data">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
+    </CopyFileToFolders>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

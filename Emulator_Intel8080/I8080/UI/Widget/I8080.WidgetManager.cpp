@@ -12,12 +12,45 @@ I8080_WidgetManager::~I8080_WidgetManager()
 
 
 void I8080_WidgetManager::Draw() {
-	for (int i = 0; i < ptr_widgets.size(); i++)
+	for (int i = 0; i < ptr_widgets.size(); i++) {
+
+
+		ptr_widgets[i]->UpdateFocus();
 		ptr_widgets[i]->Draw();
+
+
+		float TimerFocus = ptr_widgets[i]->GetTimerFocus()* ptr_widgets[i]->GetTimerFocus();
+		if (TimerFocus > 0.f) {
+
+			ImGuiWindow* window = ImGui::FindWindowByName(ptr_widgets[i]->GetName_c_str());
+
+			auto drawlist = window->DrawList;
+
+			drawlist->AddRectFilled(
+				window->Pos,
+				{ window->Pos.x + window->Size.x,window->Pos.y + window->Size.y },
+				ImGui::ColorConvertFloat4ToU32(ImVec4(0.f, TimerFocus, 0.f, TimerFocus)));
+		}
+	}
 }
 void I8080_WidgetManager::Update() {
 	for (int i = 0; i < ptr_widgets.size(); i++)
 		ptr_widgets[i]->Update();
+
+	if (indexHelp == -1)
+		return;
+
+	std::string NamePressedButtonFromHelp = ptr_widgets[indexHelp]->GetCommand();
+	if (NamePressedButtonFromHelp.empty())
+		return;
+
+	int index = GetIndexSaveObject(NamePressedButtonFromHelp);
+
+	if (ptr_widgets[index]->GetFlagShow() == false)
+		ptr_widgets[index]->SetFlagShow(true);
+	else
+		ptr_widgets[index]->SetFocus();
+
 }
 
 int I8080_WidgetManager::FindIndex(std::string nameWidget) {
@@ -30,6 +63,8 @@ int I8080_WidgetManager::FindIndex(std::string nameWidget) {
 
 void I8080_WidgetManager::AddWidgetPtr(I8080_Widget* ptr_widget) {
 	ptr_widgets.emplace_back(ptr_widget);
+	if (ptr_widget->GetName() == u8"Руководство")
+		indexHelp = ptr_widgets.size() - 1;
 }
 
 void I8080_WidgetManager::LoadVisibilitySettings(std::vector<std::pair<std::string, bool>> settingData) {

@@ -12,6 +12,7 @@ void Widget_SymbolScreen::Draw() {
 		return;
 
 
+	ImGui::SetNextWindowSize(ImVec2(200, 200), ImGuiCond_FirstUseEver);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 	if (ImGui::Begin(GetName_c_str(), GetPtrFlagShow(), ImGuiWindowFlags_NoScrollbar)) {
 

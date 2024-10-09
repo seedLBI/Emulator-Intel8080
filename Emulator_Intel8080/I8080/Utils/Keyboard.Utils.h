@@ -9,6 +9,8 @@
 
 std::string KeyToStr(const int& key);
 
+std::string KeyToHumanReadbleStr(const int& key);
+
 int StrToKey(const std::string& str);
 
 std::vector<int> GetNumberPressedKeys(GLFWwindow* window);

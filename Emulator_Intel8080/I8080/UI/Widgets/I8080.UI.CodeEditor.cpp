@@ -13,16 +13,22 @@ void Widget_CodeEditor::Draw() {
 
 
 
+
 	if (editor->IsTextChanged())
 		flags_CodeEditor = ImGuiWindowFlags_UnsavedDocument;
 	//cout << flags << endl;
 
+
+	ImGui::SetNextWindowSize(ImVec2(200, 200), ImGuiCond_FirstUseEver);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 	if (ImGui::Begin(GetName_c_str(), GetPtrFlagShow(), flags_CodeEditor)) {
 		editor->Render(GetName_c_str());
 		ImGui::End();
 	}
 	ImGui::PopStyleVar();
+
+
+
 }
 void Widget_CodeEditor::Update() {
 

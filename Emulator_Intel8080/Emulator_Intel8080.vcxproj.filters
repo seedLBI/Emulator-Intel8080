@@ -219,7 +219,31 @@
       <Filter>I8080\UI\ProjectManager</Filter>
     </ClCompile>
     <ClCompile Include="I8080\SaveSystem\DefaultSaveData.cpp">
-      <Filter>I8080\UI\SaveSystem</Filter>
+      <Filter>I8080\UI\SaveSystem\DefaultSave</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\ImagesData\AuthorPicture\Image.Author.Front.cpp">
+      <Filter>I8080\ImagesData\AuthorPicture</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\ImagesData\AuthorPicture\Image.Author.Backend.cpp">
+      <Filter>I8080\ImagesData\AuthorPicture</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\ImagesData\AuthorPicture\Image.Author.Close.cpp">
+      <Filter>I8080\ImagesData\AuthorPicture</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\ImagesData\AuthorPicture\Image.Author.EyeTransparent.cpp">
+      <Filter>I8080\ImagesData\AuthorPicture</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\ImagesData\AuthorPicture\Image.Author.LeftEye.cpp">
+      <Filter>I8080\ImagesData\AuthorPicture</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\ImagesData\AuthorPicture\Image.Author.RightEye.cpp">
+      <Filter>I8080\ImagesData\AuthorPicture</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\UI\AuthorPopup\AuthorPopup.cpp">
+      <Filter>I8080\UI\AuthorPopup</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\UI\AuthorPopup\OpenglTexture.h">
+      <Filter>I8080\UI\AuthorPopup</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -515,7 +539,28 @@
       <Filter>I8080\UI\ProjectManager</Filter>
     </ClInclude>
     <ClInclude Include="I8080\SaveSystem\DefaultSaveData.h">
-      <Filter>I8080\UI\SaveSystem</Filter>
+      <Filter>I8080\UI\SaveSystem\DefaultSave</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\ImagesData\AuthorPicture\Image.Author.Front.h">
+      <Filter>I8080\ImagesData\AuthorPicture</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\ImagesData\AuthorPicture\Image.Author.Backend.h">
+      <Filter>I8080\ImagesData\AuthorPicture</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\ImagesData\AuthorPicture\Image.Author.Close.h">
+      <Filter>I8080\ImagesData\AuthorPicture</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\ImagesData\AuthorPicture\Image.Author.EyeTransparent.h">
+      <Filter>I8080\ImagesData\AuthorPicture</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\ImagesData\AuthorPicture\Image.Author.LeftEye.h">
+      <Filter>I8080\ImagesData\AuthorPicture</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\ImagesData\AuthorPicture\Image.Author.RightEye.h">
+      <Filter>I8080\ImagesData\AuthorPicture</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\UI\AuthorPopup\AuthorPopup.h">
+      <Filter>I8080\UI\AuthorPopup</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -708,6 +753,15 @@
     <Filter Include="I8080\UI\WindowManager">
       <UniqueIdentifier>{03fbc963-ace3-4e95-b259-3a68a1cafbf2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="I8080\UI\SaveSystem\DefaultSave">
+      <UniqueIdentifier>{1a443a6a-cbcf-4d3d-8ff0-b8f924f9ac67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\ImagesData\AuthorPicture">
+      <UniqueIdentifier>{66cbcc31-b6ea-4caf-bc38-2eebbc318538}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\UI\AuthorPopup">
+      <UniqueIdentifier>{c5e5a52e-234e-4d7e-99b8-895f824e719b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="I8080_Emulator.rc">
@@ -718,5 +772,8 @@
     <Image Include="logo512_otd_icon512.ico">
       <Filter>Third-Party</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Help.data" />
   </ItemGroup>
 </Project>

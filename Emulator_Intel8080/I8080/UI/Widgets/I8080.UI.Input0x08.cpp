@@ -8,8 +8,7 @@ Widget_Input0x08::~Widget_Input0x08() {
 
 }
 void Widget_Input0x08::Draw() {
-	if (GetFlagShow() == false)
-		return;
+
 
 
 	ImVec4 ColorBG = ImGui::GetStyleColorVec4(ImGuiCol_WindowBg);
@@ -27,7 +26,12 @@ void Widget_Input0x08::Draw() {
 
 		if (GetFlagShow() == false)
 			SetFlagShow(true);
+
+		ImGui::SetWindowFocus(u8"Окно ввода");
 	}
+
+	if (GetFlagShow() == false)
+		return;
 
 
 	ImVec4 NewColorBG = ImVec4((ColorBG.x) , (ColorBG.y), ColorBG.z, 1.0f);
@@ -49,9 +53,7 @@ void Widget_Input0x08::Draw() {
 		if (ImGui::InputText(u8"Значение от 0 до 255", buf2, 4, ImGuiInputTextFlags_CharsDecimal)) {
 
 		}
-		if (processor->IsWaitingPortInput()) {
-			//ImGui::SetActiveID(ImGui::GetItemID(), ImGui::GetCurrentWindow());
-		}
+		
 
 		ImGui::SameLine();
 		if (ImGui::IsKeyPressed(ImGuiKey_Enter) && processor->IsWaitingPortInput())

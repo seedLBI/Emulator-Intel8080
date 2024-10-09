@@ -17,7 +17,7 @@ void Widget_MarkerList::Draw() {
 		return;
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 3));
-	if (ImGui::Begin(GetName_c_str(), GetPtrFlagShow(), ImGuiWindowFlags_AlwaysAutoResize)) {
+	if (ImGui::Begin(GetName_c_str(), GetPtrFlagShow())) {
 
 
 		static char* input = new char[120];

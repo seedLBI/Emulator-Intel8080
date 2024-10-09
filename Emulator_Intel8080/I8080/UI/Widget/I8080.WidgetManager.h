@@ -37,6 +37,9 @@ public:
 private:
 	std::vector<I8080_Widget*> ptr_widgets;
 
+	int indexHelp = -1;
+
+
 	int FindIndex(std::string nameWidget);
 };
 

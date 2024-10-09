@@ -66,6 +66,7 @@
 
 #include "Notification/NotificationManager.h"
 
+#include "AuthorPopup/AuthorPopup.h"
 
 
 
@@ -101,10 +102,11 @@ private:
 	void DrawMainMenu();
 
 
-
 	void InitWidgets();
 	void InitSaveManager();
 	void InitKeyCombinationHandler();
+
+	AuthorPopup authorPopup;
 
 	GLFWwindow*					  window = nullptr;
 	I8080*						  processor = nullptr;

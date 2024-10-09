@@ -20,6 +20,7 @@ void Widget_Help::Draw() {
 
 	ImU32 colorName = ImGui::GetColorU32(ImVec4(1.f, 0.5f, 0.5f, 1.f));
 
+
 	if (ImGui::Begin(GetName_c_str(), GetPtrFlagShow(),  ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_AlwaysHorizontalScrollbar)) {
 
 		if (!isDataLoaded)
@@ -66,6 +67,7 @@ void Widget_Help::Draw() {
 
 		ImGui::End();
 	}
+
 }
 void Widget_Help::Update() {
 
@@ -175,9 +177,23 @@ void Widget_Help::DrawTextWithAbbrivs(const std::vector < std::vector< std::any 
 
 				ImGui::SeparatorText(elem_code.name.c_str());
 
-				ImGui::InputTextMultiline((u8"CodeBlock_"+elem_code.name).c_str(), elem_code.text.data(), elem_code.text.size(), ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * (GetCountLines(elem_code.text) + 1)*1.1f), ImGuiInputTextFlags_ReadOnly);
+				ImGui::InputTextMultiline((u8"CodeBlock_"+elem_code.name).c_str(), elem_code.text.data(), elem_code.text.size(), ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * (GetCountLines(elem_code.text) + 1)*1.1f), ImGuiInputTextFlags_ReadOnly| ImGuiInputTextFlags_NoLabel);
+			}
+			else if (Text[line][element].type() == typeid(ColoredText)) {
+
+				ColoredText elem_code = std::any_cast<ColoredText>(Text[line][element]);
+
+				ImGui::TextColored(ImVec4(1.f, 0.4f, 0.4f, 1.f), elem_code.text.c_str());
+			}
+			else if (Text[line][element].type() == typeid(HyperTextForWidget)) {
+
+				HyperTextForWidget elem_code = std::any_cast<HyperTextForWidget>(Text[line][element]);
+
+				if (ImGui::ButtonEx(elem_code.text.c_str()))
+					Button_pressed = elem_code.text;
 			}
 
+			//HyperTextForWidget
 
 			if (element != Text[line].size() - 1)
 				ImGui::SameLine(0,0);
@@ -185,6 +201,12 @@ void Widget_Help::DrawTextWithAbbrivs(const std::vector < std::vector< std::any 
 	}
 
 
+}
+
+std::string Widget_Help::GetCommand() {
+	std::string temp = Button_pressed;
+	Button_pressed.clear();
+	return temp;
 }
 
 
@@ -332,24 +354,70 @@ void Widget_Help::ReadFromFile(const std::string& Path2File) {
 				temp_CodeBlock.text += line + "\n";
 			}
 			else {
-				if (line.find_first_of("<") != std::string::npos) {
 
-					while (line.find_first_of("<") != std::string::npos) {
-						temp_line.push_back(line.substr(0, line.find_first_of("<")));
-						begin = line.find_first_of("<") + 1;
-						end = line.find_first_of(">");
-						std::string abr_name = line.substr(begin, end - begin);
-						temp_line.push_back(GetIndexAbbriv(abr_name));
+				bool Begin_Hashteg = false;
+				bool Begin_Figure = false;
+				bool Begin_Abriv = false;
 
-						line = line.substr(end + 1);
+				std::string temp = "";
+
+				int index = 0;
+				while (true) {
+
+					if (index > line.size() - 1 || line.empty())
+						break;
+
+					if (line[index] == '<'){
+						if (temp.empty() == false) {
+							temp_line.push_back(temp);
+							temp.clear();
+						}
+						Begin_Abriv = true;
+					}
+					else if (line[index] == '>') {
+						Begin_Abriv = false;
+						temp_line.push_back(GetIndexAbbriv(temp));
+						temp.clear();
+					}
+					else if (line[index] == '{') {
+
+						if (temp.empty() == false) {
+							temp_line.push_back(temp);
+							temp.clear();
+						}
+
+						Begin_Figure = true;
+					}
+					else if (line[index] == '}') {
+						Begin_Figure = false;
+						temp_line.push_back(HyperTextForWidget{ temp });
+						temp.clear();
+					}
+					else if (line[index] == '#') {
+
+						if (Begin_Hashteg){
+							Begin_Hashteg = false;
+							temp_line.push_back(ColoredText{ temp });
+							temp.clear();
+						}
+						else {
+							if (temp.empty() == false) {
+								temp_line.push_back(temp);
+								temp.clear();
+							}
+							Begin_Hashteg = true;
+						}
+					}
+					else {
+						temp += line[index];
 					}
 
-					temp_line.push_back(line);
-				}
-				else {
-					temp_line.push_back(line);
+
+					index++;
 				}
 
+				if (temp.empty() == false)
+					temp_line.push_back(temp);
 
 				temp_text.push_back(temp_line);
 			}

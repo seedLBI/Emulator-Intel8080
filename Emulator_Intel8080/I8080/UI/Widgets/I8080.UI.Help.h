@@ -27,7 +27,11 @@ public:
 	std::string Save() override;
 	void Load(const std::string& Data) override;
 
+	std::string GetCommand() override;
+
 private:
+
+	std::string Button_pressed = "";
 
 	bool isDataLoaded = false;
 
@@ -37,9 +41,14 @@ private:
 		std::string name;
 		std::string mean;
 	};
-
 	struct CodeBlock {
 		std::string name;
+		std::string text;
+	};
+	struct ColoredText {
+		std::string text;
+	};
+	struct HyperTextForWidget {
 		std::string text;
 	};
 
@@ -47,7 +56,6 @@ private:
 		std::string name;
 		std::vector < std::vector< std::any >> text_with_index;
 	};
-
 	struct Category {
 		std::string name;
 		std::vector<SubCategory> categories;

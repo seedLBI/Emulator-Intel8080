@@ -19,6 +19,13 @@ public:
 private:
 	bool mode_output = true;
 
+	bool Hex_enable = false;
+	bool Dec_enable = true;
+	bool Bin_enable = false;
+
+
+
+
 	I8080* processor;
 };
 

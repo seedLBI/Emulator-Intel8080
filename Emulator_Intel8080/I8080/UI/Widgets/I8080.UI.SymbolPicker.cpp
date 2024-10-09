@@ -14,6 +14,7 @@ void Widget_SymbolPicker::Draw() {
 	if (GetFlagShow() == false)
 		return;
 
+	ImGui::SetNextWindowSize(ImVec2(200, 200), ImGuiCond_FirstUseEver);
 	if (ImGui::Begin(GetName_c_str(), GetPtrFlagShow(), ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize)) {
 
 		ImGuiStyle& style = ImGui::GetStyle();

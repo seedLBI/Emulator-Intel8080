@@ -7,22 +7,37 @@ void Widget_Output0x02::Draw() {
 	if (ImGui::Begin(GetName_c_str(), GetPtrFlagShow(), ImGuiWindowFlags_NoScrollbar)) {
 		ImGui::Text(u8"Порт: 0х02");
 		ImGui::SameLine();
-		/*
-		HelpMarker(
-			u8"Способ обращения к порту: \n"
-			u8"- Написать OUT 0x02 в коде.\n"
-			u8"Протокол использования: \n"
-			u8"1. Перед выводом убедиться что нужное для вывода значения лежит в регистре А\n"
-			u8"2. После выполнения команды он отобразиться в консоле"
-		);
-		*/
+
+		if (ImGui::RadioButton("Hex", Hex_enable)) {
+			Hex_enable = true;
+			Dec_enable = false;
+			Bin_enable = false;
+		}
 		ImGui::SameLine();
+		if (ImGui::RadioButton("Dec", Dec_enable)) {
+			Hex_enable = false;
+			Dec_enable = true;
+			Bin_enable = false;
+		}
+		ImGui::SameLine();
+		if (ImGui::RadioButton("Bin", Bin_enable)) {
+			Hex_enable = false;
+			Dec_enable = false;
+			Bin_enable = true;
+		}
 		
 		ImGui::Checkbox(u8"Вывод столбиком", &mode_output);
 		ImGui::Separator();
 		std::string text;
 		for (int i = 0; i < processor->GetOutputConsole().size(); i++) {
-			text += to_string(processor->GetOutputConsole()[i]);
+
+			if (Dec_enable)
+				text += to_string(processor->GetOutputConsole()[i]);
+			else if (Hex_enable)
+				text += int2stringHex(processor->GetOutputConsole()[i]);
+			else if(Bin_enable)
+				text += int2stringBin(processor->GetOutputConsole()[i]);
+
 			if (mode_output)
 				text += "\n";
 			else
@@ -48,9 +63,12 @@ Widget_Output0x02::~Widget_Output0x02()
 
 std::string Widget_Output0x02::Save() {
 	std::string output = "";
-	output += MakeBegin(2);
+	output += MakeBegin(5);
 	output += MakeSaveItem(string("Flag_Show"), std::to_string(GetFlagShow()));
 	output += MakeSaveItem(string("mode_output"), std::to_string(mode_output));
+	output += MakeSaveItem(string("Hex_enable"), std::to_string(Hex_enable));
+	output += MakeSaveItem(string("Dec_enable"), std::to_string(Dec_enable));
+	output += MakeSaveItem(string("Bin_enable"), std::to_string(Bin_enable));
 	return output;
 }
 
@@ -68,6 +86,12 @@ void Widget_Output0x02::Load(const std::string& Data) {
 			SetFlagShow(stoi(value_arg));
 		else if (name_arg == "mode_output")
 			mode_output = stoi(value_arg);
+		else if (name_arg == "Hex_enable")
+			Hex_enable = stoi(value_arg);
+		else if (name_arg == "Dec_enable")
+			Dec_enable = stoi(value_arg);
+		else if (name_arg == "Bin_enable")
+			Bin_enable = stoi(value_arg);
 		else
 			std::cout << "Unknown name argument for widget: " << name_arg << std::endl;
 	}

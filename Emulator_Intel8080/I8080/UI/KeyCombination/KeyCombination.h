@@ -12,6 +12,7 @@ struct KeyCombination {
 	std::function<void()> v_function;
 
 	std::string KeysStr;
+	std::string KeysHumanStr;
 
 	KeyCombination(std::vector<int> keys, std::function<void()> v_function) {
 		this->keys = keys;
@@ -23,6 +24,10 @@ struct KeyCombination {
 	void ChangeKeys(const std::vector<int>& new_keys) {
 		keys = new_keys;
 		UpdateStrKey();
+	}
+
+	std::string GetKeysHumanStr() {
+		return KeysHumanStr;
 	}
 
 	std::string GetKeysStr() {
@@ -63,11 +68,17 @@ private:
 
 	void UpdateStrKey() {
 		KeysStr.clear();
+		KeysHumanStr.clear();
+
 		for (int j = 0; j < keys.size(); j++) {
-			if (j != keys.size() - 1)
+			if (j != keys.size() - 1) {
+				KeysHumanStr += KeyToHumanReadbleStr(keys[j]) + " + ";
 				KeysStr += KeyToStr(keys[j]) + " + ";
-			else
+			}
+			else {
+				KeysHumanStr += KeyToHumanReadbleStr(keys[j]);
 				KeysStr += KeyToStr(keys[j]);
+			}
 		}
 	}
 };

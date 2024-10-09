@@ -211,7 +211,7 @@ void KeyCombinationHandler::DrawSetting() {
 		bool s = selected == i;
 
 
-		std::string key_name = combinations[i].second.GetKeysStr();
+		std::string key_name = combinations[i].second.GetKeysHumanStr();
 
 		if (key_name.empty()){
 			for (int j = 0; j < i; j++)
@@ -323,9 +323,9 @@ void KeyCombinationHandler::DrawPopupSetKey() {
 			std::string Keys;
 			for (int j = 0; j < kkk.size(); j++) {
 				if (j != kkk.size() - 1)
-					Keys += KeyToStr(kkk[j]) + " + ";
+					Keys += KeyToHumanReadbleStr(kkk[j]) + " + ";
 				else
-					Keys += KeyToStr(kkk[j]);
+					Keys += KeyToHumanReadbleStr(kkk[j]);
 			}
 
 			TextCenteredOnLine(Keys.c_str(), 0, 0, 0.5f, true);

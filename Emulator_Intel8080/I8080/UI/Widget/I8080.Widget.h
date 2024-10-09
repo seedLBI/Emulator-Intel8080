@@ -3,6 +3,7 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
+#include "imgui.h"
 #include "SaveSystem\SaveSystem.h"
 #include <string>
 
@@ -19,11 +20,23 @@ public:
 	void SetFlagShow(const bool& value);
 	bool* GetPtrFlagShow();
 
+	void SetFocus();
+	void UpdateFocus();
+
+	float GetTimerFocus();
+
 	std::string GetName();
 	const char* GetName_c_str();
 
+	virtual std::string GetCommand();
+
+
 	void Load(const std::string& Data) override;
 	std::string Save() override;
+
+protected:
+	float TimerFocus = 0.f;
+	bool flag_FocusSeted = false;
 
 private:
 	std::string Name;

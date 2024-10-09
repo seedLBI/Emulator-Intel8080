@@ -60,6 +60,8 @@ void I8080_UserInterface::Draw() {
 	notificationManager->Draw();
 	settings->Draw();
 
+	authorPopup.Draw();
+
 #ifdef WITH_DEBUG_OUTPUT
 	ImGui::ShowDemoWindow(); // Show demo window! :)
 #endif
@@ -278,9 +280,12 @@ void I8080_UserInterface::DrawMainMenu() {
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu((string(ICON_FA_LIFE_RING) + u8" Помощь").c_str())) {
-			if (ImGui::MenuItem((string(ICON_FA_ADDRESS_CARD) + u8" О авторе...").c_str())) {
 
+			if (ImGui::MenuItem((string(ICON_FA_ADDRESS_CARD) + u8" О авторе...").c_str())) {
+				authorPopup.Open();
 			}
+
+			/*
 			if (ImGui::MenuItem((string(ICON_FA_CIRCLE_INFO) + u8" О программе...").c_str())) {
 
 			}
@@ -304,6 +309,9 @@ void I8080_UserInterface::DrawMainMenu() {
 			if (ImGui::MenuItem((string(ICON_FA_ARROWS_ROTATE) + u8" Проверить обновления").c_str())) {
 
 			}
+			*/
+
+
 			ImGui::EndMenu();
 		}
 

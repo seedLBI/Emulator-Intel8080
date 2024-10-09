@@ -11,6 +11,8 @@ void Widget_ConstList::Draw() {
 	if (GetFlagShow() == false)
 		return;
 
+
+
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 3));
 	if (ImGui::Begin(GetName_c_str(), GetPtrFlagShow())) {
 
@@ -89,6 +91,7 @@ void Widget_ConstList::Draw() {
 		ImGui::End();
 	}
 	ImGui::PopStyleVar();
+
 }
 void Widget_ConstList::Update() {
 

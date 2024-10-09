@@ -19,6 +19,31 @@ void I8080_Widget::Update() {
 
 }
 
+void I8080_Widget::SetFocus() {
+	TimerFocus = 1.f;
+	flag_FocusSeted = true;
+}
+
+
+// Это добавлять в Draw
+void I8080_Widget::UpdateFocus() {
+	if (flag_FocusSeted){
+		ImGui::SetWindowFocus(Name_c_str);
+		flag_FocusSeted = false;
+	}
+	TimerFocus -= OpenglWindow::GetDeltaTime();
+	if (TimerFocus < 0.f)
+		TimerFocus = 0.f;
+}
+
+float I8080_Widget::GetTimerFocus() {
+	return TimerFocus;
+}
+
+std::string I8080_Widget::GetCommand() {
+	return "";
+}
+
 bool I8080_Widget::GetFlagShow() {
 	return *Show;
 }

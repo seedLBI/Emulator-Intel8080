@@ -60,6 +60,8 @@ void Widget_EmulatorInfo::Draw() {
 	if (GetFlagShow() == false)
 		return;
 
+
+
 	if (ImGui::Begin(GetName_c_str(), GetPtrFlagShow(), ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize)) {
 		ImGui::SetWindowFontScale(1.1f);
 		static ImGuiTableFlags flags =
