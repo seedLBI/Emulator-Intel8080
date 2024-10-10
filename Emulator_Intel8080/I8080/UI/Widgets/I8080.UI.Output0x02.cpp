@@ -12,38 +12,67 @@ void Widget_Output0x02::Draw() {
 			Hex_enable = true;
 			Dec_enable = false;
 			Bin_enable = false;
+			Char_enable = false;
 		}
 		ImGui::SameLine();
 		if (ImGui::RadioButton("Dec", Dec_enable)) {
 			Hex_enable = false;
 			Dec_enable = true;
 			Bin_enable = false;
+			Char_enable = false;
 		}
 		ImGui::SameLine();
 		if (ImGui::RadioButton("Bin", Bin_enable)) {
 			Hex_enable = false;
 			Dec_enable = false;
 			Bin_enable = true;
+			Char_enable = false;
 		}
-		
-		ImGui::Checkbox(u8"Вывод столбиком", &mode_output);
+		ImGui::SameLine();
+		if (ImGui::RadioButton("Char", Char_enable)) {
+			Hex_enable = false;
+			Dec_enable = false;
+			Bin_enable = false;
+			Char_enable = true;
+		}
+
+		// bool Char_enable = false;
+		if (!Char_enable)
+			ImGui::Checkbox(u8"Вывод столбиком", &mode_output);
+
 		ImGui::Separator();
 		std::string text;
-		for (int i = 0; i < processor->GetOutputConsole().size(); i++) {
 
-			if (Dec_enable)
-				text += to_string(processor->GetOutputConsole()[i]);
-			else if (Hex_enable)
-				text += int2stringHex(processor->GetOutputConsole()[i]);
-			else if(Bin_enable)
-				text += int2stringBin(processor->GetOutputConsole()[i]);
+		auto Output = processor->GetOutputConsole();
 
-			if (mode_output)
-				text += "\n";
-			else
-				text += " ";
+		for (int i = 0; i < Output.size(); i++) {
+
+			if (Char_enable) {
+				if (Output[i] == 0x0a)
+					text += "\n";
+				else if (Output[i] == 0x09)
+					text += "\t";
+				else
+					text += GetSymbol_1251_OnNumber(Output[i]).c_str();
+			} else {
+				if (Dec_enable)
+					text += to_string(Output[i]);
+				else if (Hex_enable)
+					text += int2stringHex(Output[i]);
+				else if (Bin_enable)
+					text += int2stringBin(Output[i]);
+
+				if (mode_output)
+					text += "\n";
+				else
+					text += " ";
+			}
 		}
-		ImGui::TextWrapped(text.c_str());
+		if (Char_enable == false)
+			ImGui::TextWrapped(text.c_str());
+		else
+			RenderTextWrapped(text.c_str(), false);
+
 		ImGui::End();
 	}
 }
@@ -63,12 +92,13 @@ Widget_Output0x02::~Widget_Output0x02()
 
 std::string Widget_Output0x02::Save() {
 	std::string output = "";
-	output += MakeBegin(5);
+	output += MakeBegin(6);
 	output += MakeSaveItem(string("Flag_Show"), std::to_string(GetFlagShow()));
 	output += MakeSaveItem(string("mode_output"), std::to_string(mode_output));
 	output += MakeSaveItem(string("Hex_enable"), std::to_string(Hex_enable));
 	output += MakeSaveItem(string("Dec_enable"), std::to_string(Dec_enable));
 	output += MakeSaveItem(string("Bin_enable"), std::to_string(Bin_enable));
+	output += MakeSaveItem(string("Char_enable"), std::to_string(Bin_enable));
 	return output;
 }
 
@@ -91,6 +121,8 @@ void Widget_Output0x02::Load(const std::string& Data) {
 		else if (name_arg == "Dec_enable")
 			Dec_enable = stoi(value_arg);
 		else if (name_arg == "Bin_enable")
+			Bin_enable = stoi(value_arg);
+		else if (name_arg == "Char_enable")
 			Bin_enable = stoi(value_arg);
 		else
 			std::cout << "Unknown name argument for widget: " << name_arg << std::endl;

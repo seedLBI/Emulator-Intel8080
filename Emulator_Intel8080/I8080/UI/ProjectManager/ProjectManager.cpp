@@ -38,6 +38,7 @@ void ProjectManager::NewFile() {
 
 	widget_CodeEditor->GetPtrTextEditor()->SetTextLines(std::vector<std::string>{""});
 	widget_CodeEditor->GetPtrTextEditor()->SetTextNotChanged();
+	widget_CodeEditor->GetPtrTextEditor()->DeleteAllErrorMarkers();
 
 	processor->Reset();
 	processor->LoadMemory(translatorOutput.Opcodes);
@@ -61,6 +62,8 @@ void ProjectManager::NewFile() {
 }
 bool ProjectManager::OpenFileWithPath(const std::string& path) {
 	if (path.size() != 0) {
+		widget_CodeEditor->GetPtrTextEditor()->DeleteAllErrorMarkers();
+
 		lastPathManager->AddPath(path);
 		Path_LoadedFile = path;
 		UpdateTitleWindow();
@@ -75,8 +78,7 @@ bool ProjectManager::OpenFileWithPath(const std::string& path) {
 		processor->LoadMemory(translatorOutput.Opcodes);
 		widget_RegisterFlagsInfo->InitLastState();
 
-		if (wasFirstUpdate)
-		{
+		if (wasFirstUpdate) {
 
 		static const ImVec4 color_GRAY{ 0.3f,0.3f,0.3f,1.0f };
 		static const ImVec4 color_WHITE{ 1.f,1.f,1.f,1.f };

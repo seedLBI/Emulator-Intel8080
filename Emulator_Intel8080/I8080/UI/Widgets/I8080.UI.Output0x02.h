@@ -3,6 +3,7 @@
 
 #include "Emulator\I8080.h"
 #include "UI\Widget\I8080.Widget.h"
+#include "Utils/ImGui.Utils.h"
 #include <string>
 
 
@@ -22,7 +23,7 @@ private:
 	bool Hex_enable = false;
 	bool Dec_enable = true;
 	bool Bin_enable = false;
-
+	bool Char_enable = false;
 
 
 

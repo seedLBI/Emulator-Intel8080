@@ -84,6 +84,11 @@ TextEditor::~TextEditor()
 {
 }
 
+
+void TextEditor::DeleteAllErrorMarkers() {
+	mErrorMarkers.clear();
+}
+
 void TextEditor::SetLanguageDefinition(const LanguageDefinition & aLanguageDef)
 {
 	mLanguageDefinition = aLanguageDef;

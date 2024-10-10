@@ -27,6 +27,7 @@
 #include <iomanip>
 #include <conio.h>
 #include <array>
+#include <deque>
 #include <chrono>
 #include <list>
 #include "robin_hood.h"
@@ -48,7 +49,7 @@ public:
 
 	void InitPointer2State(CurrentState& cs);
 
-	void LoadMemory(const vector<OpcodeAdressed>& array);
+	void LoadMemory(const std::vector<OpcodeAdressed>& array);
 	void EraseMemory();
 	void RemoveAllBreakPoints();
 
@@ -70,17 +71,17 @@ public:
     uint64_t GetCountInstruction();
 
 	unsigned int GetProgrammCounter();
-	vector<unsigned int> GetOutputConsole();
+	deque<unsigned int> GetOutputConsole();
 
-	vector<I8080_Port*> Get_External_Peripherals();
+	std::vector<I8080_Port*> Get_External_Peripherals();
     bool* GetBreakpointsInMemory();
     uint8_t* GetMemory();
 	bool* GetVisetedMemory();
 private:
 
-	vector<I8080_Port*> External_Peripherals;
+	std::vector<I8080_Port*> External_Peripherals;
 
-	vector<unsigned int> Output;
+	std::deque<unsigned int> Output;
 
 
 
@@ -196,7 +197,7 @@ private:
     void Init_External_Peripherals();
 
 	using InstructionHandler = void(I8080::*)();
-	array <InstructionHandler, 256>  instructions;
+	std::array <InstructionHandler, 256>  instructions;
 	void InitInstructions();
 };
 

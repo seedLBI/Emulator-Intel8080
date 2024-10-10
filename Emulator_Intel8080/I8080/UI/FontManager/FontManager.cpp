@@ -186,7 +186,20 @@ void FontManager::ReloadFont() {
 		}
 
 
-		MainFont = io.Fonts->AddFontFromMemoryTTF(MainFontData.data(), MainFontData.size(), Current_Scale, &font_cfg, io.Fonts->GetGlyphRangesCyrillic());
+		static const ImWchar ranges[] =
+		{
+			0x0020, 0x00FF, // Basic Latin + Latin Supplement
+			0x0400, 0x052F, // Cyrillic + Cyrillic Supplement
+			0x2000, 0x206f,
+			0x20ac,0x20ac,
+			0x2112, 0x2122,
+			0x2DE0, 0x2DFF, // Cyrillic Extended-A
+			0xA640, 0xA69F, // Cyrillic Extended-B
+			0,
+		};
+
+
+		MainFont = io.Fonts->AddFontFromMemoryTTF(MainFontData.data(), MainFontData.size(), Current_Scale, &font_cfg, ranges);
 
 		float iconFontSize = Current_Scale * 2.0f / 3.0f;
 		static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_16_FA, 0 };

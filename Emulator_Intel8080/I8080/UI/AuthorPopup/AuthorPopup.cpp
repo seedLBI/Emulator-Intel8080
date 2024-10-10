@@ -65,8 +65,8 @@ void AuthorPopup::Draw() {
 		ImGui::SetCursorPos(aa);
 		ImGui::Image((ImTextureID)(intptr_t)EyeTransparent.GetTextureID(), SizeImage_asp);
 
-
-		DrawEyes(aa, SizeImage_asp,asp);
+		ImGui::SetCursorPos(aa);
+		DrawEyes(ImGui::GetCursorScreenPos(), SizeImage_asp,asp);
 
 
 		ImGui::SetCursorPos(aa);
@@ -145,15 +145,16 @@ void AuthorPopup::Draw() {
 }
 
 
-void AuthorPopup::DrawEyes(ImVec2 PosDraw, const ImVec2& SizeImage, const float& aspect) {
+void AuthorPopup::DrawEyes(ImVec2 PosDraww, const ImVec2& SizeImage, const float& aspect) {
 
-	ImVec2 Mouse = { - PosDraw.x - SizeImage.x - 143 * aspect + ImGui::GetMousePos().x, -PosDraw.y - SizeImage.y - 20* aspect + ImGui::GetMousePos().y };
+	ImVec2 Mouse = { ImGui::GetMousePos().x, ImGui::GetMousePos().y };
 
-	ImVec2 LeftEyeOffset{ 263* aspect,(71)* aspect };
-	ImVec2 RightEyeOffset{ 343* aspect,(86)* aspect };
 
-	ImVec2 LeftEyeCenter{ 273 * aspect,(70) * aspect };
-	ImVec2 RightEyeCenter{ 352 * aspect,(86) * aspect };
+	ImVec2 LeftEyeOffset{ PosDraww.x + 263* aspect,PosDraww.y + (71)* aspect };
+	ImVec2 RightEyeOffset{ PosDraww.x + 343* aspect,PosDraww.y + (86)* aspect };
+
+	ImVec2 LeftEyeCenter{ PosDraww.x + 273 * aspect,PosDraww.y + (70) * aspect };
+	ImVec2 RightEyeCenter{ PosDraww.x + 352 * aspect,PosDraww.y + (86) * aspect };
 
 
 	ImVec2 LeftDeltaCenter{ LeftEyeCenter.x - Mouse.x,LeftEyeCenter.y - Mouse.y };
@@ -165,14 +166,26 @@ void AuthorPopup::DrawEyes(ImVec2 PosDraw, const ImVec2& SizeImage, const float&
 	ImVec2 LeftDeltaCenterNormal{ LeftDeltaCenter.x/ distanceLeft,LeftDeltaCenter.y/ distanceLeft };
 	ImVec2 RightDeltaCenterNormal{ RightDeltaCenter.x/ distanceRight,RightDeltaCenter.y/ distanceRight };
 
-	ImVec2 NewLeft = { LeftEyeCenter.x - 1.6f*LeftDeltaCenterNormal.x * (16 - 10) - LeftEyeOffset.x,LeftEyeCenter.y - LeftDeltaCenterNormal.y * (16 - 10) - LeftEyeOffset.y };
-	ImVec2 NewRight = { RightEyeCenter.x - 1.6f * RightDeltaCenterNormal.x * (15 - 10) - RightEyeOffset.x,RightEyeCenter.y - RightDeltaCenterNormal.y * (15 - 10) - RightEyeOffset.y };
+	ImVec2 NewLeft = { PosDraww.x + LeftEyeCenter.x - 1.6f*LeftDeltaCenterNormal.x * (16 - 10) - LeftEyeOffset.x, PosDraww.y + LeftEyeCenter.y - LeftDeltaCenterNormal.y * (16 - 10) - LeftEyeOffset.y };
+	ImVec2 NewRight = { PosDraww.x + RightEyeCenter.x - 1.6f * RightDeltaCenterNormal.x * (15 - 10) - RightEyeOffset.x,PosDraww.y + RightEyeCenter.y - RightDeltaCenterNormal.y * (15 - 10) - RightEyeOffset.y };
 
-
-
-	ImGui::SetCursorPos({ PosDraw.x + NewLeft.x, PosDraw.y + NewLeft.y });
+	ImGui::SetCursorScreenPos({ NewLeft.x,NewLeft.y });
 	ImGui::Image((ImTextureID)(intptr_t)LeftEye.GetTextureID(), SizeImage);
 
-	ImGui::SetCursorPos({ PosDraw.x + NewRight.x, PosDraw.y + NewRight.y });
+	ImGui::SetCursorScreenPos({ NewRight.x,NewRight.y });
 	ImGui::Image((ImTextureID)(intptr_t)RightEye.GetTextureID(), SizeImage);
+
+
+	// DEBUG
+	/*
+	ImDrawList* draw_list = ImGui::GetForegroundDrawList();
+
+	draw_list->AddCircleFilled(Mouse, 5.f, IM_COL32(255, 0, 0, 255));
+
+	draw_list->AddCircleFilled(PosDraww, 5.f, IM_COL32(255, 255, 0, 255));
+
+
+	draw_list->AddCircleFilled(NewLeft, 5.f, IM_COL32(255, 255, 255, 255));
+	draw_list->AddCircleFilled(NewRight, 5.f, IM_COL32(255, 255, 255, 255));
+	*/
 }

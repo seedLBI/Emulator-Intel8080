@@ -65,16 +65,13 @@ void I8080::EraseMemory() {
 	}
 }
 
-void I8080::LoadMemory(const vector<OpcodeAdressed>& array) {
+void I8080::LoadMemory(const std::vector<OpcodeAdressed>& array) {
 	EraseMemory();
 
 	for (unsigned int i = 0; i < array.size(); i++) {
 		Memory[array[i].adress_h * 256 + array[i].adress_l] = array[i].opcode;
 	}
 }
-
-
-
 
 void I8080::InitPointer2State(CurrentState& cs) {
 	cs.A = &A;
@@ -148,7 +145,7 @@ void I8080::InputAnswer2Port(const uint8_t& Answer) {
 
 	Input = Answer;
 }
-vector<unsigned int> I8080::GetOutputConsole() {
+std::deque<unsigned int> I8080::GetOutputConsole() {
 	return Output;
 }
 bool* I8080::GetBreakpointsInMemory() {
@@ -638,8 +635,9 @@ void I8080::_OUTPUT() {
 	
 	if (Memory[PC + 1] == 0x02) {
 		Output.push_back(A);
+
 		if (Output.size() > 1024) {
-			Output.erase(Output.begin());
+			Output.pop_front();
 		}
 	}
 	else {
