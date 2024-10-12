@@ -39,10 +39,10 @@ std::string GetExeFileName() {
 }
 
 
- string int2stringDec(const unsigned char& value) {
+ std::string int2stringDec(const unsigned char& value) {
     std::stringstream ss;
     ss << std::setfill('0') << std::setw(1) << std::dec << unsigned int(value);
-    string res = ss.str();
+    std::string res = ss.str();
     if (res.size() < 3) {
         for (int i = 0; i <= 3 - res.size(); i++)
         {
@@ -51,11 +51,11 @@ std::string GetExeFileName() {
     }
     return res;
 }
- string int2stringBin(const unsigned char& value,const int& countBits) {
+ std::string int2stringBin(const unsigned char& value,const int& countBits) {
     std::stringstream ss;
     ss << std::setfill('0') << std::setw(1) << std::bitset<8>{value};
 
-    string result = ss.str();
+    std::string result = ss.str();
 
     if (countBits < result.size())
     {
@@ -66,11 +66,11 @@ std::string GetExeFileName() {
 
     return result;
 }
- string int2stringBin(const unsigned char& value) {
+ std::string int2stringBin(const unsigned char& value) {
      std::stringstream ss;
      ss << std::setfill('0') << std::setw(1) << std::bitset<8>{value};
 
-     string result = ss.str();
+     std::string result = ss.str();
 
      if (8 < result.size())
      {
@@ -81,30 +81,30 @@ std::string GetExeFileName() {
 
      return result;
  }
- string int2stringHex(const unsigned char& value) {
+ std::string int2stringHex(const unsigned char& value) {
     std::stringstream ss;
     ss << std::setfill('0') << std::setw(1) << std::hex << (value | 0);
-    string res = ss.str();
+    std::string res = ss.str();
     if (res.size() == 1)
         res.insert(0, "0");
     return res;
 }
- string int2string_0x_Hex(const unsigned char& value) {
+ std::string int2string_0x_Hex(const unsigned char& value) {
     return "0x" + int2stringHex(value);
 }
- string int2stringDoubleHex(const uint16_t& value) {
+ std::string int2stringDoubleHex(const uint16_t& value) {
     return int2stringHex(value / 256) + int2stringHex(value % 256);
 }
 
- string int2stringDoubleHex(const unsigned char& value1,const unsigned char& value2) {
+ std::string int2stringDoubleHex(const unsigned char& value1,const unsigned char& value2) {
     return int2stringHex(value1) + int2stringHex(value2);
 }
- string int2string_0x_DoubleHex(const unsigned char& value1,const unsigned char& value2) {
+ std::string int2string_0x_DoubleHex(const unsigned char& value1,const unsigned char& value2) {
     return "0x" + int2stringDoubleHex(value1, value2);
 }
 
 
- unsigned int string2hex(string value) {
+ unsigned int string2hex(std::string value) {
     long n;
     if (value.substr(0, 2) == "0x") {
 
@@ -123,7 +123,7 @@ std::string GetExeFileName() {
 
     return n;
 }
- unsigned int Adress_string_2int(string value) {
+ unsigned int Adress_string_2int(std::string value) {
     if (value.substr(0, 2) == "0x")
         return string2hex(value);
     else
@@ -141,8 +141,8 @@ std::string GetExeFileName() {
     return all_args;
 }
 
- string cp1251_to_utf8(const char* str) {
-    string res;
+ std::string cp1251_to_utf8(const char* str) {
+    std::string res;
     int result_u, result_c;
     result_u = MultiByteToWideChar(1251, 0, str, -1, 0, 0);
     if (!result_u) { return 0; }
@@ -248,8 +248,8 @@ std::string GetExeFileName() {
     return true;
 }
 
- string GetSymbol_1251_OnNumber(const unsigned char& number_symbol) {
-    const vector<string> arr{
+ std::string GetSymbol_1251_OnNumber(const unsigned char& number_symbol) {
+    const static std::vector<std::string> arr{
         u8" ",  u8" ",   u8" " , u8" ",u8" ",u8" ",u8" ",u8" ",  u8" ", u8"\\t",  u8"\\n",  u8" ",  u8" ",  u8" ",  u8" ",  u8" ",
         u8" ",  u8" ",  u8" " ,   u8" ",  u8" ",  u8" ",  u8" ",  u8" ",  u8" ",   u8" ",  u8" ",  u8" ",  u8" ",  u8" ",  u8" ",  u8" ",
         u8" ",  u8"!",   u8"\"",   u8"#",  u8"$",  u8"%",  u8"&",  u8" ",  u8"(",   u8")",  u8"*",  u8"+", u8" ",  u8" ",  u8" ",  u8"/",
@@ -268,9 +268,7 @@ std::string GetExeFileName() {
       u8"ð",u8"ñ", u8"ò",  u8"ó",u8"ô",u8"õ",u8"ö",u8"÷",u8"ø", u8"ù",u8"ú",u8"û",u8"ü",u8"ý",u8"þ",u8"ÿ"
     };
 
-    std::string value = arr[number_symbol];
-
-    return value;
+    return arr[number_symbol];;
 }
 
 
@@ -314,7 +312,7 @@ std::string GetExeFileName() {
 
 
 //TODO:
- void AddSymbolToCount(string& text, char symbol, int count) {
+ void AddSymbolToCount(std::string& text, char symbol, int count) {
     if (count <= text.size()) {
         return;
     }
@@ -324,7 +322,7 @@ std::string GetExeFileName() {
     }
 
 }
- void SaveUniqueSpaces(string& text) {
+ void SaveUniqueSpaces(std::string& text) {
     if (text.size() == 0) { return; }
 
     for (int i = text.size() - 1; i >= 0; --i) {
@@ -333,7 +331,7 @@ std::string GetExeFileName() {
     }
 }
 
-void SaveUniqueSpacesWithoutQuotes(string& text) {
+void SaveUniqueSpacesWithoutQuotes(std::string& text) {
      if (text.size() == 0) { return; }
 
      bool QuoteOpen = false;
@@ -353,7 +351,7 @@ void SaveUniqueSpacesWithoutQuotes(string& text) {
 }
 
 
- void EraseSideSpaces(string& text) {
+ void EraseSideSpaces(std::string& text) {
     for (int i = 0; i < text.size() - 1; ++i) {
         if (text[i] == ' ') {
             text.erase(text.begin() + i);
@@ -372,7 +370,7 @@ void SaveUniqueSpacesWithoutQuotes(string& text) {
 }
 
 
-int GetCountSymbol(const string& text, const char& symbol) {
+int GetCountSymbol(const std::string& text, const char& symbol) {
     int result = 0;
 
     for (char ch : text) {
@@ -383,25 +381,25 @@ int GetCountSymbol(const string& text, const char& symbol) {
     return result;
 }
 
- void DeleteSideSymbols(string& text) {
+ void DeleteSideSymbols(std::string& text) {
      if (text.size() < 2)
          return;
      text.erase(text.begin());
      text.erase(text.begin() + text.size() - 1);
  }
- void DeleteAllFromFirstFindSymbol(string& text, const char& symbol) {
-    if (text.find_first_of(symbol) != string::npos)
+ void DeleteAllFromFirstFindSymbol(std::string& text, const char& symbol) {
+    if (text.find_first_of(symbol) != std::string::npos)
         text.erase(text.begin() + text.find_first_of(symbol), text.end());
 }
- void ToLowerAll(string& text) {
+ void ToLowerAll(std::string& text) {
     for (int i = 0; i < text.size(); ++i)
         text[i] = tolower(text[i]);
 }
- void ToUpperALL(string& text) {
+ void ToUpperALL(std::string& text) {
     for (int i = 0; i < text.size(); ++i)
         text[i] = toupper(text[i]);
 }
- void EraseAllSymbolType(string& text, const char& symbol) {
+ void EraseAllSymbolType(std::string& text, const char& symbol) {
     for (int i = 0; i < text.size(); ++i)
     {
         if (text[i] == symbol)
@@ -419,7 +417,7 @@ int GetCountSymbol(const string& text, const char& symbol) {
         }
     }
 }
- void EraseAllSymbolType(vector<string>& text_array, const char& symbol) {
+ void EraseAllSymbolType(std::vector<std::string>& text_array, const char& symbol) {
     for (int i = 0; i < text_array.size(); ++i)
     {
         EraseAllSymbolType(text_array[i], symbol);
@@ -435,16 +433,16 @@ int GetCountSymbol(const string& text, const char& symbol) {
         start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
     }
 }
- vector<string> split(const string& text_, const string& delimeter_) {
-    string s = text_;
-    string delimiter = delimeter_;
+ std::vector<std::string> split(const std::string & text_, const std::string & delimeter_) {
+    std::string s = text_;
+    std::string delimiter = delimeter_;
 
-    vector<string> result;
+    std::vector<std::string> result;
 
     size_t pos = 0;
-    string token;
+    std::string token;
 
-    while ((pos = s.find(delimiter)) != string::npos) {
+    while ((pos = s.find(delimiter)) != std::string::npos) {
         token = s.substr(0, pos);
         result.push_back(token);
         s.erase(0, pos + delimiter.length());
@@ -454,7 +452,7 @@ int GetCountSymbol(const string& text, const char& symbol) {
     }
     return result;
 }
- string cutFloat(string input, const int& countAfterDot) {
+ std::string cutFloat(std::string input, const int& countAfterDot) {
     int pos = input.find('.');
     if (pos + 1 + countAfterDot > input.size() - 1)
         return input;
@@ -475,18 +473,18 @@ int GetCountSymbol(const string& text, const char& symbol) {
         return input;
     }
 }
- vector<string> GetArrayLineFromFile(string path) {
-    vector<string> result;
-    ifstream ifn;
+ std::vector<std::string> GetArrayLineFromFile(std::string path) {
+    std::vector<std::string> result;
+    std::ifstream ifn;
     ifn.open(path);
-    for (string line; getline(ifn, line);) {
+    for (std::string line; getline(ifn, line);) {
         replaceAll(line, "\t", "    ");
         result.push_back(line);
     }
     ifn.close();
     return result;
 }
- string OpenFileDialog() {
+ std::string OpenFileDialog() {
     OPENFILENAME ofn;       // common dialog box structure
     wchar_t szFile[460]{};        // buffer for file name
     HWND hwnd = GetConsoleWindow();              // owner window
@@ -518,14 +516,14 @@ int GetCountSymbol(const string& text, const char& symbol) {
         //    (HANDLE)NULL);
 
     }
-    wstring ws(szFile);
+    std::wstring ws(szFile);
     // your new String
     std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
 
     return myconv.to_bytes(ws);
 }
 
- string SaveFileDialogI8080() {
+ std::string SaveFileDialogI8080() {
     OPENFILENAME ofn;       // common dialog box structure
     wchar_t szFile[460]{};        // buffer for file name
     HWND hwnd = GetConsoleWindow();              // owner window
@@ -550,13 +548,13 @@ int GetCountSymbol(const string& text, const char& symbol) {
     if (GetSaveFileName(&ofn) == TRUE) {
 
     }
-    wstring ws(szFile);
+    std::wstring ws(szFile);
     // your new String
     std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
 
     return myconv.to_bytes(ws);
 }
- string SaveFileDialogPNG() {
+ std::string SaveFileDialogPNG() {
     OPENFILENAME ofn;       // common dialog box structure
     wchar_t szFile[460]{};        // buffer for file name
     HWND hwnd = GetConsoleWindow();              // owner window
@@ -581,13 +579,13 @@ int GetCountSymbol(const string& text, const char& symbol) {
     if (GetSaveFileName(&ofn) == TRUE) {
 
     }
-    wstring ws(szFile);
+    std::wstring ws(szFile);
     // your new String
     std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
 
     return myconv.to_bytes(ws);
 }
- string SaveFileDialogTXT() {
+ std::string SaveFileDialogTXT() {
     OPENFILENAME ofn;       // common dialog box structure
     wchar_t szFile[460]{};        // buffer for file name
     HWND hwnd = GetConsoleWindow();              // owner window
@@ -612,7 +610,7 @@ int GetCountSymbol(const string& text, const char& symbol) {
     if (GetSaveFileName(&ofn) == TRUE) {
 
     }
-    wstring ws(szFile);
+    std::wstring ws(szFile);
     // your new String
 
     std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;

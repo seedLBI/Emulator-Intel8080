@@ -25,7 +25,7 @@ void Widget_MnemocodeViewer::Draw() {
 	if (ImGui::Begin(GetName_c_str(), GetPtrFlagShow())) {
 		static ImGuiTableFlags flags = ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_NoBordersInBody| ImGuiTableFlags_ScrollY;
 		ImVec2 outer_size = ImVec2(0.0f, 20 * 8);
-		if (ImGui::BeginTable("MnemoCode", 4, flags, ImGui::GetWindowSize()))
+		if (ImGui::BeginTable("MnemoCode", 4, flags))
 		{
 
 			//ImGui::TableSetupScrollFreeze(0, 0);
@@ -34,6 +34,9 @@ void Widget_MnemocodeViewer::Draw() {
 			ImGui::TableSetupColumn(u8"Строка кода", ImGuiTableColumnFlags_WidthStretch);
 			ImGui::TableSetupColumn(u8"Маркер", ImGuiTableColumnFlags_WidthStretch);
 			ImGui::TableSetupScrollFreeze(0, 1); // Make row always visible
+			ImGui::TableSetupScrollFreeze(1, 1); // Make row always visible
+			ImGui::TableSetupScrollFreeze(2, 1); // Make row always visible
+			ImGui::TableSetupScrollFreeze(3, 1); // Make row always visible
 
 			ImGui::TableHeadersRow();
 
@@ -42,7 +45,7 @@ void Widget_MnemocodeViewer::Draw() {
 
 
 
-			clipper.Begin(SIZE_MEMORY+1);
+			clipper.Begin(SIZE_MEMORY);
 			while (clipper.Step()) {
 				for (int row = clipper.DisplayStart; row < clipper.DisplayEnd; row++) {
 					ImGui::TableNextRow();

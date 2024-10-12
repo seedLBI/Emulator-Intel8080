@@ -37,7 +37,7 @@ void Widget_SymbolPicker::Draw() {
 				if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayNone)) {
 					ImGui::BeginTooltip();
 					ImGui::Text(int2string_0x_Hex(16 * h + j).c_str());
-					ImGui::Text(to_string(16 * h + j).c_str());
+					ImGui::Text(std::to_string(16 * h + j).c_str());
 					ImGui::EndTooltip();
 				}
 			}
@@ -57,7 +57,7 @@ void Widget_SymbolPicker::Update() {
 std::string Widget_SymbolPicker::Save() {
 	std::string output = "";
 	output += MakeBegin(1);
-	output += MakeSaveItem(string("Flag_Show"), std::to_string(GetFlagShow()));
+	output += MakeSaveItem(std::string("Flag_Show"), std::to_string(GetFlagShow()));
 	return output;
 }
 void Widget_SymbolPicker::Load(const std::string& Data) {

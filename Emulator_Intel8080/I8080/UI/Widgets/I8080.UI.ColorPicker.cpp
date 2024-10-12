@@ -78,7 +78,7 @@ void Widget_ColorPicker::Draw() {
 
 
 			ImGui::SeparatorText(u8"Инструменты");
-			ImGui::Button(string(ICON_FA_EYE_DROPPER).c_str());
+			ImGui::Button(std::string(ICON_FA_EYE_DROPPER).c_str());
 			ImGui::SameLine();
 			ImGui::Text(u8"Пипетка");
 
@@ -143,23 +143,23 @@ void Widget_ColorPicker::Draw() {
 					ImGui::SameLine(0.f, 0.f);
 				}
 
-				string bin_r = int2stringBin((int)FamiliarColor[i].r / 85, 2);
-				string bin_g = int2stringBin((int)FamiliarColor[i].g / 32, 3);
-				string bin_b = int2stringBin((int)FamiliarColor[i].b / 32, 3);
+				std::string bin_r = int2stringBin((int)FamiliarColor[i].r / 85, 2);
+				std::string bin_g = int2stringBin((int)FamiliarColor[i].g / 32, 3);
+				std::string bin_b = int2stringBin((int)FamiliarColor[i].b / 32, 3);
 
-				string bin_value = "0b" + bin_r + bin_g + bin_b;
+				std::string bin_value = "0b" + bin_r + bin_g + bin_b;
 
 				int value = string2hex(bin_value);
 
 
-				if (ImGui::ColorButton(string("ButtonFamiliarColor " + to_string(i)).c_str(), ImVec4(FamiliarColor[i].r / 255.0, FamiliarColor[i].g / 255.0, FamiliarColor[i].b / 255.0, 1),
+				if (ImGui::ColorButton(std::string("ButtonFamiliarColor " + std::to_string(i)).c_str(), ImVec4(FamiliarColor[i].r / 255.0, FamiliarColor[i].g / 255.0, FamiliarColor[i].b / 255.0, 1),
 					ImGuiColorEditFlags_NoSidePreview |
 					ImGuiColorEditFlags_NoDragDrop |
 					ImGuiColorEditFlags_NoSmallPreview |
 					ImGuiColorEditFlags_NoAlpha |
 					ImGuiColorEditFlags_NoPicker | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_NoTooltip,
 					ImVec2(minSize, minSize))) {
-					cout << "Insert color: [" << bin_value << "]" << endl;
+					std::cout << "Insert color: [" << bin_value << "]" << std::endl;
 					editor->InsertText(bin_value);
 					FirstPress = false;
 				}
@@ -183,14 +183,14 @@ void Widget_ColorPicker::Draw() {
 					ImGui::TextColored(ImVec4(0.55, 0.55, 1, 1), bin_b.c_str());
 
 					ImGui::Text(("Hex: " + int2string_0x_Hex(value)).c_str());
-					ImGui::Text(("Dec: " + to_string(value)).c_str());
+					ImGui::Text(("Dec: " + std::to_string(value)).c_str());
 
 
-					ImGui::TextColored(ImVec4(1, 0.55, 0.55, 1), ("R: " + to_string((int)FamiliarColor[i].r)).c_str());
+					ImGui::TextColored(ImVec4(1, 0.55, 0.55, 1), ("R: " + std::to_string((int)FamiliarColor[i].r)).c_str());
 					ImGui::SameLine(0, 0);
-					ImGui::TextColored(ImVec4(0.55, 1, 0.55, 1), (" G: " + to_string((int)FamiliarColor[i].g)).c_str());
+					ImGui::TextColored(ImVec4(0.55, 1, 0.55, 1), (" G: " + std::to_string((int)FamiliarColor[i].g)).c_str());
 					ImGui::SameLine(0, 0);
-					ImGui::TextColored(ImVec4(0.55, 0.55, 1, 1), (" B: " + to_string((int)FamiliarColor[i].b)).c_str());
+					ImGui::TextColored(ImVec4(0.55, 0.55, 1, 1), (" B: " + std::to_string((int)FamiliarColor[i].b)).c_str());
 
 
 					ImGui::EndTooltip();
@@ -213,7 +213,7 @@ void Widget_ColorPicker::Draw() {
 		for (unsigned int h = 0; h < 16; h++) {
 			for (unsigned int j = 0; j < 16; j++) {
 				unsigned char value = unsigned char(16) * h + j;
-				string bits = int2stringBin(value);
+				std::string bits = int2stringBin(value);
 				unsigned char r = (value >> 6);
 				r *= 85;
 				unsigned char g = (value << 2);
@@ -227,7 +227,7 @@ void Widget_ColorPicker::Draw() {
 					ImGui::SameLine(0.f, 0.f);
 				}
 
-				if (ImGui::ColorButton(string("ButtonColor " + to_string(16 * h + j)).c_str(), ImVec4(r / 255.0, g / 255.0, b / 255.0, 1),
+				if (ImGui::ColorButton(std::string("ButtonColor " + std::to_string(16 * h + j)).c_str(), ImVec4(r / 255.0, g / 255.0, b / 255.0, 1),
 					ImGuiColorEditFlags_NoSidePreview |
 					ImGuiColorEditFlags_NoDragDrop |
 					ImGuiColorEditFlags_NoSmallPreview |
@@ -255,13 +255,13 @@ void Widget_ColorPicker::Draw() {
 					ImGui::TextColored(ImVec4(0.55, 0.55, 1, 1), bits.substr(5, 3).c_str());
 
 					ImGui::Text(("Hex: " + int2string_0x_Hex(value)).c_str());
-					ImGui::Text(("Dec: " + to_string(value)).c_str());
+					ImGui::Text(("Dec: " + std::to_string(value)).c_str());
 
-					ImGui::TextColored(ImVec4(1, 0.55, 0.55, 1), ("R: " + to_string(r)).c_str());
+					ImGui::TextColored(ImVec4(1, 0.55, 0.55, 1), ("R: " + std::to_string(r)).c_str());
 					ImGui::SameLine(0, 0);
-					ImGui::TextColored(ImVec4(0.55, 1, 0.55, 1), (" G: " + to_string(g)).c_str());
+					ImGui::TextColored(ImVec4(0.55, 1, 0.55, 1), (" G: " + std::to_string(g)).c_str());
 					ImGui::SameLine(0, 0);
-					ImGui::TextColored(ImVec4(0.55, 0.55, 1, 1), (" B: " + to_string(b)).c_str());
+					ImGui::TextColored(ImVec4(0.55, 0.55, 1, 1), (" B: " + std::to_string(b)).c_str());
 					//ImGui::Text(("R: " + to_string(r) + " G: " + to_string(g) + " B: " + to_string(b)).c_str());
 					ImGui::EndTooltip();
 				}
@@ -281,7 +281,7 @@ void Widget_ColorPicker::Update() {
 std::string Widget_ColorPicker::Save() {
 	std::string output = "";
 	output += MakeBegin(1);
-	output += MakeSaveItem(string("Flag_Show"), std::to_string(GetFlagShow()));
+	output += MakeSaveItem(std::string("Flag_Show"), std::to_string(GetFlagShow()));
 	return output;
 }
 

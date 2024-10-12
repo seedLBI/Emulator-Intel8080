@@ -11,6 +11,7 @@ struct TranslatorOutput {
     std::vector<std::pair<std::string, uint16_t>> Markers;
     std::vector<VarsDebug>                        Vars;
     std::vector<std::pair<std::string, uint16_t>> Consts;
+    std::vector<int>                     Line_and_Adress;
     int LineError = 0;
     TypeTranslatorError Error = TypeTranslatorError::NOTHING;
 
@@ -19,6 +20,7 @@ struct TranslatorOutput {
         Markers.clear();
         Vars.clear();
         Consts.clear();
+        Line_and_Adress.clear();
         LineError = 0;
         Error = TypeTranslatorError::NOTHING;
     }

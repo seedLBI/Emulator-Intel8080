@@ -379,9 +379,9 @@ void KeyCombinationHandler::DrawPopupSetKey() {
 					static const ImVec4 color_Orange{ 0.45f,0.35f,0.1f,1.0f };
 					static const ImVec4 color_WHITE{ 1.f,1.f,1.f,1.f };
 
-					string Text = u8"Возникло совпадение комбинаций.\nДля разрешения проблемы у следующей команды\nкомбинация будет стёрта:";
+					std::string Text = u8"Возникло совпадение комбинаций.\nДля разрешения проблемы у следующей команды\nкомбинация будет стёрта:";
 
-					string Text2 = "[" + combinations[index].first + "]";
+					std::string Text2 = "[" + combinations[index].first + "]";
 
 					notificationManager->AddNottification(Notification(color_Orange, 8.f, std::vector<N_Element*>{
 						new N_Message(color_WHITE, Text),
@@ -418,7 +418,7 @@ void KeyCombinationHandler::DrawPopupSetKey() {
 	 u8"ты чемпион."
 					};
 					
-					string Text = variants[type_message];
+					std::string Text = variants[type_message];
 
 
 

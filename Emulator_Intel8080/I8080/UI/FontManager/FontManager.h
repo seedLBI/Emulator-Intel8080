@@ -67,7 +67,7 @@ private:
 
 
 	bool NeedReloadFontSize = false;
-	string Name_Font_Selected = "";
+	std::string Name_Font_Selected = "";
 
 
 	ImFont* MainFont = nullptr;

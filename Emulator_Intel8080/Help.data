@@ -222,6 +222,9 @@ End:
 Main:
 	call Cycle_16
 	call Cycle_32
+	mvi a, 10
+	call Cycle_16.loop ; Так же можно задать
+					   ; локальный адрес напрямую
 	hlt
 
 Cycle_16:

@@ -135,6 +135,8 @@ void I8080_UserInterface::Emulator_Stop() {
 	processor->ActiveFlagStop();
 	processor->Reset();
 
+	processor->RemoveAllBreakPoints();
+
 	widget_RegisterFlagsInfo->InitLastState();
 	widget_MnemocodeViewer->FollowCursorPC();
 }
@@ -159,8 +161,11 @@ void I8080_UserInterface::Emulator_FullReset() {
 
 	processor->ActiveFlagStop();
 	processor->EraseMemory();
+	processor->RemoveAllBreakPoints();
 	processor->Reset();
 	processor->Reset();
+
+	widget_CodeEditor->GetPtrTextEditor()->DeleteAllBreakpoints();
 
 
 	projectManager->GetPtrTranslatorOutput()->Opcodes.clear();

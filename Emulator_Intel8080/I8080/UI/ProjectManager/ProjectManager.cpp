@@ -362,6 +362,7 @@ void ProjectManager::TryTranslateCode() {
 
 		widget_CodeEditor->GetPtrTextEditor()->SetCursorPosition(coord);
 
+
 		if (wasFirstUpdate)
 		{
 			static const ImVec4 color_RED{ 0.45f,0.2f,0.2f,1.0f };
@@ -385,6 +386,19 @@ void ProjectManager::TryTranslateCode() {
 		processor->Reset();
 		processor->LoadMemory(translatorOutput.Opcodes);
 		widget_RegisterFlagsInfo->InitLastState();
+
+		auto breaks = widget_CodeEditor->GetPtrTextEditor()->GetBreakpoints();
+
+		for (int i = 0; i < breaks.size(); i++) {
+
+			if (breaks[i]-1 > translatorOutput.Line_and_Adress.size())
+				continue;
+
+			int adressBreak = translatorOutput.Line_and_Adress[breaks[i] - 1];
+			if (adressBreak != -1)
+				processor->SetBreakPointPosition(adressBreak);
+		}
+
 	}
 
 	clock_end = std::chrono::system_clock::now();

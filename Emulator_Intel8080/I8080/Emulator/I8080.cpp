@@ -117,7 +117,7 @@ void I8080::Reset() {
 	Flag_GetAnswer = false;
 
 	Output.clear();
-	RemoveAllBreakPoints();
+
 
 	CountTicks = 0;
 	CountInstruction = 0;

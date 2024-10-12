@@ -16,7 +16,7 @@ TranslatorOutput CompilerStable::Compile(const std::vector<std::string>& Code) {
 	PosDotForNeedLine.resize(Code.size(), {});
 	splited_code = Compiler::split_code(Code);
 
-
+	Compiler::CompilerOutput.Line_and_Adress.resize(Code.size(), -1);
 
 	if (Compiler::CompilerOutput.Error != TypeTranslatorError::NOTHING)
 		return Compiler::CompilerOutput;
@@ -90,8 +90,8 @@ bool CompilerStable::Step1_MarkingAdresses() {
 
 			const size_t pos_dot = Element.find_first_of(".");
 			const size_t pos_2dot = Element.find_first_of(":");
-			const bool flag_have_dot = pos_dot != string::npos;
-			const bool flag_have_2dot = pos_2dot != string::npos;
+			const bool flag_have_dot = pos_dot != std::string::npos;
+			const bool flag_have_2dot = pos_2dot != std::string::npos;
 			PosDotForNeedLine[Line] = { pos_dot,pos_2dot,flag_have_dot,flag_have_2dot };
 
 
@@ -100,7 +100,7 @@ bool CompilerStable::Step1_MarkingAdresses() {
 
 			if (isDerektiv_or_localMarker) {
 
-				string command = Element.substr(pos_dot + 1, (pos_2dot - pos_dot) - 1);
+				std::string command = Element.substr(pos_dot + 1, (pos_2dot - pos_dot) - 1);
 				ToLowerAll(command);
 
 				
@@ -246,22 +246,64 @@ bool CompilerStable::Step1_MarkingAdresses() {
 				}
 				else {
 
-					if (LastGlobalMarker_name.size() == 0) {
-						MakeError(ERROR_CREATE_ANONIM_MARKER, Line);
-						return false;
+					bool is_creating_new_marker = Element[0] == '.';
+					std::string marker = "";
+
+					// ѕользователь вручную прописал им€ главного маркера
+
+					if (is_creating_new_marker == false) {
+
+						marker = Element.substr(0, pos_2dot);
+
+						if (Compiler::CheckName(marker) == false) {
+							MakeError(ERROR_WRONG_ADRESS_NAME, Line);
+							return false;
+						}
+
+						if (Markers.contains(marker)) {
+							MakeError(ERROR_DUBLICAT_MARKER, Line);
+							return false;
+						}
+						else {
+							// Ќужно проверить глобальный маркер.
+
+							if (LastGlobalMarker_name.size() == 0) {
+								MakeError(ERROR_CREATE_ANONIM_MARKER, Line);
+								return false;
+							}
+
+							std::string globalCheck = Element.substr(0, pos_dot);
+
+							if (globalCheck != LastGlobalMarker_name){
+								MakeError(ERROR_WRONG_INIT_LOCAL_MARKER, Line);
+								return false;
+							}
+						}
+
+					}
+					else {
+
+						// ѕользователь создаЄт новый маркер использу€ локальный метки
+
+						if (LastGlobalMarker_name.size() == 0) {
+							MakeError(ERROR_CREATE_ANONIM_MARKER, Line);
+							return false;
+						}
+
+						marker = LastGlobalMarker_name + "." + Element.substr(1, pos_2dot - 1);
+
+						if (Compiler::CheckName(Element.substr(1, pos_2dot - 1)) == false) {
+							MakeError(ERROR_WRONG_ADRESS_NAME, Line);
+							return false;
+						}
+
+						if (Markers.contains(marker)) {
+							MakeError(ERROR_DUBLICAT_MARKER, Line);
+							return false;
+						}
+
 					}
 
-					string marker = LastGlobalMarker_name + "." + Element.substr(1, pos_2dot - 1);
-
-					if (Compiler::CheckName(Element.substr(1, pos_2dot - 1)) == false) {
-						MakeError(ERROR_WRONG_ADRESS_NAME, Line);
-						return false;
-					}
-
-					if (Markers.contains(marker)){
-						MakeError(ERROR_DUBLICAT_MARKER, Line);
-						return false;
-					}
 					adressed_code[Line] = CurrentAdress;
 
 
@@ -274,15 +316,14 @@ bool CompilerStable::Step1_MarkingAdresses() {
 					NeedCheckThatLineIndex[CounterForNeedCheck] = Line;
 					CounterForNeedCheck++;
 
-
-
-					if (Consts.contains(marker)){
+					if (Consts.contains(marker)) {
 						MakeError(ERROR_COLLISION_BETWEEN_NAMES_MARKER_AND_CONST, Line);
 						return false;
 					}
 
 					countCommandsAfterLastMarker = 0;
 					continue;
+					
 
 				}
 
@@ -371,7 +412,7 @@ bool CompilerStable::Step2_ReplaceWithDirectValues() {
 
 	int Size_NeedCheckThatLineIndex = CounterForNeedCheck;
 
-	string LastMarker = "";
+	std::string LastMarker = "";
 
 
 	for (int index = 0; index < Size_NeedCheckThatLineIndex; ++index) {
@@ -384,7 +425,7 @@ bool CompilerStable::Step2_ReplaceWithDirectValues() {
 
 			if (pdi.flag_have_dot && pdi.flag_have_2dot) {
 
-				string command = Element.substr(pdi.pos_dot + 1, (pdi.pos_2dot - pdi.pos_dot) - 1);
+				std::string command = Element.substr(pdi.pos_dot + 1, (pdi.pos_2dot - pdi.pos_dot) - 1);
 				ToLowerAll(command);
 
 				if (command == "set") {
@@ -407,7 +448,7 @@ bool CompilerStable::Step2_ReplaceWithDirectValues() {
 								return false;
 							}
 
-							splited_code[Line][element] = to_string(Const_value->second);
+							splited_code[Line][element] = std::to_string(Const_value->second);
 						}
 
 						element++;
@@ -431,15 +472,15 @@ bool CompilerStable::Step2_ReplaceWithDirectValues() {
 
 			}
 			else if (!pdi.flag_have_dot && pdi.flag_have_2dot) {
-				string marker = Element.substr(0, pdi.pos_2dot);
+				std::string marker = Element.substr(0, pdi.pos_2dot);
 				LastMarker = marker;
 				continue;
 			}
 			else {
 				ToLowerAll(Element);
 
-				const static robin_hood::unordered_flat_set<string> instruction_imm8 = { "adi","sui","ani","ori","aci","sbi","xri","cpi","in","out","rst" };
-				const static robin_hood::unordered_flat_set<string> instruction_imm16 = { "shld","sta","lhld","lda","call","cnz","cnc","cpo","cp","cz","cc","cpe","cm","jmp","jnz","jnc","jpo","jp","jz","jc","jpe","jm" };
+				const static robin_hood::unordered_flat_set<std::string> instruction_imm8 = { "adi","sui","ani","ori","aci","sbi","xri","cpi","in","out","rst" };
+				const static robin_hood::unordered_flat_set<std::string> instruction_imm16 = { "shld","sta","lhld","lda","call","cnz","cnc","cpo","cp","cz","cc","cpe","cm","jmp","jnz","jnc","jpo","jp","jz","jc","jpe","jm" };
 
 				if (Element == "mvi")
 				{
@@ -512,7 +553,7 @@ bool CompilerStable::Step2_ReplaceWithDirectValues() {
 								return false;
 							}
 
-							splited_code[Line][element + 1] = to_string(ConstObject->second);
+							splited_code[Line][element + 1] = std::to_string(ConstObject->second);
 						}
 						else {
 							if (MarkerObject->second > MAX16BIT) {
@@ -520,7 +561,7 @@ bool CompilerStable::Step2_ReplaceWithDirectValues() {
 								return false;
 							}
 
-							splited_code[Line][element + 1] = to_string(MarkerObject->second);
+							splited_code[Line][element + 1] = std::to_string(MarkerObject->second);
 						}
 
 
@@ -551,7 +592,7 @@ bool CompilerStable::Step2_ReplaceWithDirectValues() {
 								return false;
 							}
 
-							splited_code[Line][element + 2] = to_string(ConstObject->second);
+							splited_code[Line][element + 2] = std::to_string(ConstObject->second);
 						}
 						else {
 							if (MarkerObject->second > MAX16BIT) {
@@ -559,7 +600,7 @@ bool CompilerStable::Step2_ReplaceWithDirectValues() {
 								return false;
 							}
 
-							splited_code[Line][element + 2] = to_string(MarkerObject->second);
+							splited_code[Line][element + 2] = std::to_string(MarkerObject->second);
 						}
 
 					}
@@ -598,7 +639,7 @@ bool CompilerStable::Step3_MakeByteArray() {
 
 
 			if (pdi.flag_have_dot && pdi.flag_have_2dot) {
-				string command = Element.substr(pdi.pos_dot + 1, (pdi.pos_2dot - pdi.pos_dot) - 1);
+				std::string command = Element.substr(pdi.pos_dot + 1, (pdi.pos_2dot - pdi.pos_dot) - 1);
 				ToLowerAll(command);
 
 				if (command == "adr") {
@@ -614,7 +655,7 @@ bool CompilerStable::Step3_MakeByteArray() {
 						ca.adress_h = adressed_code[Line] / 256;
 						ca.opcode = value.first;
 
-
+						Compiler::CompilerOutput.Line_and_Adress[Line] = adressed_code[Line] ;
 						ca.command = ".set: " + splited_code_raw[Line][i_element];
 
 						std::string MarkerName = FindIndexMarkerByAdress(Markers,adressed_code[Line]);
@@ -643,14 +684,14 @@ bool CompilerStable::Step3_MakeByteArray() {
 				continue;
 			}
 			else {
-				vector<uint8_t> opcodes = Compiler::TranslateInstruction(splited_code[Line]);
+				std::vector<uint8_t> opcodes = Compiler::TranslateInstruction(splited_code[Line]);
 
 				if (CompilerOutput.Error != TypeTranslatorError::NOTHING) {
 					CompilerOutput.LineError = Line;
 					return false;
 				}
 
-				string command = "";
+				std::string command = "";
 
 				for (int k = 0; k < splited_code[Line].size(); ++k) {
 					command += splited_code_raw[Line][k] + " ";
@@ -665,6 +706,8 @@ bool CompilerStable::Step3_MakeByteArray() {
 					ca.opcode = opcodes[k];
 					if (k == 0)
 					{
+						
+						Compiler::CompilerOutput.Line_and_Adress[Line] = adressed_code[Line];
 						ca.command = command;
 
 						std::string MarkerName = FindIndexMarkerByAdress(Markers, adressed_code[Line]);

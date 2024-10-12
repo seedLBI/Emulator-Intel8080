@@ -159,6 +159,8 @@ void FontManager::LoadFontFromFile(std::string Path2File) {
 	List_Fonts.push_back(new_font);
 }
 
+
+
 void FontManager::ReloadFont() {
 	if (NeedReloadFontSize) {
 		NeedReloadFontSize = false;
@@ -221,11 +223,11 @@ void FontManager::ReloadFont() {
 		ImGui_ImplOpenGL3_DestroyDeviceObjects();
 		if (ImGui_ImplOpenGL3_CreateDeviceObjects() == false)
 		{
-			cout << "Error CreateDeviceObjects" << endl;
+			std::cout << "Error CreateDeviceObjects" << std::endl;
 		}
 		ImGui_ImplOpenGL3_DestroyFontsTexture();
 		if (ImGui_ImplOpenGL3_CreateFontsTexture() == false) {
-			cout << "Error CreateFontsTexture" << endl;
+			std::cout << "Error CreateFontsTexture" << std::endl;
 		}
 
 

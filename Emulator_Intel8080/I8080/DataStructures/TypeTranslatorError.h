@@ -21,6 +21,7 @@ enum TypeTranslatorError {
     ERROR_WRONG_CONST,                              // USED
     ERROR_WRONG_CONST_OR_MARKER,                    // USED
     ERROR_WRONG_LOCAL_MARKER,                       // USED
+    ERROR_WRONG_INIT_LOCAL_MARKER,
     ERROR_WRONG_REGISTER_COMMAND,
     ERROR_WRONG_VALUE_REGISTER_COMMAND,
     ERROR_WRONG_ADRESSED_COMMAND,

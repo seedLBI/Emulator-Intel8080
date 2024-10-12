@@ -41,21 +41,21 @@ protected:
     std::pair<uint64_t, TypeValue> FromString2Int(const std::string& value);
 
 
-    bool CheckName(const string& name);
+    bool CheckName(const std::string& name);
 
-    int GetCountBytes(const string& cmd);
-    int GetCountParams(const string& cmd);
+    int GetCountBytes(const std::string& cmd);
+    int GetCountParams(const std::string& cmd);
 
 
-    vector<uint8_t> TranslateInstruction(const vector<string>& splitted_command);
+    std::vector<uint8_t> TranslateInstruction(const std::vector<std::string>& splitted_command);
 
 
 private:
 
 
-     bool IsHexValue(const string& value);
-     bool IsDecValue(const string& value);
-     bool IsBinValue(const string& value);
+     bool IsHexValue(const std::string& value);
+     bool IsDecValue(const std::string& value);
+     bool IsBinValue(const std::string& value);
 
      uint64_t StrHex2int(const std::string& value);
      uint64_t StrDec2int(const std::string& value);

@@ -8,6 +8,8 @@
 #include <unordered_map>
 #include <map>
 #include <regex>
+#include "algorithm"
+
 #include "imgui.h"
 
 
@@ -278,8 +280,16 @@ public:
 
 	void DeleteAllErrorMarkers();
 
+
+	void DeleteAllBreakpoints();
+	void AddBreakPoint(const int& indexLine);
+	std::vector<int> GetBreakpoints();
+
+
 	void SetErrorMarkers(const ErrorMarkers& aMarkers) { mErrorMarkers = aMarkers; }
 	void SetBreakpoints(const Breakpoints& aMarkers) { mBreakpoints = aMarkers; }
+
+
 
 	void Render(const char* aTitle, const ImVec2& aSize = ImVec2(), bool aBorder = false);
 	void SetText(const std::string& aText);

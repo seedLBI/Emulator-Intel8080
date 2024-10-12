@@ -43,7 +43,10 @@ std::string GetErrorInfo(const int& type) {
         return u8"Такой константы или маркера не существует.";
         break;
     case ERROR_CREATE_ANONIM_MARKER:
-        return u8"Прежде чем использовать анонимный маркер нужно поставить глобальный маркер";
+        return u8"Прежде чем использовать анонимный маркер нужно поставить глобальный маркер.";
+        break;
+    case ERROR_WRONG_INIT_LOCAL_MARKER:
+        return u8"При инициализации локального маркера ты указал глобальный маркер, который до этого не существовал.";
         break;
     case ERROR_WRONG_LOCAL_MARKER:
         return u8"Такого маркера не существует";

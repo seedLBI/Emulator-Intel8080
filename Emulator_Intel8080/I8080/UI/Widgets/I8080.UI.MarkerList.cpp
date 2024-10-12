@@ -98,7 +98,7 @@ void Widget_MarkerList::Draw() {
 					if (processor->GetBreakpointsInMemory()[adress]){
 						ImU32 row_bg_color = ImGui::GetColorU32(ImVec4(0.9f, 0.9f, 0.3f, 0.45f)); // Flat or Gradient?
 						ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, row_bg_color);
-						break;
+						
 					}
 					
 

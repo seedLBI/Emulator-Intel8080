@@ -110,7 +110,7 @@ void I8080_WidgetManager::Load(const std::string& Data) {
 		auto begin = Lines[index].find_first_of('[') + 1;
 		auto end = Lines[index].find_first_of(']');
 
-		string text = Lines[index].substr(begin, end - begin);
+		std::string text = Lines[index].substr(begin, end - begin);
 
 		if (text == "BEGIN") {
 			begin = Lines[index].find_last_of('[') + 1;

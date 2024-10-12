@@ -84,7 +84,26 @@ TextEditor::~TextEditor()
 {
 }
 
+void TextEditor::DeleteAllBreakpoints() {
+	mBreakpoints.clear();
+}
 
+std::vector<int> TextEditor::GetBreakpoints() {
+	std::vector<int> result;
+
+	for (const auto& elem : mBreakpoints)
+		result.emplace_back(elem);
+
+	return result;
+}
+
+void TextEditor::AddBreakPoint(const int& indexLine) {
+	auto it = mBreakpoints.find(indexLine);
+	if (it == mBreakpoints.end())
+		mBreakpoints.emplace(indexLine);
+	else
+		mBreakpoints.erase(it);
+}
 void TextEditor::DeleteAllErrorMarkers() {
 	mErrorMarkers.clear();
 }
@@ -987,10 +1006,13 @@ void TextEditor::Render()
 	auto globalLineMax = (int)mLines.size();
 	auto lineMax = std::max(0, std::min((int)mLines.size() - 1, lineNo + (int)floor((scrollY + contentSize.y) / mCharAdvance.y)));
 
+	const float radiusBreakpoints = mCharAdvance.y / 3.f;
+
+
 	// Deduce mTextStart by evaluating mLines size (global lineMax) plus two spaces as text width
 	char buf[16];
 	snprintf(buf, 16, " %d ", globalLineMax);
-	mTextStart = ImGui::GetFont()->CalcTextSizeA(ImGui::GetFontSize(), FLT_MAX, -1.0f, buf, nullptr, nullptr).x + mLeftMargin;
+	mTextStart = ImGui::GetFont()->CalcTextSizeA(ImGui::GetFontSize(), FLT_MAX, -1.0f, buf, nullptr, nullptr).x + mLeftMargin + mCharAdvance.x;
 
 	if (!mLines.empty())
 	{
@@ -998,7 +1020,7 @@ void TextEditor::Render()
 
 		while (lineNo <= lineMax)
 		{
-			ImVec2 lineStartScreenPos = ImVec2(cursorScreenPos.x, cursorScreenPos.y + lineNo * mCharAdvance.y);
+			ImVec2 lineStartScreenPos = ImVec2(cursorScreenPos.x , cursorScreenPos.y + lineNo * mCharAdvance.y);
 			ImVec2 textScreenPos = ImVec2(lineStartScreenPos.x + mTextStart, lineStartScreenPos.y);
 
 			auto& line = mLines[lineNo];
@@ -1029,11 +1051,28 @@ void TextEditor::Render()
 
 			// Draw breakpoints
 			auto start = ImVec2(lineStartScreenPos.x + scrollX, lineStartScreenPos.y);
+			const float posBreak_x = start.x + mCharAdvance.x;
+			const float posBreak_y = start.y + mCharAdvance.y / 2.f;
 
-			if (mBreakpoints.count(lineNo + 1) != 0)
-			{
-				auto end = ImVec2(lineStartScreenPos.x + contentSize.x + 2.0f * scrollX, lineStartScreenPos.y + mCharAdvance.y);
-				drawList->AddRectFilled(start, end, mPalette[(int)PaletteIndex::Breakpoint]);
+			bool MouseCollision = ImGui::GetMousePos().x >= start.x && ImGui::GetMousePos().x <= mTextStart - mCharAdvance.x &&
+				ImGui::GetMousePos().y >= start.y && ImGui::GetMousePos().y <= start.y + mCharAdvance.y;
+
+
+			if (MouseCollision) {
+				if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+					AddBreakPoint(lineNo + 1);
+			}
+
+
+			if (mBreakpoints.count(lineNo + 1) != 0){
+				drawList->AddCircleFilled({ posBreak_x,posBreak_y }, radiusBreakpoints, mPalette[(int)PaletteIndex::Breakpoint]);
+				drawList->AddCircle({ posBreak_x,posBreak_y }, radiusBreakpoints, mPalette[(int)PaletteIndex::ErrorMarker], 0, 4.f);
+			}
+			else {
+				if (MouseCollision){
+					drawList->AddCircleFilled({ posBreak_x,posBreak_y }, radiusBreakpoints, mPalette[(int)PaletteIndex::Background]);
+					drawList->AddCircle({ posBreak_x,posBreak_y }, radiusBreakpoints, mPalette[(int)PaletteIndex::Breakpoint],0,4.f);
+				}
 			}
 
 			// Draw error markers
@@ -1188,6 +1227,10 @@ void TextEditor::Render()
 			auto id = GetWordAt(ScreenPosToCoordinates(ImGui::GetMousePos()));
 			if (!id.empty())
 			{
+
+				for (int i = 0; i < id.size(); i++)
+					id[i] = tolower(id[i]);
+
 				auto it = mLanguageDefinition.mIdentifiers.find(id);
 				if (it != mLanguageDefinition.mIdentifiers.end())
 				{
@@ -2240,7 +2283,7 @@ const TextEditor::Palette & TextEditor::GetDarkPalette()
 			0xffe0e0e0, // Cursor
 			0x80a06020, // Selection
 			0x800020ff, // ErrorMarker
-			0x40f08000, // Breakpoint
+			ImGui::ColorConvertFloat4ToU32(ImVec4(0.8, 0.6, 0.2,1.0)), // Background
 			0xff707000, // Line number
 			0x40000000, // Current line fill
 			0x40808080, // Current line fill (inactive)
@@ -3513,15 +3556,25 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::I8080()
 
 // Add additional command categories
 langDef.mTokenRegexStrings.push_back({ "\\b(add|adi|adc|aci|sub|sui|sbb|sbi|inr|dcr|inx|dcx|dad)\\b", PaletteIndex::Command_Arethmetic });
+langDef.mTokenRegexStrings.push_back({ "\\b(ADD|ADI|ADC|ACI|SUB|SUI|SBB|SBI|INR|DCR|INX|DCX|DAD)\\b", PaletteIndex::Command_Arethmetic });
 langDef.mTokenRegexStrings.push_back({ "\\b(mov|mvi|lda|sta|lhld|shld|lxi|ldax|stax|xchg)\\b", PaletteIndex::Command_DataTransfer });
+langDef.mTokenRegexStrings.push_back({ "\\b(MOV|MVI|LDA|STA|LHLD|SHLD|LXI|LDAX|STAX|XCHG)\\b", PaletteIndex::Command_DataTransfer });
 langDef.mTokenRegexStrings.push_back({ "\\b(cmp|cpi|ana|ani|ora|ori|xra|xri|rlc|ral|rrc|rar|stc|cma|cmc|stc)\\b", PaletteIndex::Command_Logic });
+langDef.mTokenRegexStrings.push_back({ "\\b(CMP|CPI|ANA|ANI|ORA|ORI|XRA|XRI|RLC|RAL|RRC|RAR|STC|CMA|CMC|STC)\\b", PaletteIndex::Command_Logic });
 langDef.mTokenRegexStrings.push_back({ "\\b(push|pop|xthl|sphl|pchl)\\b", PaletteIndex::Command_StackOperation });
+langDef.mTokenRegexStrings.push_back({ "\\b(PUSH|POP|XTHL|SPHL|PCHL)\\b", PaletteIndex::Command_StackOperation });
 langDef.mTokenRegexStrings.push_back({ "\\b(in|out)\\b", PaletteIndex::Command_PortManipulation });
+langDef.mTokenRegexStrings.push_back({ "\\b(IN|OUT)\\b", PaletteIndex::Command_PortManipulation });
 langDef.mTokenRegexStrings.push_back({ "\\b(const|set|adr)\\b", PaletteIndex::Command_Translator });
+langDef.mTokenRegexStrings.push_back({ "\\b(CONST|SET|ADR)\\b", PaletteIndex::Command_Translator });
 langDef.mTokenRegexStrings.push_back({ "\\b(hlt|nop)\\b", PaletteIndex::Command_Processor });
+langDef.mTokenRegexStrings.push_back({ "\\b(HLT|NOP)\\b", PaletteIndex::Command_Processor });
 langDef.mTokenRegexStrings.push_back({ "\\b(call|cz|cc|cpe|cm|cnz|cnc|cpo|cp|jmp|jz|jc|jpe|jm|jnz|jnc|jpo|jp|rst|ret|rz|rc|rpe|rm|rnz|rnc|rpo|rp)\\b", PaletteIndex::Command_PC_changing });
+langDef.mTokenRegexStrings.push_back({ "\\b(CALL|CZ|CC|CPE|CM|CNZ|CNC|CPO|CP|JMP|JZ|JC|JPE|JM|JNZ|JNC|JPO|JP|RST|RET|RZ|RC|RPE|RM|RNZ|RNC|RPO|RP)\\b", PaletteIndex::Command_PC_changing });
 
-langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("L?\\\"(\\\\.|[^\\\"])*\\\"", PaletteIndex::String));
+//
+
+langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("L?\\\"(\\.|[^\\\"])*\\\"", PaletteIndex::String));
 langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("\\\'[^\\\']*\\\'", PaletteIndex::String));
 langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("0[bB][01]+", PaletteIndex::Number));
 langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("0[xX][0-9a-fA-F]+[uU]?[lL]?[lL]?", PaletteIndex::Number));
