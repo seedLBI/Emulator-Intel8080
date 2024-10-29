@@ -5,6 +5,7 @@
 #include <string>
 #include "DataStructures/TranslatorOutput.h"
 #include "Utils/TextUtils.h"
+#include "Utils/UTF8.h"
 #include "robin_hood.h"
 
 #define MAX16BIT 65535
@@ -24,12 +25,11 @@ public:
 protected:
     TranslatorOutput CompilerOutput;
 
-	std::vector<std::string> split_line(const std::string& line);
+	std::vector<std::string> split_line(const std::string& line, bool& state_MultiLineComment);
 	std::vector<std::vector<std::string>> split_code (const std::vector<std::string>& code);
 
 
 	bool IsAllSpecialSymbols(const std::string& command);
-
 
     enum class TypeValue {
         DEC,

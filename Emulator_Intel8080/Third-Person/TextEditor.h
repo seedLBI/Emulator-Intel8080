@@ -10,9 +10,14 @@
 #include <regex>
 #include "algorithm"
 
+#include <iostream>
+#include "OpenglWindow/OpenglWindow.h"
 #include "imgui.h"
-
-
+#include "imgui_internal.h"
+#include "IconFontCppHeaders/IconsFontAwesome6.h"
+#include "Utils/ImGui.Utils.h"
+#include "Utils/TextUtils.h"
+#include "Utils/UTF8.h"
 
 
 class TextEditor
@@ -444,8 +449,230 @@ private:
 	ImU32 GetGlyphColor(const Glyph& aGlyph) const;
 
 	void HandleKeyboardInputs();
-	void HandleMouseInputs();
+	void HandleMouseInputs_Step1();
+	void HandleMouseInputs_Step2();
+
+	void HandleMouseInputs_Step2Again();
+	bool SetAgain_Step2 = false;
+	float SetAgain_LineNo = 0;
+
 	void Render();
+
+	void Draw_FindWindow();
+	void Toggle_OpenFindWindow();
+	bool mWindowFind = false;
+	bool mWindowFind_Launched = false;
+	int CountLines_In_Window = 0;
+
+	bool FindFlag_Register = false;
+	bool FindFlag_AllWord = false;
+
+
+	struct FindedWord {
+		Coordinates WordStart;
+		Coordinates WordEnd;
+
+		Coordinates Find_Start;
+		Coordinates Find_End;
+
+		float Attention_Time = 0.f;
+	};
+	
+	struct DataFinder {
+
+		std::string WordSetted;
+
+		std::vector<FindedWord> FindedWords;
+		int index_current = -1;
+
+		void Next() {
+			if (FindedWords.empty())
+				return;
+
+			index_current++;
+			if (index_current > FindedWords.size() - 1)
+				index_current = 0;
+
+			FindedWords[index_current].Attention_Time = TimeAttention_Default;
+		}
+		void Prev() {
+			if (FindedWords.empty())
+				return;
+
+			index_current--;
+			if (index_current < 0)
+				index_current = FindedWords.size() - 1;
+
+			FindedWords[index_current].Attention_Time = TimeAttention_Default;
+		}
+
+
+		void Update() {
+			for (int i = 0; i < FindedWords.size(); i++){
+				FindedWords[i].Attention_Time -= OpenglWindow::GetDeltaTime();
+				if (FindedWords[i].Attention_Time < 0)
+					FindedWords[i].Attention_Time = 0.f;
+			}
+		}
+
+
+		void Find(const std::vector<std::string>& lines_text, const std::string& word, const bool& Flag_Register,const bool& Flag_CompleteWord,const bool& AnywayRecalculate) {
+
+			if (word.empty()) {
+				WordSetted.clear();
+				index_current = -1;
+				FindedWords.clear();
+				return;
+			}
+
+			if (word == WordSetted && !AnywayRecalculate) {
+				Next();
+				return;
+			}
+
+			std::vector<std::vector<std::string>> utf8Line_text(lines_text.size());
+
+			UTF8_SPLITER_ERROR error;
+			std::vector<std::string> utf8_word = utf8_splitter(word, error);;
+
+			if (!Flag_Register)
+				Lowercase_UTF8_Text(utf8_word);
+
+
+
+
+			if (!Flag_Register) {
+				for (int i = 0; i < lines_text.size(); i++) {
+					utf8Line_text[i] = utf8_splitter(lines_text[i], error);
+					Lowercase_UTF8_Text(utf8Line_text[i]);
+				}
+			}
+			else {
+				for (int i = 0; i < lines_text.size(); i++)
+					utf8Line_text[i] = utf8_splitter(lines_text[i], error);
+			}
+
+
+			index_current = -1;
+			FindedWords.clear();
+			WordSetted = word;
+
+			for (int i = 0; i < utf8Line_text.size(); i++) {
+
+				int addedCollumn = 0;
+				int len = 0;
+
+				for (int j = 0; j < utf8Line_text[i].size(); j++) {
+
+					if (utf8Line_text[i][j] == "\t")
+						len += 4 - (len % 4);
+					else
+						len++;
+
+					if (utf8Line_text[i][j] == utf8_word[0]) {
+
+						int index_line = i;
+						int index_column = j;
+
+						bool AllCorrect = true;
+
+						bool BeginLine = j == 0;
+
+						for (int k = 1; k < utf8_word.size(); k++) {
+							j++;
+							len++;
+							if (j > utf8Line_text[i].size() - 1) {
+								AllCorrect = false;
+								break;
+							}
+
+							if (utf8_word[k] != utf8Line_text[i][j]) {
+								AllCorrect = false;
+								break;
+							}
+						}
+
+						if (AllCorrect) {
+
+
+
+							bool WordLeftSpace = false;
+							bool WordRightSpace = false;
+
+
+							if (index_column == 0)
+								WordLeftSpace = true;
+							else
+								WordLeftSpace = utf8Line_text[i][index_column - 1] == " ";
+
+							if (j == utf8Line_text[i].size() - 1)
+								WordRightSpace = true;
+							else
+								WordRightSpace = utf8Line_text[i][j + 1] == " ";
+
+
+							if (Flag_CompleteWord && (!WordLeftSpace || !WordRightSpace)) {
+								continue;
+							}
+
+
+							if (index_current == -1) {
+								index_current = 0;
+							}
+
+							FindedWord pos_word;
+
+							pos_word.Find_Start = Coordinates(index_line, len - utf8_word.size());
+							pos_word.Find_End = Coordinates(index_line, len);
+
+
+							FindedWords.push_back(pos_word);
+
+							//Coordinates coord_equals_begin(index_line, index_column);
+
+
+						}
+
+
+
+					}
+
+
+
+				}
+			}
+		}
+
+
+
+
+
+
+
+
+		const float TimeAttention_Default = 0.3f;
+	};
+
+
+	DataFinder _DataFinder;
+
+
+	void SetCursorAtCoord_ChoosedWord() {
+		if (_DataFinder.FindedWords.empty())
+			return;
+
+		const float fontSize = ImGui::GetFont()->CalcTextSizeA(ImGui::GetFontSize() * mVirtualFontSize, FLT_MAX, -1.0f, "#", nullptr, nullptr).x;
+		mCharAdvance = ImVec2(fontSize, ImGui::GetTextLineHeightWithSpacing() * mLineSpacing);
+
+		int line = _DataFinder.FindedWords[_DataFinder.index_current].Find_Start.mLine - CountLines_In_Window / 2;
+
+		if (line < 0)
+			line = 0;
+
+		ImGui::SetScrollY(mCharAdvance.y * line);
+	}
+
+
 
 	float mLineSpacing;
 	Lines mLines;
@@ -478,6 +705,7 @@ private:
 	Palette mPalette;
 	LanguageDefinition mLanguageDefinition;
 	RegexList mRegexList;
+
 
 	bool mCheckComments;
 	Breakpoints mBreakpoints;

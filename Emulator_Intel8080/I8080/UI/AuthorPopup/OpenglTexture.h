@@ -120,7 +120,7 @@ private:
 		if (data = SOIL_load_image(filePath.c_str(), &width, &height, &channels, SOIL_LOAD_AUTO))
 		{
 #ifdef WITH_DEBUG_OUTPUT
-			cout << "nice " << channels << "  " << filePath << endl;
+			std::cout << "nice " << channels << "  " << filePath << std::endl;
 #endif
 			if (channels == 3)
 			{
@@ -133,7 +133,7 @@ private:
 		}
 		else {
 #ifdef WITH_DEBUG_OUTPUT
-			cout << "failed " << filePath << endl;
+			std::cout << "failed " << filePath << std::endl;
 #endif
 			exit(0);
 		}

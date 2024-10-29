@@ -1236,7 +1236,7 @@ namespace Intro {
 			Vars::Word_Emulator = utf8_to_utf16(u8"Эмулятор");
 			Vars::Word_Processora = utf8_to_utf16(u8"Процессора");
 			Vars::Word_Intel_8080 = utf8_to_utf16(u8"Intel 8080");
-			Vars::Word_Version = utf8_to_utf16(u8"Версия от 09.10.2024");
+			Vars::Word_Version = utf8_to_utf16(u8"Версия от 12.10.2024");
 			Vars::Word_Avtor_Korzhunov_a_c = utf8_to_utf16(u8"Автор:  Коржунов А. С.");
 			Vars::Word_Gruppa_IM2105B = utf8_to_utf16(u8"Группа:  ИМ21-05Б");
 			Vars::Word_Nauch_ruk_CheridnichenkoOM = utf8_to_utf16(u8"Научный  руководитель:  Чередниченко О. М.");
@@ -1455,12 +1455,12 @@ namespace Intro {
 				Vars::AllLeftText.AddGlyphs(
 					Vars::Word_Avtor_Korzhunov_a_c,
 					Vars::GlyphMap,
-					glm::translate(glm::scale(glm::mat4(1.f), glm::vec3(size_Avtor_Grupp, size_Avtor_Grupp, 1.f)), glm::vec3(offsetA.x, offsetA.y + 0.1f, 0.f)),
+					glm::translate(glm::scale(glm::mat4(1.f), glm::vec3(size_Avtor_Grupp, size_Avtor_Grupp, 1.f)), glm::vec3(offsetA.x, offsetA.y + 0.15f, 0.f)),
 					1.055f);
 				Vars::AllLeftText.AddGlyphs(
 					Vars::Word_Gruppa_IM2105B,
 					Vars::GlyphMap,
-					glm::translate(glm::scale(glm::mat4(1.f), glm::vec3(size_Avtor_Grupp, size_Avtor_Grupp, 1.f)), glm::vec3(offsetG.x, offsetG.y + 0.1f, 0.f)),
+					glm::translate(glm::scale(glm::mat4(1.f), glm::vec3(size_Avtor_Grupp, size_Avtor_Grupp, 1.f)), glm::vec3(offsetG.x, offsetG.y + 0.15f, 0.f)),
 					1.015f);
 
 				/*

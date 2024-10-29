@@ -123,6 +123,11 @@ void Widget_RegisterFlagsInfo::Draw() {
 				TextCenteredOnLine(string(values_flag[i] == 0 ? "False" : "True").c_str(), 1, i + 10);
 			}
 
+			ImGui::TableNextRow();
+			ImGui::TableSetColumnIndex(0);
+
+
+
 			ImGui::EndTable();
 		}
 

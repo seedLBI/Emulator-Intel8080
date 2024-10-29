@@ -31,10 +31,10 @@ std::string GetErrorInfo(const int& type) {
         return u8"Неправильно задано число в дерективе.";
         break;
     case ERROR_WRONG_ADRESS_NAME:
-        return u8"Имя адреса не должно начинаться с цифр и знаков.";
+        return u8"Имя адреса не должно являться числом.";
         break;
     case ERROR_WRONG_DEREKTIV_CONST_NAME:
-        return u8"Константа не должна начинаться с цифр и знаков.";
+        return u8"Константа не должно являться числом.";
         break;
     case ERROR_WRONG_CONST:
         return u8"Такой константы не существует.";
@@ -87,8 +87,11 @@ std::string GetErrorInfo(const int& type) {
     case ERROR_WHERE_SECOND_DOUBLE_QUOTE:
         return u8"Нужно всегда закрывать двойные ковычки!";
         break;
+    case ERROR_WHERE_BEGIN_MULTI_COMMENT:
+        return u8"Прежде чем заканчивать многострочный комментарий нужно его начать...";
+        break;
     case ERROR_UNSUPPORTED_SYMBOL:
-        return u8"Этот символ не поддерживается компилятором.";
+        return u8"Этот символ не поддерживается компилятором. Гадай какой именно...";
         break;
     default:
         return u8"Неизвестная ошибка\n";

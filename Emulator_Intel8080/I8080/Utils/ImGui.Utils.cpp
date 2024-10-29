@@ -136,3 +136,28 @@ bool ButtonCenteredOnLine(const char* label, float alignment)
 
 	return ImGui::Button(label);
 }
+
+
+void ButtonCheckBox(const char* label, const char* help, bool& state) {
+	if (ImGui::Button(label))
+		state = !state;
+
+	ImVec2 minn = ImGui::GetItemRectMin();
+	ImVec2 maxx = ImGui::GetItemRectMax();
+
+	if (ImGui::IsItemHovered()){
+		if (ImGui::BeginTooltip()) {
+			ImGui::Text(help);
+			ImGui::EndTooltip();
+		}
+	}
+
+
+
+
+	if (state){
+		auto drawList = ImGui::GetWindowDrawList();
+		drawList->AddRect(minn, maxx, ImColor(1.f, 1.f, 1.f),0.f,0,2.f);
+	}
+
+}

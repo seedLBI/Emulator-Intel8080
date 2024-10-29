@@ -14,3 +14,5 @@ void RenderCharacterInRect(ImFont* font, ImDrawList* draw_list, const ImVec2& po
 ImVec2 GetCharacterSize(ImFont* font, char character);
 
 bool ButtonCenteredOnLine(const char* label, float alignment);
+
+void ButtonCheckBox(const char* label, const char* help, bool& state);

@@ -62,6 +62,8 @@ void I8080_UserInterface::Draw() {
 
 	authorPopup.Draw();
 
+	//ImGui::ShowDemoWindow();
+
 #ifdef WITH_DEBUG_OUTPUT
 	ImGui::ShowDemoWindow(); // Show demo window! :)
 #endif
@@ -135,7 +137,7 @@ void I8080_UserInterface::Emulator_Stop() {
 	processor->ActiveFlagStop();
 	processor->Reset();
 
-	processor->RemoveAllBreakPoints();
+	//processor->RemoveAllBreakPoints();
 
 	widget_RegisterFlagsInfo->InitLastState();
 	widget_MnemocodeViewer->FollowCursorPC();
@@ -187,6 +189,9 @@ void I8080_UserInterface::DrawMainMenu() {
 			if (ImGui::MenuItem((string(ICON_FA_FOLDER_OPEN) + u8" Открыть").c_str(), keyCombination_handler->GetStrCombinationByName(u8"Открыть файл").c_str())) {
 				projectManager->OpenFile();
 			}
+			if (ImGui::MenuItem((string(ICON_FA_FOLDER_OPEN) + u8" Открыть бинарный файл").c_str())) {
+				projectManager->OpenBinaryFile();
+			}
 			if (ImGui::MenuItem((string(ICON_FA_BOX_ARCHIVE) + u8" Сохранить").c_str(), keyCombination_handler->GetStrCombinationByName(u8"Сохранить").c_str())) {
 				projectManager->SaveFile();
 			}
@@ -199,7 +204,6 @@ void I8080_UserInterface::DrawMainMenu() {
 				}
 				ImGui::EndMenu();
 			}
-
 			//if (ImGui::MenuItem(string(string(ICON_FA_FILE_IMAGE) + u8" PixelScreen to png").c_str())) {
 			//	SaveImagePixelScreen();
 			//}
@@ -277,9 +281,10 @@ void I8080_UserInterface::DrawMainMenu() {
 			ImGui::MenuItem((string(ICON_FA_HIGHLIGHTER) + u8" Список маркеров").c_str(), "", widget_MarkerList->GetPtrFlagShow());
 			ImGui::MenuItem((string(ICON_FA_BARS) + u8" Список переменных").c_str(), "", widget_VarList->GetPtrFlagShow());
 			ImGui::MenuItem((string(ICON_FA_HAMMER) + u8" Список постоянных").c_str(), "", widget_ConstList->GetPtrFlagShow());
+
+			ImGui::MenuItem((string(ICON_FA_CODE) + u8" Дизассемблер").c_str(), "", widget_Disassembler->GetPtrFlagShow());
+
 			ImGui::MenuItem((string(ICON_FA_BOOK_BOOKMARK) + u8" Руководство к программе").c_str(), "", widget_Help->GetPtrFlagShow());
-
-
 
 
 			ImGui::EndMenu();
@@ -380,6 +385,7 @@ void I8080_UserInterface::DrawMainMenu() {
 
 void I8080_UserInterface::InitWidgets() {
 	widget_CodeEditor = new Widget_CodeEditor();
+	widget_Disassembler = new Widget_Disassembler(processor);
 	widget_ColorPicker = new Widget_ColorPicker(widget_CodeEditor->GetPtrTextEditor());
 	widget_SymbolPicker = new Widget_SymbolPicker(widget_CodeEditor->GetPtrTextEditor());
 	widget_SymbolScreen = new Widget_SymbolScreen(processor);
@@ -398,6 +404,7 @@ void I8080_UserInterface::InitWidgets() {
 	widget_ConstList = new Widget_ConstList(projectManager->GetPtrTranslatorOutput());
 	widget_Help = new Widget_Help();
 
+	WidgetManager.AddWidgetPtr(widget_Disassembler);
 	WidgetManager.AddWidgetPtr(widget_ColorPicker);
 	WidgetManager.AddWidgetPtr(widget_SymbolPicker);
 	WidgetManager.AddWidgetPtr(widget_SymbolScreen);
@@ -432,27 +439,20 @@ void I8080_UserInterface::InitKeyCombinationHandler() {
 	keyCombination_handler->AddCombination(u8"Сбросить состояние", KeyCombination({  }, std::bind(&I8080_UserInterface::Emulator_FullReset, this)));
 	keyCombination_handler->AddCombination(u8"Удалить точки останова", KeyCombination({  }, std::bind(&I8080::RemoveAllBreakPoints, processor)));
 
-
 	keyCombination_handler->AddCombination(u8"Сохранить", KeyCombination({ GLFW_KEY_LEFT_CONTROL, GLFW_KEY_S }, std::bind(&ProjectManager::SaveFile, projectManager)));
 	keyCombination_handler->AddCombination(u8"Сохранить как", KeyCombination({}, std::bind(&ProjectManager::SaveFileAs, projectManager)));
 
 	keyCombination_handler->AddCombination(u8"Новый файл", KeyCombination({}, std::bind(&ProjectManager::NewFile, projectManager)));
 	keyCombination_handler->AddCombination(u8"Открыть файл", KeyCombination({}, std::bind(&ProjectManager::OpenFile, projectManager)));
 
-
 	keyCombination_handler->AddCombination(u8"Настройки", KeyCombination({}, std::bind(&Setting::Toggle, settings)));
 
 	keyCombination_handler->AddCombination(u8"Полноэкранный\\Оконный", KeyCombination({ GLFW_KEY_F11 }, std::bind(&WindowManager::ToggleFullscreen, window_manager)));
 
-
-
 	keyCombination_handler->AddCombination(u8"Следующее рабочее пространство", KeyCombination({ GLFW_KEY_LEFT_CONTROL, GLFW_KEY_RIGHT_BRACKET }, std::bind(&I8080_WorkspaceManager::LoadNext, WorkspaceManager)));
 	keyCombination_handler->AddCombination(u8"Предыдущее рабочее пространство", KeyCombination({ GLFW_KEY_LEFT_CONTROL, GLFW_KEY_LEFT_BRACKET }, std::bind(&I8080_WorkspaceManager::LoadPrevious, WorkspaceManager)));
 
-
-
 	keyCombination_handler->AddCombination(u8"Увеличить шрифт на 1", KeyCombination({ GLFW_KEY_LEFT_CONTROL, GLFW_KEY_EQUAL }, std::bind(&FontManager::SetOneStepBigger, font_manager)));
 	keyCombination_handler->AddCombination(u8"Уменьшить шрифт на 1", KeyCombination({ GLFW_KEY_LEFT_CONTROL, GLFW_KEY_MINUS }, std::bind(&FontManager::SetOneStepSmaller, font_manager)));
-
 
 }

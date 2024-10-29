@@ -117,7 +117,7 @@ void Widget_MarkerList::Draw() {
 					}
 
 					if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(ImGuiMouseButton_Right)) {
-						processor->SetBreakPointPosition(translator->Opcodes[i].adress_h * 256 + translator->Opcodes[i].adress_l);
+						processor->ToggleBreakPointPosition(translator->Opcodes[i].adress_h * 256 + translator->Opcodes[i].adress_l);
 					}
 
 					ImGui::TableSetColumnIndex(0);

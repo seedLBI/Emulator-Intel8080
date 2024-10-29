@@ -11544,9 +11544,10 @@ void ImGui::SetScrollX(ImGuiWindow* window, float scroll_x)
 
 void ImGui::SetScrollY(ImGuiWindow* window, float scroll_y)
 {
-    window->ScrollTarget.y = scroll_y;
-    window->ScrollTargetCenterRatio.y = 0.0f;
-    window->ScrollTargetEdgeSnapDist.y = 0.0f;
+    window->Scroll.y = scroll_y;
+    //window->ScrollTarget.y = scroll_y;
+    //window->ScrollTargetCenterRatio.y = 0.0f;
+    //window->ScrollTargetEdgeSnapDist.y = 0.0f;
 }
 
 void ImGui::SetScrollX(float scroll_x)

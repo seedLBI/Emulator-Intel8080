@@ -51,6 +51,7 @@
 #include "UI\Widgets\I8080.UI.PixelScreen.h"
 #include "UI\Widgets\I8080.UI.PixelScreenTwoBuffers.h"
 #include "UI\Widgets\I8080.UI.Help.h"
+#include "UI\Widgets\I8080.UI.Disassembler.h"
 
 #include "UI\Widget\I8080.WidgetManager.h"
 #include "UI\Workspaces\I8080.WorkspaceManager.h"
@@ -137,6 +138,7 @@ private:
 	Widget_MarkerList*			  widget_MarkerList = nullptr;
 	Widget_ConstList*			  widget_ConstList = nullptr;
 	Widget_CodeEditor*			  widget_CodeEditor = nullptr; 
+	Widget_Disassembler*          widget_Disassembler = nullptr;
 
 	// port widgets
 	Widget_Input0x08*			  widget_input0x08 = nullptr;

@@ -2,6 +2,7 @@
 #define I8080_UI_REGISTER_FLAGS_INFO_H
 
 #include "Emulator\I8080.h"
+#include "Emulator/Disassembler/Disassembler.h"
 #include "UI\Widget\I8080.Widget.h"
 #include "Utils\ImGui.Utils.h"
 #include <string>

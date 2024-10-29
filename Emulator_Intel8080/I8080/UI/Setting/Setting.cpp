@@ -63,6 +63,7 @@ void Setting::Draw() {
 		ImGui::EndChild();
 
 		ImGui::SameLine();
+
 		ImGui::BeginChild("right pane");
 
 		switch (selected_setting_type) {

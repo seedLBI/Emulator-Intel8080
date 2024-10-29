@@ -8,15 +8,18 @@ void Compiler::Clear() {};
 
 
 
-//TODO: Доделать логику для разбиение строк на символы
-std::vector<std::string> Compiler::split_line(const std::string& line){
+
+std::vector<std::string> Compiler::split_line(const std::string& line, bool& state_MultiLineComment){
     std::vector<std::string> result;
 
     const static std::string DoubleQuote = "\"";
     const static std::string CommentSymbol = ";";
 
+	const static std::string Begin_MultiComment = "/*";
+	const static std::string End_MultiComment = "*/";
+	
     bool InQuote = false;
-
+	
     UTF8_SPLITER_ERROR splitter_error = UTF8_SPLITER_ERROR::NOTHING;
     auto splitted_line = utf8_splitter(line, splitter_error);
 
@@ -25,14 +28,40 @@ std::vector<std::string> Compiler::split_line(const std::string& line){
         return result;
     }
 
+	
     std::string temp = "";
     for (int i = 0; i < splitted_line.size(); i++) {
 
         const std::string symbol = splitted_line[i];
 
-        if (symbol == CommentSymbol) {
-            break;
-        }
+		if (i < splitted_line.size() - 1){
+
+			const std::string two_symbol = splitted_line[i] + splitted_line[i + 1];
+
+			if (two_symbol == Begin_MultiComment && state_MultiLineComment == false){
+				state_MultiLineComment = true;
+				i++;
+				continue;
+			}
+			else if (two_symbol == End_MultiComment) {
+				if (state_MultiLineComment == false){
+					CompilerOutput.Error = ERROR_WHERE_BEGIN_MULTI_COMMENT;
+					return result;
+				}
+				state_MultiLineComment = false;
+				i++;
+				continue;
+			}
+
+		}
+
+		if (state_MultiLineComment) {
+			continue;
+		}
+
+
+
+        if (symbol == CommentSymbol) { break; }
 
         if (symbol == DoubleQuote) {
             InQuote = true;
@@ -141,8 +170,14 @@ std::vector<std::string> Compiler::split_line(const std::string& line){
 std::vector<std::vector<std::string>> Compiler::split_code(const std::vector<std::string>& code) {
     std::vector<std::vector<std::string>> result(code.size());
 
+	bool state_MultiLineComment = false;
+
+
     for (int i = 0; i < code.size(); ++i) {
-        result[i] = split_line(code[i]);
+
+        result[i] = split_line(code[i], state_MultiLineComment);
+
+
         if (CompilerOutput.Error != TypeTranslatorError::NOTHING) {
             CompilerOutput.LineError = i;
             return result;
@@ -155,7 +190,7 @@ std::vector<std::vector<std::string>> Compiler::split_code(const std::vector<std
 
 bool Compiler::IsAllSpecialSymbols(const std::string& command) {
 
-    static const robin_hood::unordered_flat_set<char> special_symbols = { '.', ',', ':', '[', ']', '>', '<', '\\', '/', '|','\'','\"'};
+    static const robin_hood::unordered_flat_set<char> special_symbols = { '.', ',', ':','(',')','{','}', '[', ']', '>', '<', '\\', '/', '|','\'','\"'};
 
     int count = 0;
     for (char c : command) {
@@ -167,6 +202,8 @@ bool Compiler::IsAllSpecialSymbols(const std::string& command) {
     return command.size() == count;
 
 }
+
+
 
 std::pair<uint64_t, Compiler::TypeValue> Compiler::FromString2Int(const std::string& value) {
     if (IsHexValue(value))
@@ -183,17 +220,29 @@ std::pair<uint64_t, Compiler::TypeValue> Compiler::FromString2Int(const std::str
 
 bool Compiler::CheckName(const std::string& name) {
 
-    robin_hood::unordered_node_set<std::string> Denied_names = { "a","A","b","B","c","C","d","D","e","E","H","h","l","L","sp","SP" };
+	//if (checkEqualNameRegisters) {
+	//	robin_hood::unordered_node_set<std::string> Denied_names = { "a","A","b","B","c","C","d","D","e","E","H","h","l","L","m","M","sp", "sP", "Sp","SP", "pc", "PC", "pC", "Pc"};
 
-    if (Denied_names.contains(name) == true)
-        return false;
+	//	if (Denied_names.contains(name) == true) {
+	//		CompilerOutput.Error = ERROR_NAME_REGISTER_IN_GLOBAL_MARKER_OR_CONST;
+	//		return false;
+	//	}
+	//}
+
 
     //vector<string> Denied_names = { "a","A","b","B","c","C","d","D","e","E","H","h","l","L","sp","SP" };
     //if (FindInVector(Denied_names, name))
     //    return false;
 
-    if (name[0] >= '0' && name[0] <= '9')
-        return false;
+
+	auto checkIsFullValue = FromString2Int(name);
+
+	if (checkIsFullValue.second != TypeValue::UNKNOWN) {
+		return false;
+	}
+
+	/*
+	robin_hood::unordered_node_set<std::string> AcessedSymbols = { "<",">","[","]","{","}","!","@","#","$","%","^","&","*","(",")","_","-","+","="};
 
     for (int i = 0; i < name.size(); ++i) {
         bool is_low_latter = (name[i] >= 'a' && name[i] <= 'z');
@@ -206,6 +255,8 @@ bool Compiler::CheckName(const std::string& name) {
             return false;
         }
     }
+	*/
+
 
     return true;
 }
@@ -215,7 +266,7 @@ int Compiler::GetCountBytes(const std::string& cmd) {
 
     static const robin_hood::unordered_flat_map<std::string, int> cmdBytes = {
         {"mov",1},{"hlt",1},{"xra",1},{"cmp",1},
-        {"add",1},{"inr",1},{"dcr",1},{"inx",1},
+		{"add",1},{"adc",1},{"inr",1},{"dcr",1},{"inx",1},
         {"ora",1},{"ana",1},{"sub",1},{"ret",1},
         {"rz",1},{"rc",1},{"rpe",1},{"rm",1},
         {"rnz",1},{"rnc",1},{"rpo",1},{"rp",1},
@@ -439,8 +490,9 @@ std::vector<uint8_t> Compiler::TranslateInstruction(const std::vector<std::strin
 		int h_imm16 = value / 256;
 
 		result.emplace_back(instruction_imm16_map.find(command)->second);
-		result.emplace_back(h_imm16);
 		result.emplace_back(l_imm16);
+		result.emplace_back(h_imm16);
+
 
 		break;
 	}
@@ -567,8 +619,9 @@ std::vector<uint8_t> Compiler::TranslateInstruction(const std::vector<std::strin
 		int h_imm16 = value / 256;
 
 		result.emplace_back(lxi_imm16_map.find(params[0])->second);
-		result.emplace_back(h_imm16);
 		result.emplace_back(l_imm16);
+		result.emplace_back(h_imm16);
+
 
 		break;
 	}

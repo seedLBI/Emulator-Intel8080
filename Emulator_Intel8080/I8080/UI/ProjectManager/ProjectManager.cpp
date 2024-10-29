@@ -41,6 +41,7 @@ void ProjectManager::NewFile() {
 	widget_CodeEditor->GetPtrTextEditor()->DeleteAllErrorMarkers();
 
 	processor->Reset();
+	processor->RemoveAllBreakPoints();
 	processor->LoadMemory(translatorOutput.Opcodes);
 
 	Path_LoadedFile.clear();
@@ -63,6 +64,7 @@ void ProjectManager::NewFile() {
 bool ProjectManager::OpenFileWithPath(const std::string& path) {
 	if (path.size() != 0) {
 		widget_CodeEditor->GetPtrTextEditor()->DeleteAllErrorMarkers();
+		widget_CodeEditor->GetPtrTextEditor()->DeleteAllBreakpoints();
 
 		lastPathManager->AddPath(path);
 		Path_LoadedFile = path;
@@ -75,6 +77,7 @@ bool ProjectManager::OpenFileWithPath(const std::string& path) {
 
 		widget_CodeEditor->SetFlagWindow(0);
 		processor->Reset();
+		processor->RemoveAllBreakPoints();
 		processor->LoadMemory(translatorOutput.Opcodes);
 		widget_RegisterFlagsInfo->InitLastState();
 
@@ -100,6 +103,29 @@ void ProjectManager::OpenFile() {
 	string path = OpenFileDialog();
 	OpenFileWithPath(path);
 }
+
+void ProjectManager::OpenBinaryFile() {
+	string path = OpenRomFileDialog();
+
+	if (path.empty())
+		return;
+
+	Path_LoadedFile = path;
+	UpdateTitleWindow();
+
+	widget_CodeEditor->GetPtrTextEditor()->DeleteAllErrorMarkers();
+	widget_CodeEditor->GetPtrTextEditor()->DeleteAllBreakpoints();
+	widget_CodeEditor->GetPtrTextEditor()->SetTextLines({});
+
+	processor->Reset();
+	processor->RemoveAllBreakPoints();
+
+	auto data = readFileToByteArray(path);
+
+	processor->LoadMemory(data);
+
+}
+
 void ProjectManager::SaveFile() {
 	if (Path_LoadedFile.empty()) {
 		SaveFileAs();
@@ -343,6 +369,7 @@ void ProjectManager::TryTranslateCode() {
 
 	processor->ActiveFlagStop();
 	processor->Reset();
+	processor->RemoveAllBreakPoints();
 	processor->EraseMemory();
 
 
@@ -384,6 +411,7 @@ void ProjectManager::TryTranslateCode() {
 
 	if (translatorOutput.LineError == 0 && translatorOutput.Error == 0) {
 		processor->Reset();
+		processor->RemoveAllBreakPoints();
 		processor->LoadMemory(translatorOutput.Opcodes);
 		widget_RegisterFlagsInfo->InitLastState();
 
@@ -396,7 +424,7 @@ void ProjectManager::TryTranslateCode() {
 
 			int adressBreak = translatorOutput.Line_and_Adress[breaks[i] - 1];
 			if (adressBreak != -1)
-				processor->SetBreakPointPosition(adressBreak);
+				processor->SetBreakPointPosition(adressBreak,true);
 		}
 
 	}

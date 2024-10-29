@@ -147,6 +147,7 @@
     <ClCompile Include="I8080\DataStructures\TypeTranslatorError.cpp" />
     <ClCompile Include="I8080\Emulator\Compilier\Compiler.cpp" />
     <ClCompile Include="I8080\Emulator\Compilier\Stable\Compiler.Stable.cpp" />
+    <ClCompile Include="I8080\Emulator\Disassembler\Disassembler.cpp" />
     <ClCompile Include="I8080\Emulator\EmulationThread\EmulationThread.cpp" />
     <ClCompile Include="I8080\Emulator\I8080.cpp" />
     <ClCompile Include="I8080\Emulator\Port\I8080.Port.AsyncKeyboard.cpp" />
@@ -188,12 +189,14 @@
     <ClCompile Include="I8080\UI\Widgets\I8080.UI.CodeEditor.cpp" />
     <ClCompile Include="I8080\UI\Widgets\I8080.UI.ColorPicker.cpp" />
     <ClCompile Include="I8080\UI\Widgets\I8080.UI.ConstList.cpp" />
+    <ClCompile Include="I8080\UI\Widgets\I8080.UI.Disassembler.cpp" />
     <ClCompile Include="I8080\UI\Widgets\I8080.UI.EmulatorInfo.cpp" />
     <ClCompile Include="I8080\UI\Widgets\I8080.UI.Help.cpp" />
     <ClCompile Include="I8080\UI\Widgets\I8080.UI.HexViewer.cpp" />
     <ClCompile Include="I8080\UI\Widgets\I8080.UI.Input0x08.cpp" />
     <ClCompile Include="I8080\UI\Widgets\I8080.UI.Keyboard.cpp" />
     <ClCompile Include="I8080\UI\Widgets\I8080.UI.MarkerList.cpp" />
+    <ClCompile Include="I8080\UI\Widgets\I8080.UI.MemoryMonoPixelScreen.cpp" />
     <ClCompile Include="I8080\UI\Widgets\I8080.UI.MnemoCodeViewer.cpp" />
     <ClCompile Include="I8080\UI\Widgets\I8080.UI.Output0x02.cpp" />
     <ClCompile Include="I8080\UI\Widgets\I8080.UI.PixelScreen.cpp" />
@@ -214,6 +217,8 @@
     <ClCompile Include="I8080\Utils\Keyboard.Utils.cpp" />
     <ClCompile Include="I8080\Utils\MathUtils.cpp" />
     <ClCompile Include="I8080\Utils\TextUtils.cpp" />
+    <ClCompile Include="I8080\Utils\Unicode.cpp" />
+    <ClCompile Include="I8080\Utils\UTF8.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Third-Person\imgui.cpp" />
     <ClCompile Include="Third-Person\imgui_demo.cpp" />
@@ -236,6 +241,7 @@
     <ClInclude Include="I8080\DataStructures\VarsDebug.h" />
     <ClInclude Include="I8080\Emulator\Compilier\Compiler.h" />
     <ClInclude Include="I8080\Emulator\Compilier\Stable\Compiler.Stable.h" />
+    <ClInclude Include="I8080\Emulator\Disassembler\Disassembler.h" />
     <ClInclude Include="I8080\Emulator\EmulationThread\EmulationThread.h" />
     <ClInclude Include="I8080\Emulator\I8080.h" />
     <ClInclude Include="I8080\Emulator\Port\I8080.Port.AsyncKeyboard.h" />
@@ -288,12 +294,14 @@
     <ClInclude Include="I8080\UI\Widgets\I8080.UI.CodeEditor.h" />
     <ClInclude Include="I8080\UI\Widgets\I8080.UI.ColorPicker.h" />
     <ClInclude Include="I8080\UI\Widgets\I8080.UI.ConstList.h" />
+    <ClInclude Include="I8080\UI\Widgets\I8080.UI.Disassembler.h" />
     <ClInclude Include="I8080\UI\Widgets\I8080.UI.EmulatorInfo.h" />
     <ClInclude Include="I8080\UI\Widgets\I8080.UI.Help.h" />
     <ClInclude Include="I8080\UI\Widgets\I8080.UI.HexViewer.h" />
     <ClInclude Include="I8080\UI\Widgets\I8080.UI.Input0x08.h" />
     <ClInclude Include="I8080\UI\Widgets\I8080.UI.Keyboard.h" />
     <ClInclude Include="I8080\UI\Widgets\I8080.UI.MarkerList.h" />
+    <ClInclude Include="I8080\UI\Widgets\I8080.UI.MemoryMonoPixelScreen.h" />
     <ClInclude Include="I8080\UI\Widgets\I8080.UI.MnemoCodeViewer.h" />
     <ClInclude Include="I8080\UI\Widgets\I8080.UI.Output0x02.h" />
     <ClInclude Include="I8080\UI\Widgets\I8080.UI.PixelScreen.h" />
@@ -314,6 +322,8 @@
     <ClInclude Include="I8080\Utils\Keyboard.Utils.h" />
     <ClInclude Include="I8080\Utils\MathUtils.h" />
     <ClInclude Include="I8080\Utils\TextUtils.h" />
+    <ClInclude Include="I8080\Utils\Unicode.h" />
+    <ClInclude Include="I8080\Utils\UTF8.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Third-Person\IconFontCppHeaders\IconsFontAwesome6.h" />
     <ClInclude Include="Third-Person\imconfig.h" />
@@ -331,7 +341,6 @@
     <ClInclude Include="Third-Person\lodepng.h" />
     <ClInclude Include="Third-Person\PBO.h" />
     <ClInclude Include="Third-Person\TextEditor.h" />
-    <ClInclude Include="Third-Person\utf8.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="I8080_Emulator.rc" />

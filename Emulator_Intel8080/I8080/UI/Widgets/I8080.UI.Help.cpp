@@ -130,6 +130,11 @@ void Widget_Help::DrawRightMousePopup() {
 
 void Widget_Help::DrawTextWithAbbrivs(const std::vector < std::vector< std::any >>& Text) {
 	for (int line = 0; line < Text.size(); line++){
+
+		if (Text[line].empty()) {
+			ImGui::Text("");
+		}
+
 		for (int element = 0; element < Text[line].size(); element++){
 
 			if (Text[line][element].type() == typeid(std::string)) {

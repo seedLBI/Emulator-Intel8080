@@ -72,6 +72,13 @@ void I8080::LoadMemory(const std::vector<OpcodeAdressed>& array) {
 		Memory[array[i].adress_h * 256 + array[i].adress_l] = array[i].opcode;
 	}
 }
+void I8080::LoadMemory(const std::vector<uint8_t>& array) {
+	EraseMemory();
+
+	for (unsigned int i = 0; i < array.size(); i++) {
+		Memory[i] = array[i];
+	}
+}
 
 void I8080::InitPointer2State(CurrentState& cs) {
 	cs.A = &A;
@@ -151,8 +158,13 @@ std::deque<unsigned int> I8080::GetOutputConsole() {
 bool* I8080::GetBreakpointsInMemory() {
 	return BreakPoints;
 }
-void I8080::SetBreakPointPosition(const unsigned int& Position) {
+void I8080::ToggleBreakPointPosition(const unsigned int& Position) {
 	BreakPoints[Position] = !BreakPoints[Position];
+}
+
+
+void I8080::SetBreakPointPosition(const unsigned int& Position, const bool& state) {
+	BreakPoints[Position] = state;
 }
 void I8080::RemoveAllBreakPoints() {
 	for (int i = 0; i < SIZE_MEMORY; i++)
@@ -374,19 +386,19 @@ void I8080::_STAX_D() {
 void I8080::_SHLD_addr16() {
 	CountTicks += 16;
 
-	unsigned char indexFirst = Memory[PC + 1];
-	unsigned char indexSecond = Memory[PC + 2];
+	unsigned int l = Memory[PC + 1];
+	unsigned int h = Memory[PC + 2];
 
-	Memory[indexFirst * 256 + indexSecond] = L;
-	Memory[indexFirst * 256 + indexSecond + 1] = H;
+	Memory[h * 256 + l] = L;
+	Memory[h * 256 + l + 1] = H;
 	IncrementPC(3);
 }
 void I8080::_STA_addr16() {
 	CountTicks += 13;
-	unsigned char indexFirst = Memory[PC + 1];
-	unsigned char indexSecond = Memory[PC + 2];
+	unsigned int l = Memory[PC + 1];
+	unsigned int h = Memory[PC + 2];
 
-	Memory[indexFirst * 256 + indexSecond] = A;
+	Memory[h * 256 + l] = A;
 	IncrementPC(3);
 }
 
@@ -991,29 +1003,29 @@ void I8080::_MOV_M_L() {
 
 void I8080::_LXI_B_imm16() {
 	CountTicks += 10;
-	B = Memory[PC + 1];
-	C = Memory[PC + 2];
+	C = Memory[PC + 1];
+	B = Memory[PC + 2];
 	IncrementPC(3);
 }
 
 void I8080::_LXI_D_imm16() {
 	CountTicks += 10;
-	D = Memory[PC + 1];
-	E = Memory[PC + 2];
+	E = Memory[PC + 1];
+	D = Memory[PC + 2];
 	IncrementPC(3);
 }
 
 void I8080::_LXI_H_imm16() {
 	CountTicks += 10;
-	H = Memory[PC + 1];
-	L = Memory[PC + 2];
+	L = Memory[PC + 1];
+	H = Memory[PC + 2];
 	IncrementPC(3);
 }
 
 void I8080::_LXI_SP_imm16() {
 	CountTicks += 10;
-	unsigned int sp_h = Memory[PC + 1];
-	unsigned int sp_l = Memory[PC + 2];
+	unsigned int sp_l = Memory[PC + 1];
+	unsigned int sp_h = Memory[PC + 2];
 	SP = sp_h * 256 + sp_l;
 	IncrementPC(3);
 }
@@ -1030,20 +1042,20 @@ void I8080::_LDAX_D() {
 }
 void I8080::_LHLD_addr16() {
 	CountTicks += 16;
-	L = Memory[Memory[PC + 1] * 256 + Memory[PC + 2]];
-	H = Memory[Memory[PC + 1] * 256 + Memory[PC + 2] + 1];
+	L = Memory[Memory[PC + 2] * 256 + Memory[PC + 1]];
+	H = Memory[Memory[PC + 2] * 256 + Memory[PC + 1] + 1];
 	IncrementPC(3);
 }
 void I8080::_LDA_addr16() {
 	CountTicks += 16;
-	A = Memory[Memory[PC + 1] * 256 + Memory[PC + 2]];
+	A = Memory[Memory[PC + 2] * 256 + Memory[PC + 1]];
 	IncrementPC(3);
 }
 
 void I8080::_JMP() {
 	CountTicks += 10;
-	unsigned int h_t = Memory[PC + 1];
-	unsigned int l_t = Memory[PC + 2];
+	unsigned int l_t = Memory[PC + 1];
+	unsigned int h_t = Memory[PC + 2];
 	SetVisitedMemoryFromPC(3);
 	SetPC(h_t * 256 + l_t);
 }
@@ -1321,7 +1333,7 @@ void I8080::_CALL() {
 	SetSP_nextAdress(PC + 3);
 
 	SetVisitedMemoryFromPC(3);
-	SetPC(Memory[PC + 1] * 256 + Memory[PC + 2]);
+	SetPC(Memory[PC + 2] * 256 + Memory[PC + 1]);
 }
 
 
@@ -1565,10 +1577,10 @@ void I8080::InitInstructions() {
 	  &I8080::_SUB_B,   &I8080::_SUB_C,        &I8080::_SUB_D,       &I8080::_SUB_E,   &I8080::_SUB_H,   &I8080::_SUB_L,   &I8080::_SUB_M,      &I8080::_SUB_A,   &I8080::_SBB_B,   &I8080::_SBB_C,   &I8080::_SBB_D,       &I8080::_SBB_E,   &I8080::_SBB_H,   &I8080::_SBB_L,   &I8080::_SBB_M,      &I8080::_SBB_A,
 	  &I8080::_ANA_B,   &I8080::_ANA_C,        &I8080::_ANA_D,       &I8080::_ANA_E,   &I8080::_ANA_H,   &I8080::_ANA_L,   &I8080::_ANA_M,      &I8080::_ANA_A,   &I8080::_XRA_B,   &I8080::_XRA_C,   &I8080::_XRA_D,       &I8080::_XRA_E,   &I8080::_XRA_H,   &I8080::_XRA_L,   &I8080::_XRA_M,      &I8080::_XRA_A,
 	  &I8080::_ORA_B,   &I8080::_ORA_C,        &I8080::_ORA_D,       &I8080::_ORA_E,   &I8080::_ORA_H,   &I8080::_ORA_L,   &I8080::_ORA_M,      &I8080::_ORA_A,   &I8080::_CMP_B,   &I8080::_CMP_C,   &I8080::_CMP_D,       &I8080::_CMP_E,   &I8080::_CMP_H,   &I8080::_CMP_L,   &I8080::_CMP_M,      &I8080::_CMP_A,
-	  &I8080::_RNZ,     &I8080::_POP_B,        &I8080::_JNZ,         &I8080::_JMP,     &I8080::_CNZ,     &I8080::_PUSH_B,  &I8080::_ADI_imm8,   &I8080::_RST_0,   &I8080::_RZ,      &I8080::_RET,     &I8080::_JZ,          &I8080::_NOP,     &I8080::_CZ,      &I8080::_CALL,    &I8080::_ACI_imm8,   &I8080::_RST_1,
-	  &I8080::_RNC,     &I8080::_POP_D,        &I8080::_JNC,         &I8080::_OUTPUT,  &I8080::_CNC,     &I8080::_PUSH_D,  &I8080::_SUI_imm8,   &I8080::_RST_2,   &I8080::_RC,      &I8080::_NOP,     &I8080::_JC,          &I8080::_INPUT,   &I8080::_CC,      &I8080::_NOP,     &I8080::_SBI_imm8,   &I8080::_RST_3,
-	  &I8080::_RPO,     &I8080::_POP_H,        &I8080::_JPO,         &I8080::_XTHL,    &I8080::_CPO,     &I8080::_PUSH_H,  &I8080::_ANI_imm8,   &I8080::_RST_4,   &I8080::_RPE,     &I8080::_PCHL,    &I8080::_JPE,         &I8080::_XCHG,    &I8080::_CPE,     &I8080::_NOP,     &I8080::_XRI_imm8,   &I8080::_RST_5,
-	  &I8080::_RP,      &I8080::_POP_PSW,      &I8080::_JP,          &I8080::_NOP,     &I8080::_CP,      &I8080::_PUSH_PSW,&I8080::_ORI_imm8,   &I8080::_RST_6,   &I8080::_RM,      &I8080::_SPHL,    &I8080::_JM,          &I8080::_NOP,     &I8080::_CM,      &I8080::_NOP,     &I8080::_CPI_imm8,   &I8080::_RST_7
+	  &I8080::_RNZ,     &I8080::_POP_B,        &I8080::_JNZ,         &I8080::_JMP,     &I8080::_CNZ,     &I8080::_PUSH_B,  &I8080::_ADI_imm8,   &I8080::_RST_0,   &I8080::_RZ,      &I8080::_RET,     &I8080::_JZ,          &I8080::_JMP,     &I8080::_CZ,      &I8080::_CALL,    &I8080::_ACI_imm8,   &I8080::_RST_1,
+	  &I8080::_RNC,     &I8080::_POP_D,        &I8080::_JNC,         &I8080::_OUTPUT,  &I8080::_CNC,     &I8080::_PUSH_D,  &I8080::_SUI_imm8,   &I8080::_RST_2,   &I8080::_RC,      &I8080::_RET,     &I8080::_JC,          &I8080::_INPUT,   &I8080::_CC,      &I8080::_CALL,     &I8080::_SBI_imm8,   &I8080::_RST_3,
+	  &I8080::_RPO,     &I8080::_POP_H,        &I8080::_JPO,         &I8080::_XTHL,    &I8080::_CPO,     &I8080::_PUSH_H,  &I8080::_ANI_imm8,   &I8080::_RST_4,   &I8080::_RPE,     &I8080::_PCHL,    &I8080::_JPE,         &I8080::_XCHG,    &I8080::_CPE,     &I8080::_CALL,     &I8080::_XRI_imm8,   &I8080::_RST_5,
+	  &I8080::_RP,      &I8080::_POP_PSW,      &I8080::_JP,          &I8080::_NOP,     &I8080::_CP,      &I8080::_PUSH_PSW,&I8080::_ORI_imm8,   &I8080::_RST_6,   &I8080::_RM,      &I8080::_SPHL,    &I8080::_JM,          &I8080::_NOP,     &I8080::_CM,      &I8080::_CALL,     &I8080::_CPI_imm8,   &I8080::_RST_7
 	};
 }
 

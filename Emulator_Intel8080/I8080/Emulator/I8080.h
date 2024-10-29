@@ -50,6 +50,9 @@ public:
 	void InitPointer2State(CurrentState& cs);
 
 	void LoadMemory(const std::vector<OpcodeAdressed>& array);
+    void LoadMemory(const std::vector<uint8_t>& array);
+
+
 	void EraseMemory();
 	void RemoveAllBreakPoints();
 
@@ -65,7 +68,8 @@ public:
 	void InputAnswer2Port(const uint8_t& Answer);
 
 	void SetProgrammCounter(const unsigned int& index);
-	void SetBreakPointPosition(const unsigned int& Position);
+	void ToggleBreakPointPosition(const unsigned int& Position);
+    void SetBreakPointPosition(const unsigned int& Position, const bool& state);
 
 	uint64_t GetCountTicks();
     uint64_t GetCountInstruction();

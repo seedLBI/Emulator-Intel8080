@@ -22,7 +22,7 @@ void Widget_SymbolPicker::Draw() {
 
 		style.ItemSpacing.y = 0.f;
 		ImVec2 SizeWind = { abs(ImGui::GetWindowSize().x) / 16.f, abs(ImGui::GetWindowSize().y - style.FramePadding.y - style.WindowPadding.y - ImGui::GetFontSize()) / 16.f };
-		float minSize = min(SizeWind.x, SizeWind.y);
+		float minSize = (std::min)(SizeWind.x, SizeWind.y);
 		for (unsigned int h = 0; h < 16; h++) {
 			for (unsigned int j = 0; j < 16; j++) {
 				char symbol(16 * h + j);

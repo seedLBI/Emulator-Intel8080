@@ -305,7 +305,7 @@ bool CompilerStable::Step1_MarkingAdresses() {
 					}
 
 					adressed_code[Line] = CurrentAdress;
-
+					Compiler::CompilerOutput.Line_and_Adress[Line] = CurrentAdress;
 
 					Markers[marker] = CurrentAdress;
 
@@ -340,6 +340,7 @@ bool CompilerStable::Step1_MarkingAdresses() {
 				NeedCheckThatLineIndex[CounterForNeedCheck] = Line;
 				CounterForNeedCheck++;
 
+				Compiler::CompilerOutput.Line_and_Adress[Line] = CurrentAdress;
 				adressed_code[Line] = CurrentAdress;
 				Markers[marker] = CurrentAdress;
 
@@ -373,8 +374,10 @@ bool CompilerStable::Step1_MarkingAdresses() {
 					return false;
 				}
 
-
+			
 				adressed_code[Line] = CurrentAdress;
+				Compiler::CompilerOutput.Line_and_Adress[Line] = CurrentAdress;
+
 				CurrentAdress += bytes;
 
 

@@ -245,6 +245,21 @@
     <ClCompile Include="I8080\UI\AuthorPopup\OpenglTexture.h">
       <Filter>I8080\UI\AuthorPopup</Filter>
     </ClCompile>
+    <ClCompile Include="I8080\Emulator\Disassembler\Disassembler.cpp">
+      <Filter>I8080\Emulator\Disassembler</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\UI\Widgets\I8080.UI.Disassembler.cpp">
+      <Filter>I8080\UI\Widgets\Disassembler</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\UI\Widgets\I8080.UI.MemoryMonoPixelScreen.cpp">
+      <Filter>I8080\UI\Widgets\MemoryMonoPixelScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\Utils\Unicode.cpp">
+      <Filter>I8080\Utils\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\Utils\UTF8.cpp">
+      <Filter>I8080\Utils\Text</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Third-Person\IconFontCppHeaders\IconsFontAwesome6.h">
@@ -487,9 +502,6 @@
     <ClInclude Include="I8080\Emulator\EmulationThread\EmulationThread.h">
       <Filter>I8080\Emulator\EmulationThread</Filter>
     </ClInclude>
-    <ClInclude Include="Third-Person\utf8.h">
-      <Filter>Third-Party</Filter>
-    </ClInclude>
     <ClInclude Include="I8080\UI\KeyCombination\KeyCombinationHandler.h">
       <Filter>I8080\UI\KeyCombination</Filter>
     </ClInclude>
@@ -561,6 +573,21 @@
     </ClInclude>
     <ClInclude Include="I8080\UI\AuthorPopup\AuthorPopup.h">
       <Filter>I8080\UI\AuthorPopup</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Emulator\Disassembler\Disassembler.h">
+      <Filter>I8080\Emulator\Disassembler</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\UI\Widgets\I8080.UI.Disassembler.h">
+      <Filter>I8080\UI\Widgets\Disassembler</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\UI\Widgets\I8080.UI.MemoryMonoPixelScreen.h">
+      <Filter>I8080\UI\Widgets\MemoryMonoPixelScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Utils\Unicode.h">
+      <Filter>I8080\Utils\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\Utils\UTF8.h">
+      <Filter>I8080\Utils\Text</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -761,6 +788,15 @@
     </Filter>
     <Filter Include="I8080\UI\AuthorPopup">
       <UniqueIdentifier>{c5e5a52e-234e-4d7e-99b8-895f824e719b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\Emulator\Disassembler">
+      <UniqueIdentifier>{9477a928-5640-4941-8df2-1ddfabc2c0ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\UI\Widgets\Disassembler">
+      <UniqueIdentifier>{3821c53e-42c9-497d-ad43-8b0dd106b288}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\UI\Widgets\MemoryMonoPixelScreen">
+      <UniqueIdentifier>{c1096c14-603d-445b-b5b3-f7866b9a2e50}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

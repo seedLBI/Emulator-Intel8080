@@ -441,7 +441,7 @@ struct MemoryEditor
                             if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
                                 processor->SetProgrammCounter(addr);
                             else if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
-                                processor->SetBreakPointPosition(addr);
+                                processor->ToggleBreakPointPosition(addr);
                             //else if (ImGui::IsMouseClicked(ImGuiMouseButton_Middle))
                             //    I8080_UserInterface::SetCursorMnemoCode(addr);
                             //DataEditingTakeFocus = true;

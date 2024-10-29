@@ -104,7 +104,7 @@ void Widget_MnemocodeViewer::Draw() {
 						processor->SetProgrammCounter(row);
 					}
 					if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(ImGuiMouseButton_Right)) {
-						processor->SetBreakPointPosition(row);
+						processor->ToggleBreakPointPosition(row);
 					}
 
 					for (int i = 0; i < translator->Opcodes.size(); i++) {

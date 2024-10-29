@@ -6816,7 +6816,7 @@ void ImGui::ShowStyleEditor(ImGuiStyle* ref)
 {
     IMGUI_DEMO_MARKER("Tools/Style Editor");
     // You can pass in a reference ImGuiStyle structure to compare to, revert to and save to
-    // (without a reference style pointer, we will use one compared locally as a reference)
+    // (without a reference style pointerf, we will use one compared locally as a reference)
     ImGuiStyle& style = ImGui::GetStyle();
     static ImGuiStyle ref_saved_style;
 
