@@ -603,12 +603,12 @@ private:
 							if (index_column == 0)
 								WordLeftSpace = true;
 							else
-								WordLeftSpace = utf8Line_text[i][index_column - 1] == " ";
+								WordLeftSpace = utf8Line_text[i][index_column - 1] == " " || utf8Line_text[i][index_column - 1] == "\t";
 
 							if (j == utf8Line_text[i].size() - 1)
 								WordRightSpace = true;
 							else
-								WordRightSpace = utf8Line_text[i][j + 1] == " ";
+								WordRightSpace = utf8Line_text[i][j + 1] == " " || utf8Line_text[i][j+1] == "\t";
 
 
 							if (Flag_CompleteWord && (!WordLeftSpace || !WordRightSpace)) {

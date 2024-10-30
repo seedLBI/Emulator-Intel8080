@@ -30,7 +30,7 @@ I8080_UserInterface::I8080_UserInterface(GLFWwindow* window) {
 		Compiler);
 
 
-	settings = new Setting(font_manager, window_manager, notificationManager, emulationThread, keyCombination_handler, projectManager);
+	settings = new Setting(font_manager, window_manager, WorkspaceManager, notificationManager, emulationThread, keyCombination_handler, projectManager);
 
 	InitSaveManager();
 	InitWidgets();
@@ -47,11 +47,19 @@ I8080_UserInterface::I8080_UserInterface(GLFWwindow* window) {
 
 }
 I8080_UserInterface::~I8080_UserInterface() {
+#ifdef WITH_DEBUG_OUTPUT
+	std::cout << "I8080_UserInterface::~I8080_UserInterface()\n";
+#endif // !WITH_DEBUG_OUTPUT
+
 	saveSystemManager->Save();
 }
 
 void I8080_UserInterface::Draw() {
 	BeginDraw();
+
+
+
+
 
 
 	DrawMainMenu();
@@ -62,6 +70,8 @@ void I8080_UserInterface::Draw() {
 
 	authorPopup.Draw();
 
+
+
 	//ImGui::ShowDemoWindow();
 
 #ifdef WITH_DEBUG_OUTPUT
@@ -70,6 +80,8 @@ void I8080_UserInterface::Draw() {
 
 
 	EndDraw();
+
+
 }
 void I8080_UserInterface::Update() {
 	projectManager->Update();
@@ -85,6 +97,8 @@ bool I8080_UserInterface::OpenFileFromPath(string path) {
 
 
 void I8080_UserInterface::BeginDraw() {
+
+
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
@@ -93,6 +107,9 @@ void I8080_UserInterface::BeginDraw() {
 void I8080_UserInterface::EndDraw() {
 
 	ImGui::EndFrame();
+
+
+
 
 	font_manager->ReloadFont();
 
@@ -114,6 +131,8 @@ void I8080_UserInterface::Emulator_Play() {
 
 	processor->ResetFlagStop();
 	emulationThread->SetControlMode(ControlMode::Continous);
+
+
 }
 void I8080_UserInterface::Emulator_Pause() {
 #ifdef WITH_DEBUG_OUTPUT
@@ -404,6 +423,7 @@ void I8080_UserInterface::InitWidgets() {
 	widget_ConstList = new Widget_ConstList(projectManager->GetPtrTranslatorOutput());
 	widget_Help = new Widget_Help();
 
+	WidgetManager.AddWidgetPtr(widget_Help);
 	WidgetManager.AddWidgetPtr(widget_Disassembler);
 	WidgetManager.AddWidgetPtr(widget_ColorPicker);
 	WidgetManager.AddWidgetPtr(widget_SymbolPicker);
@@ -422,7 +442,7 @@ void I8080_UserInterface::InitWidgets() {
 	WidgetManager.AddWidgetPtr(widget_MarkerList);
 	WidgetManager.AddWidgetPtr(widget_VarList);
 	WidgetManager.AddWidgetPtr(widget_ConstList);
-	WidgetManager.AddWidgetPtr(widget_Help);
+
 }
 void I8080_UserInterface::InitSaveManager() {
 	saveSystemManager->AddObjectPtr((SaveSystem*)settings);

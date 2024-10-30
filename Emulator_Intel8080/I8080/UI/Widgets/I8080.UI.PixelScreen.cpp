@@ -104,6 +104,8 @@ void Widget_PixelScreen::Draw() {
 	ImGui::PopStyleVar();
 }
 void Widget_PixelScreen::Update() {
+	UpdateActive();
+
 	if (GetFlagShow() == false)
 		return;
 
@@ -150,15 +152,16 @@ void Widget_PixelScreen::Update() {
 
 std::string Widget_PixelScreen::Save() {
 	std::string output = "";
-	output += MakeBegin(8);
-	output += MakeSaveItem(string("Flag_Show"), std::to_string(GetFlagShow()));
-	output += MakeSaveItem(string("Ratio_Mode"), std::to_string(Ratio_Mode));
-	output += MakeSaveItem(string("DrawLines"), std::to_string(DrawLines));
-	output += MakeSaveItem(string("ThiknessLines"), std::to_string(ThiknessLines));
-	output += MakeSaveItem(string("ColorsLine_red"), std::to_string(ColorsLine[0]));
-	output += MakeSaveItem(string("ColorsLine_green"), std::to_string(ColorsLine[1]));
-	output += MakeSaveItem(string("ColorsLine_blue"), std::to_string(ColorsLine[2]));
-	output += MakeSaveItem(string("ColorsLine_alpha"), std::to_string(ColorsLine[3]));
+	output += MakeBegin(9);
+	output += MakeSaveItem(std::string("Flag_Show"), std::to_string(GetFlagShow()));
+	output += MakeSaveItem(std::string("Flag_Active"), std::to_string(WindowIsVisiable()));
+	output += MakeSaveItem(std::string("Ratio_Mode"), std::to_string(Ratio_Mode));
+	output += MakeSaveItem(std::string("DrawLines"), std::to_string(DrawLines));
+	output += MakeSaveItem(std::string("ThiknessLines"), std::to_string(ThiknessLines));
+	output += MakeSaveItem(std::string("ColorsLine_red"), std::to_string(ColorsLine[0]));
+	output += MakeSaveItem(std::string("ColorsLine_green"), std::to_string(ColorsLine[1]));
+	output += MakeSaveItem(std::string("ColorsLine_blue"), std::to_string(ColorsLine[2]));
+	output += MakeSaveItem(std::string("ColorsLine_alpha"), std::to_string(ColorsLine[3]));
 	return output;
 }
 
@@ -174,6 +177,10 @@ void Widget_PixelScreen::Load(const std::string& Data) {
 
 		if (name_arg == "Flag_Show")
 			SetFlagShow(stoi(value_arg));
+		else if (name_arg == "Flag_Active") {
+			if (stoi(value_arg) == 1)
+				SetActive();
+		}
 		else if (name_arg == "Ratio_Mode")
 			Ratio_Mode = stoi(value_arg);
 		else if (name_arg == "DrawLines")

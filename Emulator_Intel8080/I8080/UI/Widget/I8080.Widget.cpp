@@ -9,6 +9,9 @@ I8080_Widget::I8080_Widget(const std::string& Name, const bool& flag) : SaveSyst
 
 I8080_Widget::~I8080_Widget()
 {
+#ifdef WITH_DEBUG_OUTPUT
+	std::cout << "I8080_Widget::~I8080_Widget()\n";
+#endif // !WITH_DEBUG_OUTPUT
 }
 
 void I8080_Widget::Draw() {
@@ -18,12 +21,40 @@ void I8080_Widget::Draw() {
 void I8080_Widget::Update() {
 
 }
+void I8080_Widget::UpdateActive() {
+	if (IsSettedActive){
+		IsSettedActive = false;
+		MakeActiveCurrentWidget();
+	}
+}
 
 void I8080_Widget::SetFocus() {
 	TimerFocus = 1.f;
 	flag_FocusSeted = true;
 }
 
+void I8080_Widget::SetActive() {
+
+	IsSettedActive = true;
+}
+
+void I8080_Widget::MakeActiveCurrentWidget() {
+	ImGui::SetWindowFocus(Name_c_str);
+}
+
+bool I8080_Widget::WindowIsVisiable() {
+
+	ImGuiContext& g = *GImGui;
+
+	// Перебираем все окна в контексте
+	for (ImGuiWindow* window : g.Windows) {
+		if (std::string(window->Name) == Name && window->Hidden == false) {
+			return true;
+		}
+	}
+
+	return false;
+}
 
 // Это добавлять в Draw
 void I8080_Widget::UpdateFocus() {

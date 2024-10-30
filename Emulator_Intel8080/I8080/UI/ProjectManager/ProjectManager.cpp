@@ -19,7 +19,9 @@ ProjectManager::ProjectManager(
 }
 
 ProjectManager::~ProjectManager() {
-
+#ifdef WITH_DEBUG_OUTPUT
+	std::cout << "ProjectManager::~ProjectManager()\n";
+#endif // !WITH_DEBUG_OUTPUT
 }
 
 void ProjectManager::InitWidgets(

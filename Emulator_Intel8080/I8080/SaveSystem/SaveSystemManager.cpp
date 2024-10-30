@@ -68,7 +68,9 @@ SaveSystemManager::SaveSystemManager(const std::string& SavingPath) {
 }
 
 SaveSystemManager::~SaveSystemManager() {
-
+#ifdef WITH_DEBUG_OUTPUT
+	std::cout << "SaveSystemManager::~SaveSystemManager()\n";
+#endif // !WITH_DEBUG_OUTPUT
 }
 
 

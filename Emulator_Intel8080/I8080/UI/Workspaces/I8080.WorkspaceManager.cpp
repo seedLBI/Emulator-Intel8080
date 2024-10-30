@@ -6,7 +6,21 @@ I8080_WorkspaceManager::I8080_WorkspaceManager(I8080_WidgetManager* widget_manag
 
 I8080_WorkspaceManager::~I8080_WorkspaceManager() {
 
+#ifdef WITH_DEBUG_OUTPUT
+	std::cout << "I8080_WorkspaceManager::~I8080_WorkspaceManager()\n";
+#endif // !WITH_DEBUG_OUTPUT
+
 }
+
+
+
+void I8080_WorkspaceManager::DrawSetting() {
+	ImGui::SeparatorText(u8"–абочие пространтсва");
+	if (ImGui::RadioButton(u8"ѕерезаписывать текущее пространство перед выходом", SaveCurrentWorkspaceBeforeClosingApp)) {
+		SaveCurrentWorkspaceBeforeClosingApp = !SaveCurrentWorkspaceBeforeClosingApp;
+	}
+}
+
 
 void I8080_WorkspaceManager::AddWorkspace(const std::string& Name, const bool& LoadStyle) {
 #ifdef WITH_DEBUG_OUTPUT
@@ -17,16 +31,21 @@ void I8080_WorkspaceManager::AddWorkspace(const std::string& Name, const bool& L
 
 
 std::string I8080_WorkspaceManager::Save() {
+
+	if (IndexChoosed >= 0 && IndexChoosed <= workspaces.size() - 1 && SaveCurrentWorkspaceBeforeClosingApp) {
+		workspaces[IndexChoosed].Rewrite();
+	}
+
 	std::string output;
 
 	std::string Data_workspaces = "";
 	for (int i = 0; i < workspaces.size(); i++)
 		Data_workspaces += workspaces[i].Save();
 
-	output += MakeBegin(GetCountLines(Data_workspaces) + 1);
+	output += MakeBegin(GetCountLines(Data_workspaces) + 2);
 	output += Data_workspaces;
 	output += MakeSaveItem("IndexChoosed", std::to_string(IndexChoosed));
-
+	output += MakeSaveItem("SaveCurrentWorkspaceBeforeClosingApp", std::to_string(SaveCurrentWorkspaceBeforeClosingApp));
 
 	return output;
 }
@@ -84,6 +103,9 @@ void I8080_WorkspaceManager::Load(const std::string& Data) {
 				IndexChoosed = stoi(info[1]);
 			}
 			SetNeedLoad();
+		}
+		else if (info[0] == "SaveCurrentWorkspaceBeforeClosingApp") {
+			SaveCurrentWorkspaceBeforeClosingApp = stoi(info[1]);
 		}
 		index++;
 
@@ -473,13 +495,22 @@ void I8080_WorkspaceManager::Draw() {
 
 
 void I8080_WorkspaceManager::Update() {
+
 	if (NeedLoadIni){
-		LoadChoosed();
 		NeedLoadIni = false;
+		LoadChoosed();
 	}
+
+	
+	if (countLoad > 0) {
+		countLoad--;
+		LoadChoosed();
+	}
+	
 }
 void I8080_WorkspaceManager::SetNeedLoad() {
 	NeedLoadIni = true;
+	countLoad = 1;
 }
 void I8080_WorkspaceManager::LoadPrevious() {
 

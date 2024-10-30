@@ -346,9 +346,16 @@ int TextEditor::InsertTextAt(Coordinates& /* inout */ aWhere, const char * aValu
 		{
 			auto& line = mLines[aWhere.mLine];
 			auto d = UTF8CharLength(*aValue);
+			char symbol = *aValue;
+
+
 			while (d-- > 0 && *aValue != '\0')
 				line.insert(line.begin() + cindex++, Glyph(*aValue++, PaletteIndex::Default));
-			++aWhere.mColumn;
+
+			if (symbol == '\t' && UTF8CharLength(symbol) == 1)
+				aWhere.mColumn += 4 - aWhere.mColumn % 4;
+			else
+				++aWhere.mColumn;
 		}
 
 		mTextChanged = true;
@@ -1066,9 +1073,6 @@ void TextEditor::HandleKeyboardInputs()
 	}
 }
 
-
-
-
 void TextEditor::HandleMouseInputs_Step1() {
 	ImGuiIO& io = ImGui::GetIO();
 	auto shift = io.KeyShift;
@@ -1145,9 +1149,6 @@ void TextEditor::HandleMouseInputs_Step1() {
 
 }
 
-
-
-
 void TextEditor::HandleMouseInputs_Step2() {
 	ImGuiIO& io = ImGui::GetIO();
 	auto shift = io.KeyShift;
@@ -1172,8 +1173,8 @@ void TextEditor::HandleMouseInputs_Step2() {
 
 				LastScale = mVirtualFontSize;
 
-				if (mVirtualFontSize < 0.25f)
-					mVirtualFontSize = 0.25f;
+				if (mVirtualFontSize < 0.125f)
+					mVirtualFontSize = 0.125f;
 
 				if (mVirtualFontSize > 5.f)
 					mVirtualFontSize = 5.f;
@@ -1192,7 +1193,6 @@ void TextEditor::HandleMouseInputs_Step2() {
 
 	}
 }
-
 
 void TextEditor::HandleMouseInputs_Step2Again() {
 	if (SetAgain_Step2) {
@@ -2376,6 +2376,8 @@ void TextEditor::Delete()
 			u.mRemoved = GetText(u.mRemovedStart, u.mRemovedEnd);
 
 			auto d = UTF8CharLength(line[cindex].mChar);
+
+
 			while (d-- > 0 && cindex < (int)line.size())
 				line.erase(line.begin() + cindex);
 		}
@@ -2438,23 +2440,49 @@ void TextEditor::Backspace()
 		else
 		{
 			auto& line = mLines[mState.mCursorPosition.mLine];
+
+
+			int lengthUTF8 = UTF8CharLength(line[GetCharacterIndex(pos) - 1].mChar);
+			int countDeleteTab = 0;
+			if (lengthUTF8 == 1 && line[GetCharacterIndex(pos) - 1].mChar == '\t') {
+				int c = 0;
+
+				for (unsigned i = 0; i < line.size();) {
+
+					if (line[i].mChar == '\t' && UTF8CharLength(line[i].mChar) == 1){
+						int countdel = 4 - c % 4;
+						c += countdel;
+
+						if (pos.mColumn == c)
+							countDeleteTab = countdel;
+					}
+					else 
+						c++;
+
+					i += UTF8CharLength(line[i].mChar);
+				}
+			}
+
+
 			auto cindex = GetCharacterIndex(pos) - 1;
 			auto cend = cindex + 1;
 			while (cindex > 0 && IsUTFSequence(line[cindex].mChar))
 				--cindex;
 
-			//if (cindex > 0 && UTF8CharLength(line[cindex].mChar) > 1)
-			//	--cindex;
-
 			u.mRemovedStart = u.mRemovedEnd = GetActualCursorCoordinates();
 			--u.mRemovedStart.mColumn;
 			--mState.mCursorPosition.mColumn;
 
-			while (cindex < line.size() && cend-- > cindex)
-			{
+			while (cindex < line.size() && cend-- > cindex){
 				u.mRemoved += line[cindex].mChar;
 				line.erase(line.begin() + cindex);
 			}
+
+			if (countDeleteTab != 0){
+				pos.mColumn -= countDeleteTab;
+				SetCursorPosition(pos);
+			}
+
 		}
 
 		mTextChanged = true;
@@ -2538,8 +2566,7 @@ void TextEditor::Paste()
 		UndoRecord u;
 		u.mBefore = mState;
 
-		if (HasSelection())
-		{
+		if (HasSelection()){
 			u.mRemoved = GetSelectedText();
 			u.mRemovedStart = mState.mSelectionStart;
 			u.mRemovedEnd = mState.mSelectionEnd;

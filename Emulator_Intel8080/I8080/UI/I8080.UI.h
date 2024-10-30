@@ -88,6 +88,37 @@ public:
 
 	bool OpenFileFromPath(string path);
 private:
+
+	// Функция для проверки активных окон
+	void CheckVisibleWindows() {
+
+		std::cout << "-------------------\n";
+
+		ImGuiContext& g = *GImGui;
+
+		// Перебираем все окна в контексте
+		for (ImGuiWindow* window : g.Windows) {
+
+			//std::cout << "Check: \n";
+
+			if (window->Hidden == false) {
+
+				std::string NameWindow = window->Name;
+				UTF8_SPLITER_ERROR error;
+				auto splited = utf8_splitter(NameWindow, error);
+				std::cout << "Visible: [";
+				for (int i = 0; i < splited.size(); i++) {
+					std::cout << convert_utf8_toCP1251(splited[i]).first;
+				}
+				std::cout << "]\n";
+			}
+			
+		}
+
+
+	}
+
+
 	void BeginDraw();
 	void EndDraw();
 

@@ -8,7 +8,9 @@ SaveSystem::SaveSystem(const std::string& NameObject) {
 
 
 SaveSystem::~SaveSystem() {
-
+#ifdef WITH_DEBUG_OUTPUT
+	std::cout << "SaveSystem::~SaveSystem()\n";
+#endif // !WITH_DEBUG_OUTPUT
 }
 
 std::string SaveSystem::GetName() {

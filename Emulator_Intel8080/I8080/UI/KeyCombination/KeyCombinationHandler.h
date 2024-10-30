@@ -18,7 +18,7 @@ class KeyCombinationHandler : public SaveSystem
 public:
 
 	KeyCombinationHandler(NotificationManager* notificationManager);
-	~KeyCombinationHandler() = default;
+	~KeyCombinationHandler();
 	
 	
 	bool GetCollision(const KeyCombination& comb);

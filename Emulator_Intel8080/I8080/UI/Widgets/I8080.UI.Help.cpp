@@ -15,6 +15,7 @@ void Widget_Help::Draw() {
 	if (GetFlagShow() == false)
 		return;
 
+
 	static float VirtualScaleFont = 1.f;
 	ImGuiIO& io = ImGui::GetIO();
 
@@ -71,13 +72,15 @@ void Widget_Help::Draw() {
 }
 void Widget_Help::Update() {
 
+	UpdateActive();
 }
 
 std::string Widget_Help::Save() {
 	std::string output = "";
-	output += MakeBegin(2);
-	output += MakeSaveItem(string("Flag_Show"), std::to_string(GetFlagShow()));
-	output += MakeSaveItem(string("EnableWrapedText"), std::to_string(EnableWrapedText));
+	output += MakeBegin(3);
+	output += MakeSaveItem(std::string("Flag_Show"), std::to_string(GetFlagShow()));
+	output += MakeSaveItem(std::string("Flag_Active"), std::to_string(WindowIsVisiable()));
+	output += MakeSaveItem(std::string("EnableWrapedText"), std::to_string(EnableWrapedText));
 	return output;
 }
 void Widget_Help::Load(const std::string& Data) {
@@ -92,6 +95,10 @@ void Widget_Help::Load(const std::string& Data) {
 
 		if (name_arg == "Flag_Show")
 			SetFlagShow(stoi(value_arg));
+		else if (name_arg == "Flag_Active") {
+			if (stoi(value_arg) == 1)
+				SetActive();
+		}
 		else if (name_arg == "EnableWrapedText")
 			EnableWrapedText = stoi(value_arg);
 		else

@@ -17,7 +17,11 @@ enum class UTF8_to_CP1251_CONVERTER_ERROR {
 };
 
 std::vector<std::string> utf8_splitter(const std::string& line, UTF8_SPLITER_ERROR& error);
-std::pair<uint8_t, UTF8_to_CP1251_CONVERTER_ERROR> convert_utf8_toUTF8cp1251(const std::string& symbol);
+std::pair<uint8_t, UTF8_to_CP1251_CONVERTER_ERROR> convert_utf8_toCP1251(const std::string& symbol);
+
+std::string convertText_utf8_toCP1251(const std::string& text);
+
+
 
 std::string Lowercase_UTF8_Symbol(const std::string& UTF8symbol);
 std::string Uppercase_UTF8_Symbol(const std::string& UTF8symbol);

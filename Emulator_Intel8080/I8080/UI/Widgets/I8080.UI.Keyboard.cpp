@@ -8,14 +8,13 @@ Widget_Keyboard::~Widget_Keyboard() {
 
 }
 
-void Widget_Keyboard::Update() {
 
-}
 
 
 void Widget_Keyboard::Draw() {
 	if (GetFlagShow() == false)
 		return;
+
 
 	if (ImGui::Begin(GetName_c_str(), GetPtrFlagShow(), ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoNav)) {
 
@@ -74,10 +73,15 @@ void Widget_Keyboard::Draw() {
 	}
 }
 
+void Widget_Keyboard::Update() {
+	UpdateActive();
+}
+
 std::string Widget_Keyboard::Save() {
 	std::string output = "";
-	output += MakeBegin(1);
-	output += MakeSaveItem(string("Flag_Show"), std::to_string(GetFlagShow()));
+	output += MakeBegin(2);
+	output += MakeSaveItem(std::string("Flag_Show"), std::to_string(GetFlagShow()));
+	output += MakeSaveItem(std::string("Flag_Active"), std::to_string(WindowIsVisiable()));
 	return output;
 }
 
@@ -93,6 +97,10 @@ void Widget_Keyboard::Load(const std::string& Data) {
 
 		if (name_arg == "Flag_Show")
 			SetFlagShow(stoi(value_arg));
+		else if (name_arg == "Flag_Active") {
+			if (stoi(value_arg) == 1)
+				SetActive();
+		}
 		else
 			std::cout << "Unknown name argument for widget: " << name_arg << std::endl;
 	}

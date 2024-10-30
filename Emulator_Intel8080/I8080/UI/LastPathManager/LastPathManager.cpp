@@ -6,6 +6,9 @@ LastPathManager::LastPathManager():SaveSystem("LastPaths")
 
 LastPathManager::~LastPathManager()
 {
+#ifdef WITH_DEBUG_OUTPUT
+	std::cout << "LastPathManager::~LastPathManager()\n";
+#endif // !WITH_DEBUG_OUTPUT
 }
 /// <summary>
 /// Возвращает true если пользователь нажал на один из путей

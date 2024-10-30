@@ -1,17 +1,20 @@
 #include "Setting.h"
 
 
-Setting::Setting(FontManager* font, WindowManager* window, NotificationManager* notification, EmulationThread* emulation, KeyCombinationHandler* keyCombinationHandler, ProjectManager* projectManager) : SaveSystem("Setting") {
+Setting::Setting(FontManager* font, WindowManager* window, I8080_WorkspaceManager* WorkspaceManager, NotificationManager* notification, EmulationThread* emulation, KeyCombinationHandler* keyCombinationHandler, ProjectManager* projectManager) : SaveSystem("Setting") {
 	this->font = font;
 	this->window = window;
 	this->notification = notification;
 	this->emulation = emulation;
 	this->keyCombinationHandler = keyCombinationHandler;
 	this->projectManager = projectManager;
+	this->WorkspaceManager = WorkspaceManager;
 }
 
 Setting::~Setting() {
-
+#ifdef WITH_DEBUG_OUTPUT
+	std::cout << "Setting::~Setting()\n";
+#endif // !WITH_DEBUG_OUTPUT
 }
 
 
@@ -73,6 +76,7 @@ void Setting::Draw() {
 			DrawNotificationSetting();
 			DrawEmulationSetting();
 			projectManager->DrawSetting();
+			WorkspaceManager->DrawSetting();
 
 			ImGui::Dummy(ImVec2(0, ImGui::GetTextLineHeight()));
 

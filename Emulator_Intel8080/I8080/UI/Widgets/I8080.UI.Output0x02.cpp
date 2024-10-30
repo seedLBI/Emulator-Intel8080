@@ -77,7 +77,7 @@ void Widget_Output0x02::Draw() {
 	}
 }
 void Widget_Output0x02::Update() {
-
+	UpdateActive();
 }
 
 Widget_Output0x02::Widget_Output0x02(I8080* processor) : I8080_Widget(u8"Окно вывода")
@@ -92,13 +92,14 @@ Widget_Output0x02::~Widget_Output0x02()
 
 std::string Widget_Output0x02::Save() {
 	std::string output = "";
-	output += MakeBegin(6);
-	output += MakeSaveItem(string("Flag_Show"), std::to_string(GetFlagShow()));
-	output += MakeSaveItem(string("mode_output"), std::to_string(mode_output));
-	output += MakeSaveItem(string("Hex_enable"), std::to_string(Hex_enable));
-	output += MakeSaveItem(string("Dec_enable"), std::to_string(Dec_enable));
-	output += MakeSaveItem(string("Bin_enable"), std::to_string(Bin_enable));
-	output += MakeSaveItem(string("Char_enable"), std::to_string(Bin_enable));
+	output += MakeBegin(7);
+	output += MakeSaveItem(std::string("Flag_Show"), std::to_string(GetFlagShow()));
+	output += MakeSaveItem(std::string("Flag_Active"), std::to_string(WindowIsVisiable()));
+	output += MakeSaveItem(std::string("mode_output"), std::to_string(mode_output));
+	output += MakeSaveItem(std::string("Hex_enable"), std::to_string(Hex_enable));
+	output += MakeSaveItem(std::string("Dec_enable"), std::to_string(Dec_enable));
+	output += MakeSaveItem(std::string("Bin_enable"), std::to_string(Bin_enable));
+	output += MakeSaveItem(std::string("Char_enable"), std::to_string(Bin_enable));
 	return output;
 }
 
@@ -114,6 +115,10 @@ void Widget_Output0x02::Load(const std::string& Data) {
 
 		if (name_arg == "Flag_Show")
 			SetFlagShow(stoi(value_arg));
+		else if (name_arg == "Flag_Active") {
+			if (stoi(value_arg) == 1)
+				SetActive();
+		}
 		else if (name_arg == "mode_output")
 			mode_output = stoi(value_arg);
 		else if (name_arg == "Hex_enable")

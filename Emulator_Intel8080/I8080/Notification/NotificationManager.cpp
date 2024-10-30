@@ -8,7 +8,9 @@ NotificationManager::NotificationManager() : SaveSystem(u8"Notification"){
 }
 
 NotificationManager::~NotificationManager(){
-
+#ifdef WITH_DEBUG_OUTPUT
+	std::cout << "NotificationManager::~NotificationManager()\n";
+#endif // !WITH_DEBUG_OUTPUT
 }
 
 void NotificationManager::SetFlag_Enabled(const bool& flag) {

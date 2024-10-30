@@ -11,6 +11,9 @@ using namespace std;
 I8080_UserInterface* i8080_ui = nullptr;
 
 int main(int argc, char* argv[]) {
+	//setlocale(LC_ALL, "russian");
+
+
 	OpenglWindow::Init();
 
 	i8080_ui = new I8080_UserInterface(OpenglWindow::Vars::window);
@@ -31,6 +34,7 @@ int main(int argc, char* argv[]) {
 		if (Intro::FirstMoveAchivied()) {
 			i8080_ui->Update();
 			i8080_ui->Draw();
+
 		}
 
 		Intro::Update();
@@ -51,6 +55,9 @@ int main(int argc, char* argv[]) {
 	}
 
 	i8080_ui->~I8080_UserInterface();
+
+
+
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();

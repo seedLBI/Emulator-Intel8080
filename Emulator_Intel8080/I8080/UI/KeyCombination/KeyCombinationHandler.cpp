@@ -5,6 +5,14 @@ KeyCombinationHandler::KeyCombinationHandler(NotificationManager* notificationMa
 	this->notificationManager = notificationManager;
 }
 
+KeyCombinationHandler::~KeyCombinationHandler() {
+#ifdef WITH_DEBUG_OUTPUT
+	std::cout << "KeyCombinationHandler::~KeyCombinationHandler()\n";
+#endif // !WITH_DEBUG_OUTPUT
+}
+
+
+
 bool KeyCombinationHandler::GetCollision(const KeyCombination& comb) {
 	if (GetIndexCollision(comb) != -1)
 		return true;

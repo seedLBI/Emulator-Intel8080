@@ -15,7 +15,9 @@ FontManager::FontManager():SaveSystem("Font") {
 }
 
 FontManager::~FontManager() {
-
+#ifdef WITH_DEBUG_OUTPUT
+	std::cout << "FontManager::~FontManager()\n";
+#endif // !WITH_DEBUG_OUTPUT
 }
 
 void FontManager::Draw() {

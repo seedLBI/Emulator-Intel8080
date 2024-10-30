@@ -46,6 +46,9 @@ Notification::Notification(const ImVec4& BackgroundColor, const float& LifeTime,
 }
 
 Notification::~Notification() {
+#ifdef WITH_DEBUG_OUTPUT
+	std::cout << "Notification::~Notification()\n";
+#endif // !WITH_DEBUG_OUTPUT
 	//for (int i = 0; i < elements.size(); i++)
 	//	delete elements[i];
 }

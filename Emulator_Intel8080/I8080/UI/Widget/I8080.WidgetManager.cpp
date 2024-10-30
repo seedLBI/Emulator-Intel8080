@@ -8,6 +8,9 @@ I8080_WidgetManager::I8080_WidgetManager() : SaveSystem("Widgets")
 
 I8080_WidgetManager::~I8080_WidgetManager()
 {
+#ifdef WITH_DEBUG_OUTPUT
+	std::cout << "I8080_WidgetManager::~I8080_WidgetManager()\n";
+#endif // !WITH_DEBUG_OUTPUT
 }
 
 
@@ -34,6 +37,7 @@ void I8080_WidgetManager::Draw() {
 	}
 }
 void I8080_WidgetManager::Update() {
+
 	for (int i = 0; i < ptr_widgets.size(); i++)
 		ptr_widgets[i]->Update();
 
@@ -94,6 +98,7 @@ int I8080_WidgetManager::GetIndexSaveObject(const std::string& NameObject) {
 
 void I8080_WidgetManager::Load(const std::string& Data) {
 	PrintDebugInfoAboutData(Data);
+
 
 	std::vector<std::string> Lines = split(Data, "\n");
 

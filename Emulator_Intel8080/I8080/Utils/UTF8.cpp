@@ -64,7 +64,7 @@ std::vector<std::string> utf8_splitter(const std::string& line, UTF8_SPLITER_ERR
     return result;
 }
 
-std::pair<uint8_t, UTF8_to_CP1251_CONVERTER_ERROR> convert_utf8_toUTF8cp1251(const std::string& symbol) {
+std::pair<uint8_t, UTF8_to_CP1251_CONVERTER_ERROR> convert_utf8_toCP1251(const std::string& symbol) {
 
     const static std::unordered_map<std::string, uint8_t> utf8_to_utf8cp1251{
         {u8" ",0x20},{u8"!",0x21},{u8"\"",0x22},{u8"#",0x23},{u8"$",0x24},{u8"%",0x25},{u8"&",0x26},{u8"\'",0x27},{u8"(",0x28},{u8")",0x29},{u8"*",0x2a},{u8"+",0x2b},{u8",",0x2c}, {u8"-",0x2d},{u8".",0x2e},{u8"/",0x2f},
@@ -92,6 +92,21 @@ std::pair<uint8_t, UTF8_to_CP1251_CONVERTER_ERROR> convert_utf8_toUTF8cp1251(con
     }
 
 
+}
+
+std::string convertText_utf8_toCP1251(const std::string& text) {
+
+    UTF8_SPLITER_ERROR error;
+    auto s = utf8_splitter(text,error);
+
+    std::string output;
+    output.resize(s.size());
+
+    for (int i = 0; i < s.size(); i++){
+        output[i] = convert_utf8_toCP1251(s[i]).first;
+    }
+
+    return output;
 }
 
 

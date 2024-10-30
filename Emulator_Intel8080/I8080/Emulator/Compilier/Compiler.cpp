@@ -76,7 +76,7 @@ std::vector<std::string> Compiler::split_line(const std::string& line, bool& sta
 
                 if (splitted_line[i] == DoubleQuote) {
                     if (LastWasSlash) {
-                        auto t = convert_utf8_toUTF8cp1251(splitted_line[i]);
+                        auto t = convert_utf8_toCP1251(splitted_line[i]);
                         if (t.second == UTF8_to_CP1251_CONVERTER_ERROR::UNSUPPORTED_SYMBOL) {
                             CompilerOutput.Error = ERROR_UNSUPPORTED_SYMBOL;
                             return result;
@@ -95,7 +95,7 @@ std::vector<std::string> Compiler::split_line(const std::string& line, bool& sta
                         LastWasSlash = true;
                     }
                     else {
-                        auto t = convert_utf8_toUTF8cp1251(splitted_line[i]);
+                        auto t = convert_utf8_toCP1251(splitted_line[i]);
                         if (t.second == UTF8_to_CP1251_CONVERTER_ERROR::UNSUPPORTED_SYMBOL){
                             CompilerOutput.Error = ERROR_UNSUPPORTED_SYMBOL;
                             return result;
@@ -106,7 +106,7 @@ std::vector<std::string> Compiler::split_line(const std::string& line, bool& sta
                     }
                 }
                 else {
-                    auto t = convert_utf8_toUTF8cp1251(splitted_line[i]);
+                    auto t = convert_utf8_toCP1251(splitted_line[i]);
                     if (t.second == UTF8_to_CP1251_CONVERTER_ERROR::UNSUPPORTED_SYMBOL) {
                         CompilerOutput.Error = ERROR_UNSUPPORTED_SYMBOL;
                         return result;

@@ -21,7 +21,9 @@ I8080_Workspace::I8080_Workspace(const std::string& Name, const bool& LoadStyle,
 }
 
 I8080_Workspace::~I8080_Workspace() {
-
+#ifdef WITH_DEBUG_OUTPUT
+	std::cout << "I8080_Workspace::~I8080_Workspace()\n";
+#endif // !WITH_DEBUG_OUTPUT
 }
 
 
@@ -44,6 +46,8 @@ void I8080_Workspace::SetAsCurrent() {
 
 	if(!Data_INI.empty())
 		ImGui::LoadIniSettingsFromMemory(Data_INI.data(), Data_INI.size());
+
+
 }
 
 
@@ -57,6 +61,13 @@ void I8080_Workspace::LoadCurrent(const std::string& Name, const bool& LoadStyle
 void I8080_Workspace::Rewrite() {
 	Data_Widgets = WidgetManager->Save();
 	Data_INI = ImGui::SaveIniSettingsToMemory();
+
+#ifdef WITH_DEBUG_OUTPUT
+	std::cout << "REWRITING+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+	std::cout << Data_Widgets << std::endl << std::endl;
+	std::cout << Data_INI << std::endl << std::endl;
+#endif
+
 }
 
 

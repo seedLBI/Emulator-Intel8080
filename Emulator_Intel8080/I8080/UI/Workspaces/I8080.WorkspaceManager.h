@@ -32,6 +32,7 @@ public:
 	std::string Save() override;
 	void		Load(const std::string& Data) override;
 
+	void		DrawSetting();
 	void		Draw();
 	void		Update();
 
@@ -48,10 +49,13 @@ private:
 	bool Draging = false;
 
 	bool NeedLoadIni = false;
+	int countLoad = 1;
 
 	bool OpenedPopupCreation = false;
 	bool OpenedPopupSetting  = false;
 	int IndexSetting = 0;
+
+	bool SaveCurrentWorkspaceBeforeClosingApp = false;
 
 	bool DrawPopupCreation(char* name, int name_size);
 	bool DrawPopupSetting(int index, char* name, int name_size);

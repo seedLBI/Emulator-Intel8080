@@ -5,7 +5,9 @@ WindowManager::WindowManager() : SaveSystem("Window"){
 }
 
 WindowManager::~WindowManager(){
-
+#ifdef WITH_DEBUG_OUTPUT
+	std::cout << "WindowManager::~WindowManager()\n";
+#endif // !WITH_DEBUG_OUTPUT
 }
 
 

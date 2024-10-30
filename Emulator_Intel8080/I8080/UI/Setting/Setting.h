@@ -6,6 +6,7 @@
 #include "OpenglWindow\OpenglWindow.h"
 #include "UI\FontManager\FontManager.h"
 #include "UI\WindowManager\WindowManager.h"
+#include "UI\Workspaces\I8080.WorkspaceManager.h"
 #include "UI\ProjectManager\ProjectManager.h"
 #include "UI\KeyCombination\KeyCombinationHandler.h"
 #include "Notification/NotificationManager.h"
@@ -16,7 +17,7 @@
 class Setting : public SaveSystem
 {
 public:
-	Setting(FontManager* font, WindowManager* window,NotificationManager* notification, EmulationThread* emulation,KeyCombinationHandler* keyCombinationHandler, ProjectManager* projectManager);
+	Setting(FontManager* font, WindowManager* window, I8080_WorkspaceManager* WorkspaceManager,NotificationManager* notification, EmulationThread* emulation,KeyCombinationHandler* keyCombinationHandler, ProjectManager* projectManager);
 	~Setting();
 
 
@@ -32,6 +33,7 @@ public:
 
 private:
 	FontManager* font = nullptr;
+	I8080_WorkspaceManager* WorkspaceManager = nullptr;
 	WindowManager* window = nullptr;
 	NotificationManager* notification = nullptr;
 	EmulationThread* emulation = nullptr;

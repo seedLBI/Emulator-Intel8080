@@ -25,6 +25,8 @@ public:
 	TextEditor* GetPtrTextEditor();
 
 private:
+	bool IsActive = false;
+
 	TextEditor* editor;
 	ImGuiWindowFlags flags_CodeEditor = 0;
 };

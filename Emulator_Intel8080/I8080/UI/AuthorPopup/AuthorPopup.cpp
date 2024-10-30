@@ -12,6 +12,9 @@ AuthorPopup::AuthorPopup() {
 
 AuthorPopup::~AuthorPopup()
 {
+#ifdef WITH_DEBUG_OUTPUT
+	std::cout << "AuthorPopup::~AuthorPopup()\n";
+#endif // !WITH_DEBUG_OUTPUT
 }
 
 void AuthorPopup::Open() {
