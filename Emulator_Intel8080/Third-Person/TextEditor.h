@@ -22,7 +22,7 @@
 
 class TextEditor
 {
-public:
+private:
 
 	enum ENUM_Arguments {
 		Register8,
@@ -43,6 +43,21 @@ public:
 		Adress_high,
 		MAX
 	};
+	enum ENUM_FlagsState {
+		Unaffected,
+		Affected,
+		Reset,
+		Set
+	};
+	struct FlagsList {
+		ENUM_FlagsState Sign;
+		ENUM_FlagsState Zero;
+		ENUM_FlagsState ACarry;
+		ENUM_FlagsState Parity;
+		ENUM_FlagsState Carry;
+
+	};
+
 
 	struct CommandArguments {
 		std::string type_argument;
@@ -96,10 +111,17 @@ public:
 		std::vector<std::string> arr;
 	};
 
+	const std::vector<std::string> info_flagsStatus = {
+		u8"Не учавствует",
+		u8"Учавствует",
+		u8"Устанавливается 0",
+		u8"Устанавливается 1",
+	};
 
 	ArgumentsArray info_arguments;
 	OpcodesArray info_opcode;
 
+public:
 	enum class PaletteIndex
 	{
 		Default,
@@ -221,6 +243,7 @@ public:
 		std::vector<int> mArguments;
 		std::vector<int> mBytes;
 		std::vector<int> mTicks;
+		FlagsList mFlags;
 	};
 
 	typedef std::string String;

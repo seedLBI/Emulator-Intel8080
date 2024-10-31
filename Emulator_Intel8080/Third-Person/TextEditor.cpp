@@ -1633,6 +1633,49 @@ void TextEditor::Render()
 						}
 
 
+						//info_flagsStatus
+						/*
+							enum ENUM_FlagsState {
+								Unaffected,
+								Affected,
+								Reset,
+								Set
+							};
+						*/
+
+
+						static const std::vector<ImVec4> ColorStatusFlag = {
+							ImVec4(1.f,0.3f,0.3f,1.f),
+							ImVec4(0.3f,1.0f,0.3f,1.f),
+							ImVec4(1.f, 1.f, 0.2f, 1.f),
+							ImVec4(1.f, 1.f, 0.2f, 1.f),
+						};
+
+
+						ImGui::SeparatorText(u8"Флаги");
+						ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "Sign       ");
+						ImGui::SameLine();
+						ImGui::TextColored(ColorStatusFlag[it->second.mFlags.Sign], std::string(info_flagsStatus[it->second.mFlags.Sign]).c_str());
+
+
+						ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "Zero       ");
+						ImGui::SameLine();
+						ImGui::TextColored(ColorStatusFlag[it->second.mFlags.Zero], std::string(info_flagsStatus[it->second.mFlags.Zero]).c_str());
+
+
+						ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "A. Carry   ");
+						ImGui::SameLine();
+						ImGui::TextColored(ColorStatusFlag[it->second.mFlags.ACarry], std::string(info_flagsStatus[it->second.mFlags.ACarry]).c_str());
+
+						ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "Parity     ");
+						ImGui::SameLine();
+						ImGui::TextColored(ColorStatusFlag[it->second.mFlags.Parity], std::string(info_flagsStatus[it->second.mFlags.Parity]).c_str());
+
+						ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "Carry      ");
+						ImGui::SameLine();
+						ImGui::TextColored(ColorStatusFlag[it->second.mFlags.Carry], std::string(info_flagsStatus[it->second.mFlags.Carry]).c_str());
+
+
 
 						ImGui::SeparatorText(u8"Описание");
 						ImGui::TextWrapped(it->second.mDeclaration.c_str());
@@ -3783,6 +3826,7 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::I8080()
 		std::vector<int> bytes;
 		std::string declaration;
 		std::vector<int> ticks;
+		FlagsList flags_status;
 	};
 
 
@@ -3802,84 +3846,156 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::I8080()
 		for (auto& k : keywords)
 			langDef.mKeywords.insert(k);
 
+		static const std::vector<FullInfoInstruction> InfoInstructions {
+			{"hlt", {},{},u8"Остановка работы процессора",{7},FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-		static const std::vector<FullInfoInstruction> InfoInstructions{
-			{"hlt", {},{},u8"Остановка работы процессора",{7}},
-			{"nop", {},{},u8"Пустая команда которая занимает один байт",{4}},
-			{"in",  {ENUM_Arguments::Value8},{ENUM_Bytes::Value},   u8"Чтение значения в аккумулятор из внешнего порта",{10}},
-			{"out", {ENUM_Arguments::Value8},{ENUM_Bytes::Value},   u8"Отправка значения из аккумулятора во внешний порт",{10}},
-			{"mov", {ENUM_Arguments::Register8,ENUM_Arguments::Register8},{},  u8"Перемешение значений между регистрами или памятью(по адресу HL)",{5,7}},
-			{"mvi", {ENUM_Arguments::Register8,ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Запись константы в регистр или память",{7,10}},
-			{"cmp", {ENUM_Arguments::Register8},{},  u8"Сравнение значений между акуммулятором и регистрами или памятью(по адресу HL)",{4,7}},
-			{"cpi",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Сравнение значения аккумулятора с константой",{7}},
-			{"ana",{ENUM_Arguments::Register8},{},  u8"Логическое И значения аккумулятора с регистром или памятью(по адресу HL)",{4,7}},
-			{"ani",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Логическое И аккумулятора с константой",{7}},
-			{"ora",{ENUM_Arguments::Register8},{},  u8"Логическое ИЛИ значения аккумулятора с регистром или памятью(по адресу HL)",{4,7}},
-			{"ori",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Логическое ИЛИ значения аккумулятора с константой",{7}},
-			{"xra",{ENUM_Arguments::Register8},{},  u8"Логическое исключающее ИЛИ значение аккумулятора с регистром или памятью(по адресу HL)",{4,7}},
-			{"xri",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Логичиское исключающее ИЛИ значение аккумулятора с константой",{7}},
-			{"rlc",{},{},  u8"Все биты аккумулятора сдвигаются влево на один бит. Значение последнего сдвинутого бита устанавливается в флаг Carry и устанавливается в первый бит аккумулятора",{4}},
-			{"ral",{},{},  u8"Все биты аккумулятора сдвигаются влево на один бит. Состояние флага Carry устанавливается в первый бит аккумулятора. Значение последнего бита  (не сдвинутого аккумулятора) устанавливается в флаг Carry",{4}},
-			{"rrc",{},{},  u8"Все биты аккумулятора сдвигаются вправо на один бит. Значение первого бита аккумулятора устанавливается в флаг Carry и устанавливается в последний бит аккумулятора",{4}},
-			{"rar",{},{},  u8"Все биты аккумулятора сдвигаются вправо на один бит. Состояние флага Carry устанавливается в последний бит аккумулятора. Значение первого бита (не сдвинутого аккумулятора) устанавливается в флаг Carry",{4}},
-			{"stc",{},{},  u8"Устанавливает флаг Carry в состояние True. Carry = True",{4}},
-			{"cma",{},{},  u8"Инвентирует побитово значение аккумулятора.",{4}},
-			{"cmc",{},{},  u8"Инвентирует флаг Carry",{4}},
-			{"ret",{},{},  u8"Прыжок на адрес записанный в верхушке стэка",{10}},
-			{"rz",{},{},   u8"Если флаг Zero = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}},
-			{"rc",{},{},   u8"Если флаг Carry = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}},
-			{"rpe",{},{},  u8"Если флаг Paruty = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}},
-			{"rm",{},{},   u8"Если флаг Sign = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}},
-			{"rnz",{},{},  u8"Если флаг Zero = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}},
-			{"rnc",{},{},  u8"Если флаг Carry = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}},
-			{"rpo",{},{},  u8"Если флаг Paruty = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}},
-			{"rp",{},{},   u8"Если флаг Sign = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}},
-			{"jmp",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Прыжок PC по адресу заданной константы",{10}},
-			{"jz",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Zero = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}},
-			{"jc",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Carry = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}},
-			{"jpe",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Paruty = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}},
-			{"jm",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Sign = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}},
-			{"jnz",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Zero = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}},
-			{"jnc",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Carry = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}},
-			{"jpo",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Paruty = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}},
-			{"jp",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг  Sign = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}},
-			{"call",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high}, u8"Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17}},
-			{"cz",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Zero = 1, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}},
-			{"cc",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Carry = 1, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}},
-			{"cpe",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Paruty = 1, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}},
-			{"cm",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Sign = 1, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}},
-			{"cnz",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Zero = 0, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}},
-			{"cnc",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Carry = 0, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}},
-			{"cpo",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Paruty = 0, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}},
-			{"cp",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Sign = 0, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}},
-			{"push",{ENUM_Arguments::Register16_WithPSW},{}, u8"Сохранение двухбайтового числа из пары регистров в верхушку стэка",{11}},
-			{"shld",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high}, u8"Сохраняет двухбайтовое значение пары регистров HL по адресу памяти заданной константой",{16}},
-			{"sta",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Сохраняет значение из аккумулятор по адресу памяти заданной константой",{13} },
-			{"stax",{ENUM_Arguments::Register16_OnlyBD},{}, u8"Сохраняет значение аккумулятора в память по адресу пары регистров",{7}},
-			{"ldax",{ENUM_Arguments::Register16_OnlyBD},{}, u8"Загружает число по адресу пары регистров в аккумулятор",{7}},
-			{"pop",{ENUM_Arguments::Register16_WithPSW},{},  u8"Загрузка из верхушки стэка двухбайтового числа в пару регистров",{10}},
-			{"lhld",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high}, u8"Загружает двухбайтовое значение по адресу памяти заданной константой в пару регистров HL",{16}},
-			{"lda",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Загружает значение из памяти по адресу заданной константой в аккумулятор",{13}},
-			{"lxi",{ENUM_Arguments::Register16_WithSP,ENUM_Arguments::Value16},{ENUM_Bytes::Value_low,ENUM_Bytes::Value_high},  u8"Записывает двухбайтовую константу в пару регистров",{10}},
-			{"xchg",{},{}, u8"Меняет местами значения двухбайтовых чисел пар регистров DE и HL",{4}},
-			{"xthl",{},{}, u8"Меняет местами значение памяти по адресу SP c значением регистра L, и также с адресом памяти (SP + 1) и регистром H. Память поменяется, а значение SP не поменяется",{18}},
-			{"pchl",{},{}, u8"Загружает значение числа из пар регистров HL в адрес текущей позиции процессора PC",{5}},
-			{"sphl",{},{}, u8"Загружает значение двух байтвого числа пары регистров HL в стэк SP. При этом SP увеличится на два",{5}},
-			{"dad",{ENUM_Arguments::Register16_WithSP},{},  u8"Прибавляние к числу из пары регистров HL, числа из указанной пары регистров",{10}},
-			{"inx",{ENUM_Arguments::Register16_WithSP},{},  u8"Увелечение на единицу числа записанного в паре регистров",{5}},
-			{"inr",{ENUM_Arguments::Register8},{},  u8"Увелечение регистра или памяти на единицу",{5,10}},
-			{"dcx",{ENUM_Arguments::Register16_WithSP},{},  u8"Уменьшение на единицу числа записанного в паре регистров",{5}},
-			{"dcr",{ENUM_Arguments::Register8},{},  u8"Уменьшение регистра или памяти на единицу",{5,10}},
-			{"add",{ENUM_Arguments::Register8},{},  u8"Арифмитическое сложение значения аккумулятора и регистра или памяти(по адресу HL)",{4,7}},
-			{"adc",{ENUM_Arguments::Register8},{},  u8"Арифмитическое сложение значения аккумулятора и (регистра или памяти(по адресу HL)) с флагом Carry",{4,7}},
-			{"adi",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Арифмитическое сложения значения аккумулятора с константой",{7}},
-			{"aci",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Арифмитическое сложения значения аккумулятора с константой и флагом Carry",{7}},
-			{"sub",{ENUM_Arguments::Register8},{},  u8"Арифмитическое вычитание из значения аккумулятора значение памяти(по адресу HL) или регистра",{4,7}},
-			{"sbb",{ENUM_Arguments::Register8},{},  u8"Арифмитическое вычитание из значения аккумулятора значение (памяти(по адресу HL) или регистра) с флагом Carry",{4,7}},
-			{"sui",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Арифмитическое вычитание из значения аккумулятора константы",{7}},
-			{"sbi",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Арифмитическое вычитание из значения аккумулятора константы и флага Carry",{7}},
-			//TODO:
-			{"rst",{ENUM_Arguments::ValueSpecial},{ENUM_Bytes::Value},  u8"глянь список инструкций...",{11}}
+			{"nop", {},{},u8"Пустая команда которая занимает один байт",{4},FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"in",  {ENUM_Arguments::Value8},{ENUM_Bytes::Value},   u8"Чтение значения в аккумулятор из внешнего порта",{10},FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"out", {ENUM_Arguments::Value8},{ENUM_Bytes::Value},   u8"Отправка значения из аккумулятора во внешний порт",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"mov", {ENUM_Arguments::Register8,ENUM_Arguments::Register8},{},  u8"Перемешение значений между регистрами или памятью(по адресу HL)",{5,7}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"mvi", {ENUM_Arguments::Register8,ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Запись константы в регистр или память",{7,10},  FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"cmp", {ENUM_Arguments::Register8},{},  u8"Сравнение значений между акуммулятором и регистрами или памятью(по адресу HL)",{4,7},  FlagsList{Affected,Affected,Affected,Affected,Affected}},
+
+			{"cpi",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Сравнение значения аккумулятора с константой",{7},  FlagsList{Affected,Affected,Affected,Affected,Affected}},
+
+			{"ana",{ENUM_Arguments::Register8},{},  u8"Логическое И значения аккумулятора с регистром или памятью(по адресу HL)",{4,7},  FlagsList{Affected,Affected,Affected,Affected,Reset}},
+
+			{"ani",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Логическое И аккумулятора с константой",{7}, FlagsList{Affected,Affected,Affected,Affected,Reset}},
+
+			{"ora",{ENUM_Arguments::Register8},{},  u8"Логическое ИЛИ значения аккумулятора с регистром или памятью(по адресу HL)",{4,7}, FlagsList{Affected,Affected,Reset,Affected,Reset}},
+
+			{"ori",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Логическое ИЛИ значения аккумулятора с константой",{7}, FlagsList{Affected,Affected,Reset,Affected,Reset}},
+
+			{"xra",{ENUM_Arguments::Register8},{},  u8"Логическое исключающее ИЛИ значение аккумулятора с регистром или памятью(по адресу HL)",{4,7}, FlagsList{Affected,Affected,Reset,Affected,Reset}},
+
+			{"xri",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Логичиское исключающее ИЛИ значение аккумулятора с константой",{7}, FlagsList{Affected,Affected,Reset,Affected,Reset}},
+
+			{"rlc",{},{},  u8"Все биты аккумулятора сдвигаются влево на один бит. Значение последнего сдвинутого бита устанавливается в флаг Carry и устанавливается в первый бит аккумулятора",{4}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Affected}},
+
+			{"ral",{},{},  u8"Все биты аккумулятора сдвигаются влево на один бит. Состояние флага Carry устанавливается в первый бит аккумулятора. Значение последнего бита  (не сдвинутого аккумулятора) устанавливается в флаг Carry",{4}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Affected}},
+
+			{"rrc",{},{},  u8"Все биты аккумулятора сдвигаются вправо на один бит. Значение первого бита аккумулятора устанавливается в флаг Carry и устанавливается в последний бит аккумулятора",{4}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Affected}},
+
+			{"rar",{},{},  u8"Все биты аккумулятора сдвигаются вправо на один бит. Состояние флага Carry устанавливается в последний бит аккумулятора. Значение первого бита (не сдвинутого аккумулятора) устанавливается в флаг Carry",{4}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Affected}},
+
+			{"stc",{},{},  u8"Устанавливает флаг Carry в состояние True. Carry = True",{4}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Set}},
+
+			{"cma",{},{},  u8"Инвентирует побитово значение аккумулятора.",{4}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"cmc",{},{},  u8"Инвентирует флаг Carry",{4}, FlagsList{ Unaffected,Unaffected,Unaffected,Unaffected,Affected }},
+
+			{"ret",{},{},  u8"Прыжок на адрес записанный в верхушке стэка",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"rz",{},{},   u8"Если флаг Zero = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"rc",{},{},   u8"Если флаг Carry = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"rpe",{},{},  u8"Если флаг Paruty = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"rm",{},{},   u8"Если флаг Sign = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"rnz",{},{},  u8"Если флаг Zero = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"rnc",{},{},  u8"Если флаг Carry = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"rpo",{},{},  u8"Если флаг Paruty = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"rp",{},{},   u8"Если флаг Sign = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"jmp",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Прыжок PC по адресу заданной константы",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"jz",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Zero = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"jc",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Carry = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"jpe",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Paruty = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"jm",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Sign = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"jnz",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Zero = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"jnc",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Carry = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"jpo",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Paruty = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"jp",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг  Sign = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"call",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high}, u8"Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"cz",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Zero = 1, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"cc",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Carry = 1, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"cpe",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Paruty = 1, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"cm",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Sign = 1, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"cnz",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Zero = 0, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"cnc",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Carry = 0, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"cpo",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Paruty = 0, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"cp",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Sign = 0, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"push",{ENUM_Arguments::Register16_WithPSW},{}, u8"Сохранение двухбайтового числа из пары регистров в верхушку стэка",{11}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"shld",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high}, u8"Сохраняет двухбайтовое значение пары регистров HL по адресу памяти заданной константой",{16}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+
+			{"sta",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Сохраняет значение из аккумулятор по адресу памяти заданной константой",{13} , FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+
+			{"stax",{ENUM_Arguments::Register16_OnlyBD},{}, u8"Сохраняет значение аккумулятора в память по адресу пары регистров",{7}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+
+			{"ldax",{ENUM_Arguments::Register16_OnlyBD},{}, u8"Загружает число по адресу пары регистров в аккумулятор",{7}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+
+			{"pop",{ENUM_Arguments::Register16_WithPSW},{},  u8"Загрузка из верхушки стэка двухбайтового числа в пару регистров",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+
+			{"lhld",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high}, u8"Загружает двухбайтовое значение по адресу памяти заданной константой в пару регистров HL",{16}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+
+			{"lda",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Загружает значение из памяти по адресу заданной константой в аккумулятор",{13}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+
+			{"lxi",{ENUM_Arguments::Register16_WithSP,ENUM_Arguments::Value16},{ENUM_Bytes::Value_low,ENUM_Bytes::Value_high},  u8"Записывает двухбайтовую константу в пару регистров",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+
+			{"xchg",{},{}, u8"Меняет местами значения двухбайтовых чисел пар регистров DE и HL",{4}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+
+			{"xthl",{},{}, u8"Меняет местами значение памяти по адресу SP c значением регистра L, и также с адресом памяти (SP + 1) и регистром H. Память поменяется, а значение SP не поменяется",{18}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+
+			{"pchl",{},{}, u8"Загружает значение числа из пар регистров HL в адрес текущей позиции процессора PC",{5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+
+			{"sphl",{},{}, u8"Загружает значение двух байтвого числа пары регистров HL в стэк SP. При этом SP увеличится на два",{5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+
+			{"dad",{ENUM_Arguments::Register16_WithSP},{},  u8"Прибавляние к числу из пары регистров HL, числа из указанной пары регистров",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Affected} },
+
+			{"inx",{ENUM_Arguments::Register16_WithSP},{},  u8"Увелечение на единицу числа записанного в паре регистров",{5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+
+			{"inr",{ENUM_Arguments::Register8},{},  u8"Увелечение регистра или памяти на единицу",{5,10}, FlagsList{Affected,Affected,Affected,Affected,Unaffected} },
+
+			{"dcx",{ENUM_Arguments::Register16_WithSP},{},  u8"Уменьшение на единицу числа записанного в паре регистров",{5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+
+			{"dcr",{ENUM_Arguments::Register8},{},  u8"Уменьшение регистра или памяти на единицу",{5,10}, FlagsList{Affected,Affected,Affected,Affected,Unaffected} },
+
+			{"add",{ENUM_Arguments::Register8},{},  u8"Арифмитическое сложение значения аккумулятора и регистра или памяти(по адресу HL)",{4,7}, FlagsList{Affected,Affected,Affected,Affected,Affected} },
+
+			{"adc",{ENUM_Arguments::Register8},{},  u8"Арифмитическое сложение значения аккумулятора и (регистра или памяти(по адресу HL)) с флагом Carry",{4,7}, FlagsList{Affected,Affected,Affected,Affected,Affected} },
+
+			{"adi",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Арифмитическое сложения значения аккумулятора с константой",{7}, FlagsList{Affected,Affected,Affected,Affected,Affected} },
+
+			{"aci",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Арифмитическое сложения значения аккумулятора с константой и флагом Carry",{7}, FlagsList{Affected,Affected,Affected,Affected,Affected} },
+
+			{"sub",{ENUM_Arguments::Register8},{},  u8"Арифмитическое вычитание из значения аккумулятора значение памяти(по адресу HL) или регистра",{4,7}, FlagsList{Affected,Affected,Affected,Affected,Affected} },
+
+			{"sbb",{ENUM_Arguments::Register8},{},  u8"Арифмитическое вычитание из значения аккумулятора значение (памяти(по адресу HL) или регистра) с флагом Carry",{4,7}, FlagsList{Affected,Affected,Affected,Affected,Affected} },
+
+			{"sui",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Арифмитическое вычитание из значения аккумулятора константы",{7}, FlagsList{Affected,Affected,Affected,Affected,Affected} },
+
+			{"sbi",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Арифмитическое вычитание из значения аккумулятора константы и флага Carry",{7}, FlagsList{Affected,Affected,Affected,Affected,Affected} },
+
+			{"rst",{ENUM_Arguments::ValueSpecial},{ENUM_Bytes::Value},  u8"Call [Число * 8]",{11}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} }
 		};
 
 
@@ -3890,6 +4006,7 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::I8080()
 			id.mArguments = info.arguments;
 			id.mBytes = info.bytes;
 			id.mTicks = info.ticks;
+			id.mFlags = info.flags_status;
 			langDef.mIdentifiers.insert(std::make_pair(info.name, id));
 		}
 	
