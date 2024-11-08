@@ -6,6 +6,7 @@
 #ifndef I8080_H
 #define I8080_H
 
+#include "Port\I8080.Port.ConsoleOutput.h"
 #include "Port\I8080.Port.SymbolScreen.h"
 #include "Port\I8080.Port.GeneratorRandomValues.h"
 #include "Port\I8080.Port.Timer.h"
@@ -18,6 +19,9 @@
 #include "DataStructures\VarsDebug.h"
 #include "DataStructures\TranslatorOutput.h"
 #include "DataStructures\CurrentStateProcessor.h"
+#include "DataStructures/ModeProject.h"
+#include "Emulator/Disassembler/Disassembler.h"
+
 
 #include <iostream>
 #include <fstream>
@@ -36,59 +40,62 @@
 using namespace std;
 
 
-
 class I8080
 {
 public:
 
-	I8080() {
-        Init_External_Peripherals();
-		InitInstructions();
-	}
-
+    I8080();
 
 	void InitPointer2State(CurrentState& cs);
 
 	void LoadMemory(const std::vector<OpcodeAdressed>& array);
-    void LoadMemory(const std::vector<uint8_t>& array);
+    void LoadMemoryFromBinary(const std::vector<uint8_t>& array);
+    void LoadMemoryFromCOM(const std::vector<uint8_t>& array);
 
+
+
+    void  NextStep();
 
 	void EraseMemory();
 	void RemoveAllBreakPoints();
 
-	void NextStep();
-	void Reset();
-	void ResetFlagStop();
+	void  Reset();
+	void  ResetFlagStop();
+    void  ActiveFlagStop();
 	bool *IsStop();
-    void ActiveFlagStop();
+
+    void        SetModeProject(const ModeProject& mode);
+    ModeProject GetModeProject();
+
 
 	bool IsWaitingPortInput();
 	bool PC_on_BreakPoint();
 
 	void InputAnswer2Port(const uint8_t& Answer);
 
-	void SetProgrammCounter(const unsigned int& index);
-	void ToggleBreakPointPosition(const unsigned int& Position);
-    void SetBreakPointPosition(const unsigned int& Position, const bool& state);
 
+	void ToggleBreakPointPosition(const uint16_t& Position);
+    void SetBreakPointPosition(const uint16_t& Position, const bool& state);
+
+    uint8_t  GetRegisterFlags();
 	uint64_t GetCountTicks();
     uint64_t GetCountInstruction();
 
-	unsigned int GetProgrammCounter();
-	deque<unsigned int> GetOutputConsole();
+	uint16_t GetProgrammCounter();
+    void     SetProgrammCounter(const uint16_t& index);
+
+
+
 
 	std::vector<I8080_Port*> Get_External_Peripherals();
     bool* GetBreakpointsInMemory();
     uint8_t* GetMemory();
 	bool* GetVisetedMemory();
+
+
 private:
 
 	std::vector<I8080_Port*> External_Peripherals;
-
-	std::deque<unsigned int> Output;
-
-
-
 
 	bool Flag_Stop = false;
 	bool Flag_Waiting_Input = false;
@@ -106,18 +113,22 @@ private:
 		L = 0;
 
 	uint16_t PC = 0, // programm counter
-		     SP = 0; // index register
+		     SP = 0; // stack register
 
-	bool Sign = false, // flags
-		 Zero = false,
-		 Paruty = false,
-		 Carry = false,
-		 AC = false;
+    bool Sign = false, // flags
+         Zero = false,
+         Paruty = false,
+         Carry = false,
+         AuxiliaryCarry = false,
+         InterruptEnabled = false;
 
     uint64_t CountTicks = 0;
     uint64_t CountInstruction = 0;
 
+    ModeProject _ModeProject = ModeProject::USER;
 
+    std::vector<uint8_t> project_DATA;
+    void ReloadProjectData();
 
 	uint8_t Memory[SIZE_MEMORY] = { 0, };
 	bool Viseted_Memory[SIZE_MEMORY] = { 0, };
@@ -126,8 +137,8 @@ private:
     inline void ALU(const uint8_t& opcode);
 
     inline void SetSP_nextAdress(const uint16_t& next_adress);
-    inline void SetPC(const int& adress);
-    inline void IncrementPC(const int& count = 1);
+    inline void SetPC(const uint16_t& adress);
+    inline void IncrementPC(const uint8_t& count = 1);
 
     inline void SetVisitedMemoryFromPC(const int& count);
 
@@ -140,6 +151,8 @@ private:
 
     void _INPUT();
     void _OUTPUT();
+    void _OUTPUT_COM();
+
     inline void _MOV(uint8_t& valueTo, const uint8_t& valueFrom);
     inline void _MVI(uint8_t& valueTo);
     inline void _CALL();
@@ -196,6 +209,9 @@ private:
     void _PUSH_B();  void _PUSH_D();  void _PUSH_H();  void _PUSH_PSW();
     void _NOP();
     void _HLT();
+
+    void _EI(); void _DI();
+    void _DAA();
 
 
     void Init_External_Peripherals();

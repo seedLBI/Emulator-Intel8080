@@ -109,6 +109,12 @@ void EmulationThread::ThreadLoop() {
 
 					while (processor->GetCountTicks() - startTicks < targetTicksPerFrame) {
 						processor->NextStep();
+
+						if (processor->PC_on_BreakPoint() || *processor->IsStop() || Speed != SpeedMode::Intel8080) {
+							Control = ControlMode::Stop;
+							break;
+						}
+
 					}
 
 					while (true) {
@@ -141,6 +147,11 @@ void EmulationThread::ThreadLoop() {
 
 					while (processor->GetCountTicks() - startTicks < targetTicksPerFrame) {
 						processor->NextStep();
+
+						if (processor->PC_on_BreakPoint() || *processor->IsStop() || Speed != SpeedMode::Intel8085) {
+							Control = ControlMode::Stop;
+							break;
+						}
 					}
 
 					while (true) {

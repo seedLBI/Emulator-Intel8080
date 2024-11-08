@@ -1238,30 +1238,30 @@ namespace Intro {
 			Vars::Word_Processora = utf8_to_utf16(u8"Процессора");
 			Vars::Word_Intel_8080 = utf8_to_utf16(u8"Intel 8080");
 
-			Vars::Word_Version = utf8_to_utf16(u8"Версия от 12.10.2024");
+			Vars::Word_Version = utf8_to_utf16(u8"Версия от 08.11.2024");
 
 
 			Vars::Word_Avtor_Korzhunov_a_c = utf8_to_utf16(u8"Автор:  Коржунов А. С.");
 			Vars::Word_Gruppa_IM2105B = utf8_to_utf16(u8"Группа:  ИМ21-05Б");
-
+			
 
 			Vars::Word_Nauch_ruk_CheridnichenkoOM = utf8_to_utf16(u8"Научный  руководитель:  Чередниченко О. М.");
 			Vars::Word_Update = utf8_to_utf16(u8"Обновления");
 			Vars::Word_Added = utf8_to_utf16(u8"Добавлено:");
 			Vars::ListWord_added = {
-				{utf8_to_utf16(u8"  * Новый порт - пиксельный экран")},
-				{utf8_to_utf16(u8"  * Список переменных")},
-				{utf8_to_utf16(u8"  * Список постоянных")},
-				{utf8_to_utf16(u8"  * Подбор цветов из палитры цветов")},
-				{utf8_to_utf16(u8" в соответствии с человеческим зрением")},
-				{utf8_to_utf16(u8"  * Добавленна новая деректива (const)")},
+				{utf8_to_utf16(u8"  * Поиск в редакторе кода")},
+				{utf8_to_utf16(u8"  * Многострочные комментарии")},
+				{utf8_to_utf16(u8"  * Полная поддержка кирилицы")},
+				{utf8_to_utf16(u8"  * Настройки горячих клавиш")},
+				{utf8_to_utf16(u8"  * Улучшены возможности .set:")},
+				{utf8_to_utf16(u8"  * Автосохранение")},
 			};
-			Vars::Word_Optimazed = utf8_to_utf16(u8"Оптимизированно:");
+			Vars::Word_Optimazed = utf8_to_utf16(u8"Исправлено:");
 			Vars::ListWord_optimazed = {
-				{utf8_to_utf16(u8"  * Уменьшенно время компиляции")},
-				{utf8_to_utf16(u8"  * Уменьшенно время отрисовки")},
-				{utf8_to_utf16(u8"  * Увеличенна производительность")},
-				{utf8_to_utf16(u8" эмуляции")},
+				{utf8_to_utf16(u8"  * Неточности эмуляции")},
+				{utf8_to_utf16(u8"  * Случайные вылеты")},
+				{utf8_to_utf16(u8"  * Работа с окнами")},
+				{utf8_to_utf16(u8"  * Руководство")},
 			};
 			Vars::Word_PressAnyKey = utf8_to_utf16(u8"Нажми на любую кнопку");
 			Vars::Word_ForContinue = utf8_to_utf16(u8"чтобы продолжить");

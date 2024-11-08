@@ -55,7 +55,7 @@ private:
 	bool OpenedPopupSetting  = false;
 	int IndexSetting = 0;
 
-	bool SaveCurrentWorkspaceBeforeClosingApp = false;
+	bool SaveCurrentWorkspaceBeforeClosingApp = true;
 
 	bool DrawPopupCreation(char* name, int name_size);
 	bool DrawPopupSetting(int index, char* name, int name_size);

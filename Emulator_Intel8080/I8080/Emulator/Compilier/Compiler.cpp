@@ -272,7 +272,7 @@ int Compiler::GetCountBytes(const std::string& cmd) {
         {"rnz",1},{"rnc",1},{"rpo",1},{"rp",1},
         {"rst",1},{"push",1},{"pchl",1},{"sphl",1},
         {"pop",1},{"stax",1},{"dad",1},{"ldax",1},
-        {"xchg",1},{"ei",1},{"rrc",1},{"rar",1},
+		{"xchg",1},{"ei",1},{"rrc",1},{"rar",1},
         {"cma",1},{"cmc",1},{"rlc",1},{"ral",1}, {"sbb",1},
         {"daa",1},{"stc",1},{"nop",1},{"dcx",1},{"di",1},{"xthl",1},
 
@@ -351,7 +351,8 @@ std::vector<uint8_t> Compiler::TranslateInstruction(const std::vector<std::strin
 			{"cmc",none_param},{"rnz",none_param},{"rnc",none_param},{"rpo",none_param},
 			{"rp",none_param},{"rz",none_param},{"rc",none_param},{"rpe",none_param},
 			{"rm",none_param},{"ret",none_param},{"xthl",none_param},{"pchl",none_param},
-			{"sphl",none_param},{"xchg",none_param},
+			{"sphl",none_param},{"xchg",none_param},{"daa",none_param},{"ei",none_param},
+			{"di",none_param}
 	};
 	std::vector<uint8_t> result;
 
@@ -466,7 +467,7 @@ std::vector<uint8_t> Compiler::TranslateInstruction(const std::vector<std::strin
 			{"nop",0x00},{"hlt",0x76},{"rlc",0x07},{"ral",0x17},{"stc",0x37},{"rrc",0x0f},{"rar",0x1f},
 			{"cma",0x2f},{"cmc",0x3f},{"rnz",0xc0},{"rnc",0xd0},{"rpo",0xe0},{"rp",0xf0},{"rz",0xc8},
 			{"rc",0xd8},{"rpe",0xe8},{"rm",0xf8},{"ret",0xc9},{"xthl",0xe3},{"pchl",0xe9},{"sphl",0xf9},
-			{"xchg",0xeb},
+			{"xchg",0xeb},{"daa",0x27},{"ei",0xfb},{"di",0xf3}
 	};
 	static const robin_hood::unordered_flat_map<std::string, uint8_t> rst_map = {
 			{"0",0xc7},{"1",0xcf},{"2",0xd7},{"3",0xdf},
@@ -475,16 +476,25 @@ std::vector<uint8_t> Compiler::TranslateInstruction(const std::vector<std::strin
 
 	switch (type_instruction) {
 	case imm8: {
-
 		int value = FromString2Int(params[0]).first;
+
+		if (value > MAX8BIT) {
+			CompilerOutput.Error = ERROR_OVERFLOW_VALUE_8BIT;
+			return result;
+		}
+
 
 		result.emplace_back(instruction_imm8_map.find(command)->second);
 		result.emplace_back(value);
 		break;
 	}
 	case imm16: {
-
 		int value = FromString2Int(params[0]).first;
+
+		if (value > MAX16BIT) {
+			CompilerOutput.Error = ERROR_OVERFLOW_VALUE_16BIT;
+			return result;
+		}
 
 		int l_imm16 = value % 256;
 		int h_imm16 = value / 256;
@@ -608,12 +618,18 @@ std::vector<uint8_t> Compiler::TranslateInstruction(const std::vector<std::strin
 		break;
 	}
 	case lxi: {
+
 		if (inx_dcx_dad_lxi_access_registers.contains(params[0]) == false) {
 			CompilerOutput.Error = TypeTranslatorError::ERROR_INCORECT_PARAMS;
 			return result;
 		}
 
 		int value = FromString2Int(params[1]).first;
+
+		if (value > MAX16BIT){
+			CompilerOutput.Error = ERROR_OVERFLOW_VALUE_16BIT;
+			return result;
+		}
 
 		int l_imm16 = value % 256;
 		int h_imm16 = value / 256;

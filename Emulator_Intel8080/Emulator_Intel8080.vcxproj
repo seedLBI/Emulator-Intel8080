@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="I8080\DataStructures\ModeProject.cpp" />
     <ClCompile Include="I8080\DataStructures\TypesCommand.cpp" />
     <ClCompile Include="I8080\DataStructures\TypeTranslatorError.cpp" />
     <ClCompile Include="I8080\Emulator\Compilier\Compiler.cpp" />
@@ -151,6 +152,7 @@
     <ClCompile Include="I8080\Emulator\EmulationThread\EmulationThread.cpp" />
     <ClCompile Include="I8080\Emulator\I8080.cpp" />
     <ClCompile Include="I8080\Emulator\Port\I8080.Port.AsyncKeyboard.cpp" />
+    <ClCompile Include="I8080\Emulator\Port\I8080.Port.ConsoleOutput.cpp" />
     <ClCompile Include="I8080\Emulator\Port\I8080.Port.cpp" />
     <ClCompile Include="I8080\Emulator\Port\I8080.Port.GeneratorRandomValues.cpp" />
     <ClCompile Include="I8080\Emulator\Port\I8080.Port.PixelScreen.cpp" />
@@ -234,6 +236,7 @@
   <ItemGroup>
     <ClInclude Include="I8080\Config_Compilier.h" />
     <ClInclude Include="I8080\DataStructures\CurrentStateProcessor.h" />
+    <ClInclude Include="I8080\DataStructures\ModeProject.h" />
     <ClInclude Include="I8080\DataStructures\OpcodeAdressed.h" />
     <ClInclude Include="I8080\DataStructures\TranslatorOutput.h" />
     <ClInclude Include="I8080\DataStructures\TypesCommand.h" />
@@ -245,6 +248,7 @@
     <ClInclude Include="I8080\Emulator\EmulationThread\EmulationThread.h" />
     <ClInclude Include="I8080\Emulator\I8080.h" />
     <ClInclude Include="I8080\Emulator\Port\I8080.Port.AsyncKeyboard.h" />
+    <ClInclude Include="I8080\Emulator\Port\I8080.Port.ConsoleOutput.h" />
     <ClInclude Include="I8080\Emulator\Port\I8080.Port.GeneratorRandomValues.h" />
     <ClInclude Include="I8080\Emulator\Port\I8080.Port.h" />
     <ClInclude Include="I8080\Emulator\Port\I8080.Port.PixelScreen.h" />

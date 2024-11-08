@@ -58,12 +58,11 @@ public:
 
 	void NewFile();
 
-	void OpenBinaryFile();
-
 	bool OpenFileWithPath(const std::string& path);
 	void OpenFile();
 	void SaveFile();
 	void SaveFileAs();
+	void SaveFileIntoBinary();
 
 	void Compile();
 

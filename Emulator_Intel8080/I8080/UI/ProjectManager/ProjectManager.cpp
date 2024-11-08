@@ -35,21 +35,31 @@ void ProjectManager::InitWidgets(
 }
 
 void ProjectManager::NewFile() {
-	translatorOutput.Opcodes.clear();
+	translatorOutput.Clear();
 	LinesCode.clear();
 
 	widget_CodeEditor->GetPtrTextEditor()->SetTextLines(std::vector<std::string>{""});
 	widget_CodeEditor->GetPtrTextEditor()->SetTextNotChanged();
 	widget_CodeEditor->GetPtrTextEditor()->DeleteAllErrorMarkers();
+	widget_CodeEditor->GetPtrTextEditor()->SetReadOnly(false);
+
+	processor->ActiveFlagStop();
+	emulationThread->SetControlMode(ControlMode::Stop);
+	emulationThread->WaitThread();
 
 	processor->Reset();
 	processor->RemoveAllBreakPoints();
-	processor->LoadMemory(translatorOutput.Opcodes);
+	processor->EraseMemory();
+
+	processor->SetModeProject(ModeProject::USER);
+
+	widget_MnemocodeViewer->FollowCursor(0);
 
 	Path_LoadedFile.clear();
 	widget_RegisterFlagsInfo->InitLastState();
 
 	UpdateTitleWindow();
+
 
 
 	static const ImVec4 color_GRAY{ 0.3f,0.3f,0.3f,1.0f };
@@ -65,37 +75,81 @@ void ProjectManager::NewFile() {
 }
 bool ProjectManager::OpenFileWithPath(const std::string& path) {
 	if (path.size() != 0) {
-		widget_CodeEditor->GetPtrTextEditor()->DeleteAllErrorMarkers();
-		widget_CodeEditor->GetPtrTextEditor()->DeleteAllBreakpoints();
 
-		lastPathManager->AddPath(path);
-		Path_LoadedFile = path;
-		UpdateTitleWindow();
-		ReadFile(path);
+		translatorOutput.Clear();
+		LinesCode.clear();
 
-		if (flag_CompileAfterOpen == true)
-			TryTranslateCode();
+		std::string ExtensionFile = path.substr(path.find_last_of('.') + 1);
+		ToLowerAll(ExtensionFile);
 
 
-		widget_CodeEditor->SetFlagWindow(0);
+		processor->ActiveFlagStop();
+		emulationThread->SetControlMode(ControlMode::Stop);
+		emulationThread->WaitThread();
+		processor->ActiveFlagStop();
 		processor->Reset();
 		processor->RemoveAllBreakPoints();
-		processor->LoadMemory(translatorOutput.Opcodes);
+		processor->EraseMemory();
 		widget_RegisterFlagsInfo->InitLastState();
 
-		if (wasFirstUpdate) {
+		widget_MnemocodeViewer->FollowCursor(0);
 
-		static const ImVec4 color_GRAY{ 0.3f,0.3f,0.3f,1.0f };
-		static const ImVec4 color_WHITE{ 1.f,1.f,1.f,1.f };
+		Path_LoadedFile = path;
+		UpdateTitleWindow();
+		lastPathManager->AddPath(path);
 
-		string text = u8"Файл успешно открыт.";
 
-		notificationManager->AddNottification(Notification(color_GRAY, 2.f, std::vector<N_Element*>{
-			new N_Message(color_WHITE, text)
-		},
-			nullptr));
+		if (ExtensionFile == "i8080")
+		{
+			widget_CodeEditor->GetPtrTextEditor()->DeleteAllErrorMarkers();
+			widget_CodeEditor->GetPtrTextEditor()->DeleteAllBreakpoints();
+			widget_CodeEditor->GetPtrTextEditor()->SetReadOnly(false);
+
+			ReadFile(path);
+
+			if (flag_CompileAfterOpen == true)
+				TryTranslateCode();
+
+			widget_CodeEditor->SetFlagWindow(0);
 
 		}
+		else if (ExtensionFile == "com") {
+			widget_CodeEditor->GetPtrTextEditor()->DeleteAllErrorMarkers();
+			widget_CodeEditor->GetPtrTextEditor()->DeleteAllBreakpoints();
+			widget_CodeEditor->GetPtrTextEditor()->SetTextLines({});
+			widget_CodeEditor->GetPtrTextEditor()->SetReadOnly(true);
+
+			auto data = readFileToByteArray(path);
+
+			processor->LoadMemoryFromCOM(data);
+		}
+		else if (ExtensionFile == "bin") {
+
+			widget_CodeEditor->GetPtrTextEditor()->DeleteAllErrorMarkers();
+			widget_CodeEditor->GetPtrTextEditor()->DeleteAllBreakpoints();
+			widget_CodeEditor->GetPtrTextEditor()->SetTextLines({});
+			widget_CodeEditor->GetPtrTextEditor()->SetReadOnly(true);
+
+			auto data = readFileToByteArray(path);
+
+			processor->LoadMemoryFromBinary(data);
+		}
+
+		
+		if (wasFirstUpdate) {
+
+			static const ImVec4 color_GRAY{ 0.3f,0.3f,0.3f,1.0f };
+			static const ImVec4 color_WHITE{ 1.f,1.f,1.f,1.f };
+
+			string text = u8"Файл успешно открыт.";
+
+			notificationManager->AddNottification(Notification(color_GRAY, 2.f, std::vector<N_Element*>{
+				new N_Message(color_WHITE, text)
+			},
+				nullptr));
+
+		}
+
 
 		return true;
 	}
@@ -106,29 +160,25 @@ void ProjectManager::OpenFile() {
 	OpenFileWithPath(path);
 }
 
-void ProjectManager::OpenBinaryFile() {
-	string path = OpenRomFileDialog();
 
-	if (path.empty())
-		return;
-
-	Path_LoadedFile = path;
-	UpdateTitleWindow();
-
-	widget_CodeEditor->GetPtrTextEditor()->DeleteAllErrorMarkers();
-	widget_CodeEditor->GetPtrTextEditor()->DeleteAllBreakpoints();
-	widget_CodeEditor->GetPtrTextEditor()->SetTextLines({});
-
-	processor->Reset();
-	processor->RemoveAllBreakPoints();
-
-	auto data = readFileToByteArray(path);
-
-	processor->LoadMemory(data);
-
-}
 
 void ProjectManager::SaveFile() {
+
+	if (processor->GetModeProject() != ModeProject::USER){
+
+		static const ImVec4 color_RED{ 0.45f,0.2f,0.2f,1.0f };
+		static const ImVec4 color_WHITE{ 1.f,1.f,1.f,1.f };
+
+		string text = u8"Нельзя сохранять бинарные файлы их можно лишь открыть.";
+
+		notificationManager->AddNottification(Notification(color_RED, 2.f, std::vector<N_Element*>{
+			new N_Message(color_WHITE, text)
+		},
+			nullptr));
+
+		return;
+	}
+
 	if (Path_LoadedFile.empty()) {
 		SaveFileAs();
 	}
@@ -164,6 +214,23 @@ void ProjectManager::SaveFile() {
 	}
 }
 void ProjectManager::SaveFileAs() {
+
+	if (processor->GetModeProject() != ModeProject::USER) {
+
+		static const ImVec4 color_RED{ 0.45f,0.2f,0.2f,1.0f };
+		static const ImVec4 color_WHITE{ 1.f,1.f,1.f,1.f };
+
+		string text = u8"Нельзя сохранять бинарные файлы их можно лишь открыть.";
+
+		notificationManager->AddNottification(Notification(color_RED, 2.f, std::vector<N_Element*>{
+			new N_Message(color_WHITE, text)
+		},
+			nullptr));
+
+		return;
+	}
+
+
 	string nameFile = SaveFileDialogI8080();
 
 	if (nameFile.empty()) {
@@ -219,8 +286,66 @@ void ProjectManager::SaveFileAs() {
 	widget_RegisterFlagsInfo->InitLastState();
 
 }
+void ProjectManager::SaveFileIntoBinary() {
+
+	TryTranslateCode();
+	if (translatorOutput.Error != TypeTranslatorError::NOTHING)
+		return;
+
+
+	std::string path = SaveFileDialogROM();
+	if (path.empty())
+		return;
+
+	path += ".BIN";
+
+	std::vector<uint8_t> data;
+
+	int max = 0;
+	for (int i = 65535; i >= 0; i--){
+		if (processor->GetMemory()[i] != 0x00){
+			max = i;
+			break;
+		}
+	}
+	
+	for (int i = 0; i < max + 1; i++)
+		data.emplace_back(processor->GetMemory()[i]);
+
+
+	std::ofstream file(stringUTF8_to_wstring(path), std::ios::binary);
+
+	if (!file) {
+		std::cerr << "Error opening file for writing: " << path << std::endl;
+		return;
+	}
+
+	file.write(reinterpret_cast<const char*>(data.data()), data.size());
+
+	file.close();
+
+
+
+}
+
 
 void ProjectManager::Compile() {
+
+	if (processor->GetModeProject() != ModeProject::USER) {
+
+		static const ImVec4 color_RED{ 0.45f,0.2f,0.2f,1.0f };
+		static const ImVec4 color_WHITE{ 1.f,1.f,1.f,1.f };
+
+		string text = u8"Нельзя компилировать бинарные файлы, ведь они уже откомпилированны...";
+
+		notificationManager->AddNottification(Notification(color_RED, 2.f, std::vector<N_Element*>{
+			new N_Message(color_WHITE, text)
+		},
+			nullptr));
+
+		return;
+	}
+
 	TryTranslateCode();
 	widget_MnemocodeViewer->FollowCursorPC();
 }
@@ -345,9 +470,14 @@ void ProjectManager::ReadFile(const std::string& path) {
 	t.open(stringUTF8_to_wstring(path));
 	std::string str((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
 	t.close();
+
+
+
+
 	widget_CodeEditor->GetPtrTextEditor()->SetText(str);
 	widget_CodeEditor->GetPtrTextEditor()->SetLanguageDefinition(TextEditor::LanguageDefinition::I8080());
 	widget_CodeEditor->GetPtrTextEditor()->SetTextNotChanged();
+	
 }
 
 void ProjectManager::TryTranslateCode() {
@@ -366,10 +496,11 @@ void ProjectManager::TryTranslateCode() {
 	translatorOutput = Compiler->Compile(LinesCode);
 
 
+	processor->ActiveFlagStop();
 	emulationThread->SetControlMode(ControlMode::Stop);
 	emulationThread->WaitThread();
 
-	processor->ActiveFlagStop();
+
 	processor->Reset();
 	processor->RemoveAllBreakPoints();
 	processor->EraseMemory();

@@ -260,6 +260,12 @@
     <ClCompile Include="I8080\Utils\UTF8.cpp">
       <Filter>I8080\Utils\Text</Filter>
     </ClCompile>
+    <ClCompile Include="I8080\Emulator\Port\I8080.Port.ConsoleOutput.cpp">
+      <Filter>I8080\Emulator\Port\ConsoleOutput</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\DataStructures\ModeProject.cpp">
+      <Filter>I8080\DataStructures</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Third-Person\IconFontCppHeaders\IconsFontAwesome6.h">
@@ -589,6 +595,12 @@
     <ClInclude Include="I8080\Utils\UTF8.h">
       <Filter>I8080\Utils\Text</Filter>
     </ClInclude>
+    <ClInclude Include="I8080\Emulator\Port\I8080.Port.ConsoleOutput.h">
+      <Filter>I8080\Emulator\Port\ConsoleOutput</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\DataStructures\ModeProject.h">
+      <Filter>I8080\DataStructures</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Third-Party">
@@ -797,6 +809,9 @@
     </Filter>
     <Filter Include="I8080\UI\Widgets\MemoryMonoPixelScreen">
       <UniqueIdentifier>{c1096c14-603d-445b-b5b3-f7866b9a2e50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\Emulator\Port\ConsoleOutput">
+      <UniqueIdentifier>{d3682c98-b11c-49f0-8751-013b78bcc846}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

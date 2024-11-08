@@ -3,8 +3,12 @@
 
 #include "Emulator\I8080.h"
 #include "UI\Widget\I8080.Widget.h"
+#include "Emulator/Port/I8080.Port.ConsoleOutput.h"
 #include "Utils/ImGui.Utils.h"
 #include <string>
+#include <vector>
+
+
 
 
 class Widget_Output0x02: public I8080_Widget
@@ -24,7 +28,6 @@ private:
 	bool Dec_enable = true;
 	bool Bin_enable = false;
 	bool Char_enable = false;
-
 
 
 	I8080* processor;

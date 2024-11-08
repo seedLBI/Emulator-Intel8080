@@ -19,7 +19,7 @@ TypesCommands GetTypeCommand(std::string command) {
     const std::vector<std::string>  MovingData_Command = { "mov","mvi","lxi","lda","lhld","sta","shld","ldax","stax","xchg" };
     const std::vector<std::string>  Adding_Command = { "add","adi","adc","aci","inr","inx","dad" };
     const std::vector<std::string>  Subtracting_Command = { "sub","sui","sbb","sbi","dcr","dcx" };
-    const std::vector<std::string>  Logic_Command = { "ana","ani","ora","ori","xra","xri","rlc","rrc","ral","rar","cma","stc","cmc" };
+    const std::vector<std::string>  Logic_Command = { "ana","ani","ora","ori","xra","xri","rlc","rrc","ral","rar","cma","stc","cmc","daa"};
     const std::vector<std::string>  Compare_Command = { "cmp","cpi" };
     const std::vector<std::string>  Calls_Command = { "call","cnz","cz","cnc","cc","cpo","cpe","cp","cm","rst" };
     const std::vector<std::string>  Returns_Command = { "ret","rnz","rz","rnc","rc","rpo","rpe","rp","rm" };

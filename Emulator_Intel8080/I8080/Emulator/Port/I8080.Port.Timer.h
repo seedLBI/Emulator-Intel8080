@@ -6,6 +6,7 @@
 
 #include "Config_Compilier.h"
 
+#include "Emulator/Port/I8080.Port.h"
 #include <vector>
 #include <iostream>
 #include <chrono>
@@ -13,9 +14,9 @@
 class I8080_Timer : public I8080_Port {
 public:
 	I8080_Timer();
-	void virtual SetInput(uint8_t value) override;
-	uint8_t virtual GetOutput() override;
-	void virtual Reset() override;
+	void SetInput(uint8_t value) override;
+	uint8_t GetOutput() override;
+	void Reset() override;
 	uint8_t GetPort();
 
 private:

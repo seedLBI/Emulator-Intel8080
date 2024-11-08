@@ -28,15 +28,14 @@ void Widget_MnemocodeViewer::Draw() {
 		if (ImGui::BeginTable("MnemoCode", 4, flags))
 		{
 
-			//ImGui::TableSetupScrollFreeze(0, 0);
 			ImGui::TableSetupColumn(u8"Адрес", ImGuiTableColumnFlags_WidthFixed);
 			ImGui::TableSetupColumn(u8"Код", ImGuiTableColumnFlags_WidthFixed);
 			ImGui::TableSetupColumn(u8"Строка кода", ImGuiTableColumnFlags_WidthStretch);
 			ImGui::TableSetupColumn(u8"Маркер", ImGuiTableColumnFlags_WidthStretch);
-			ImGui::TableSetupScrollFreeze(0, 1); // Make row always visible
-			ImGui::TableSetupScrollFreeze(1, 1); // Make row always visible
-			ImGui::TableSetupScrollFreeze(2, 1); // Make row always visible
-			ImGui::TableSetupScrollFreeze(3, 1); // Make row always visible
+			ImGui::TableSetupScrollFreeze(0, 1);
+			ImGui::TableSetupScrollFreeze(1, 1);
+			ImGui::TableSetupScrollFreeze(2, 1);
+			ImGui::TableSetupScrollFreeze(3, 1);
 
 			ImGui::TableHeadersRow();
 

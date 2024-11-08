@@ -15,14 +15,13 @@ struct CurrentState {
 		* L = nullptr;
 
 	uint16_t* PC = nullptr, // programm counter
-		* SP = nullptr; // index register
+		    * SP = nullptr; // index register
 
 	bool* Sign = nullptr, // flags
 		* Zero = nullptr,
 		* Paruty = nullptr,
-		* Carry = nullptr;
-
-	bool* AC = nullptr;
+		* Carry = nullptr,
+		* AuxiliaryCarry = nullptr;
 
 	uint64_t* CountTicks = nullptr;
 	uint64_t* CountInstruction = nullptr;
@@ -40,8 +39,9 @@ struct CurrentStateNotPointer {
 	bool Sign = false, // flags
 		Zero = false,
 		Paruty = false,
-		Carry = false;
-	bool AC = false;
+		Carry = false,
+		AuxiliaryCarry = false;
+
 	CurrentStateNotPointer() {
 
 	}
@@ -64,7 +64,7 @@ struct CurrentStateNotPointer {
 			Carry = *cs.Carry;
 			Paruty = *cs.Paruty;
 			Zero = *cs.Zero;
-			AC = *cs.AC;
+			AuxiliaryCarry = *cs.AuxiliaryCarry;
 		}
 		else {
 			A = 0;
@@ -78,7 +78,7 @@ struct CurrentStateNotPointer {
 			Carry = 0;
 			Paruty = 0;
 			Zero = 0;
-			AC = 0;
+			AuxiliaryCarry = 0;
 		}
 	}
 

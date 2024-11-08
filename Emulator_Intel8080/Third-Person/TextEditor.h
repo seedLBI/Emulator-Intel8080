@@ -11,6 +11,7 @@
 #include "algorithm"
 
 #include <iostream>
+#include "SaveSystem/SaveSystem.h"
 #include "OpenglWindow/OpenglWindow.h"
 #include "imgui.h"
 #include "imgui_internal.h"
@@ -20,7 +21,7 @@
 #include "Utils/UTF8.h"
 
 
-class TextEditor
+class TextEditor : public SaveSystem
 {
 private:
 
@@ -49,6 +50,12 @@ private:
 		Reset,
 		Set
 	};
+	enum ENUM_TicksMean {
+		Condition,
+		M_Used,
+		Always
+	};
+
 	struct FlagsList {
 		ENUM_FlagsState Sign;
 		ENUM_FlagsState Zero;
@@ -112,11 +119,21 @@ private:
 	};
 
 	const std::vector<std::string> info_flagsStatus = {
-		u8"Не учавствует",
-		u8"Учавствует",
+		u8"Не изменяется",
+		u8"Изменяется",
 		u8"Устанавливается 0",
 		u8"Устанавливается 1",
 	};
+
+	std::string Get_info_ticks_mean(std::vector<int> ticks, ENUM_TicksMean mean) {
+		if (mean == ENUM_TicksMean::Condition)
+			return std::to_string(ticks[0]) + u8" - Выполняется условие.\n" + std::to_string(ticks[1]) + u8" - Иначе.";
+		else if (mean == ENUM_TicksMean::M_Used)
+			return std::to_string(ticks[0]) + u8" - Используется регистр M.\n" + std::to_string(ticks[1]) + u8" - Иначе.";
+		else if (mean == ENUM_TicksMean::Always)
+			return std::to_string(ticks[0]) + u8" - Всегда.";
+	}
+
 
 	ArgumentsArray info_arguments;
 	OpcodesArray info_opcode;
@@ -236,13 +253,14 @@ public:
 		}
 	};
 
-	struct Identifier
-	{
+	struct Identifier {
 		Coordinates mLocation;
 		std::string mDeclaration;
-		std::vector<int> mArguments;
+		std::string mPseudoCode;
+		std::vector<int> mArguments; //asdasdasdas
 		std::vector<int> mBytes;
 		std::vector<int> mTicks;
+		ENUM_TicksMean mTicksMean;
 		FlagsList mFlags;
 	};
 
@@ -318,7 +336,6 @@ public:
 	void SetBreakpoints(const Breakpoints& aMarkers) { mBreakpoints = aMarkers; }
 
 
-
 	void Render(const char* aTitle, const ImVec2& aSize = ImVec2(), bool aBorder = false);
 	void SetText(const std::string& aText);
 	std::string GetText() const;
@@ -392,6 +409,16 @@ public:
 	static const Palette& GetDarkPalette();
 	static const Palette& GetLightPalette();
 	static const Palette& GetRetroBluePalette();
+
+
+
+
+	void DrawSetting();
+
+	std::string Save() override;
+	void Load(const std::string& Data) override;
+
+	bool Flag_EnableAutoTab = true;
 
 private:
 	typedef std::vector<std::pair<std::regex, PaletteIndex>> RegexList;
@@ -478,6 +505,9 @@ private:
 	void HandleMouseInputs_Step2Again();
 	bool SetAgain_Step2 = false;
 	float SetAgain_LineNo = 0;
+
+
+
 
 	void Render();
 
@@ -667,12 +697,6 @@ private:
 		}
 
 
-
-
-
-
-
-
 		const float TimeAttention_Default = 0.3f;
 	};
 
@@ -684,15 +708,23 @@ private:
 		if (_DataFinder.FindedWords.empty())
 			return;
 
+
+		ImGuiWindow* window = ImGui::GetCurrentWindow();
+		float PrevScale = window->FontWindowScale;
+
+		ImGui::SetWindowFontScale(mVirtualFontSize);
+
 		const float fontSize = ImGui::GetFont()->CalcTextSizeA(ImGui::GetFontSize() * mVirtualFontSize, FLT_MAX, -1.0f, "#", nullptr, nullptr).x;
-		mCharAdvance = ImVec2(fontSize, ImGui::GetTextLineHeightWithSpacing() * mLineSpacing);
+		ImVec2 mCharAdvance = ImVec2(fontSize, ImGui::GetTextLineHeightWithSpacing() * mLineSpacing);
 
-		int line = _DataFinder.FindedWords[_DataFinder.index_current].Find_Start.mLine - CountLines_In_Window / 2;
+		float lineee = _DataFinder.FindedWords[_DataFinder.index_current].Find_Start.mLine - CountLines_In_Window / 2;
 
-		if (line < 0)
-			line = 0;
+		if (lineee < 0)
+			lineee = 0;
 
-		ImGui::SetScrollY(mCharAdvance.y * line);
+		ImGui::SetScrollY(mCharAdvance.y * lineee);
+
+		ImGui::SetWindowFontScale(PrevScale);
 	}
 
 

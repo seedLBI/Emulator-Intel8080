@@ -28,19 +28,21 @@ void Widget_RegisterFlagsInfo::Draw() {
 			ImGui::TableHeadersRow();
 
 
-			const string name_flags[4] = { "Zero","Carry","Sign","Paruty" };
-			unsigned int values_flag[4] = {
+			const string name_flags[5] = { "Zero","Carry","Sign","Paruty","Aux. Carry"};
+			unsigned int values_flag[5] = {
 				*current_state.Zero,
 				*current_state.Carry,
 				*current_state.Sign,
-				*current_state.Paruty };
-			unsigned int values_last_flag[4] = {
+				*current_state.Paruty,
+				*current_state.AuxiliaryCarry };
+			unsigned int values_last_flag[5] = {
 				prev_state.Zero,
 				prev_state.Carry,
 				prev_state.Sign,
-				prev_state.Paruty };
+				prev_state.Paruty,
+				prev_state.AuxiliaryCarry};
 
-			const string name_registers[9] = { "A","B","C","D","E","H","L","M","PSW" };
+			const string name_registers[9] = { "A","B","C","D","E","H","L","M","F" };
 			unsigned int values[9] = {
 				*current_state.A,
 				*current_state.B,
@@ -50,8 +52,7 @@ void Widget_RegisterFlagsInfo::Draw() {
 				*current_state.H,
 				*current_state.L,
 				processor->GetMemory()[*current_state.H * 256 + *current_state.L],
-				(0x02 + *current_state.Carry + *current_state.Paruty * 4 + *current_state.AC * 16 + *current_state.Zero * 64 + *current_state.Sign * 128)
-
+				(0x02 + *current_state.Carry + *current_state.Paruty * 4 + *current_state.AuxiliaryCarry * 16 + *current_state.Zero * 64 + *current_state.Sign * 128)
 			};
 			unsigned int values_last[9] = {
 				prev_state.A,
@@ -62,7 +63,7 @@ void Widget_RegisterFlagsInfo::Draw() {
 				prev_state.H,
 				prev_state.L,
 				processor->GetMemory()[prev_state.H * 256 + prev_state.L],
-				(0x02 + prev_state.Carry + prev_state.Paruty * 4 + prev_state.AC * 16 + prev_state.Zero * 64 + prev_state.Sign * 128)
+				(0x02 + prev_state.Carry + prev_state.Paruty * 4 + prev_state.AuxiliaryCarry * 16 + prev_state.Zero * 64 + prev_state.Sign * 128)
 			};
 
 
@@ -108,11 +109,10 @@ void Widget_RegisterFlagsInfo::Draw() {
 			TextCenteredOnLine(std::to_string(*current_state.SP).c_str(), 1, 9);
 
 
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < 5; i++) {
 				ImGui::TableNextRow();
 
-				if (values_flag[i] != values_last_flag[i])
-				{
+				if (values_flag[i] != values_last_flag[i]){
 					ImU32 row_bg_color = ImGui::GetColorU32(ImVec4(1.f, 0.7f, 0.3f, 0.7f)); // Flat or Gradient?
 					ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, row_bg_color);
 				}

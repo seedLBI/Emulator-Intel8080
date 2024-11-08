@@ -30,13 +30,18 @@ I8080_UserInterface::I8080_UserInterface(GLFWwindow* window) {
 		Compiler);
 
 
-	settings = new Setting(font_manager, window_manager, WorkspaceManager, notificationManager, emulationThread, keyCombination_handler, projectManager);
+
+
+	InitWidgets();
+
+	settings = new Setting(font_manager, window_manager, WorkspaceManager, notificationManager, emulationThread, keyCombination_handler, projectManager, widget_CodeEditor);
+
+
 
 	InitSaveManager();
-	InitWidgets();
 	InitKeyCombinationHandler();
 
-
+	
 	projectManager->InitWidgets(
 		widget_MnemocodeViewer,
 		widget_RegisterFlagsInfo,
@@ -208,14 +213,14 @@ void I8080_UserInterface::DrawMainMenu() {
 			if (ImGui::MenuItem((string(ICON_FA_FOLDER_OPEN) + u8" Открыть").c_str(), keyCombination_handler->GetStrCombinationByName(u8"Открыть файл").c_str())) {
 				projectManager->OpenFile();
 			}
-			if (ImGui::MenuItem((string(ICON_FA_FOLDER_OPEN) + u8" Открыть бинарный файл").c_str())) {
-				projectManager->OpenBinaryFile();
-			}
 			if (ImGui::MenuItem((string(ICON_FA_BOX_ARCHIVE) + u8" Сохранить").c_str(), keyCombination_handler->GetStrCombinationByName(u8"Сохранить").c_str())) {
 				projectManager->SaveFile();
 			}
 			if (ImGui::MenuItem((string(ICON_FA_FILE_EXPORT) + u8" Сохранить как...").c_str(), keyCombination_handler->GetStrCombinationByName(u8"Сохранить как").c_str())) {
 				projectManager->SaveFileAs();
+			}
+			if (ImGui::MenuItem((string(ICON_FA_FOLDER_OPEN) + u8" Сохранить в бинарный файл").c_str())) {
+				projectManager->SaveFileIntoBinary();
 			}
 			if (ImGui::BeginMenu(string(string(ICON_FA_COPY) + u8" Последние проекты").c_str())) {
 				if (lastPathManager->Draw()) {
@@ -360,6 +365,10 @@ void I8080_UserInterface::DrawMainMenu() {
 			Emulator_Next_step();
 
 
+		ImGui::Text(("  " + ModeProject_To_Str(processor->GetModeProject())).c_str());
+		if (ImGui::IsItemHovered())
+			ImGui::SetTooltip(u8"Режим работы с загруженным файлом:\n\n* USER - пользователю доступно всё.\n\n* BIN - отключен редактор и компиляция.\n\n* COM - отключен редактор и компиляция.\nPC установливается в 0x0100 и внедряется несколько\nбайт в начало программы для реализации функций вывода CP/M.");
+
 		{
 			wind = ImGui::GetCurrentWindow();
 
@@ -461,6 +470,7 @@ void I8080_UserInterface::InitKeyCombinationHandler() {
 
 	keyCombination_handler->AddCombination(u8"Сохранить", KeyCombination({ GLFW_KEY_LEFT_CONTROL, GLFW_KEY_S }, std::bind(&ProjectManager::SaveFile, projectManager)));
 	keyCombination_handler->AddCombination(u8"Сохранить как", KeyCombination({}, std::bind(&ProjectManager::SaveFileAs, projectManager)));
+	keyCombination_handler->AddCombination(u8"Сохранить в бинарный файл", KeyCombination({}, std::bind(&ProjectManager::SaveFileIntoBinary, projectManager)));
 
 	keyCombination_handler->AddCombination(u8"Новый файл", KeyCombination({}, std::bind(&ProjectManager::NewFile, projectManager)));
 	keyCombination_handler->AddCombination(u8"Открыть файл", KeyCombination({}, std::bind(&ProjectManager::OpenFile, projectManager)));

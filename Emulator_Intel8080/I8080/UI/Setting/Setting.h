@@ -11,13 +11,14 @@
 #include "UI\KeyCombination\KeyCombinationHandler.h"
 #include "Notification/NotificationManager.h"
 #include "Emulator/EmulationThread/EmulationThread.h"
+#include "UI/Widgets/I8080.UI.CodeEditor.h"
 #include "Utils\TextUtils.h"
 
 
 class Setting : public SaveSystem
 {
 public:
-	Setting(FontManager* font, WindowManager* window, I8080_WorkspaceManager* WorkspaceManager,NotificationManager* notification, EmulationThread* emulation,KeyCombinationHandler* keyCombinationHandler, ProjectManager* projectManager);
+	Setting(FontManager* font, WindowManager* window, I8080_WorkspaceManager* WorkspaceManager,NotificationManager* notification, EmulationThread* emulation,KeyCombinationHandler* keyCombinationHandler, ProjectManager* projectManager, Widget_CodeEditor* w_codeEditor);
 	~Setting();
 
 
@@ -39,6 +40,7 @@ private:
 	EmulationThread* emulation = nullptr;
 	KeyCombinationHandler* keyCombinationHandler = nullptr;
 	ProjectManager* projectManager = nullptr;
+	Widget_CodeEditor* w_codeEditor = nullptr;
 
 	bool Popup_Open = false;
 

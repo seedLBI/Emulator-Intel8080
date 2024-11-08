@@ -1,10 +1,9 @@
 #include "I8080.h"
 
-
-
-
-
-
+I8080::I8080() {
+	Init_External_Peripherals();
+	InitInstructions();
+}
 
 void I8080::Init_External_Peripherals() {
 #ifdef WITH_DEBUG_OUTPUT
@@ -13,15 +12,10 @@ void I8080::Init_External_Peripherals() {
 
 	External_Peripherals.resize(255);
 
-	for (int i = 0x00; i < 0x05; i++)
-		External_Peripherals[i] = new I8080_Port(i);
-	for (int i = 0x0a; i < 0x10; i++)
-		External_Peripherals[i] = new I8080_Port(i);
-	for (int i = 0x11; i < 0x16; i++)
-		External_Peripherals[i] = new I8080_Port(i);
-	for (int i = 0x17; i < 0xff; i++)
+	for (int i = 0x00; i < 0xff; i++)
 		External_Peripherals[i] = new I8080_Port(i);
 
+	External_Peripherals[ 0x02 ] = new I8080_ConsoleOutput();
 	External_Peripherals[ 0x05 ] = new I8080_PixelScreen();
 	External_Peripherals[ 0x06 ] = new I8080_PixelScreenTwoBuffers();
 	External_Peripherals[ 0x07 ] = new I8080_SymbolScreen();
@@ -33,11 +27,11 @@ void I8080::Init_External_Peripherals() {
 }
 
 inline void I8080::SetSP_nextAdress(const uint16_t& next_adress) {
-	Memory[SP] = next_adress & 0xff;
-	Memory[SP + 1] = next_adress >> 8;
+	Memory[SP]     = (next_adress & 0x00ff);	  // next.low
+	Memory[SP + 1] = (next_adress & 0xff00) >> 8; // next.high
 }
 
-inline void I8080::SetPC(const int& adress) {
+inline void I8080::SetPC(const uint16_t& adress) {
 	Viseted_Memory[adress] = true;
 	PC = adress;
 }
@@ -48,10 +42,9 @@ inline void I8080::SetVisitedMemoryFromPC(const int& count) {
 	}
 }
 
-inline void I8080::IncrementPC(const int& count) {
-	for (int i = PC; i < (PC + count); ++i) {
+inline void I8080::IncrementPC(const uint8_t& count) {
+	for (int i = PC; i < (PC + count); ++i)
 		Viseted_Memory[i] = true;
-	}
 	PC += count;
 }
 
@@ -68,17 +61,99 @@ void I8080::EraseMemory() {
 void I8080::LoadMemory(const std::vector<OpcodeAdressed>& array) {
 	EraseMemory();
 
-	for (unsigned int i = 0; i < array.size(); i++) {
+	project_DATA.clear();
+
+	for (unsigned int i = 0; i < array.size(); i++)
 		Memory[array[i].adress_h * 256 + array[i].adress_l] = array[i].opcode;
-	}
+
+	SetModeProject(ModeProject::USER);
 }
-void I8080::LoadMemory(const std::vector<uint8_t>& array) {
+void I8080::LoadMemoryFromBinary(const std::vector<uint8_t>& array) {
 	EraseMemory();
 
-	for (unsigned int i = 0; i < array.size(); i++) {
+	project_DATA = array;
+
+	for (unsigned int i = 0; i < array.size(); i++)
 		Memory[i] = array[i];
+
+	PC = 0x0000;
+
+	SetModeProject(ModeProject::BIN);
+
+}
+void I8080::LoadMemoryFromCOM(const std::vector<uint8_t>& array) {
+	EraseMemory();
+
+	project_DATA = array;
+
+
+	for (unsigned int i = 0; i < array.size(); i++) {
+		if (i + 0x0100 > 0xffff)
+			break;
+		Memory[i + 0x0100] = array[i];
+	}
+
+	// inject "out 0" at 0x0000 (signal to stop the test)
+	Memory[0x0000] = 0xD3;
+	Memory[0x0001] = 0x00;
+
+	// inject "out 1" at 0x0005 (signal to output some characters)
+	Memory[0x0005] = 0xD3;
+	Memory[0x0006] = 0x01;
+	Memory[0x0007] = 0xC9;
+
+	PC = 0x0100;
+
+	SetModeProject(ModeProject::COM);
+}
+
+void I8080::ReloadProjectData() {
+	if (_ModeProject == ModeProject::COM){
+		EraseMemory();
+
+		for (unsigned int i = 0; i < project_DATA.size(); i++) {
+			if (i + 0x0100 > 0xffff)
+				break;
+			Memory[i + 0x0100] = project_DATA[i];
+		}
+
+		// inject "out 0" at 0x0000 (signal to stop the test)
+		Memory[0x0000] = 0xD3;
+		Memory[0x0001] = 0x00;
+
+		// inject "out 1" at 0x0005 (signal to output some characters)
+		Memory[0x0005] = 0xD3;
+		Memory[0x0006] = 0x01;
+		Memory[0x0007] = 0xC9;
+
+		PC = 0x0100;
+	}
+	else if (_ModeProject == ModeProject::BIN) {
+		EraseMemory();
+
+		for (unsigned int i = 0; i < project_DATA.size(); i++)
+			Memory[i] = project_DATA[i];
+
+		PC = 0;
 	}
 }
+
+void I8080::SetModeProject(const ModeProject& mode) {
+	if (mode != _ModeProject){
+
+		if (mode == ModeProject::COM)
+			instructions[0xD3] = &I8080::_OUTPUT_COM;
+		else
+			instructions[0xD3] = &I8080::_OUTPUT;
+
+		_ModeProject = mode;
+	}
+}
+
+ModeProject I8080::GetModeProject() {
+	return _ModeProject;
+}
+
 
 void I8080::InitPointer2State(CurrentState& cs) {
 	cs.A = &A;
@@ -96,7 +171,7 @@ void I8080::InitPointer2State(CurrentState& cs) {
 	cs.Paruty = &Paruty;
 	cs.Zero = &Zero;
 	cs.Sign = &Sign;
-	cs.AC = &AC;
+	cs.AuxiliaryCarry = &AuxiliaryCarry;
 }
 
 void I8080::NextStep() {
@@ -105,7 +180,14 @@ void I8080::NextStep() {
 }
 
 void I8080::Reset() {
-	SetPC(0);
+
+	ReloadProjectData();
+
+	if (_ModeProject == ModeProject::COM)
+		SetPC(0x0100);
+	else
+		SetPC(0);
+
 	SP = 0;
 	A = 0;
 	B = 0;
@@ -118,13 +200,12 @@ void I8080::Reset() {
 	Sign = false;
 	Paruty = false;
 	Zero = false;
+	AuxiliaryCarry = false;
+	InterruptEnabled = false;
 
 	Flag_Stop = false;
 	Flag_Waiting_Input = false;
 	Flag_GetAnswer = false;
-
-	Output.clear();
-
 
 	CountTicks = 0;
 	CountInstruction = 0;
@@ -134,36 +215,33 @@ void I8080::Reset() {
 
 }
 
-bool * I8080::IsStop() {
+bool* I8080::IsStop() {
 	return &Flag_Stop;
 }
-void I8080::ResetFlagStop() {
+void  I8080::ResetFlagStop() {
 	Flag_Stop = false;
 }
-void I8080::ActiveFlagStop() {
+void  I8080::ActiveFlagStop() {
 	Flag_Stop = true;
 }
-bool I8080::IsWaitingPortInput() {
+bool  I8080::IsWaitingPortInput() {
 	return Flag_Waiting_Input;
 }
-void I8080::InputAnswer2Port(const uint8_t& Answer) {
+void  I8080::InputAnswer2Port(const uint8_t& Answer) {
 	Flag_GetAnswer = true;
 	Flag_Waiting_Input = false;
 
 	Input = Answer;
 }
-std::deque<unsigned int> I8080::GetOutputConsole() {
-	return Output;
-}
 bool* I8080::GetBreakpointsInMemory() {
 	return BreakPoints;
 }
-void I8080::ToggleBreakPointPosition(const unsigned int& Position) {
+void  I8080::ToggleBreakPointPosition(const uint16_t& Position) {
 	BreakPoints[Position] = !BreakPoints[Position];
 }
 
 
-void I8080::SetBreakPointPosition(const unsigned int& Position, const bool& state) {
+void I8080::SetBreakPointPosition(const uint16_t& Position, const bool& state) {
 	BreakPoints[Position] = state;
 }
 void I8080::RemoveAllBreakPoints() {
@@ -182,11 +260,11 @@ uint64_t I8080::GetCountInstruction() {
 	return CountInstruction;
 }
 
-unsigned int I8080::GetProgrammCounter() {
+uint16_t I8080::GetProgrammCounter() {
 	return PC;
 }
 
-void I8080::SetProgrammCounter(const unsigned int& index) {
+void I8080::SetProgrammCounter(const uint16_t& index) {
 	SetPC(index);
 	Flag_Stop = false;
 }
@@ -206,14 +284,60 @@ bool* I8080::GetVisetedMemory() {
 
 
 
+void I8080::_DAA() {
+	CountTicks += 4;
+
+	bool c = Carry;
+
+	uint8_t lsb = A & 0b00001111;
+	uint8_t msb = A >> 4;
+
+	uint8_t adjustment = 0;
+
+	if (lsb > 9 || AuxiliaryCarry) {
+		adjustment += 0x06;
+	}
+
+	if (msb > 9 || Carry || (msb >= 9 && lsb > 9)) {
+		adjustment += 0x60;
+		c = true;
+	}
+
+
+	AuxiliaryCarry = ((A & 0b00001111) + (adjustment & 0b00001111)) > 0b00001111;
+	Carry = (255 - A < adjustment);
+	
+
+	A += adjustment;
+
+	_SetFlagSign(A);
+	_SetFlagParuty(A);
+	_SetFlagZero(A);
+
+	Carry = c;
+
+	IncrementPC();
+}
+
+void I8080::_EI() {
+	CountTicks += 4;
+	InterruptEnabled = true;
+	IncrementPC();
+}
+void I8080::_DI() {
+	CountTicks += 4;
+	InterruptEnabled = false;
+	IncrementPC();
+}
 
 
 
 void I8080::_XRA(const uint8_t& value) {
 	CountTicks += 4;
 
-	AC = 0;
 	A = A ^ value;
+
+	AuxiliaryCarry = 0;
 	Carry = 0;
 	_SetFlagSign(A);
 	_SetFlagParuty(A);
@@ -256,10 +380,9 @@ void I8080::_XRI_imm8() {
 void I8080::_SUB(const uint8_t& value) {
 	CountTicks += 4;
 
-
-	AC = ((A - value) ^ A ^ value) & 16;
-
+	AuxiliaryCarry = (int16_t(A & 0b00001111) - int16_t(value & 0b00001111)) >= 0;
 	Carry = (A < value);
+
 	A -= value;
 	_SetFlagSign(A);
 	_SetFlagParuty(A);
@@ -307,7 +430,7 @@ void I8080::_RLC() {
 }
 void I8080::_RAL() {
 	CountTicks += 4;
-	unsigned char last_carry = Carry;
+	uint8_t last_carry = Carry;
 	Carry = A >> 7;
 	A = ((A << 1) + (last_carry));
 	IncrementPC();
@@ -330,11 +453,14 @@ void I8080::_RAR() {
 void I8080::_SBB(const uint8_t& value) {
 	CountTicks += 4;
 
-	AC = ((A - value - Carry) ^ A ^ value) & 16;
-
 	bool C_old = Carry;
-	Carry = (A < value + Carry);
-	A -= value + C_old;
+
+	AuxiliaryCarry = (int16_t(A&0b00001111) - int16_t(value&0b00001111) - Carry) >= 0;
+	Carry = (uint16_t(A) < uint16_t(value) + uint16_t(Carry));
+
+	A -= value;
+	A -= C_old;
+
 	_SetFlagSign(A);
 	_SetFlagParuty(A);
 	_SetFlagZero(A);
@@ -408,7 +534,10 @@ void I8080::_RST(const uint8_t& N) {
 	SP = SP - 2;
 
 	SetSP_nextAdress(PC + 1);
+	SetVisitedMemoryFromPC(1);
+
 	SetPC(uint16_t(N) * 8);
+
 }
 
 
@@ -437,6 +566,7 @@ void I8080::_RST_7() {
 	_RST(7);
 }
 
+
 void I8080::_RET() {
 	CountTicks += 10;
 
@@ -456,6 +586,7 @@ void I8080::_RNZ() {
 		IncrementPC();
 	}
 }
+
 void I8080::_RNC() {
 	if (Carry == 0) {
 		CountTicks += 1;
@@ -553,15 +684,23 @@ void I8080::_PUSH_H() {
 }
 void I8080::_PUSH_PSW() {
 	CountTicks += 11;
+
+	uint8_t Flags = GetRegisterFlags();
+
 	SP--;
 	Memory[SP] = A;
 	SP--;
-	Memory[SP] = 0x02 + Carry + Paruty * 4 + AC * 16 + Zero * 64 + Sign * 128;
+	Memory[SP] = Flags;
+
 	IncrementPC();
 }
 
 void I8080::_POP_B() {
 	CountTicks += 10;
+
+	
+
+
 	C = Memory[SP];
 	SP++;
 	B = Memory[SP];
@@ -586,11 +725,15 @@ void I8080::_POP_H() {
 }
 void I8080::_POP_PSW() {
 	CountTicks += 10;
-	Carry = (Memory[SP] & 0b00000001) == 1;
-	Paruty = (Memory[SP] & 0b00000100) == 4;
-	AC = (Memory[SP] & 0b00010000) == 16;
-	Zero = (Memory[SP] & 0b01000000) == 64;
-	Sign = (Memory[SP] & 0b10000000) == 128;
+
+	uint8_t Flags = Memory[SP];
+
+	Sign = (Flags >> 7) & 1;
+	Zero = (Flags >> 6) & 1;
+	AuxiliaryCarry = (Flags >> 4) & 1;
+	Paruty = (Flags >> 2) & 1;
+	Carry = (Flags >> 0) & 1;
+
 	SP++;
 	A = Memory[SP];
 	SP++;
@@ -644,22 +787,34 @@ void I8080::_INPUT() {
 }
 void I8080::_OUTPUT() {
 	CountTicks += 10;
-	
-	if (Memory[PC + 1] == 0x02) {
-		Output.push_back(A);
+	External_Peripherals[Memory[PC + 1]]->SetInput(A);
+	IncrementPC(2);
+}
 
-		if (Output.size() > 1024) {
-			Output.pop_front();
+void I8080::_OUTPUT_COM() {
+	CountTicks += 10;
+
+	if (Memory[PC + 1] == 0) {
+		Flag_Stop = true;
+	}
+	else if (Memory[PC + 1] == 1) {
+		uint8_t operation = C;
+
+		if (operation == 2) {
+			External_Peripherals[0x02]->SetInput(E);
+		}
+		else if (operation == 9) {
+			uint16_t addr = (D << 8) | E;
+			do {
+				External_Peripherals[0x02]->SetInput(Memory[addr++]);
+			} while (Memory[addr] != '$');
 		}
 	}
-	else {
-		External_Peripherals[Memory[PC + 1]]->SetInput(A);
-	}
-	
 
 
 	IncrementPC(2);
 }
+
 
 void I8080::_XTHL() {
 	CountTicks += 18;
@@ -680,10 +835,8 @@ void I8080::_PCHL() {
 }
 void I8080::_SPHL() {
 	CountTicks += 5;
-	SP--;
-	Memory[SP] = H / 256;
-	SP--;
-	Memory[SP] = L % 256;
+
+	SP = H * 256 + L;
 
 	IncrementPC();
 }
@@ -703,8 +856,10 @@ void I8080::_HLT() {
 inline void I8080::_ORA(const uint8_t& value) {
 	CountTicks += 4;
 
-	AC = 0;
+
 	A = A | value;
+
+	AuxiliaryCarry = 0;
 	Carry = 0;
 	_SetFlagSign(A);
 	_SetFlagParuty(A);
@@ -1109,7 +1264,7 @@ void I8080::_JC() {
 	}
 }
 void I8080::_JPE() {
-	if (Carry == 1)
+	if (Paruty == 1)
 		_JMP();
 	else {
 		CountTicks += 10;
@@ -1141,7 +1296,8 @@ void I8080::_INCREMENT(uint8_t& value) {
 	_SetFlagParuty(value);
 	_SetFlagZero(value);
 
-	AC = ((value & 16) == 0);
+	AuxiliaryCarry = ((value & 0b00001111) == 0);
+
 
 	IncrementPC();
 }
@@ -1195,14 +1351,14 @@ inline void I8080::_DECREMENT(uint8_t& value) {
 	_SetFlagParuty(value);
 	_SetFlagZero(value);
 
-	AC = ((value & 16) == 16);
+	AuxiliaryCarry = ((value & 0b00001111) != 0b00001111);
 
 	IncrementPC();
 }
 
 inline void I8080::_DCX(uint8_t& pair_element1, uint8_t& pair_element2) {
 	CountTicks += 5;
-	unsigned short first = pair_element1 * 256 + pair_element2;
+	uint32_t first = pair_element1 * 256 + pair_element2;
 	first--;
 	pair_element1 = first / 256;
 	pair_element2 = first % 256;
@@ -1247,7 +1403,7 @@ void I8080::_DCX_H() {
 	_DCX(H, L);
 }
 void I8080::_DCX_SP() {
-	unsigned char f = SP / 256, s = SP % 256;
+	uint8_t f = SP / 256, s = SP % 256;
 	_DCX(f, s);
 	SP = f * 256 + s;
 }
@@ -1256,15 +1412,15 @@ void I8080::_DAD(const uint8_t& pair_element1, const uint8_t& pair_element2) {
 	// TODO: переделать...
 	CountTicks += 10;
 
-	unsigned int value = pair_element1 * 256 + pair_element2;
-	unsigned int second = H * 256 + L;
+	uint32_t value = (uint16_t)pair_element1 * 256 + (uint16_t)pair_element2;
+	uint32_t HL =(uint16_t)H * 256 + (uint16_t)L;
 
-	Carry = ((SIZE_MEMORY - 1) - second < value);
+	Carry = ((HL + value) >> 16) & 1;
 
-	second += value;
+	HL += value;
 
-	H = second / 256;
-	L = second % 256;
+	H = HL / 256;
+	L = HL % 256;
 
 	IncrementPC();
 }
@@ -1284,9 +1440,10 @@ void I8080::_DAD_SP() {
 }
 void I8080::_COMPARE(const uint8_t& value) {
 	CountTicks += 4;
-
-	AC = ~(A ^ (A - value) ^ value) & 16;
+	
+	AuxiliaryCarry = ((A & 0b00001111) - (value & 0b00001111)) >= 0;
 	Carry = A < value;
+
 	_SetFlagSign(A - value);
 	_SetFlagParuty(A - value);
 	_SetFlagZero(A - value);
@@ -1333,23 +1490,23 @@ void I8080::_CALL() {
 	SetSP_nextAdress(PC + 3);
 
 	SetVisitedMemoryFromPC(3);
-	SetPC(Memory[PC + 2] * 256 + Memory[PC + 1]);
+	SetPC(Memory[PC + 1] + Memory[PC + 2] * 256);
 }
-
 
 void I8080::_CNZ() {
 	if (Zero == 0)
 		_CALL();
 	else {
-		CountTicks -= 6;
+		CountTicks += 11;
 		IncrementPC(3);
 	}
 }
+
 void I8080::_CNC() {
 	if (Carry == 0)
 		_CALL();
 	else {
-		CountTicks -= 6;
+		CountTicks += 11;
 		IncrementPC(3);
 	}
 }
@@ -1357,7 +1514,7 @@ void I8080::_CPO() {
 	if (Paruty == 0)
 		_CALL();
 	else {
-		CountTicks -= 6;
+		CountTicks += 11;
 		IncrementPC(3);
 	}
 }
@@ -1365,7 +1522,7 @@ void I8080::_CP() {
 	if (Sign == 0)
 		_CALL();
 	else {
-		CountTicks -= 6;
+		CountTicks += 11;
 		IncrementPC(3);
 	}
 }
@@ -1373,7 +1530,7 @@ void I8080::_CZ() {
 	if (Zero == 1)
 		_CALL();
 	else {
-		CountTicks -= 6;
+		CountTicks += 11;
 		IncrementPC(3);
 	}
 }
@@ -1381,7 +1538,7 @@ void I8080::_CC() {
 	if (Carry == 1)
 		_CALL();
 	else {
-		CountTicks -= 6;
+		CountTicks += 11;
 		IncrementPC(3);
 	}
 }
@@ -1389,7 +1546,7 @@ void I8080::_CPE() {
 	if (Paruty == 1)
 		_CALL();
 	else {
-		CountTicks -= 6;
+		CountTicks += 11;
 		IncrementPC(3);
 	}
 }
@@ -1397,7 +1554,7 @@ void I8080::_CM() {
 	if (Sign == 1)
 		_CALL();
 	else {
-		CountTicks -= 6;
+		CountTicks += 11;
 		IncrementPC(3);
 	}
 }
@@ -1405,10 +1562,11 @@ void I8080::_CM() {
 void I8080::_ANA(const uint8_t& value) {
 	CountTicks += 4;
 
-	AC = ((A | value) & 8) != 0;
+	Carry = 0;
+	AuxiliaryCarry = ((A | value) & 0b00001000) != 0;
 
 	A = A & value;
-	Carry = 0;
+
 	_SetFlagSign(A);
 	_SetFlagParuty(A);
 	_SetFlagZero(A);
@@ -1450,9 +1608,8 @@ void I8080::_ANI_imm8() {
 void I8080::_ADD(const uint8_t& value) {
 	CountTicks += 4;
 
-	AC = ((A + value) ^ A ^ value) & 16;
-
-	Carry = (255 - A < value);
+	AuxiliaryCarry = (A&0b00001111) + (value&0b00001111) > 0b00001111;
+	Carry = (uint16_t(A) + uint16_t(value) > 0x00ff);
 
 	A += value;
 	_SetFlagSign(A);
@@ -1498,10 +1655,13 @@ void I8080::_ADI_imm8() {
 void I8080::_ADC(const uint8_t& value) {
 	CountTicks += 4;
 
-	AC = ((A + value + Carry) ^ A ^ value) & 16;
 	bool C_old = Carry;
-	Carry = (255 - A < value + Carry);
-	A += value + C_old;
+	AuxiliaryCarry = ((A & 0b00001111) + (value & 0b00001111) + Carry) > 0b00001111;
+	Carry = uint16_t(A) + uint16_t(value) + Carry > 0x00FF;
+
+	A += value;
+	A += C_old;
+
 	_SetFlagSign(A);
 	_SetFlagParuty(A);
 	_SetFlagZero(A);
@@ -1555,11 +1715,25 @@ inline void I8080::_SetFlagZero(const uint8_t& value) {
 	Zero = (value == 0);
 }
 
+uint8_t I8080::GetRegisterFlags() {
+	uint8_t FlagRegister = 0;
+	FlagRegister |= Sign << 7;
+	FlagRegister |= Zero << 6;
+	FlagRegister |= AuxiliaryCarry << 4;
+	FlagRegister |= Paruty << 2;
+	FlagRegister |= 1 << 1;
+	FlagRegister |= Carry << 0;
+
+	return FlagRegister;
+}
+
 inline void I8080::ALU(const uint8_t& opcode) {
 	(this->*instructions[opcode])();
 }
 
 void I8080::InitInstructions() {
+
+
 #ifdef WITH_DEBUG_OUTPUT
 	cout << "init instructions" << endl;
 #endif
@@ -1567,7 +1741,7 @@ void I8080::InitInstructions() {
 	{
 	  &I8080::_NOP,     &I8080::_LXI_B_imm16,  &I8080::_STAX_B,      &I8080::_INX_B,   &I8080::_INR_B,   &I8080::_DCR_B,   &I8080::_MVI_B_imm8, &I8080::_RLC,     &I8080::_NOP,     &I8080::_DAD_B,   &I8080::_LDAX_B,      &I8080::_DCX_B,   &I8080::_INR_C,   &I8080::_DCR_C,   &I8080::_MVI_C_imm8, &I8080::_RRC,
 	  &I8080::_NOP,     &I8080::_LXI_D_imm16,  &I8080::_STAX_D,      &I8080::_INX_D,   &I8080::_INR_D,   &I8080::_DCR_D,   &I8080::_MVI_D_imm8, &I8080::_RAL,     &I8080::_NOP,     &I8080::_DAD_D,   &I8080::_LDAX_D,      &I8080::_DCX_D,   &I8080::_INR_E,   &I8080::_DCR_E,   &I8080::_MVI_E_imm8, &I8080::_RAR,
-	  &I8080::_NOP,     &I8080::_LXI_H_imm16,  &I8080::_SHLD_addr16, &I8080::_INX_H,   &I8080::_INR_H,   &I8080::_DCR_H,   &I8080::_MVI_H_imm8, &I8080::_NOP,     &I8080::_NOP,     &I8080::_DAD_H,   &I8080::_LHLD_addr16, &I8080::_DCX_H,   &I8080::_INR_L,   &I8080::_DCR_L,   &I8080::_MVI_L_imm8, &I8080::_CMA,
+	  &I8080::_NOP,     &I8080::_LXI_H_imm16,  &I8080::_SHLD_addr16, &I8080::_INX_H,   &I8080::_INR_H,   &I8080::_DCR_H,   &I8080::_MVI_H_imm8, &I8080::_DAA,     &I8080::_NOP,     &I8080::_DAD_H,   &I8080::_LHLD_addr16, &I8080::_DCX_H,   &I8080::_INR_L,   &I8080::_DCR_L,   &I8080::_MVI_L_imm8, &I8080::_CMA,
 	  &I8080::_NOP,     &I8080::_LXI_SP_imm16, &I8080::_STA_addr16,  &I8080::_INX_SP,  &I8080::_INR_M,   &I8080::_DCR_M,   &I8080::_MVI_M_imm8, &I8080::_STC,     &I8080::_NOP,     &I8080::_DAD_SP,  &I8080::_LDA_addr16,  &I8080::_DCX_SP,  &I8080::_INR_A,   &I8080::_DCR_A,   &I8080::_MVI_A_imm8, &I8080::_CMC,
 	  &I8080::_MOV_B_B, &I8080::_MOV_B_C,      &I8080::_MOV_B_D,     &I8080::_MOV_B_E, &I8080::_MOV_B_H, &I8080::_MOV_B_L, &I8080::_MOV_B_M,    &I8080::_MOV_B_A, &I8080::_MOV_C_B, &I8080::_MOV_C_C, &I8080::_MOV_C_D,     &I8080::_MOV_C_E, &I8080::_MOV_C_H, &I8080::_MOV_C_L, &I8080::_MOV_C_M,    &I8080::_MOV_C_A,
 	  &I8080::_MOV_D_B, &I8080::_MOV_D_C,      &I8080::_MOV_D_D,     &I8080::_MOV_D_E, &I8080::_MOV_D_H, &I8080::_MOV_D_L, &I8080::_MOV_D_M,    &I8080::_MOV_D_A, &I8080::_MOV_E_B, &I8080::_MOV_E_C, &I8080::_MOV_E_D,     &I8080::_MOV_E_E, &I8080::_MOV_E_H, &I8080::_MOV_E_L, &I8080::_MOV_E_M,    &I8080::_MOV_E_A,
@@ -1578,9 +1752,9 @@ void I8080::InitInstructions() {
 	  &I8080::_ANA_B,   &I8080::_ANA_C,        &I8080::_ANA_D,       &I8080::_ANA_E,   &I8080::_ANA_H,   &I8080::_ANA_L,   &I8080::_ANA_M,      &I8080::_ANA_A,   &I8080::_XRA_B,   &I8080::_XRA_C,   &I8080::_XRA_D,       &I8080::_XRA_E,   &I8080::_XRA_H,   &I8080::_XRA_L,   &I8080::_XRA_M,      &I8080::_XRA_A,
 	  &I8080::_ORA_B,   &I8080::_ORA_C,        &I8080::_ORA_D,       &I8080::_ORA_E,   &I8080::_ORA_H,   &I8080::_ORA_L,   &I8080::_ORA_M,      &I8080::_ORA_A,   &I8080::_CMP_B,   &I8080::_CMP_C,   &I8080::_CMP_D,       &I8080::_CMP_E,   &I8080::_CMP_H,   &I8080::_CMP_L,   &I8080::_CMP_M,      &I8080::_CMP_A,
 	  &I8080::_RNZ,     &I8080::_POP_B,        &I8080::_JNZ,         &I8080::_JMP,     &I8080::_CNZ,     &I8080::_PUSH_B,  &I8080::_ADI_imm8,   &I8080::_RST_0,   &I8080::_RZ,      &I8080::_RET,     &I8080::_JZ,          &I8080::_JMP,     &I8080::_CZ,      &I8080::_CALL,    &I8080::_ACI_imm8,   &I8080::_RST_1,
-	  &I8080::_RNC,     &I8080::_POP_D,        &I8080::_JNC,         &I8080::_OUTPUT,  &I8080::_CNC,     &I8080::_PUSH_D,  &I8080::_SUI_imm8,   &I8080::_RST_2,   &I8080::_RC,      &I8080::_RET,     &I8080::_JC,          &I8080::_INPUT,   &I8080::_CC,      &I8080::_CALL,     &I8080::_SBI_imm8,   &I8080::_RST_3,
-	  &I8080::_RPO,     &I8080::_POP_H,        &I8080::_JPO,         &I8080::_XTHL,    &I8080::_CPO,     &I8080::_PUSH_H,  &I8080::_ANI_imm8,   &I8080::_RST_4,   &I8080::_RPE,     &I8080::_PCHL,    &I8080::_JPE,         &I8080::_XCHG,    &I8080::_CPE,     &I8080::_CALL,     &I8080::_XRI_imm8,   &I8080::_RST_5,
-	  &I8080::_RP,      &I8080::_POP_PSW,      &I8080::_JP,          &I8080::_NOP,     &I8080::_CP,      &I8080::_PUSH_PSW,&I8080::_ORI_imm8,   &I8080::_RST_6,   &I8080::_RM,      &I8080::_SPHL,    &I8080::_JM,          &I8080::_NOP,     &I8080::_CM,      &I8080::_CALL,     &I8080::_CPI_imm8,   &I8080::_RST_7
+	  &I8080::_RNC,     &I8080::_POP_D,        &I8080::_JNC,         &I8080::_OUTPUT,  &I8080::_CNC,     &I8080::_PUSH_D,  &I8080::_SUI_imm8,   &I8080::_RST_2,   &I8080::_RC,      &I8080::_RET,     &I8080::_JC,          &I8080::_INPUT,   &I8080::_CC,      &I8080::_CALL,    &I8080::_SBI_imm8,   &I8080::_RST_3,
+	  &I8080::_RPO,     &I8080::_POP_H,        &I8080::_JPO,         &I8080::_XTHL,    &I8080::_CPO,     &I8080::_PUSH_H,  &I8080::_ANI_imm8,   &I8080::_RST_4,   &I8080::_RPE,     &I8080::_PCHL,    &I8080::_JPE,         &I8080::_XCHG,    &I8080::_CPE,     &I8080::_CALL,    &I8080::_XRI_imm8,   &I8080::_RST_5,
+	  &I8080::_RP,      &I8080::_POP_PSW,      &I8080::_JP,          &I8080::_DI,      &I8080::_CP,      &I8080::_PUSH_PSW,&I8080::_ORI_imm8,   &I8080::_RST_6,   &I8080::_RM,      &I8080::_SPHL,    &I8080::_JM,          &I8080::_EI,      &I8080::_CM,      &I8080::_CALL,    &I8080::_CPI_imm8,   &I8080::_RST_7
 	};
 }
 

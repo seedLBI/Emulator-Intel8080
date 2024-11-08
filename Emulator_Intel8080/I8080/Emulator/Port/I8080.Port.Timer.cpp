@@ -12,6 +12,7 @@ void I8080_Timer::SetInput(uint8_t value) {
 	countPartSec = value;
 	clock_start = std::chrono::system_clock::now();
 }
+
 uint8_t I8080_Timer::GetOutput() {
 	clock_end = std::chrono::system_clock::now();
 	float timeElapsed = std::chrono::duration_cast<std::chrono::milliseconds> (clock_end - clock_start).count() / 1000.f;
@@ -19,13 +20,9 @@ uint8_t I8080_Timer::GetOutput() {
 
 
 	if (timeElapsed > timeSetted)
-	{
 		return 0;
-	}
-	else {
-
+	else
 		return unsigned int((timeSetted - timeElapsed) * 100.f);
-	}
 }
 
 void I8080_Timer::Reset() {

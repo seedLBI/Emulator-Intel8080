@@ -43,7 +43,8 @@ void Widget_Output0x02::Draw() {
 		ImGui::Separator();
 		std::string text;
 
-		auto Output = processor->GetOutputConsole();
+		I8080_ConsoleOutput* p = dynamic_cast<I8080_ConsoleOutput*>(processor->Get_External_Peripherals()[0x02]);
+		auto Output = p->GetConsoleData();
 
 		for (int i = 0; i < Output.size(); i++) {
 
@@ -68,10 +69,13 @@ void Widget_Output0x02::Draw() {
 					text += " ";
 			}
 		}
-		if (Char_enable == false)
-			ImGui::TextWrapped(text.c_str());
-		else
-			RenderTextWrapped(text.c_str(), false);
+		//if (Char_enable == false)
+		//	ImGui::TextWrapped(text.c_str());
+		//else
+		//	RenderTextWrapped(text.c_str(), false);
+
+		RenderTextWrapped(text.c_str(), false);
+
 
 		ImGui::End();
 	}
@@ -99,7 +103,7 @@ std::string Widget_Output0x02::Save() {
 	output += MakeSaveItem(std::string("Hex_enable"), std::to_string(Hex_enable));
 	output += MakeSaveItem(std::string("Dec_enable"), std::to_string(Dec_enable));
 	output += MakeSaveItem(std::string("Bin_enable"), std::to_string(Bin_enable));
-	output += MakeSaveItem(std::string("Char_enable"), std::to_string(Bin_enable));
+	output += MakeSaveItem(std::string("Char_enable"), std::to_string(Char_enable));
 	return output;
 }
 
@@ -128,7 +132,7 @@ void Widget_Output0x02::Load(const std::string& Data) {
 		else if (name_arg == "Bin_enable")
 			Bin_enable = stoi(value_arg);
 		else if (name_arg == "Char_enable")
-			Bin_enable = stoi(value_arg);
+			Char_enable = stoi(value_arg);
 		else
 			std::cout << "Unknown name argument for widget: " << name_arg << std::endl;
 	}

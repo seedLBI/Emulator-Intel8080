@@ -401,15 +401,18 @@ int GetCountSymbol(const std::string& text, const char& symbol) {
     ofn.lpstrFile = szFile;
     // Set lpstrFile[0] to '\0' so that GetOpenFileName does not 
     // use the contents of szFile to initialize itself.
+
     ofn.lpstrFile[0] = '\0';
     ofn.nMaxFile = sizeof(szFile);
-    ofn.lpstrFilter = L"I8080 files\0*.I8080\0";
+    ofn.lpstrFilter = L"Файлы проекта (I8080, BIN, COM)\0*.I8080;*.BIN;*.COM\0";
     ofn.nFilterIndex = 1;
     ofn.lpstrFileTitle = NULL;
     ofn.nMaxFileTitle = 0;
     ofn.lpstrInitialDir = NULL;
     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
     // Display the Open dialog box. 
+
+    ofn.lpstrTitle = L"Выбери файл проекта";
 
     if (GetOpenFileName(&ofn) == TRUE) {
         //hf = CreateFile(ofn.lpstrFile,
@@ -421,50 +424,12 @@ int GetCountSymbol(const std::string& text, const char& symbol) {
         //    (HANDLE)NULL);
 
     }
+
     std::wstring ws(szFile);
-    // your new String
     std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
 
     return myconv.to_bytes(ws);
 }
- std::string OpenRomFileDialog() {
-     OPENFILENAME ofn;       // common dialog box structure
-     wchar_t szFile[460]{};        // buffer for file name
-     HWND hwnd = GetConsoleWindow();              // owner window
-     HANDLE hf;              // file handle
-     // Initialize OPENFILENAME
-     ZeroMemory(&ofn, sizeof(ofn));
-     ofn.lStructSize = sizeof(ofn);
-     ofn.hwndOwner = hwnd;
-     ofn.lpstrFile = szFile;
-     // Set lpstrFile[0] to '\0' so that GetOpenFileName does not 
-     // use the contents of szFile to initialize itself.
-     ofn.lpstrFile[0] = '\0';
-     ofn.nMaxFile = sizeof(szFile);
-     ofn.lpstrFilter = L"Binary files\0*.rom\0";
-     ofn.nFilterIndex = 1;
-     ofn.lpstrFileTitle = NULL;
-     ofn.nMaxFileTitle = 0;
-     ofn.lpstrInitialDir = NULL;
-     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
-     // Display the Open dialog box. 
-
-     if (GetOpenFileName(&ofn) == TRUE) {
-         //hf = CreateFile(ofn.lpstrFile,
-         //    GENERIC_READ,
-         //    0,
-         //    (LPSECURITY_ATTRIBUTES)NULL,
-         //    OPEN_EXISTING,
-         //    FILE_ATTRIBUTE_NORMAL,
-         //    (HANDLE)NULL);
-
-     }
-     std::wstring ws(szFile);
-     // your new String
-     std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
-
-     return myconv.to_bytes(ws);
- }
 
  std::string SaveFileDialogI8080() {
     OPENFILENAME ofn;       // common dialog box structure
@@ -488,36 +453,9 @@ int GetCountSymbol(const std::string& text, const char& symbol) {
     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
     // Display the Open dialog box. 
 
-    if (GetSaveFileName(&ofn) == TRUE) {
 
-    }
-    std::wstring ws(szFile);
-    // your new String
-    std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
+    ofn.lpstrTitle = L"Придумай название и сохрани проект";
 
-    return myconv.to_bytes(ws);
-}
- std::string SaveFileDialogPNG() {
-    OPENFILENAME ofn;       // common dialog box structure
-    wchar_t szFile[460]{};        // buffer for file name
-    HWND hwnd = GetConsoleWindow();              // owner window
-    HANDLE hf;              // file handle
-    // Initialize OPENFILENAME
-    ZeroMemory(&ofn, sizeof(ofn));
-    ofn.lStructSize = sizeof(ofn);
-    ofn.hwndOwner = hwnd;
-    ofn.lpstrFile = szFile;
-    // Set lpstrFile[0] to '\0' so that GetOpenFileName does not 
-    // use the contents of szFile to initialize itself.
-    ofn.lpstrFile[0] = '\0';
-    ofn.nMaxFile = sizeof(szFile);
-    ofn.lpstrFilter = L"Png\0*.png\0";
-    ofn.nFilterIndex = 1;
-    ofn.lpstrFileTitle = NULL;
-    ofn.nMaxFileTitle = 0;
-    ofn.lpstrInitialDir = NULL;
-    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
-    // Display the Open dialog box. 
 
     if (GetSaveFileName(&ofn) == TRUE) {
 
@@ -528,39 +466,39 @@ int GetCountSymbol(const std::string& text, const char& symbol) {
 
     return myconv.to_bytes(ws);
 }
- std::string SaveFileDialogTXT() {
-    OPENFILENAME ofn;       // common dialog box structure
-    wchar_t szFile[460]{};        // buffer for file name
-    HWND hwnd = GetConsoleWindow();              // owner window
-    HANDLE hf;              // file handle
-    // Initialize OPENFILENAME
-    ZeroMemory(&ofn, sizeof(ofn));
-    ofn.lStructSize = sizeof(ofn);
-    ofn.hwndOwner = hwnd;
-    ofn.lpstrFile = szFile;
-    // Set lpstrFile[0] to '\0' so that GetOpenFileName does not 
-    // use the contents of szFile to initialize itself.
-    ofn.lpstrFile[0] = '\0';
-    ofn.nMaxFile = sizeof(szFile);
-    ofn.lpstrFilter = L"Txt\0*.txt\0";
-    ofn.nFilterIndex = 1;
-    ofn.lpstrFileTitle = NULL;
-    ofn.nMaxFileTitle = 0;
-    ofn.lpstrInitialDir = NULL;
-    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
-    // Display the Open dialog box. 
+ std::string SaveFileDialogROM() {
+     OPENFILENAME ofn;       // common dialog box structure
+     wchar_t szFile[460]{};        // buffer for file name
+     HWND hwnd = GetConsoleWindow();              // owner window
+     HANDLE hf;              // file handle
+     // Initialize OPENFILENAME
+     ZeroMemory(&ofn, sizeof(ofn));
+     ofn.lStructSize = sizeof(ofn);
+     ofn.hwndOwner = hwnd;
+     ofn.lpstrFile = szFile;
+     // Set lpstrFile[0] to '\0' so that GetOpenFileName does not 
+     // use the contents of szFile to initialize itself.
+     ofn.lpstrFile[0] = '\0';
+     ofn.nMaxFile = sizeof(szFile);
+     ofn.lpstrFilter = L"BIN files\0*.BIN\0";
+     ofn.nFilterIndex = 1;
+     ofn.lpstrFileTitle = NULL;
+     ofn.nMaxFileTitle = 0;
+     ofn.lpstrInitialDir = NULL;
+     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+     // Display the Open dialog box. 
 
-    if (GetSaveFileName(&ofn) == TRUE) {
+     ofn.lpstrTitle = L"Придумай название и сохрани проект в виде бинарного файла";
 
-    }
-    std::wstring ws(szFile);
-    // your new String
+     if (GetSaveFileName(&ofn) == TRUE) {
 
-    std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
+     }
+     std::wstring ws(szFile);
+     // your new String
+     std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
 
-    return myconv.to_bytes(ws);
-}
-
+     return myconv.to_bytes(ws);
+ }
 
  std::wstring stringUTF8_to_wstring(const std::string& str)
  {

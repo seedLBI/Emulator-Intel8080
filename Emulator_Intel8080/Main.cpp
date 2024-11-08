@@ -45,13 +45,16 @@ int main(int argc, char* argv[]) {
 	Intro::Destructor();
 
 	while (!glfwWindowShouldClose(OpenglWindow::Vars::window) && i8080_ui->ExitButton == false) {
-
 		i8080_ui->Update();
 
-		OpenglWindow::BeginDraw();
-		i8080_ui->Draw();
-		OpenglWindow::EndDraw();
 
+		OpenglWindow::BeginDraw();
+
+
+		i8080_ui->Draw();
+
+
+		OpenglWindow::EndDraw();
 	}
 
 	i8080_ui->~I8080_UserInterface();

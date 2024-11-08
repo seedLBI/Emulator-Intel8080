@@ -23,15 +23,15 @@ TranslatorOutput CompilerStable::Compile(const std::vector<std::string>& Code) {
 
 
 
-	if (Step1_MarkingAdresses()== false) {
+	if (Step1_MarkingAdresses()== false)
 		return Compiler::CompilerOutput;
-	}
-	if (Step2_ReplaceWithDirectValues() == false ) {
+
+	if (Step2_ReplaceWithDirectValues() == false )
 		return Compiler::CompilerOutput;
-	}
-	if (Step3_MakeByteArray() == false) {
+
+	if (Step3_MakeByteArray() == false)
 		return Compiler::CompilerOutput;
-	}
+
 
 	for (auto& n : Markers)
 		Compiler::CompilerOutput.Markers.emplace_back( n.first, n.second );

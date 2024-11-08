@@ -49,7 +49,8 @@ bool equals(InputIt1 first1, InputIt1 last1,
 }
 
 TextEditor::TextEditor()
-	: mLineSpacing(1.0f)
+	: SaveSystem(u8"TextEditor")
+	, mLineSpacing(1.0f)
 	, mUndoIndex(0)
 	, mTabSize(4)
 	, mOverwrite(false)
@@ -1208,6 +1209,51 @@ void TextEditor::HandleMouseInputs_Step2Again() {
 }
 
 
+void TextEditor::DrawSetting() {
+	//EnableAutoTab
+
+	ImGui::SeparatorText(u8"Редактор кода");
+
+	if (ImGui::RadioButton(u8"АвтоТабуляция", Flag_EnableAutoTab)) {
+		Flag_EnableAutoTab = !Flag_EnableAutoTab;
+	}
+	ImGui::SameLine();
+	HelpMarker(u8"Сохраняет отступы до начала текста при создании новой строки.\nТакже создаёт дополнительный отступ если в строчке присутствует маркер");
+
+
+}
+
+std::string TextEditor::Save() {
+	std::string output = "";
+
+	output += MakeBegin(1);
+	output += MakeSaveItem(std::string("Flag_EnableAutoTab"), std::to_string(Flag_EnableAutoTab));
+
+	return output;
+}
+void TextEditor::Load(const std::string& Data) {
+	PrintDebugInfoAboutData(Data);
+
+
+	std::string path_temp;
+
+	std::vector<std::string> Lines = split(Data, "\n");
+	for (int i = 0; i < Lines.size(); i++) {
+		std::vector<std::string> info = SplitLine(Lines[i]);
+
+		std::string name_arg = info[0];
+		std::string value_arg = info[1];
+
+		if (name_arg == "Flag_EnableAutoTab")
+			Flag_EnableAutoTab = std::stoi(value_arg);
+		else
+			std::cout << "Unknown name argument for widget: " << name_arg << std::endl;
+	}
+
+}
+
+
+
 
 void TextEditor::Render()
 {
@@ -1243,8 +1289,9 @@ void TextEditor::Render()
 	auto globalLineMax = (int)mLines.size();
 	auto lineMax = (std::max)(0, (std::min)((int)mLines.size() - 1, lineNo + (int)floor((scrollY + contentSize.y) / mCharAdvance.y)));
 
-	CountLines_In_Window = lineMax - lineNo;
 
+	CountLines_In_Window = lineMax - lineNo;
+	//std::cout << CountLines_In_Window << std::endl;
 
 	const float radiusBreakpoints = mCharAdvance.y / 3.f;
 
@@ -1526,11 +1573,14 @@ void TextEditor::Render()
 
 
 					ImGui::SetWindowFontScale(1.f);
-					ImVec2 sizeText = ImGui::CalcTextSize("                                ");
+					ImVec2 sizeText1 = ImGui::CalcTextSize("                               ");
+					ImVec2 sizeText2 = ImGui::CalcTextSize("                                          ");
+
+
 					ImGui::SetWindowFontScale(mVirtualFontSize);
 
 
-					ImGui::SetNextWindowSize(ImVec2(sizeText.x,0)); // Задаем размер окна 200x100
+					ImGui::SetNextWindowSize(ImVec2(sizeText1.x + sizeText2.x,0)); // Задаем размер окна 200x100
 
 
 
@@ -1538,150 +1588,155 @@ void TextEditor::Render()
 
 					
 
-					ImGui::GetStyle().WindowPadding= ImVec2(10, 8);
+					ImGui::GetStyle().WindowPadding= ImVec2(10, 10);
+
 					ImGui::BeginTooltip( ); {
 
-						ImGui::SeparatorText(u8"Аргументы");
 
-						std::string command = it->first;
+						ImGui::BeginChild("sdasd", ImVec2(sizeText1.x, 0), ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_Border); {
 
-						for (int i = 0; i < command.size(); i++)
-							command[i] = toupper(command[i]);
+							ImGui::SeparatorText(u8"Аргументы");
 
-						ImGui::Text(command.c_str());
-						if (it->second.mArguments.size() > 0) {
-							ImGui::SameLine();
-							ImGui::Text(" ");
-							int type_argument = it->second.mArguments[0];
-							std::string text = info_arguments.GetArgument(type_argument).type_argument;
-							ImGui::SameLine();
-							DrawTextWithBackground(text.c_str(), ImVec4(0.4f, 0.4f, 0.f, 1.f));
-						}
-						if (it->second.mArguments.size() > 1) {
-							ImGui::SameLine();
-							ImGui::Text(", ");
-							int type_argument = it->second.mArguments[1];
-							std::string text = info_arguments.GetArgument(type_argument).type_argument;
-							ImGui::SameLine();
-							DrawTextWithBackground(text.c_str(), ImVec4(0.6f, 0.4f, 0.f, 1.f));
-						}
+							std::string command = it->first;
 
+							for (int i = 0; i < command.size(); i++)
+								command[i] = toupper(command[i]);
 
-						if (it->second.mArguments.size() > 0) {
-							int type_argument = it->second.mArguments[0];
-							std::string text = info_arguments.GetArgument(type_argument).type_argument;
-							ImGui::SeparatorText(text.c_str());
-
-							ImGui::Text("");
-							for (int i = 0; i < info_arguments.GetArgument(type_argument).available_values.size(); i++)
-							{
-								ImGui::SameLine();
-								DrawTextWithBackground(info_arguments.GetArgument(type_argument).available_values[i].c_str(), ImVec4(0.1f, 0.3f, 0.6f, 1.f));
+							ImGui::Text(command.c_str());
+							if (it->second.mArguments.size() > 0) {
 								ImGui::SameLine();
 								ImGui::Text(" ");
+								int type_argument = it->second.mArguments[0];
+								std::string text = info_arguments.GetArgument(type_argument).type_argument;
+								ImGui::SameLine();
+								DrawTextWithBackground(text.c_str(), ImVec4(0.4f, 0.4f, 0.f, 1.f));
+							}
+							if (it->second.mArguments.size() > 1) {
+								ImGui::SameLine();
+								ImGui::Text(", ");
+								int type_argument = it->second.mArguments[1];
+								std::string text = info_arguments.GetArgument(type_argument).type_argument;
+								ImGui::SameLine();
+								DrawTextWithBackground(text.c_str(), ImVec4(0.6f, 0.4f, 0.f, 1.f));
 							}
 
-						}
-						if (it->second.mArguments.size() > 1 && it->second.mArguments[0] != it->second.mArguments[1]) {
-							int type_argument = it->second.mArguments[1];
-							std::string text = info_arguments.GetArgument(type_argument).type_argument;
-							ImGui::SeparatorText(text.c_str());
 
-							ImGui::Text("");
-							for (int i = 0; i < info_arguments.GetArgument(type_argument).available_values.size(); i++)
-							{
-								ImGui::SameLine();
-								DrawTextWithBackground(info_arguments.GetArgument(type_argument).available_values[i].c_str(), ImVec4(0.1f, 0.3f, 0.6f, 1.f));
-								ImGui::SameLine();
-								ImGui::Text(" ");
-							}
-						}
+							if (it->second.mArguments.size() > 0) {
+								int type_argument = it->second.mArguments[0];
+								std::string text = info_arguments.GetArgument(type_argument).type_argument;
+								ImGui::SeparatorText(text.c_str());
 
-
-
-						ImGui::SeparatorText(u8"Байты");
-						DrawTextWithBackground(info_opcode.GetOpcodeName(ENUM_Bytes::Opcode).c_str(), ImVec4(0.1f, 0.4f, 0.5f, 1.f));
-						ImGui::SameLine();
-						ImGui::Text(" ");
-						for (int i = 0; i < it->second.mBytes.size(); i++)
-						{
-							ImGui::SameLine();
-							DrawTextWithBackground(info_opcode.GetOpcodeName(it->second.mBytes[i]).c_str(), ImVec4(0.6f, 0.3f, 0.1f, 1.f));
-							ImGui::SameLine();
-							ImGui::Text(" ");
-						}
-
-
-						ImGui::SeparatorText(u8"Такты");
-
-						if (it->second.mTicks.size() == 1)
-						{
-							ImGui::TextWrapped(std::string(std::to_string(it->second.mTicks[0]) + u8" - Всегда").c_str());
-						}
-						else {
-							for (int i = 0; i < it->second.mTicks.size(); i++)
-							{
-								if (i == 1)
+								ImGui::Text("");
+								for (int i = 0; i < info_arguments.GetArgument(type_argument).available_values.size(); i++)
 								{
 									ImGui::SameLine();
-									ImGui::TextWrapped(std::string(" \\ " + std::to_string(it->second.mTicks[i])).c_str());
+									DrawTextWithBackground(info_arguments.GetArgument(type_argument).available_values[i].c_str(), ImVec4(0.1f, 0.3f, 0.6f, 1.f));
+									ImGui::SameLine();
+									ImGui::Text(" ");
 								}
-								else {
-									ImGui::TextWrapped(std::to_string(it->second.mTicks[i]).c_str());
+
+							}
+							if (it->second.mArguments.size() > 1 && it->second.mArguments[0] != it->second.mArguments[1]) {
+								int type_argument = it->second.mArguments[1];
+								std::string text = info_arguments.GetArgument(type_argument).type_argument;
+								ImGui::SeparatorText(text.c_str());
+
+								ImGui::Text("");
+								for (int i = 0; i < info_arguments.GetArgument(type_argument).available_values.size(); i++)
+								{
+									ImGui::SameLine();
+									DrawTextWithBackground(info_arguments.GetArgument(type_argument).available_values[i].c_str(), ImVec4(0.1f, 0.3f, 0.6f, 1.f));
+									ImGui::SameLine();
+									ImGui::Text(" ");
 								}
 							}
+
+
+
+
+							ImGui::SeparatorText(u8"Байты");
+							DrawTextWithBackground(info_opcode.GetOpcodeName(ENUM_Bytes::Opcode).c_str(), ImVec4(0.1f, 0.4f, 0.5f, 1.f));
+							ImGui::SameLine();
+							ImGui::Text(" ");
+							for (int i = 0; i < it->second.mBytes.size(); i++)
+							{
+								ImGui::SameLine();
+								DrawTextWithBackground(info_opcode.GetOpcodeName(it->second.mBytes[i]).c_str(), ImVec4(0.6f, 0.3f, 0.1f, 1.f));
+								ImGui::SameLine();
+								ImGui::Text(" ");
+							}
+
+
+							ImGui::SeparatorText(u8"Такты");
+							ImGui::TextWrapped(Get_info_ticks_mean(it->second.mTicks, it->second.mTicksMean).c_str());
+
+
+
+							static const std::vector<ImVec4> ColorStatusFlag = {
+								ImVec4(1.f,0.3f,0.3f,1.f),
+								ImVec4(0.3f,1.0f,0.3f,1.f),
+								ImVec4(1.f, 1.f, 0.2f, 1.f),
+								ImVec4(1.f, 1.f, 0.2f, 1.f),
+							};
+
+
+							ImGui::SeparatorText(u8"Флаги");
+							ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "Sign       ");
+							ImGui::SameLine();
+							ImGui::TextColored(ColorStatusFlag[it->second.mFlags.Sign], std::string(info_flagsStatus[it->second.mFlags.Sign]).c_str());
+
+							ImGui::Separator();
+
+							ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "Zero       ");
+							ImGui::SameLine();
+							ImGui::TextColored(ColorStatusFlag[it->second.mFlags.Zero], std::string(info_flagsStatus[it->second.mFlags.Zero]).c_str());
+
+							ImGui::Separator();
+
+							ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "A. Carry   ");
+							ImGui::SameLine();
+							ImGui::TextColored(ColorStatusFlag[it->second.mFlags.ACarry], std::string(info_flagsStatus[it->second.mFlags.ACarry]).c_str());
+
+							ImGui::Separator();
+
+							ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "Parity     ");
+							ImGui::SameLine();
+							ImGui::TextColored(ColorStatusFlag[it->second.mFlags.Parity], std::string(info_flagsStatus[it->second.mFlags.Parity]).c_str());
+
+							ImGui::Separator();
+
+							ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "Carry      ");
+							ImGui::SameLine();
+							ImGui::TextColored(ColorStatusFlag[it->second.mFlags.Carry], std::string(info_flagsStatus[it->second.mFlags.Carry]).c_str());
+
+							ImGui::EndChild();
 						}
 
 
-						//info_flagsStatus
-						/*
-							enum ENUM_FlagsState {
-								Unaffected,
-								Affected,
-								Reset,
-								Set
-							};
-						*/
+						ImGui::SameLine(0.f,8.f);
 
+						ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical, 4.f);
 
-						static const std::vector<ImVec4> ColorStatusFlag = {
-							ImVec4(1.f,0.3f,0.3f,1.f),
-							ImVec4(0.3f,1.0f,0.3f,1.f),
-							ImVec4(1.f, 1.f, 0.2f, 1.f),
-							ImVec4(1.f, 1.f, 0.2f, 1.f),
-						};
-
-
-						ImGui::SeparatorText(u8"Флаги");
-						ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "Sign       ");
-						ImGui::SameLine();
-						ImGui::TextColored(ColorStatusFlag[it->second.mFlags.Sign], std::string(info_flagsStatus[it->second.mFlags.Sign]).c_str());
-
-
-						ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "Zero       ");
-						ImGui::SameLine();
-						ImGui::TextColored(ColorStatusFlag[it->second.mFlags.Zero], std::string(info_flagsStatus[it->second.mFlags.Zero]).c_str());
-
-
-						ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "A. Carry   ");
-						ImGui::SameLine();
-						ImGui::TextColored(ColorStatusFlag[it->second.mFlags.ACarry], std::string(info_flagsStatus[it->second.mFlags.ACarry]).c_str());
-
-						ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "Parity     ");
-						ImGui::SameLine();
-						ImGui::TextColored(ColorStatusFlag[it->second.mFlags.Parity], std::string(info_flagsStatus[it->second.mFlags.Parity]).c_str());
-
-						ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "Carry      ");
-						ImGui::SameLine();
-						ImGui::TextColored(ColorStatusFlag[it->second.mFlags.Carry], std::string(info_flagsStatus[it->second.mFlags.Carry]).c_str());
+						ImGui::SameLine(0.f,8.f);
 
 
 
-						ImGui::SeparatorText(u8"Описание");
-						ImGui::TextWrapped(it->second.mDeclaration.c_str());
+						ImGui::BeginChild("asdaskjdlas", ImVec2(0, 0), ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_Border); {
+
+
+							ImGui::SeparatorText(u8"Описание");
+							ImGui::TextWrapped(it->second.mDeclaration.c_str());
+
+							ImGui::SeparatorText(u8"Псевдокод");
+							ImGui::TextWrapped(it->second.mPseudoCode.c_str());
+
+							ImGui::EndChild();
+						}
+
 						//ImGui::Text(it->second.mDeclaration.c_str());
 						ImGui::EndTooltip();
 					}
+
 					ImGui::GetStyle().WindowPadding = prev;
 				}
 				else
@@ -1733,7 +1788,38 @@ void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 		HandleMouseInputs_Step2Again();
 	}
 
-	Render();
+
+	if (mReadOnly){
+
+		ImGuiStyle& style = ImGui::GetStyle();
+		auto contentSize = ImGui::GetWindowSize();
+		auto drawList = ImGui::GetWindowDrawList();
+		auto cursorScreenPos = ImGui::GetWindowPos();
+
+		const float scrollbarsSize = style.ScrollbarSize + 2.f;
+
+		const ImVec2 LeftUpperCorner = { cursorScreenPos.x, cursorScreenPos.y };
+		const ImVec2 RightUpperCorner = { cursorScreenPos.x + contentSize.x - scrollbarsSize, cursorScreenPos.y };
+		const ImVec2 LeftDownCorner = { cursorScreenPos.x, cursorScreenPos.y + contentSize.y - scrollbarsSize };
+		const ImVec2 RightDownCorner = { cursorScreenPos.x + contentSize.x - scrollbarsSize,cursorScreenPos.y + contentSize.y - scrollbarsSize };
+
+		const ImVec2 Center = { cursorScreenPos.x + contentSize.x / 2.f, cursorScreenPos.y + contentSize.y / 2.f };
+
+		const char* TextDisableInput = u8"  Открыт бинарный файл   \nРедактирование запрещено.";
+
+		ImVec2 SizeText = ImGui::CalcTextSize(TextDisableInput);
+		
+
+		ImGui::SetCursorScreenPos({ Center.x - SizeText.x/2.f ,Center.y - SizeText.y/2.f });
+
+		ImGui::TextColored(ImColor(1.f, 0.2f, 0.2f, 1.f), TextDisableInput);
+
+	}
+	else
+		Render();
+
+
+
 	
 	Draw_FindWindow();
 
@@ -1927,15 +2013,53 @@ void TextEditor::EnterCharacter(ImWchar aChar, bool aShift)
 	if (aChar == '\n')
 	{
 
+
+
 		InsertLine(coord.mLine + 1);
 		auto& line = mLines[coord.mLine];
 		auto& newLine = mLines[coord.mLine + 1];
+
+
+		if (Flag_EnableAutoTab)
+		{
+
+			std::string SpacesAndTabs = "";
+
+			for (int i = 0; i < line.size(); i++) {
+				if (line[i].mChar == '\t' || line[i].mChar == ' ') {
+					SpacesAndTabs += line[i].mChar;
+				}
+				else
+					break;
+			}
+
+			int posComment = 10000000;
+			int pos2DOT = -1;
+
+			for (int i = 0; i < line.size(); i++) {
+				if (line[i].mChar == ';' && i < posComment)
+					posComment = i;
+
+				if (line[i].mChar == ':' && i < posComment)
+					pos2DOT = i;
+			}
+
+			if (pos2DOT != -1 && GetCharacterIndex(coord) - 1 >= pos2DOT)
+				SpacesAndTabs += "\t";
+
+			for (int i = 0; i < SpacesAndTabs.size(); i++) {
+				newLine.insert(newLine.begin() + i, Glyph(SpacesAndTabs[i], PaletteIndex::Default));
+			}
+		}
+
 
 		if (mLanguageDefinition.mAutoIndentation) {
 
 			for (size_t it = 0; it < line.size() && isascii(line[it].mChar) && isblank(line[it].mChar); ++it)
 				newLine.push_back(line[it]);
 		}
+
+
 
 		const size_t whitespaceSize = newLine.size();
 		auto cindex = GetCharacterIndex(coord);
@@ -1953,10 +2077,16 @@ void TextEditor::EnterCharacter(ImWchar aChar, bool aShift)
 			}
 		}
 
+
 		newLine.insert(newLine.end(), line.begin() + cindex, line.end());
+
 		line.erase(line.begin() + cindex, line.begin() + line.size());
 		SetCursorPosition(Coordinates(coord.mLine + 1, GetCharacterColumn(coord.mLine + 1, (int)whitespaceSize)));
 		u.mAdded = (char)aChar;
+
+
+
+
 	}
 	else
 	{
@@ -3396,427 +3526,6 @@ static bool TokenizeCStylePunctuation(const char * in_begin, const char * in_end
 	return false;
 }
 
-
-/*
-
-const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::CPlusPlus()
-{
-	static bool inited = false;
-	static LanguageDefinition langDef;
-	if (!inited)
-	{
-		static const char* const cppKeywords[] = {
-			"alignas", "alignof", "and", "and_eq", "asm", "atomic_cancel", "atomic_commit", "atomic_noexcept", "auto", "bitand", "bitor", "bool", "break", "case", "catch", "char", "char16_t", "char32_t", "class",
-			"compl", "concept", "const", "constexpr", "const_cast", "continue", "decltype", "default", "delete", "do", "double", "dynamic_cast", "else", "enum", "explicit", "export", "extern", "false", "float",
-			"for", "friend", "goto", "if", "import", "inline", "int", "long", "module", "mutable", "namespace", "new", "noexcept", "not", "not_eq", "nullptr", "operator", "or", "or_eq", "private", "protected", "public",
-			"register", "reinterpret_cast", "requires", "return", "short", "signed", "sizeof", "static", "static_assert", "static_cast", "struct", "switch", "synchronized", "template", "this", "thread_local",
-			"throw", "true", "try", "typedef", "typeid", "typename", "union", "unsigned", "using", "virtual", "void", "volatile", "wchar_t", "while", "xor", "xor_eq"
-		};
-		for (auto& k : cppKeywords)
-			langDef.mKeywords.insert(k);
-
-		static const char* const identifiers[] = {
-			"abort", "abs", "acos", "asin", "atan", "atexit", "atof", "atoi", "atol", "ceil", "clock", "cosh", "ctime", "div", "exit", "fabs", "floor", "fmod", "getchar", "getenv", "isalnum", "isalpha", "isdigit", "isgraph",
-			"ispunct", "isspace", "isupper", "kbhit", "log10", "log2", "log", "memcmp", "modf", "pow", "printf", "sprintf", "snprintf", "putchar", "putenv", "puts", "rand", "remove", "rename", "sinh", "sqrt", "srand", "strcat", "strcmp", "strerror", "time", "tolower", "toupper",
-			"std", "string", "vector", "map", "unordered_map", "set", "unordered_set", "min", "max"
-		};
-		for (auto& k : identifiers)
-		{
-			Identifier id;
-			id.mDeclaration = "Built-in function";
-			langDef.mIdentifiers.insert(std::make_pair(std::string(k), id));
-		}
-
-		langDef.mTokenize = [](const char * in_begin, const char * in_end, const char *& out_begin, const char *& out_end, PaletteIndex & paletteIndex) -> bool
-		{
-			paletteIndex = PaletteIndex::Max;
-
-			while (in_begin < in_end && isascii(*in_begin) && isblank(*in_begin))
-				in_begin++;
-
-			if (in_begin == in_end)
-			{
-				out_begin = in_end;
-				out_end = in_end;
-				paletteIndex = PaletteIndex::Default;
-			}
-			else if (TokenizeCStyleString(in_begin, in_end, out_begin, out_end))
-				paletteIndex = PaletteIndex::String;
-			else if (TokenizeCStyleCharacterLiteral(in_begin, in_end, out_begin, out_end))
-				paletteIndex = PaletteIndex::CharLiteral;
-			else if (TokenizeCStyleIdentifier(in_begin, in_end, out_begin, out_end))
-				paletteIndex = PaletteIndex::Identifier;
-			else if (TokenizeCStyleNumber(in_begin, in_end, out_begin, out_end))
-				paletteIndex = PaletteIndex::Number;
-			else if (TokenizeCStylePunctuation(in_begin, in_end, out_begin, out_end))
-				paletteIndex = PaletteIndex::Punctuation;
-
-			return paletteIndex != PaletteIndex::Max;
-		};
-
-
-		langDef.mSingleLineComment = "//";
-
-		langDef.mCaseSensitive = true;
-		langDef.mAutoIndentation = true;
-
-		langDef.mName = "C++";
-
-		inited = true;
-	}
-	return langDef;
-}
-
-const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::HLSL()
-{
-	static bool inited = false;
-	static LanguageDefinition langDef;
-	if (!inited)
-	{
-		static const char* const keywords[] = {
-			"AppendStructuredBuffer", "asm", "asm_fragment", "BlendState", "bool", "break", "Buffer", "ByteAddressBuffer", "case", "cbuffer", "centroid", "class", "column_major", "compile", "compile_fragment",
-			"CompileShader", "const", "continue", "ComputeShader", "ConsumeStructuredBuffer", "default", "DepthStencilState", "DepthStencilView", "discard", "do", "double", "DomainShader", "dword", "else",
-			"export", "extern", "false", "float", "for", "fxgroup", "GeometryShader", "groupshared", "half", "Hullshader", "if", "in", "inline", "inout", "InputPatch", "int", "interface", "line", "lineadj",
-			"linear", "LineStream", "matrix", "min16float", "min10float", "min16int", "min12int", "min16uint", "namespace", "nointerpolation", "noperspective", "NULL", "out", "OutputPatch", "packoffset",
-			"pass", "pixelfragment", "PixelShader", "point", "PointStream", "precise", "RasterizerState", "RenderTargetView", "return", "register", "row_major", "RWBuffer", "RWByteAddressBuffer", "RWStructuredBuffer",
-			"RWTexture1D", "RWTexture1DArray", "RWTexture2D", "RWTexture2DArray", "RWTexture3D", "sample", "sampler", "SamplerState", "SamplerComparisonState", "shared", "snorm", "stateblock", "stateblock_state",
-			"static", "string", "struct", "switch", "StructuredBuffer", "tbuffer", "technique", "technique10", "technique11", "texture", "Texture1D", "Texture1DArray", "Texture2D", "Texture2DArray", "Texture2DMS",
-			"Texture2DMSArray", "Texture3D", "TextureCube", "TextureCubeArray", "true", "typedef", "triangle", "triangleadj", "TriangleStream", "uint", "uniform", "unorm", "unsigned", "vector", "vertexfragment",
-			"VertexShader", "void", "volatile", "while",
-			"bool1","bool2","bool3","bool4","double1","double2","double3","double4", "float1", "float2", "float3", "float4", "int1", "int2", "int3", "int4", "in", "out", "inout",
-			"uint1", "uint2", "uint3", "uint4", "dword1", "dword2", "dword3", "dword4", "half1", "half2", "half3", "half4",
-			"float1x1","float2x1","float3x1","float4x1","float1x2","float2x2","float3x2","float4x2",
-			"float1x3","float2x3","float3x3","float4x3","float1x4","float2x4","float3x4","float4x4",
-			"half1x1","half2x1","half3x1","half4x1","half1x2","half2x2","half3x2","half4x2",
-			"half1x3","half2x3","half3x3","half4x3","half1x4","half2x4","half3x4","half4x4",
-		};
-		for (auto& k : keywords)
-			langDef.mKeywords.insert(k);
-
-		static const char* const identifiers[] = {
-			"abort", "abs", "acos", "all", "AllMemoryBarrier", "AllMemoryBarrierWithGroupSync", "any", "asdouble", "asfloat", "asin", "asint", "asint", "asuint",
-			"asuint", "atan", "atan2", "ceil", "CheckAccessFullyMapped", "clamp", "clip", "cos", "cosh", "countbits", "cross", "D3DCOLORtoUBYTE4", "ddx",
-			"ddx_coarse", "ddx_fine", "ddy", "ddy_coarse", "ddy_fine", "degrees", "determinant", "DeviceMemoryBarrier", "DeviceMemoryBarrierWithGroupSync",
-			"distance", "dot", "dst", "errorf", "EvaluateAttributeAtCentroid", "EvaluateAttributeAtSample", "EvaluateAttributeSnapped", "exp", "exp2",
-			"f16tof32", "f32tof16", "faceforward", "firstbithigh", "firstbitlow", "floor", "fma", "fmod", "frac", "frexp", "fwidth", "GetRenderTargetSampleCount",
-			"GetRenderTargetSamplePosition", "GroupMemoryBarrier", "GroupMemoryBarrierWithGroupSync", "InterlockedAdd", "InterlockedAnd", "InterlockedCompareExchange",
-			"InterlockedCompareStore", "InterlockedExchange", "InterlockedMax", "InterlockedMin", "InterlockedOr", "InterlockedXor", "isfinite", "isinf", "isnan",
-			"ldexp", "length", "lerp", "lit", "log", "log10", "log2", "mad", "max", "min", "modf", "msad4", "mul", "noise", "normalize", "pow", "printf",
-			"Process2DQuadTessFactorsAvg", "Process2DQuadTessFactorsMax", "Process2DQuadTessFactorsMin", "ProcessIsolineTessFactors", "ProcessQuadTessFactorsAvg",
-			"ProcessQuadTessFactorsMax", "ProcessQuadTessFactorsMin", "ProcessTriTessFactorsAvg", "ProcessTriTessFactorsMax", "ProcessTriTessFactorsMin",
-			"radians", "rcp", "reflect", "refract", "reversebits", "round", "rsqrt", "saturate", "sign", "sin", "sincos", "sinh", "smoothstep", "sqrt", "step",
-			"tan", "tanh", "tex1D", "tex1D", "tex1Dbias", "tex1Dgrad", "tex1Dlod", "tex1Dproj", "tex2D", "tex2D", "tex2Dbias", "tex2Dgrad", "tex2Dlod", "tex2Dproj",
-			"tex3D", "tex3D", "tex3Dbias", "tex3Dgrad", "tex3Dlod", "tex3Dproj", "texCUBE", "texCUBE", "texCUBEbias", "texCUBEgrad", "texCUBElod", "texCUBEproj", "transpose", "trunc"
-		};
-		for (auto& k : identifiers)
-		{
-			Identifier id;
-			id.mDeclaration = "Built-in function";
-			langDef.mIdentifiers.insert(std::make_pair(std::string(k), id));
-		}
-
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[ \\t]*#[ \\t]*[a-zA-Z_]+", PaletteIndex::Preprocessor));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("L?\\\"(\\\\.|[^\\\"])*\\\"", PaletteIndex::String));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("\\'\\\\?[^\\']\\'", PaletteIndex::CharLiteral));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)([eE][+-]?[0-9]+)?[fF]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[+-]?[0-9]+[Uu]?[lL]?[lL]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("0[0-7]+[Uu]?[lL]?[lL]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("0[xX][0-9a-fA-F]+[uU]?[lL]?[lL]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[a-zA-Z_][a-zA-Z0-9_]*", PaletteIndex::Identifier));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[\\[\\]\\{\\}\\!\\%\\^\\&\\*\\(\\)\\-\\+\\=\\~\\|\\<\\>\\?\\/\\;\\,\\.]", PaletteIndex::Punctuation));
-
-
-		langDef.mSingleLineComment = "//";
-
-		langDef.mCaseSensitive = true;
-		langDef.mAutoIndentation = true;
-
-		langDef.mName = "HLSL";
-
-		inited = true;
-	}
-	return langDef;
-}
-
-const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::GLSL()
-{
-	static bool inited = false;
-	static LanguageDefinition langDef;
-	if (!inited)
-	{
-		static const char* const keywords[] = {
-			"auto", "break", "case", "char", "const", "continue", "default", "do", "double", "else", "enum", "extern", "float", "for", "goto", "if", "inline", "int", "long", "register", "restrict", "return", "short",
-			"signed", "sizeof", "static", "struct", "switch", "typedef", "union", "unsigned", "void", "volatile", "while", "_Alignas", "_Alignof", "_Atomic", "_Bool", "_Complex", "_Generic", "_Imaginary",
-			"_Noreturn", "_Static_assert", "_Thread_local"
-		};
-		for (auto& k : keywords)
-			langDef.mKeywords.insert(k);
-
-		static const char* const identifiers[] = {
-			"abort", "abs", "acos", "asin", "atan", "atexit", "atof", "atoi", "atol", "ceil", "clock", "cosh", "ctime", "div", "exit", "fabs", "floor", "fmod", "getchar", "getenv", "isalnum", "isalpha", "isdigit", "isgraph",
-			"ispunct", "isspace", "isupper", "kbhit", "log10", "log2", "log", "memcmp", "modf", "pow", "putchar", "putenv", "puts", "rand", "remove", "rename", "sinh", "sqrt", "srand", "strcat", "strcmp", "strerror", "time", "tolower", "toupper"
-		};
-		for (auto& k : identifiers)
-		{
-			Identifier id;
-			id.mDeclaration = "Built-in function";
-			langDef.mIdentifiers.insert(std::make_pair(std::string(k), id));
-		}
-
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[ \\t]*#[ \\t]*[a-zA-Z_]+", PaletteIndex::Preprocessor));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("L?\\\"(\\\\.|[^\\\"])*\\\"", PaletteIndex::String));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("\\'\\\\?[^\\']\\'", PaletteIndex::CharLiteral));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)([eE][+-]?[0-9]+)?[fF]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[+-]?[0-9]+[Uu]?[lL]?[lL]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("0[0-7]+[Uu]?[lL]?[lL]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("0[xX][0-9a-fA-F]+[uU]?[lL]?[lL]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[a-zA-Z_][a-zA-Z0-9_]*", PaletteIndex::Identifier));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[\\[\\]\\{\\}\\!\\%\\^\\&\\*\\(\\)\\-\\+\\=\\~\\|\\<\\>\\?\\/\\;\\,\\.]", PaletteIndex::Punctuation));
-
-
-		langDef.mSingleLineComment = "//";
-
-		langDef.mCaseSensitive = true;
-		langDef.mAutoIndentation = true;
-
-		langDef.mName = "GLSL";
-
-		inited = true;
-	}
-	return langDef;
-}
-
-const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::C()
-{
-	static bool inited = false;
-	static LanguageDefinition langDef;
-	if (!inited)
-	{
-		static const char* const keywords[] = {
-			"auto", "break", "case", "char", "const", "continue", "default", "do", "double", "else", "enum", "extern", "float", "for", "goto", "if", "inline", "int", "long", "register", "restrict", "return", "short",
-			"signed", "sizeof", "static", "struct", "switch", "typedef", "union", "unsigned", "void", "volatile", "while", "_Alignas", "_Alignof", "_Atomic", "_Bool", "_Complex", "_Generic", "_Imaginary",
-			"_Noreturn", "_Static_assert", "_Thread_local"
-		};
-		for (auto& k : keywords)
-			langDef.mKeywords.insert(k);
-
-		static const char* const identifiers[] = {
-			"abort", "abs", "acos", "asin", "atan", "atexit", "atof", "atoi", "atol", "ceil", "clock", "cosh", "ctime", "div", "exit", "fabs", "floor", "fmod", "getchar", "getenv", "isalnum", "isalpha", "isdigit", "isgraph",
-			"ispunct", "isspace", "isupper", "kbhit", "log10", "log2", "log", "memcmp", "modf", "pow", "putchar", "putenv", "puts", "rand", "remove", "rename", "sinh", "sqrt", "srand", "strcat", "strcmp", "strerror", "time", "tolower", "toupper"
-		};
-		for (auto& k : identifiers)
-		{
-			Identifier id;
-			id.mDeclaration = "Built-in function";
-			langDef.mIdentifiers.insert(std::make_pair(std::string(k), id));
-		}
-
-		langDef.mTokenize = [](const char * in_begin, const char * in_end, const char *& out_begin, const char *& out_end, PaletteIndex & paletteIndex) -> bool
-		{
-			paletteIndex = PaletteIndex::Max;
-
-			while (in_begin < in_end && isascii(*in_begin) && isblank(*in_begin))
-				in_begin++;
-
-			if (in_begin == in_end)
-			{
-				out_begin = in_end;
-				out_end = in_end;
-				paletteIndex = PaletteIndex::Default;
-			}
-			else if (TokenizeCStyleString(in_begin, in_end, out_begin, out_end))
-				paletteIndex = PaletteIndex::String;
-			else if (TokenizeCStyleCharacterLiteral(in_begin, in_end, out_begin, out_end))
-				paletteIndex = PaletteIndex::CharLiteral;
-			else if (TokenizeCStyleIdentifier(in_begin, in_end, out_begin, out_end))
-				paletteIndex = PaletteIndex::Identifier;
-			else if (TokenizeCStyleNumber(in_begin, in_end, out_begin, out_end))
-				paletteIndex = PaletteIndex::Number;
-			else if (TokenizeCStylePunctuation(in_begin, in_end, out_begin, out_end))
-				paletteIndex = PaletteIndex::Punctuation;
-
-			return paletteIndex != PaletteIndex::Max;
-		};
-
-		langDef.mSingleLineComment = "//";
-
-		langDef.mCaseSensitive = true;
-		langDef.mAutoIndentation = true;
-
-		langDef.mName = "C";
-
-		inited = true;
-	}
-	return langDef;
-}
-
-const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::SQL()
-{
-	static bool inited = false;
-	static LanguageDefinition langDef;
-	if (!inited)
-	{
-		static const char* const keywords[] = {
-			"ADD", "EXCEPT", "PERCENT", "ALL", "EXEC", "PLAN", "ALTER", "EXECUTE", "PRECISION", "AND", "EXISTS", "PRIMARY", "ANY", "EXIT", "PRINT", "AS", "FETCH", "PROC", "ASC", "FILE", "PROCEDURE",
-			"AUTHORIZATION", "FILLFACTOR", "PUBLIC", "BACKUP", "FOR", "RAISERROR", "BEGIN", "FOREIGN", "READ", "BETWEEN", "FREETEXT", "READTEXT", "BREAK", "FREETEXTTABLE", "RECONFIGURE",
-			"BROWSE", "FROM", "REFERENCES", "BULK", "FULL", "REPLICATION", "BY", "FUNCTION", "RESTORE", "CASCADE", "GOTO", "RESTRICT", "CASE", "GRANT", "RETURN", "CHECK", "GROUP", "REVOKE",
-			"CHECKPOINT", "HAVING", "RIGHT", "CLOSE", "HOLDLOCK", "ROLLBACK", "CLUSTERED", "IDENTITY", "ROWCOUNT", "COALESCE", "IDENTITY_INSERT", "ROWGUIDCOL", "COLLATE", "IDENTITYCOL", "RULE",
-			"COLUMN", "IF", "SAVE", "COMMIT", "IN", "SCHEMA", "COMPUTE", "INDEX", "SELECT", "CONSTRAINT", "INNER", "SESSION_USER", "CONTAINS", "INSERT", "SET", "CONTAINSTABLE", "INTERSECT", "SETUSER",
-			"CONTINUE", "INTO", "SHUTDOWN", "CONVERT", "IS", "SOME", "CREATE", "JOIN", "STATISTICS", "CROSS", "KEY", "SYSTEM_USER", "CURRENT", "KILL", "TABLE", "CURRENT_DATE", "LEFT", "TEXTSIZE",
-			"CURRENT_TIME", "LIKE", "THEN", "CURRENT_TIMESTAMP", "LINENO", "TO", "CURRENT_USER", "LOAD", "TOP", "CURSOR", "NATIONAL", "TRAN", "DATABASE", "NOCHECK", "TRANSACTION",
-			"DBCC", "NONCLUSTERED", "TRIGGER", "DEALLOCATE", "NOT", "TRUNCATE", "DECLARE", "NULL", "TSEQUAL", "DEFAULT", "NULLIF", "UNION", "DELETE", "OF", "UNIQUE", "DENY", "OFF", "UPDATE",
-			"DESC", "OFFSETS", "UPDATETEXT", "DISK", "ON", "USE", "DISTINCT", "OPEN", "USER", "DISTRIBUTED", "OPENDATASOURCE", "VALUES", "DOUBLE", "OPENQUERY", "VARYING","DROP", "OPENROWSET", "VIEW",
-			"DUMMY", "OPENXML", "WAITFOR", "DUMP", "OPTION", "WHEN", "ELSE", "OR", "WHERE", "END", "ORDER", "WHILE", "ERRLVL", "OUTER", "WITH", "ESCAPE", "OVER", "WRITETEXT"
-		};
-
-		for (auto& k : keywords)
-			langDef.mKeywords.insert(k);
-
-		static const char* const identifiers[] = {
-			"ABS",  "ACOS",  "ADD_MONTHS",  "ASCII",  "ASCIISTR",  "ASIN",  "ATAN",  "ATAN2",  "AVG",  "BFILENAME",  "BIN_TO_NUM",  "BITAND",  "CARDINALITY",  "CASE",  "CAST",  "CEIL",
-			"CHARTOROWID",  "CHR",  "COALESCE",  "COMPOSE",  "CONCAT",  "CONVERT",  "CORR",  "COS",  "COSH",  "COUNT",  "COVAR_POP",  "COVAR_SAMP",  "CUME_DIST",  "CURRENT_DATE",
-			"CURRENT_TIMESTAMP",  "DBTIMEZONE",  "DECODE",  "DECOMPOSE",  "DENSE_RANK",  "DUMP",  "EMPTY_BLOB",  "EMPTY_CLOB",  "EXP",  "EXTRACT",  "FIRST_VALUE",  "FLOOR",  "FROM_TZ",  "GREATEST",
-			"GROUP_ID",  "HEXTORAW",  "INITCAP",  "INSTR",  "INSTR2",  "INSTR4",  "INSTRB",  "INSTRC",  "LAG",  "LAST_DAY",  "LAST_VALUE",  "LEAD",  "LEAST",  "LENGTH",  "LENGTH2",  "LENGTH4",
-			"LENGTHB",  "LENGTHC",  "LISTAGG",  "LN",  "LNNVL",  "LOCALTIMESTAMP",  "LOG",  "LOWER",  "LPAD",  "LTRIM",  "MAX",  "MEDIAN",  "MIN",  "MOD",  "MONTHS_BETWEEN",  "NANVL",  "NCHR",
-			"NEW_TIME",  "NEXT_DAY",  "NTH_VALUE",  "NULLIF",  "NUMTODSINTERVAL",  "NUMTOYMINTERVAL",  "NVL",  "NVL2",  "POWER",  "RANK",  "RAWTOHEX",  "REGEXP_COUNT",  "REGEXP_INSTR",
-			"REGEXP_REPLACE",  "REGEXP_SUBSTR",  "REMAINDER",  "REPLACE",  "ROUND",  "ROWNUM",  "RPAD",  "RTRIM",  "SESSIONTIMEZONE",  "SIGN",  "SIN",  "SINH",
-			"SOUNDEX",  "SQRT",  "STDDEV",  "SUBSTR",  "SUM",  "SYS_CONTEXT",  "SYSDATE",  "SYSTIMESTAMP",  "TAN",  "TANH",  "TO_CHAR",  "TO_CLOB",  "TO_DATE",  "TO_DSINTERVAL",  "TO_LOB",
-			"TO_MULTI_BYTE",  "TO_NCLOB",  "TO_NUMBER",  "TO_SINGLE_BYTE",  "TO_TIMESTAMP",  "TO_TIMESTAMP_TZ",  "TO_YMINTERVAL",  "TRANSLATE",  "TRIM",  "TRUNC", "TZ_OFFSET",  "UID",  "UPPER",
-			"USER",  "USERENV",  "VAR_POP",  "VAR_SAMP",  "VARIANCE",  "VSIZE "
-		};
-		for (auto& k : identifiers)
-		{
-			Identifier id;
-			id.mDeclaration = "Built-in function";
-			langDef.mIdentifiers.insert(std::make_pair(std::string(k), id));
-		}
-
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("L?\\\"(\\\\.|[^\\\"])*\\\"", PaletteIndex::String));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("\\\'[^\\\']*\\\'", PaletteIndex::String));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)([eE][+-]?[0-9]+)?[fF]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[+-]?[0-9]+[Uu]?[lL]?[lL]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("0[0-7]+[Uu]?[lL]?[lL]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("0[xX][0-9a-fA-F]+[uU]?[lL]?[lL]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[a-zA-Z_][a-zA-Z0-9_]*", PaletteIndex::Identifier));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[\\[\\]\\{\\}\\!\\%\\^\\&\\*\\(\\)\\-\\+\\=\\~\\|\\<\\>\\?\\/\\;\\,\\.]", PaletteIndex::Punctuation));
-
-
-		langDef.mSingleLineComment = "//";
-
-		langDef.mCaseSensitive = false;
-		langDef.mAutoIndentation = false;
-
-		langDef.mName = "SQL";
-
-		inited = true;
-	}
-	return langDef;
-}
-
-const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::AngelScript()
-{
-	static bool inited = false;
-	static LanguageDefinition langDef;
-	if (!inited)
-	{
-		static const char* const keywords[] = {
-			"and", "abstract", "auto", "bool", "break", "case", "cast", "class", "const", "continue", "default", "do", "double", "else", "enum", "false", "final", "float", "for",
-			"from", "funcdef", "function", "get", "if", "import", "in", "inout", "int", "interface", "int8", "int16", "int32", "int64", "is", "mixin", "namespace", "not",
-			"null", "or", "out", "override", "private", "protected", "return", "set", "shared", "super", "switch", "this ", "true", "typedef", "uint", "uint8", "uint16", "uint32",
-			"uint64", "void", "while", "xor"
-		};
-
-		for (auto& k : keywords)
-			langDef.mKeywords.insert(k);
-
-		static const char* const identifiers[] = {
-			"cos", "sin", "tab", "acos", "asin", "atan", "atan2", "cosh", "sinh", "tanh", "log", "log10", "pow", "sqrt", "abs", "ceil", "floor", "fraction", "closeTo", "fpFromIEEE", "fpToIEEE",
-			"complex", "opEquals", "opAddAssign", "opSubAssign", "opMulAssign", "opDivAssign", "opAdd", "opSub", "opMul", "opDiv"
-		};
-		for (auto& k : identifiers)
-		{
-			Identifier id;
-			id.mDeclaration = "Built-in function";
-			langDef.mIdentifiers.insert(std::make_pair(std::string(k), id));
-		}
-
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("L?\\\"(\\\\.|[^\\\"])*\\\"", PaletteIndex::String));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("\\'\\\\?[^\\']\\'", PaletteIndex::String));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)([eE][+-]?[0-9]+)?[fF]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[+-]?[0-9]+[Uu]?[lL]?[lL]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("0[0-7]+[Uu]?[lL]?[lL]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("0[xX][0-9a-fA-F]+[uU]?[lL]?[lL]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[a-zA-Z_][a-zA-Z0-9_]*", PaletteIndex::Identifier));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[\\[\\]\\{\\}\\!\\%\\^\\&\\*\\(\\)\\-\\+\\=\\~\\|\\<\\>\\?\\/\\;\\,\\.]", PaletteIndex::Punctuation));
-
-
-		langDef.mSingleLineComment = "//";
-
-		langDef.mCaseSensitive = true;
-		langDef.mAutoIndentation = true;
-
-		langDef.mName = "AngelScript";
-
-		inited = true;
-	}
-	return langDef;
-}
-
-const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Lua()
-{
-	static bool inited = false;
-	static LanguageDefinition langDef;
-	if (!inited)
-	{
-		static const char* const keywords[] = {
-			"and", "break", "do", "", "else", "elseif", "end", "false", "for", "function", "if", "in", "", "local", "nil", "not", "or", "repeat", "return", "then", "true", "until", "while"
-		};
-
-		for (auto& k : keywords)
-			langDef.mKeywords.insert(k);
-
-		static const char* const identifiers[] = {
-			"assert", "collectgarbage", "dofile", "error", "getmetatable", "ipairs", "loadfile", "load", "loadstring",  "next",  "pairs",  "pcall",  "print",  "rawequal",  "rawlen",  "rawget",  "rawset",
-			"select",  "setmetatable",  "tonumber",  "tostring",  "type",  "xpcall",  "_G",  "_VERSION","arshift", "band", "bnot", "bor", "bxor", "btest", "extract", "lrotate", "lshift", "replace",
-			"rrotate", "rshift", "create", "resume", "running", "status", "wrap", "yield", "isyieldable", "debug","getuservalue", "gethook", "getinfo", "getlocal", "getregistry", "getmetatable",
-			"getupvalue", "upvaluejoin", "upvalueid", "setuservalue", "sethook", "setlocal", "setmetatable", "setupvalue", "traceback", "close", "flush", "input", "lines", "open", "output", "popen",
-			"read", "tmpfile", "type", "write", "close", "flush", "lines", "read", "seek", "setvbuf", "write", "__gc", "__tostring", "abs", "acos", "asin", "atan", "ceil", "cos", "deg", "exp", "tointeger",
-			"floor", "fmod", "ult", "log", "max", "min", "modf", "rad", "random", "randomseed", "sin", "sqrt", "string", "tan", "type", "atan2", "cosh", "sinh", "tanh",
-			"pow", "frexp", "ldexp", "log10", "pi", "huge", "maxinteger", "mininteger", "loadlib", "searchpath", "seeall", "preload", "cpath", "path", "searchers", "loaded", "module", "require", "clock",
-			"date", "difftime", "execute", "exit", "getenv", "remove", "rename", "setlocale", "time", "tmpname", "byte", "char", "dump", "find", "format", "gmatch", "gsub", "len", "lower", "match", "rep",
-			"reverse", "sub", "upper", "pack", "packsize", "unpack", "concat", "maxn", "insert", "pack", "unpack", "remove", "move", "sort", "offset", "codepoint", "char", "len", "codes", "charpattern",
-			"coroutine", "table", "io", "os", "string", "utf8", "bit32", "math", "debug", "package"
-		};
-		for (auto& k : identifiers)
-		{
-			Identifier id;
-			id.mDeclaration = "Built-in function";
-			langDef.mIdentifiers.insert(std::make_pair(std::string(k), id));
-		}
-
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("L?\\\"(\\\\.|[^\\\"])*\\\"", PaletteIndex::String));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("\\\'[^\\\']*\\\'", PaletteIndex::String));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("0[xX][0-9a-fA-F]+[uU]?[lL]?[lL]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)([eE][+-]?[0-9]+)?[fF]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[+-]?[0-9]+[Uu]?[lL]?[lL]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[a-zA-Z_][a-zA-Z0-9_]*", PaletteIndex::Identifier));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[\\[\\]\\{\\}\\!\\%\\^\\&\\*\\(\\)\\-\\+\\=\\~\\|\\<\\>\\?\\/\\;\\,\\.]", PaletteIndex::Punctuation));
-
-		langDef.mCommentStart = "--[[";
-		langDef.mCommentEnd = "]]";
-		langDef.mSingleLineComment = "--";
-
-		langDef.mCaseSensitive = true;
-		langDef.mAutoIndentation = false;
-
-		langDef.mName = "Lua";
-
-		inited = true;
-	}
-	return langDef;
-}
-*/
-
 const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::I8080()
 {
 	
@@ -3825,7 +3534,9 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::I8080()
 		std::vector<int> arguments;
 		std::vector<int> bytes;
 		std::string declaration;
+		std::string pseudoCode;
 		std::vector<int> ticks;
+		ENUM_TicksMean TicksMean;
 		FlagsList flags_status;
 	};
 
@@ -3846,156 +3557,156 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::I8080()
 		for (auto& k : keywords)
 			langDef.mKeywords.insert(k);
 
-		static const std::vector<FullInfoInstruction> InfoInstructions {
-			{"hlt", {},{},u8"Остановка работы процессора",{7},FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+		static const std::vector<FullInfoInstruction> InfoInstructions{
+			{"hlt", {},{},u8"Остановка работы процессора.",u8"Stop",{7},ENUM_TicksMean::Always,FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"nop", {},{},u8"Пустая команда которая занимает один байт",{4},FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"nop", {},{},u8"Пустая команда которая занимает один байт", u8"1. [PC] = [PC] + 1",{4},ENUM_TicksMean::Always,FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"in",  {ENUM_Arguments::Value8},{ENUM_Bytes::Value},   u8"Чтение значения в аккумулятор из внешнего порта",{10},FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"in",  {ENUM_Arguments::Value8},{ENUM_Bytes::Value},   u8"Чтение значения в аккумулятор из внешнего порта", u8"1. [A]  = Port[Число.8]\n2. [PC] = [PC] + 2",{10}, ENUM_TicksMean::Always,FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"out", {ENUM_Arguments::Value8},{ENUM_Bytes::Value},   u8"Отправка значения из аккумулятора во внешний порт",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"out", {ENUM_Arguments::Value8},{ENUM_Bytes::Value},   u8"Отправка значения из аккумулятора во внешний порт", u8"1. Port[Число.8] = [A]\n2. [PC]          = [PC] + 2",{10}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"mov", {ENUM_Arguments::Register8,ENUM_Arguments::Register8},{},  u8"Перемешение значений между регистрами или памятью(по адресу HL)",{5,7}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"mov", {ENUM_Arguments::Register8,ENUM_Arguments::Register8},{},  u8"Перемешение значений между регистрами или памятью(по адресу HL)", u8"1. [Рег.8] = [Рег.8]\n2. [PC]    = [PC] + 1",{7,5}, ENUM_TicksMean::M_Used, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"mvi", {ENUM_Arguments::Register8,ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Запись константы в регистр или память",{7,10},  FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"mvi", {ENUM_Arguments::Register8,ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Запись константы в регистр или память", u8"1. [Рег.8] = [Число.8]\n2. [PC]    = [PC] + 2",{10,7}, ENUM_TicksMean::M_Used,  FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"cmp", {ENUM_Arguments::Register8},{},  u8"Сравнение значений между акуммулятором и регистрами или памятью(по адресу HL)",{4,7},  FlagsList{Affected,Affected,Affected,Affected,Affected}},
+			{"cmp", {ENUM_Arguments::Register8},{},  u8"Сравнение значений между акуммулятором и регистрами или памятью(по адресу HL)", u8"1. Temp    = ([A] - [Рег.8])\n2. [Zero]  = [Temp == 0]\n3. [Carry] = [A] < [Рег.8]  \n4. [PC]    = [PC] + 1",{7,4}, ENUM_TicksMean::M_Used,  FlagsList{Affected,Affected,Affected,Affected,Affected}},
 
-			{"cpi",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Сравнение значения аккумулятора с константой",{7},  FlagsList{Affected,Affected,Affected,Affected,Affected}},
+			{"cpi",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Сравнение значения аккумулятора с константой", u8"1. Temp    = [A] - [Число.8]\n2. [Zero]  = [Temp == 0]\n3. [Carry] = [A] < [Число.8]  \n4. [PC]    = [PC] + 1",{7}, ENUM_TicksMean::Always,  FlagsList{Affected,Affected,Affected,Affected,Affected}},
 
-			{"ana",{ENUM_Arguments::Register8},{},  u8"Логическое И значения аккумулятора с регистром или памятью(по адресу HL)",{4,7},  FlagsList{Affected,Affected,Affected,Affected,Reset}},
+			{"ana",{ENUM_Arguments::Register8},{},  u8"Логическое И значения аккумулятора с регистром или памятью(по адресу HL)", u8"1. [A]  = [A] & [Рег.8]\n2. [PC] = [PC] + 1",{7,4}, ENUM_TicksMean::M_Used,  FlagsList{Affected,Affected,Affected,Affected,Reset}},
 
-			{"ani",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Логическое И аккумулятора с константой",{7}, FlagsList{Affected,Affected,Affected,Affected,Reset}},
+			{"ani",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Логическое И аккумулятора с константой", u8"1. [A]  = [A] & [Число.8]\n2. [PC] = [PC] + 2",{7}, ENUM_TicksMean::Always, FlagsList{Affected,Affected,Affected,Affected,Reset}},
 
-			{"ora",{ENUM_Arguments::Register8},{},  u8"Логическое ИЛИ значения аккумулятора с регистром или памятью(по адресу HL)",{4,7}, FlagsList{Affected,Affected,Reset,Affected,Reset}},
+			{"ora",{ENUM_Arguments::Register8},{},  u8"Логическое ИЛИ значения аккумулятора с регистром или памятью(по адресу HL)", u8"1. [A]  = [A] | [Рег.8]\n2. [PC] = [PC] + 1",{7,4}, ENUM_TicksMean::M_Used, FlagsList{Affected,Affected,Reset,Affected,Reset}},
 
-			{"ori",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Логическое ИЛИ значения аккумулятора с константой",{7}, FlagsList{Affected,Affected,Reset,Affected,Reset}},
+			{"ori",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Логическое ИЛИ значения аккумулятора с константой", u8"1. [A]  = [A] | [Число.8]\n2. [PC] = [PC] + 2",{7}, ENUM_TicksMean::Always, FlagsList{Affected,Affected,Reset,Affected,Reset}},
 
-			{"xra",{ENUM_Arguments::Register8},{},  u8"Логическое исключающее ИЛИ значение аккумулятора с регистром или памятью(по адресу HL)",{4,7}, FlagsList{Affected,Affected,Reset,Affected,Reset}},
+			{"xra",{ENUM_Arguments::Register8},{},  u8"Логическое исключающее ИЛИ значение аккумулятора с регистром или памятью(по адресу HL)", u8"1. [A]  = [A] ^ [Рег.8]\n2. [PC] = [PC] + 1",{7,4}, ENUM_TicksMean::M_Used, FlagsList{Affected,Affected,Reset,Affected,Reset}},
 
-			{"xri",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Логичиское исключающее ИЛИ значение аккумулятора с константой",{7}, FlagsList{Affected,Affected,Reset,Affected,Reset}},
+			{"xri",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Логичиское исключающее ИЛИ значение аккумулятора с константой", u8"1. [A]  = [A] ^ [Число.8]\n2. [PC] = [PC] + 2",{7}, ENUM_TicksMean::Always, FlagsList{Affected,Affected,Reset,Affected,Reset}},
 
-			{"rlc",{},{},  u8"Все биты аккумулятора сдвигаются влево на один бит. Значение последнего сдвинутого бита устанавливается в флаг Carry и устанавливается в первый бит аккумулятора",{4}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Affected}},
+			{"rlc",{},{},  u8"Все биты аккумулятора сдвигаются влево на один бит. Значение последнего сдвинутого бита устанавливается в флаг Carry и устанавливается в первый бит аккумулятора", u8"1. [Carry] = A[7]\n2. [A] = (A << 1) | Carry\n3. [PC] = PC + 1",{4}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Affected}},
 
-			{"ral",{},{},  u8"Все биты аккумулятора сдвигаются влево на один бит. Состояние флага Carry устанавливается в первый бит аккумулятора. Значение последнего бита  (не сдвинутого аккумулятора) устанавливается в флаг Carry",{4}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Affected}},
+			{"ral",{},{},  u8"Все биты аккумулятора сдвигаются влево на один бит. Состояние флага Carry устанавливается в первый бит аккумулятора. Значение последнего бита (не сдвинутого аккумулятора) устанавливается в флаг Carry", u8"1. Temp = A[7]\n2. [A] = (A << 1) | Carry\n3. [Carry] = Temp\n4. [PC] = PC + 1",{4}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Affected}},
 
-			{"rrc",{},{},  u8"Все биты аккумулятора сдвигаются вправо на один бит. Значение первого бита аккумулятора устанавливается в флаг Carry и устанавливается в последний бит аккумулятора",{4}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Affected}},
+			{"rrc",{},{},  u8"Все биты аккумулятора сдвигаются вправо на один бит. Значение первого бита аккумулятора устанавливается в флаг Carry и устанавливается в последний бит аккумулятора", u8"1. Carry = A[0]\n2. [A] = (A >> 1) | (Carry << 7)\n3. [PC] = PC + 1",{4}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Affected}},
 
-			{"rar",{},{},  u8"Все биты аккумулятора сдвигаются вправо на один бит. Состояние флага Carry устанавливается в последний бит аккумулятора. Значение первого бита (не сдвинутого аккумулятора) устанавливается в флаг Carry",{4}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Affected}},
+			{"rar",{},{},  u8"Все биты аккумулятора сдвигаются вправо на один бит. Состояние флага Carry устанавливается в последний бит аккумулятора. Значение первого бита (не сдвинутого аккумулятора) устанавливается в флаг Carry", u8"1. Temp = A[0]\n2. [A] = (A >> 1) | (Carry << 7)\n3. [Carry] = Temp\n4. [PC] = PC + 1",{4}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Affected}},
 
-			{"stc",{},{},  u8"Устанавливает флаг Carry в состояние True. Carry = True",{4}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Set}},
+			{"stc",{},{},  u8"Устанавливает флаг Carry в состояние True.", u8"1. [Carry] = [True]\n2. [PC]    = [PC] + 1",{4}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Set}},
 
-			{"cma",{},{},  u8"Инвентирует побитово значение аккумулятора.",{4}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"cma",{},{},  u8"Инвентирует побитово значение аккумулятора.", u8"1. [A]  = ![A]\n2. [PC] = [PC] + 1",{4}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"cmc",{},{},  u8"Инвентирует флаг Carry",{4}, FlagsList{ Unaffected,Unaffected,Unaffected,Unaffected,Affected }},
+			{"cmc",{},{},  u8"Инвентирует флаг Carry.", u8"1. [Carry] = ![Carry]\n2. [PC]    = [PC] + 1",{4}, ENUM_TicksMean::Always, FlagsList{ Unaffected,Unaffected,Unaffected,Unaffected,Affected }},
 
-			{"ret",{},{},  u8"Прыжок на адрес записанный в верхушке стэка",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"ret",{},{},  u8"Прыжок на адрес записанный в верхушке стэка.", u8"1. [PC].low  = M[SP]\n2. [PC].high = M[SP + 1]\n3. [SP]      = [SP] + 2",{10}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"rz",{},{},   u8"Если флаг Zero = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"rz",{},{},   u8"Если флаг Zero = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды", u8"Если условие выполненно:\n1. [PC].low  = M[SP]\n2. [PC].high = M[SP + 1]\n3. [SP]      = [SP] + 2\nИначе:\n1. [PC]      = [PC] + 1",{11,5}, ENUM_TicksMean::Condition, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"rc",{},{},   u8"Если флаг Carry = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"rc",{},{},   u8"Если флаг Carry = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды", u8"Если условие выполненно:\n1. [PC].low  = M[SP]\n2. [PC].high = M[SP + 1]\n3. [SP]      = [SP] + 2\nИначе:\n1. [PC]      = [PC] + 1",{11,5}, ENUM_TicksMean::Condition, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"rpe",{},{},  u8"Если флаг Paruty = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"rpe",{},{},  u8"Если флаг Paruty = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды", u8"Если условие выполненно:\n1. [PC].low  = M[SP]\n2. [PC].high = M[SP + 1]\n3. [SP]      = [SP] + 2\nИначе:\n1. [PC]      = [PC] + 1",{11,5}, ENUM_TicksMean::Condition, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"rm",{},{},   u8"Если флаг Sign = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"rm",{},{},   u8"Если флаг Sign = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды", u8"Если условие выполненно:\n1. [PC].low  = M[SP]\n2. [PC].high = M[SP + 1]\n3. [SP]      = [SP] + 2\nИначе:\n1. [PC]      = [PC] + 1",{11,5}, ENUM_TicksMean::Condition, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"rnz",{},{},  u8"Если флаг Zero = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"rnz",{},{},  u8"Если флаг Zero = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды", u8"Если условие выполненно:\n1. [PC].low  = M[SP]\n2. [PC].high = M[SP + 1]\n3. [SP]      = [SP] + 2\nИначе:\n1. [PC]      = [PC] + 1",{11,5}, ENUM_TicksMean::Condition, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"rnc",{},{},  u8"Если флаг Carry = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"rnc",{},{},  u8"Если флаг Carry = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды", u8"Если условие выполненно:\n1. [PC].low  = M[SP]\n2. [PC].high = M[SP + 1]\n3. [SP]      = [SP] + 2\nИначе:\n1. [PC]      = [PC] + 1",{11,5}, ENUM_TicksMean::Condition, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"rpo",{},{},  u8"Если флаг Paruty = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"rpo",{},{},  u8"Если флаг Paruty = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды", u8"Если условие выполненно:\n1. [PC].low  = M[SP]\n2. [PC].high = M[SP + 1]\n3. [SP]      = [SP] + 2\nИначе:\n1. [PC]      = [PC] + 1",{11,5}, ENUM_TicksMean::Condition, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"rp",{},{},   u8"Если флаг Sign = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",{11,5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"rp",{},{},   u8"Если флаг Sign = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды", u8"Если условие выполненно:\n1. [PC].low  = M[SP]\n2. [PC].high = M[SP + 1]\n3. [SP]      = [SP] + 2\nИначе:\n1. [PC]      = [PC] + 1",{11,5}, ENUM_TicksMean::Condition, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"jmp",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Прыжок PC по адресу заданной константы",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"jmp",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Прыжок PC по адресу заданной константы", u8"1. [PC] = [Число.16]",{10}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"jz",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Zero = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"jz",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Zero = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",u8"Если условие выполненно:\n1. [PC] = [Число.16]\nИначе:\n1. [PC] = [PC] + 3",{10}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"jc",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Carry = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"jc",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Carry = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",u8"Если условие выполненно:\n1. [PC] = [Число.16]\nИначе:\n1. [PC] = [PC] + 3",{10}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"jpe",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Paruty = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"jpe",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Paruty = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",u8"Если условие выполненно:\n1. [PC] = [Число.16]\nИначе:\n1. [PC] = [PC] + 3",{10}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"jm",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Sign = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"jm",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Sign = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",u8"Если условие выполненно:\n1. [PC] = [Число.16]\nИначе:\n1. [PC] = [PC] + 3",{10}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"jnz",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Zero = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"jnz",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Zero = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",u8"Если условие выполненно:\n1. [PC] = [Число.16]\nИначе:\n1. [PC] = [PC] + 3",{10}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"jnc",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Carry = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"jnc",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Carry = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",u8"Если условие выполненно:\n1. [PC] = [Число.16]\nИначе:\n1. [PC] = [PC] + 3",{10}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"jpo",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Paruty = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"jpo",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Paruty = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",u8"Если условие выполненно:\n1. [PC] = [Число.16]\nИначе:\n1. [PC] = [PC] + 3",{10}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"jp",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг  Sign = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"jp",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг  Sign = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",u8"Если условие выполненно:\n1. [PC] = [Число.16]\nИначе:\n1. [PC] = [PC] + 3",{10}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"call",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high}, u8"Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"call",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high}, u8"Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",u8"1. [SP]      = [SP] - 2\n2. M[SP]     = [PC + 3].low\n3. M[SP + 1] = [PC + 3].high\n4. [PC]      = [Число.16]",{17}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"cz",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Zero = 1, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"cz",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Zero = 1, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",u8"Если условие выполненно:\n1. [SP]      = [SP] - 2\n2. M[SP]     = [PC + 3].low\n3. M[SP + 1] = [PC + 3].high\n4. [PC]      = [Число.16]\nИначе:\n1. [PC]      = [PC] + 3",{17,11}, ENUM_TicksMean::Condition, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"cc",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Carry = 1, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"cc",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Carry = 1, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",u8"Если условие выполненно:\n1. [SP]      = [SP] - 2\n2. M[SP]     = [PC + 3].low\n3. M[SP + 1] = [PC + 3].high\n4. [PC]      = [Число.16]\nИначе:\n1. [PC]      = [PC] + 3",{17,11}, ENUM_TicksMean::Condition, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"cpe",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Paruty = 1, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"cpe",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Paruty = 1, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",u8"Если условие выполненно:\n1. [SP]      = [SP] - 2\n2. M[SP]     = [PC + 3].low\n3. M[SP + 1] = [PC + 3].high\n4. [PC]      = [Число.16]\nИначе:\n1. [PC]      = [PC] + 3",{17,11}, ENUM_TicksMean::Condition, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"cm",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Sign = 1, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"cm",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Sign = 1, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",u8"Если условие выполненно:\n1. [SP]      = [SP] - 2\n2. M[SP]     = [PC + 3].low\n3. M[SP + 1] = [PC + 3].high\n4. [PC]      = [Число.16]\nИначе:\n1. [PC]      = [PC] + 3",{17,11}, ENUM_TicksMean::Condition, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"cnz",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Zero = 0, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"cnz",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Zero = 0, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",u8"Если условие выполненно:\n1. [SP]      = [SP] - 2\n2. M[SP]     = [PC + 3].low\n3. M[SP + 1] = [PC + 3].high\n4. [PC]      = [Число.16]\nИначе:\n1. [PC]      = [PC] + 3",{17,11}, ENUM_TicksMean::Condition, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"cnc",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Carry = 0, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"cnc",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Carry = 0, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",u8"Если условие выполненно:\n1. [SP]      = [SP] - 2\n2. M[SP]     = [PC + 3].low\n3. M[SP + 1] = [PC + 3].high\n4. [PC]      = [Число.16]\nИначе:\n1. [PC]      = [PC] + 3",{17,11}, ENUM_TicksMean::Condition, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"cpo",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Paruty = 0, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"cpo",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Если флаг Paruty = 0, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",u8"Если условие выполненно:\n1. [SP]      = [SP] - 2\n2. M[SP]     = [PC + 3].low\n3. M[SP + 1] = [PC + 3].high\n4. [PC]      = [Число.16]\nИначе:\n1. [PC]      = [PC] + 3",{17,11}, ENUM_TicksMean::Condition, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"cp",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Sign = 0, то Сохранение следующего адреса команды и прыжок PC на адрес указанный константой",{17,11}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"cp",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},   u8"Если флаг Sign = 0, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",u8"Если условие выполненно:\n1. [SP]      = [SP] - 2\n2. M[SP]     = [PC + 3].low\n3. M[SP + 1] = [PC + 3].high\n4. [PC]      = [Число.16]\nИначе:\n1. [PC]      = [PC] + 3",{17,11}, ENUM_TicksMean::Condition, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"push",{ENUM_Arguments::Register16_WithPSW},{}, u8"Сохранение двухбайтового числа из пары регистров в верхушку стэка",{11}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"push",{ENUM_Arguments::Register16_WithPSW},{}, u8"Сохранение двухбайтового числа из пары регистров в верхушку стэка",u8"1. [SP]      = [SP] - 2\n2. M[SP + 1] = [Рег.16].high\n3. M[SP]     = [Рег.16].low.\n4. [PC]      = [PC] + 1",{11}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"shld",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high}, u8"Сохраняет двухбайтовое значение пары регистров HL по адресу памяти заданной константой",{16}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
+			{"pop",{ENUM_Arguments::Register16_WithPSW},{},  u8"Извлечение из верхушки стэка двухбайтового числа в пару регистров",u8"1. M[SP]     = [Рег.16].low\n2. M[SP + 1] = [Рег.16].high\n3. [SP]      = [SP] + 2\n4. [PC]      = [PC] + 1",{10}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
 
-			{"sta",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Сохраняет значение из аккумулятор по адресу памяти заданной константой",{13} , FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+			{"shld",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high}, u8"Сохраняет двухбайтовое значение пары регистров HL по адресу памяти заданной константой",u8"1. M[Число.16]     = [L]\n2. M[Число.16 + 1] = [H]\n3. [PC]            = [PC] + 3",{16}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected}},
 
-			{"stax",{ENUM_Arguments::Register16_OnlyBD},{}, u8"Сохраняет значение аккумулятора в память по адресу пары регистров",{7}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+			{"lhld",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high}, u8"Загружает двухбайтовое значение по адресу памяти заданной константой в пару регистров HL",u8"1. [L]  = M[Число.16]\n2. [H]  = M[Число.16 + 1]\n3. [PC] = [PC] + 3",{16}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
 
-			{"ldax",{ENUM_Arguments::Register16_OnlyBD},{}, u8"Загружает число по адресу пары регистров в аккумулятор",{7}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+			{"stax",{ENUM_Arguments::Register16_OnlyBD},{}, u8"Сохраняет значение аккумулятора в память по адресу пары регистров",u8"1. M[Рег.16] = [A]\n2. [PC]      = [PC] + 1",{7}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
 
-			{"pop",{ENUM_Arguments::Register16_WithPSW},{},  u8"Загрузка из верхушки стэка двухбайтового числа в пару регистров",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+			{"ldax",{ENUM_Arguments::Register16_OnlyBD},{}, u8"Загружает число по адресу пары регистров в аккумулятор",u8"1. [A]  = M[Рег.16]\n2. [PC] = [PC] + 1",{7}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
 
-			{"lhld",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high}, u8"Загружает двухбайтовое значение по адресу памяти заданной константой в пару регистров HL",{16}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+			{"sta",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Сохраняет значение из аккумулятор по адресу памяти заданной константой",u8"1. M[Число.16] = [A]\n2. [PC]        = [PC] + 3",{13}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
 
-			{"lda",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Загружает значение из памяти по адресу заданной константой в аккумулятор",{13}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+			{"lda",{ENUM_Arguments::Value16},{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},  u8"Загружает значение из памяти по адресу заданной константой в аккумулятор",u8"1. [A]  = M[Число.16]\n2. [PC] = [PC] + 3",{13}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
 
-			{"lxi",{ENUM_Arguments::Register16_WithSP,ENUM_Arguments::Value16},{ENUM_Bytes::Value_low,ENUM_Bytes::Value_high},  u8"Записывает двухбайтовую константу в пару регистров",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+			{"lxi",{ENUM_Arguments::Register16_WithSP,ENUM_Arguments::Value16},{ENUM_Bytes::Value_low,ENUM_Bytes::Value_high},  u8"Записывает двухбайтовую константу в пару регистров",u8"1. [Рег.16].low  = M[PC + 1]\n2. [Рег.16].high = M[PC + 2]\n3. [PC]          = [PC] + 3",{10}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
 
-			{"xchg",{},{}, u8"Меняет местами значения двухбайтовых чисел пар регистров DE и HL",{4}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+			{"xchg",{},{}, u8"Меняет местами значения двухбайтовых чисел пар регистров DE и HL",u8"1. swap([DE], [HL])\n2. [PC] = [PC] + 1",{4}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
 
-			{"xthl",{},{}, u8"Меняет местами значение памяти по адресу SP c значением регистра L, и также с адресом памяти (SP + 1) и регистром H. Память поменяется, а значение SP не поменяется",{18}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+			{"xthl",{},{}, u8"Меняет местами значение памяти по адресу SP c значением регистра L, и также с адресом памяти (SP + 1) и регистром H. Память поменяется, а значение SP не поменяется",u8"1. swap([H], Memory[SP + 1])\n2. swap([L], Memory[SP])\n3. [PC] = [PC] + 1",{18}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
 
-			{"pchl",{},{}, u8"Загружает значение числа из пар регистров HL в адрес текущей позиции процессора PC",{5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+			{"pchl",{},{}, u8"Загружает значение числа из пар регистров HL в адрес текущей позиции процессора PC",u8"1. [PC] = [HL]",{5}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
 
-			{"sphl",{},{}, u8"Загружает значение двух байтвого числа пары регистров HL в стэк SP. При этом SP увеличится на два",{5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+			{"sphl",{},{}, u8"Загружает значение двух байтвого числа пары регистров HL в стэк SP. При этом SP увеличится на два",u8"1. [SP] = [HL]\n2. [PC] = [PC] + 1",{5}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
 
-			{"dad",{ENUM_Arguments::Register16_WithSP},{},  u8"Прибавляние к числу из пары регистров HL, числа из указанной пары регистров",{10}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Affected} },
+			{"dad",{ENUM_Arguments::Register16_WithSP},{},  u8"Прибавляние к числу из пары регистров HL, числа из указанной пары регистров",u8"1. [HL] = [HL] + [Рег.16]\n2. [PC] = [PC] + 1",{10}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Affected} },
 
-			{"inx",{ENUM_Arguments::Register16_WithSP},{},  u8"Увелечение на единицу числа записанного в паре регистров",{5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+			{"inx",{ENUM_Arguments::Register16_WithSP},{},  u8"Увелечение на единицу числа записанного в паре регистров",u8"1. [Рег.16] = [Рег.16] + 1\n2. [PC]     = [PC] + 1",{5}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
 
-			{"inr",{ENUM_Arguments::Register8},{},  u8"Увелечение регистра или памяти на единицу",{5,10}, FlagsList{Affected,Affected,Affected,Affected,Unaffected} },
+			{"inr",{ENUM_Arguments::Register8},{},  u8"Увелечение регистра или памяти на единицу",u8"1. [Рег.8] = [Рег.8] + 1\n2. [PC]    = [PC] + 1",{10,5}, ENUM_TicksMean::M_Used, FlagsList{Affected,Affected,Affected,Affected,Unaffected} },
 
-			{"dcx",{ENUM_Arguments::Register16_WithSP},{},  u8"Уменьшение на единицу числа записанного в паре регистров",{5}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
+			{"dcx",{ENUM_Arguments::Register16_WithSP},{},  u8"Уменьшение на единицу числа записанного в паре регистров",u8"1. [Рег.16] = [Рег.16] - 1\n2. [PC]     = [PC] + 1",{5}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} },
 
-			{"dcr",{ENUM_Arguments::Register8},{},  u8"Уменьшение регистра или памяти на единицу",{5,10}, FlagsList{Affected,Affected,Affected,Affected,Unaffected} },
+			{"dcr",{ENUM_Arguments::Register8},{},  u8"Уменьшение регистра или памяти на единицу",u8"1. [Рег.8] = [Рег.8] - 1\n2. [PC]    = [PC] + 1",{10,5}, ENUM_TicksMean::M_Used, FlagsList{Affected,Affected,Affected,Affected,Unaffected} },
 
-			{"add",{ENUM_Arguments::Register8},{},  u8"Арифмитическое сложение значения аккумулятора и регистра или памяти(по адресу HL)",{4,7}, FlagsList{Affected,Affected,Affected,Affected,Affected} },
+			{"add",{ENUM_Arguments::Register8},{},  u8"Арифмитическое сложение значения аккумулятора и регистра или памяти(по адресу HL)",u8"1. [A]  = [A] + [Рег.8]\n2. [PC] = [PC] + 1",{7,4}, ENUM_TicksMean::M_Used, FlagsList{Affected,Affected,Affected,Affected,Affected} },
 
-			{"adc",{ENUM_Arguments::Register8},{},  u8"Арифмитическое сложение значения аккумулятора и (регистра или памяти(по адресу HL)) с флагом Carry",{4,7}, FlagsList{Affected,Affected,Affected,Affected,Affected} },
+			{"adc",{ENUM_Arguments::Register8},{},  u8"Арифмитическое сложение значения аккумулятора и (регистра или памяти(по адресу HL)) с флагом Carry",u8"1. [A]  = [A] + [Рег.8] + [Carry]\n2. [PC] = [PC] + 1",{7,4}, ENUM_TicksMean::M_Used, FlagsList{Affected,Affected,Affected,Affected,Affected} },
 
-			{"adi",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Арифмитическое сложения значения аккумулятора с константой",{7}, FlagsList{Affected,Affected,Affected,Affected,Affected} },
+			{"adi",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Арифмитическое сложения значения аккумулятора с константой",u8"1. [A]  = [A] + [Число.8]\n2. [PC] = [PC] + 1",{7}, ENUM_TicksMean::Always, FlagsList{Affected,Affected,Affected,Affected,Affected} },
 
-			{"aci",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Арифмитическое сложения значения аккумулятора с константой и флагом Carry",{7}, FlagsList{Affected,Affected,Affected,Affected,Affected} },
+			{"aci",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Арифмитическое сложения значения аккумулятора с константой и флагом Carry",u8"1. [A]  = [A] + [Число.8] + [Carry]\n2. [PC] = [PC] + 1",{7}, ENUM_TicksMean::Always, FlagsList{Affected,Affected,Affected,Affected,Affected} },
 
-			{"sub",{ENUM_Arguments::Register8},{},  u8"Арифмитическое вычитание из значения аккумулятора значение памяти(по адресу HL) или регистра",{4,7}, FlagsList{Affected,Affected,Affected,Affected,Affected} },
+			{"sub",{ENUM_Arguments::Register8},{},  u8"Арифмитическое вычитание из значения аккумулятора значение памяти(по адресу HL) или регистра",u8"1. [A]  = [A] - [Рег.8]\n2. [PC] = [PC] + 1",{7,4}, ENUM_TicksMean::M_Used, FlagsList{Affected,Affected,Affected,Affected,Affected} },
 
-			{"sbb",{ENUM_Arguments::Register8},{},  u8"Арифмитическое вычитание из значения аккумулятора значение (памяти(по адресу HL) или регистра) с флагом Carry",{4,7}, FlagsList{Affected,Affected,Affected,Affected,Affected} },
+			{"sbb",{ENUM_Arguments::Register8},{},  u8"Арифмитическое вычитание из значения аккумулятора значение (памяти(по адресу HL) или регистра) с флагом Carry",u8"1. [A]  = [A] - [Рег.8] - [Carry]\n2. [PC] = [PC] + 1",{7,4}, ENUM_TicksMean::M_Used, FlagsList{Affected,Affected,Affected,Affected,Affected} },
 
-			{"sui",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Арифмитическое вычитание из значения аккумулятора константы",{7}, FlagsList{Affected,Affected,Affected,Affected,Affected} },
+			{"sui",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Арифмитическое вычитание из значения аккумулятора константы",u8"1. [A]  = [A] - [Число.8]\n2. [PC] = [PC] + 1",{7}, ENUM_TicksMean::Always, FlagsList{Affected,Affected,Affected,Affected,Affected} },
 
-			{"sbi",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Арифмитическое вычитание из значения аккумулятора константы и флага Carry",{7}, FlagsList{Affected,Affected,Affected,Affected,Affected} },
+			{"sbi",{ENUM_Arguments::Value8},{ENUM_Bytes::Value},  u8"Арифмитическое вычитание из значения аккумулятора константы и флага Carry",u8"1. [A]  = [A] - [Число.8] - [Carry]\n2. [PC] = [PC] + 1",{7}, ENUM_TicksMean::Always, FlagsList{Affected,Affected,Affected,Affected,Affected} },
 
-			{"rst",{ENUM_Arguments::ValueSpecial},{ENUM_Bytes::Value},  u8"Call [Число * 8]",{11}, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} }
+			{"rst",{ENUM_Arguments::ValueSpecial},{ENUM_Bytes::Value},  u8"Call [Число * 8]",u8"1. [SP]      = [SP] - 2\n2. M[SP]     = [PC + 3].low\n3. M[SP + 1] = [PC + 3].high\n4. [PC]      = [Число * 8]",{11}, ENUM_TicksMean::Always, FlagsList{Unaffected,Unaffected,Unaffected,Unaffected,Unaffected} }
 		};
 
 
@@ -4003,9 +3714,11 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::I8080()
 		{
 			Identifier id;
 			id.mDeclaration = info.declaration;
+			id.mPseudoCode = info.pseudoCode;
 			id.mArguments = info.arguments;
 			id.mBytes = info.bytes;
 			id.mTicks = info.ticks;
+			id.mTicksMean = info.TicksMean;
 			id.mFlags = info.flags_status;
 			langDef.mIdentifiers.insert(std::make_pair(info.name, id));
 		}

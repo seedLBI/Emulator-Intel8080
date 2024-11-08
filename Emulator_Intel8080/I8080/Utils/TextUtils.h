@@ -80,11 +80,9 @@ std::vector<std::string> GetArrayLineFromFile(std::string path);
 
 
 std::string OpenFileDialog();
-std::string OpenRomFileDialog();
 
 std::string SaveFileDialogI8080();
-std::string SaveFileDialogPNG();
-std::string SaveFileDialogTXT();
+std::string SaveFileDialogROM();
 
 
 

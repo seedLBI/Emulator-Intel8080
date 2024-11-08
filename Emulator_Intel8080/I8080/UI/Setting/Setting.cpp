@@ -1,7 +1,7 @@
 #include "Setting.h"
 
 
-Setting::Setting(FontManager* font, WindowManager* window, I8080_WorkspaceManager* WorkspaceManager, NotificationManager* notification, EmulationThread* emulation, KeyCombinationHandler* keyCombinationHandler, ProjectManager* projectManager) : SaveSystem("Setting") {
+Setting::Setting(FontManager* font, WindowManager* window, I8080_WorkspaceManager* WorkspaceManager, NotificationManager* notification, EmulationThread* emulation, KeyCombinationHandler* keyCombinationHandler, ProjectManager* projectManager, Widget_CodeEditor* w_codeEditor) : SaveSystem("Setting") {
 	this->font = font;
 	this->window = window;
 	this->notification = notification;
@@ -9,6 +9,7 @@ Setting::Setting(FontManager* font, WindowManager* window, I8080_WorkspaceManage
 	this->keyCombinationHandler = keyCombinationHandler;
 	this->projectManager = projectManager;
 	this->WorkspaceManager = WorkspaceManager;
+	this->w_codeEditor = w_codeEditor;
 }
 
 Setting::~Setting() {
@@ -77,6 +78,8 @@ void Setting::Draw() {
 			DrawEmulationSetting();
 			projectManager->DrawSetting();
 			WorkspaceManager->DrawSetting();
+			w_codeEditor->GetPtrTextEditor()->DrawSetting();
+
 
 			ImGui::Dummy(ImVec2(0, ImGui::GetTextLineHeight()));
 
@@ -194,6 +197,7 @@ std::string Setting::Save() {
 	data += emulation->Save();
 	data += keyCombinationHandler->Save();
 	data += projectManager->Save();
+	data += w_codeEditor->GetPtrTextEditor()->Save();
 
 	std::string output = MakeBegin(GetCountLines(data));
 
@@ -246,24 +250,20 @@ void Setting::Load(const std::string& Data) {
 					Data_save_object += line + '\n';
 			}
 
-			if (Name_Object == font->GetName()){
+			if (Name_Object == font->GetName())
 				font->Load(Data_save_object);
-			}
-			else if (Name_Object == window->GetName()){
+			else if (Name_Object == window->GetName())
 				window->Load(Data_save_object);
-			}
-			else if (Name_Object == emulation->GetName()) {
+			else if (Name_Object == emulation->GetName())
 				emulation->Load(Data_save_object);
-			}
-			else if (Name_Object == notification->GetName()) {
+			else if (Name_Object == notification->GetName())
 				notification->Load(Data_save_object);
-			}
-			else if (Name_Object == projectManager->GetName()) {
+			else if (Name_Object == projectManager->GetName())
 				projectManager->Load(Data_save_object);
-			}
-			else if (Name_Object == keyCombinationHandler->GetName()) {
+			else if (Name_Object == keyCombinationHandler->GetName())
 				keyCombinationHandler->Load(Data_save_object);
-			}
+			else if (Name_Object == w_codeEditor->GetPtrTextEditor()->GetName())
+				w_codeEditor->GetPtrTextEditor()->Load(Data_save_object);
 		}
 
 	}
