@@ -1,8 +1,7 @@
 #include "ImGui.Utils.h"
 
 
-void RenderTextWrapped(const char* text, bool bIndentToHere = false)
-{
+void RenderTextWrapped(const char* text, bool bIndentToHere = false) {
 	const char* text_end = text + strlen(text);
 	static float indentX = 0.f;
 
@@ -27,6 +26,25 @@ void RenderTextWrapped(const char* text, bool bIndentToHere = false)
 		endPrevLine = ImGui::GetFont()->CalcWordWrapPositionA(scale, text, text_end, widthLeft);
 		ImGui::TextUnformatted(text, endPrevLine);
 	}
+}
+
+void DrawTextWithBackground(const char* text, ImVec4 bgColor) {
+	ImVec2 position = ImGui::GetCursorScreenPos();
+	ImVec2 textSize = ImGui::CalcTextSize(text);
+
+	// Получаем текущий draw list
+	ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+	// Координаты прямоугольника
+	ImVec2 rectMin = position;
+	ImVec2 rectMax = ImVec2(position.x + textSize.x, position.y + textSize.y);
+
+	// Рисуем прямоугольник
+	draw_list->AddRectFilled(rectMin, rectMax, ImColor(bgColor));
+
+	// Рисуем текст поверх
+	ImGui::SetCursorScreenPos(position);
+	ImGui::TextUnformatted(text);
 }
 
 void TextCenteredOnLine(const char* label, int col, int row, float alignment, bool AndY){

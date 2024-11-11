@@ -184,6 +184,9 @@
     <ClCompile Include="I8080\UI\AuthorPopup\OpenglTexture.h" />
     <ClCompile Include="I8080\UI\FontManager\FontManager.cpp" />
     <ClCompile Include="I8080\UI\I8080.UI.cpp" />
+    <ClCompile Include="I8080\UI\InfoInstruction\InfoInstruction.Data.cpp" />
+    <ClCompile Include="I8080\UI\InfoInstruction\InfoInstruction.Display.cpp" />
+    <ClCompile Include="I8080\UI\InfoInstruction\InfoInstruction.Structures.cpp" />
     <ClCompile Include="I8080\UI\KeyCombination\KeyCombinationHandler.cpp" />
     <ClCompile Include="I8080\UI\LastPathManager\LastPathManager.cpp" />
     <ClCompile Include="I8080\UI\ProjectManager\ProjectManager.cpp" />
@@ -289,6 +292,9 @@
     <ClInclude Include="I8080\UI\AuthorPopup\AuthorPopup.h" />
     <ClInclude Include="I8080\UI\FontManager\FontManager.h" />
     <ClInclude Include="I8080\UI\I8080.UI.h" />
+    <ClInclude Include="I8080\UI\InfoInstruction\InfoInstruction.Data.h" />
+    <ClInclude Include="I8080\UI\InfoInstruction\InfoInstruction.Display.h" />
+    <ClInclude Include="I8080\UI\InfoInstruction\InfoInstruction.Structures.h" />
     <ClInclude Include="I8080\UI\KeyCombination\KeyCombination.h" />
     <ClInclude Include="I8080\UI\KeyCombination\KeyCombinationHandler.h" />
     <ClInclude Include="I8080\UI\LastPathManager\LastPathManager.h" />

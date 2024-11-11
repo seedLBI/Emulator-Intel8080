@@ -16,6 +16,7 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 #include "IconFontCppHeaders/IconsFontAwesome6.h"
+#include "UI/InfoInstruction/InfoInstruction.Display.h"
 #include "Utils/ImGui.Utils.h"
 #include "Utils/TextUtils.h"
 #include "Utils/UTF8.h"
@@ -255,13 +256,6 @@ public:
 
 	struct Identifier {
 		Coordinates mLocation;
-		std::string mDeclaration;
-		std::string mPseudoCode;
-		std::vector<int> mArguments; //asdasdasdas
-		std::vector<int> mBytes;
-		std::vector<int> mTicks;
-		ENUM_TicksMean mTicksMean;
-		FlagsList mFlags;
 	};
 
 	typedef std::string String;

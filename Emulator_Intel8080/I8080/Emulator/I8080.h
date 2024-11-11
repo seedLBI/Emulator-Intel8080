@@ -85,7 +85,7 @@ public:
     void     SetProgrammCounter(const uint16_t& index);
 
 
-
+    inline int GetAdressHL();
 
 	std::vector<I8080_Port*> Get_External_Peripherals();
     bool* GetBreakpointsInMemory();
@@ -143,7 +143,7 @@ private:
     inline void SetVisitedMemoryFromPC(const int& count);
 
 
-    inline int GetAdressHL();
+
 
     inline void _SetFlagSign(const uint8_t& value);
     inline void _SetFlagParuty(const uint8_t& value);

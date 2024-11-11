@@ -392,12 +392,19 @@ struct MemoryEditor
 
 
 
+
+                        if (processor->GetAdressHL() == addr)
+                            draw_list->AddRectFilled(pos, ImVec2(pos.x + highlight_width, pos.y + s.LineHeight), ImGui::GetColorU32(ImVec4(0.7f, 0.1f, 0.1f, 0.8f)));
+
                         if (processor->GetBreakpointsInMemory()[addr])
                             draw_list->AddRectFilled(pos, ImVec2(pos.x + highlight_width, pos.y + s.LineHeight), ImGui::GetColorU32(ImVec4(0.7f, 0.6f, 0.3f, 0.8f)));
 
-                        if (cursor == addr){
+                        if (cursor == addr)
                             draw_list->AddRectFilled(pos, ImVec2(pos.x + highlight_width, pos.y + s.LineHeight), ImGui::GetColorU32(ImVec4(0.2f, 0.6f, 0.2f, 0.6f)));
-                        }
+                         
+
+                        
+
 
                         bool finded = false;
                         for (int i = 0; i < ca.size(); i++)

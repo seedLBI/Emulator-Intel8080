@@ -266,6 +266,15 @@
     <ClCompile Include="I8080\DataStructures\ModeProject.cpp">
       <Filter>I8080\DataStructures</Filter>
     </ClCompile>
+    <ClCompile Include="I8080\UI\InfoInstruction\InfoInstruction.Structures.cpp">
+      <Filter>I8080\UI\InfoInstruction</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\UI\InfoInstruction\InfoInstruction.Data.cpp">
+      <Filter>I8080\UI\InfoInstruction</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\UI\InfoInstruction\InfoInstruction.Display.cpp">
+      <Filter>I8080\UI\InfoInstruction</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Third-Person\IconFontCppHeaders\IconsFontAwesome6.h">
@@ -601,6 +610,15 @@
     <ClInclude Include="I8080\DataStructures\ModeProject.h">
       <Filter>I8080\DataStructures</Filter>
     </ClInclude>
+    <ClInclude Include="I8080\UI\InfoInstruction\InfoInstruction.Structures.h">
+      <Filter>I8080\UI\InfoInstruction</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\UI\InfoInstruction\InfoInstruction.Data.h">
+      <Filter>I8080\UI\InfoInstruction</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\UI\InfoInstruction\InfoInstruction.Display.h">
+      <Filter>I8080\UI\InfoInstruction</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Third-Party">
@@ -812,6 +830,9 @@
     </Filter>
     <Filter Include="I8080\Emulator\Port\ConsoleOutput">
       <UniqueIdentifier>{d3682c98-b11c-49f0-8751-013b78bcc846}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="I8080\UI\InfoInstruction">
+      <UniqueIdentifier>{9919ecd1-ce9c-49d1-9426-d931b983174f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
