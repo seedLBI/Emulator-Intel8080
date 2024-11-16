@@ -179,3 +179,31 @@ void ButtonCheckBox(const char* label, const char* help, bool& state) {
 	}
 
 }
+
+
+bool ButtonDelete(ImGuiWindow* imgui_window, ImDrawList* draw_list, const char* nameIndex, const ImU32& ColorText) {
+	ImVec2 p = ImGui::GetCursorScreenPos();
+	float size = ImGui::GetFontSize();
+	float offset = size / 6.f;
+	float offset_edge = size / 8.f;
+
+	ImVec2 Delete_min = ImVec2(p.x, p.y);
+	ImVec2 Delete_max = ImVec2(p.x + size, p.y + size);
+	ImRect Delete_size = ImRect(Delete_min.x, Delete_min.y, Delete_max.x, Delete_max.y);
+
+	ImGuiID id = imgui_window->GetID(nameIndex);
+	ImGui::ItemAdd(Delete_size, id);
+
+	bool hovered, held;
+	bool pressed_Delete = ImGui::ButtonBehavior(Delete_size, id, &hovered, &held, 0);
+	ImU32 coll = ImGui::GetColorU32((held && hovered) ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
+
+	ImGui::RenderFrame(Delete_min, Delete_max, coll, false);
+
+	RenderCharacterInRect(ImGui::GetFont(), ImGui::GetWindowDrawList(), ImVec2(p.x + size / 6.f, p.y), ImVec2(size, size), ICON_FA_TRASH, ColorText);
+
+	p.x += size + 2.f * offset_edge;
+	ImGui::SetCursorScreenPos(p);
+
+	return pressed_Delete;
+}

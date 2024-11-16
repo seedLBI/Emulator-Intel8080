@@ -1,5 +1,9 @@
 #pragma once
 #include "imgui.h"
+#include "imgui_internal.h"
+#include "IconFontCppHeaders/IconsFontAwesome6.h"
+#include <string>
+
 
 void RenderTextWrapped(const char* text, bool bIndentToHere);
 
@@ -18,3 +22,6 @@ ImVec2 GetCharacterSize(ImFont* font, char character);
 bool ButtonCenteredOnLine(const char* label, float alignment);
 
 void ButtonCheckBox(const char* label, const char* help, bool& state);
+
+
+bool ButtonDelete(ImGuiWindow* imgui_window, ImDrawList* draw_list, const char* nameIndex, const ImU32& ColorText);

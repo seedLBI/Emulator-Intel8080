@@ -2,6 +2,7 @@
 #define NOTIFICATION_MANAGER_H
 
 #include "imgui.h"
+#include "UI/Setting/ISettingObject.h"
 #include "SaveSystem/SaveSystem.h"
 #include "Notification.h"
 #include "Config_Compilier.h"
@@ -16,7 +17,7 @@ enum class NotificationType {
 };
 
 
-class NotificationManager : public SaveSystem
+class NotificationManager : public ISettingObject
 {
 public:
 	NotificationManager();
@@ -34,9 +35,9 @@ public:
 
 
 
-
-	std::string Save() override;
-	void Load(const std::string& Data) override;
+	void DrawSetting() override;
+	std::string SaveSetting() override;
+	void LoadSetting(const std::string& Data) override;
 
 private:
 	std::vector<Notification> notifs;

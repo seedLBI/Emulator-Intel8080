@@ -3,10 +3,11 @@
 
 
 #include "OpenglWindow\OpenglWindow.h"
+#include "UI/Setting/ISettingObject.h"
 #include "SaveSystem\SaveSystem.h"
 #include "Utils/ImGui.Utils.h"
 
-class WindowManager : public SaveSystem
+class WindowManager : public ISettingObject
 {
 public:
 	WindowManager();
@@ -31,10 +32,9 @@ public:
 
 
 	// Put it in Settings
-	void Draw();
-
-	std::string Save() override;
-	void Load(const std::string& Data) override;
+	void DrawSetting() override;
+	std::string SaveSetting() override;
+	void LoadSetting(const std::string& Data) override;
 
 
 private:

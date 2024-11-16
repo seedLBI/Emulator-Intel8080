@@ -6,11 +6,12 @@
 #include "Utils\ImGui.Utils.h"
 #include "IconFontCppHeaders/IconsFontAwesome6.h"
 #include "UI\Widget\I8080.WidgetManager.h"
+#include "UI/Setting/ISettingObject.h"
 #include "SaveSystem\SaveSystem.h"
 #include <string>
 #include <vector>
 
-class I8080_WorkspaceManager : SaveSystem {
+class I8080_WorkspaceManager : public SaveSystem, public ISettingObject {
 public:
 	I8080_WorkspaceManager(I8080_WidgetManager* widget_manager);
 	~I8080_WorkspaceManager();
@@ -27,12 +28,16 @@ public:
 	void		LoadChoosed();
 	void		LoadNext();
 	void		LoadPrevious();
+	
 
 
 	std::string Save() override;
 	void		Load(const std::string& Data) override;
 
-	void		DrawSetting();
+	std::string SaveSetting() override;
+	void		LoadSetting(const std::string& Data) override;
+	void		DrawSetting() override;
+
 	void		Draw();
 	void		Update();
 

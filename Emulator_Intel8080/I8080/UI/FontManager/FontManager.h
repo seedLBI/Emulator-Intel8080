@@ -11,6 +11,7 @@
 #include "IconFontCppHeaders/IconsFontAwesome6.h"
 #include "Utils/TextUtils.h"
 #include "Utils/ImGui.Utils.h"
+#include "UI/Setting/ISettingObject.h"
 #include "SaveSystem\SaveSystem.h"
 #include "nfd.h"
 
@@ -28,7 +29,7 @@ struct FontInfo {
 	std::vector<uint8_t> Data;
 };
 
-class FontManager : public SaveSystem {
+class FontManager : public ISettingObject {
 
 public:
 	FontManager();
@@ -41,8 +42,7 @@ public:
 	void SetOneStepBigger();
 	void SetOneStepSmaller();
 
-	// TODO: Put it in setting
-	void Draw();
+
 
 
 	void LoadNewFont();
@@ -50,9 +50,9 @@ public:
 	std::vector<FontInfo> GetList_FontInfo();
 	std::vector<std::string> GetListSizes();
 
-
-	std::string Save() override;
-	void Load(const std::string& Data) override;
+	void DrawSetting() override;
+	std::string SaveSetting() override;
+	void LoadSetting(const std::string& Data) override;
 
 	// TODO: Put it after ImGui::EndFrame()
 	void ReloadFont();

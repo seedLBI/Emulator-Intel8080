@@ -275,6 +275,15 @@
     <ClCompile Include="I8080\UI\InfoInstruction\InfoInstruction.Display.cpp">
       <Filter>I8080\UI\InfoInstruction</Filter>
     </ClCompile>
+    <ClCompile Include="I8080\UI\Setting\ISettingDrawable.cpp">
+      <Filter>I8080\UI\Setting</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\UI\Setting\ISettingSavable.cpp">
+      <Filter>I8080\UI\Setting</Filter>
+    </ClCompile>
+    <ClCompile Include="I8080\UI\Setting\ISettingObject.cpp">
+      <Filter>I8080\UI\Setting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Third-Person\IconFontCppHeaders\IconsFontAwesome6.h">
@@ -618,6 +627,15 @@
     </ClInclude>
     <ClInclude Include="I8080\UI\InfoInstruction\InfoInstruction.Display.h">
       <Filter>I8080\UI\InfoInstruction</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\UI\Setting\ISettingDrawable.h">
+      <Filter>I8080\UI\Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\UI\Setting\ISettingSavable.h">
+      <Filter>I8080\UI\Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="I8080\UI\Setting\ISettingObject.h">
+      <Filter>I8080\UI\Setting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

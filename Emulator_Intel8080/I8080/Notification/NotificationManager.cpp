@@ -3,7 +3,7 @@
 
 
 
-NotificationManager::NotificationManager() : SaveSystem(u8"Notification"){
+NotificationManager::NotificationManager() : ISettingObject(u8"Уведомления",u8"Общие") {
 
 }
 
@@ -35,6 +35,8 @@ void NotificationManager::AddNottification(const Notification& new_Notification)
 
 
 }
+
+
 
 
 
@@ -95,30 +97,33 @@ void NotificationManager::Update() {
 }
 
 
-std::string NotificationManager::Save() {
-	std::string result = MakeBegin(1);
+void NotificationManager::DrawSetting() {
+	ISettingObject::DrawBegin();
 
-	result += MakeSaveItem("Enabled", std::to_string(isEnabled));
+	if (ImGui::RadioButton(u8"Показывать", GetFlag_Enable()))
+		ToggleFlag_Enabled();
+
+
+}
+
+std::string NotificationManager::SaveSetting() {
+	std::string result = save_MakeBegin(1);
+
+	result += save_MakeItem("Enabled", std::to_string(isEnabled));
 
 	return result;
 }
 
-void NotificationManager::Load(const std::string& Data) {
-	PrintDebugInfoAboutData(Data);
+void NotificationManager::LoadSetting(const std::string& Data) {
 
-	auto save_info = SplitData(Data);
+	auto info = load_TokenizeData(Data);
 
-	for (int i = 0; i < save_info.size(); i++) {
-
-		std::string Name_Element = save_info[i].first;
-		std::string Data_Element = save_info[i].second;
-
-		if (Name_Element == "Enabled") {
-			isEnabled = stoi(Data_Element);
-		}
-		else {
-			std::cout << "Unknowed save element founded: [" << Name_Element << "] [" << Data_Element << "]\n";
-		}
+	for (SettingLoadData data : info) {
+		if (data.NameVar == "Enabled")
+			isEnabled = stoi(data.ValueVar);
+		else
+			std::cout << "NotificationManager::LoadSetting -> Unknown name argument" << data.NameVar << std::endl;
 	}
+
 
 }

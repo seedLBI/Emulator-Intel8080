@@ -1,6 +1,6 @@
 #include "LastPathManager.h"
 
-LastPathManager::LastPathManager():SaveSystem("LastPaths")
+LastPathManager::LastPathManager():SaveSystem(u8"LastPaths"), ISettingObject(u8"Последние проекты", u8"Общие")
 {
 }
 
@@ -22,12 +22,21 @@ bool LastPathManager::Draw() {
 		ImGui::Text(u8"Пока что здесь пусто, ну ты это.. хотя бы сохрани или открой файл я не знаю");
 	}
 	else {
-		for (int i = 0; i < paths.size(); i++)
-		{
-			if (ImGui::MenuItem(std::string(std::to_string(i + 1) + ". " + paths[i]).c_str())) {
+		for (int i = 0; i < paths.size(); i++){
+
+			std::string PathDraw = std::to_string(i + 1) + ". ";
+
+			if (!ShowAllPath)
+				PathDraw += paths[i].substr(paths[i].find_last_of("\\") + 1);
+			else
+				PathDraw += paths[i];
+
+
+			if (ImGui::MenuItem(PathDraw.c_str())) {
 				IndexChoosed = i;
 				pressed = true;
 			}
+
 		}
 	}
 	return pressed;
@@ -66,6 +75,36 @@ int LastPathManager::PathIsNotEqual(const std::string& name) {
 	}
 	return -1;
 }
+
+
+void LastPathManager::DrawSetting() {
+	ISettingObject::DrawBegin();
+
+	if (ImGui::RadioButton(u8"Показывать абсолютный путь", ShowAllPath))
+		ShowAllPath = !ShowAllPath;
+
+}
+
+std::string LastPathManager::SaveSetting() {
+	std::string output;
+
+	output += save_MakeBegin(1);
+	output += save_MakeItem("ShowAllPath", std::to_string(ShowAllPath));
+
+	return output;
+}
+
+void LastPathManager::LoadSetting(const std::string& Data) {
+	auto TokenizedData = load_TokenizeData(Data);
+
+	for (int i = 0; i < TokenizedData.size(); i++){
+
+		if (TokenizedData[i].NameVar == "ShowAllPath")
+			ShowAllPath = stoi(TokenizedData[i].ValueVar);
+
+	}
+}
+
 
 
 std::string LastPathManager::Save() {

@@ -190,6 +190,9 @@
     <ClCompile Include="I8080\UI\KeyCombination\KeyCombinationHandler.cpp" />
     <ClCompile Include="I8080\UI\LastPathManager\LastPathManager.cpp" />
     <ClCompile Include="I8080\UI\ProjectManager\ProjectManager.cpp" />
+    <ClCompile Include="I8080\UI\Setting\ISettingDrawable.cpp" />
+    <ClCompile Include="I8080\UI\Setting\ISettingObject.cpp" />
+    <ClCompile Include="I8080\UI\Setting\ISettingSavable.cpp" />
     <ClCompile Include="I8080\UI\Setting\Setting.cpp" />
     <ClCompile Include="I8080\UI\Widgets\I8080.UI.CodeEditor.cpp" />
     <ClCompile Include="I8080\UI\Widgets\I8080.UI.ColorPicker.cpp" />
@@ -299,7 +302,10 @@
     <ClInclude Include="I8080\UI\KeyCombination\KeyCombinationHandler.h" />
     <ClInclude Include="I8080\UI\LastPathManager\LastPathManager.h" />
     <ClInclude Include="I8080\UI\ProjectManager\ProjectManager.h" />
+    <ClInclude Include="I8080\UI\Setting\ISettingObject.h" />
+    <ClInclude Include="I8080\UI\Setting\ISettingSavable.h" />
     <ClInclude Include="I8080\UI\Setting\Setting.h" />
+    <ClInclude Include="I8080\UI\Setting\ISettingDrawable.h" />
     <ClInclude Include="I8080\UI\Theme\Theme.h" />
     <ClInclude Include="I8080\UI\Widgets\I8080.UI.CodeEditor.h" />
     <ClInclude Include="I8080\UI\Widgets\I8080.UI.ColorPicker.h" />

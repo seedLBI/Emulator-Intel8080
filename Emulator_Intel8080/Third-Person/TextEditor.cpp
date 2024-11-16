@@ -30,7 +30,7 @@ bool equals(InputIt1 first1, InputIt1 last1,
 }
 
 TextEditor::TextEditor()
-	: SaveSystem(u8"TextEditor")
+	: ISettingObject(u8"Редактор кода", u8"Общие")
 	, mLineSpacing(1.0f)
 	, mUndoIndex(0)
 	, mTabSize(4)
@@ -1203,32 +1203,23 @@ void TextEditor::DrawSetting() {
 
 
 }
-
-std::string TextEditor::Save() {
+std::string TextEditor::SaveSetting() {
 	std::string output = "";
 
-	output += MakeBegin(1);
-	output += MakeSaveItem(std::string("Flag_EnableAutoTab"), std::to_string(Flag_EnableAutoTab));
+	output += save_MakeBegin(1);
+	output += save_MakeItem(std::string("Flag_EnableAutoTab"), std::to_string(Flag_EnableAutoTab));
 
 	return output;
 }
-void TextEditor::Load(const std::string& Data) {
-	PrintDebugInfoAboutData(Data);
+void TextEditor::LoadSetting(const std::string& Data) {
 
+	auto info = load_TokenizeData(Data);
 
-	std::string path_temp;
-
-	std::vector<std::string> Lines = split(Data, "\n");
-	for (int i = 0; i < Lines.size(); i++) {
-		std::vector<std::string> info = SplitLine(Lines[i]);
-
-		std::string name_arg = info[0];
-		std::string value_arg = info[1];
-
-		if (name_arg == "Flag_EnableAutoTab")
-			Flag_EnableAutoTab = std::stoi(value_arg);
+	for (SettingLoadData data : info) {
+		if (data.NameVar == "Flag_EnableAutoTab")
+			Flag_EnableAutoTab = std::stoi(data.ValueVar);
 		else
-			std::cout << "Unknown name argument for widget: " << name_arg << std::endl;
+			std::cout << "TextEditor::LoadSetting -> Unknown name argument" << data.NameVar << std::endl;
 	}
 
 }
@@ -1857,7 +1848,23 @@ void TextEditor::EnterCharacter(ImWchar aChar, bool aShift)
 					pos2DOT = i;
 			}
 
-			if (pos2DOT != -1 && GetCharacterIndex(coord) - 1 >= pos2DOT)
+			bool flag_AddTab = true;
+			if (pos2DOT != -1){
+				for (int i = pos2DOT + 1; i < GetCharacterIndex(coord); i++){
+					if (line[i].mChar == ' ')
+						continue;
+					if (line[i].mChar == ';')
+						break;
+
+					flag_AddTab = false;
+					break;
+				}
+			}
+			else {
+				flag_AddTab = false;
+			}
+
+			if (flag_AddTab)
 				SpacesAndTabs += "\t";
 
 			for (int i = 0; i < SpacesAndTabs.size(); i++) {

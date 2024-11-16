@@ -89,36 +89,6 @@ public:
 	bool OpenFileFromPath(string path);
 private:
 
-	// Функция для проверки активных окон
-	void CheckVisibleWindows() {
-
-		std::cout << "-------------------\n";
-
-		ImGuiContext& g = *GImGui;
-
-		// Перебираем все окна в контексте
-		for (ImGuiWindow* window : g.Windows) {
-
-			//std::cout << "Check: \n";
-
-			if (window->Hidden == false) {
-
-				std::string NameWindow = window->Name;
-				UTF8_SPLITER_ERROR error;
-				auto splited = utf8_splitter(NameWindow, error);
-				std::cout << "Visible: [";
-				for (int i = 0; i < splited.size(); i++) {
-					std::cout << convert_utf8_toCP1251(splited[i]).first;
-				}
-				std::cout << "]\n";
-			}
-			
-		}
-
-
-	}
-
-
 	void BeginDraw();
 	void EndDraw();
 
@@ -133,7 +103,7 @@ private:
 
 	void DrawMainMenu();
 
-
+	void InitSetting();
 	void InitWidgets();
 	void InitSaveManager();
 	void InitKeyCombinationHandler();
@@ -161,24 +131,26 @@ private:
 
 	// base widgets
 	Widget_Help*				  widget_Help = nullptr;
+	Widget_VarList*				  widget_VarList = nullptr;
 	Widget_HexViewer*			  widget_HexViewer = nullptr;
+	Widget_ConstList*			  widget_ConstList = nullptr;
+	Widget_CodeEditor*			  widget_CodeEditor = nullptr;
+	Widget_MarkerList*			  widget_MarkerList = nullptr;
+	Widget_Disassembler*		  widget_Disassembler = nullptr;
+	Widget_EmulatorInfo*		  widget_EmulatorInfo = nullptr;
 	Widget_MnemocodeViewer*		  widget_MnemocodeViewer = nullptr;
 	Widget_RegisterFlagsInfo*	  widget_RegisterFlagsInfo = nullptr;
-	Widget_EmulatorInfo*		  widget_EmulatorInfo = nullptr;
-	Widget_VarList*				  widget_VarList = nullptr;
-	Widget_MarkerList*			  widget_MarkerList = nullptr;
-	Widget_ConstList*			  widget_ConstList = nullptr;
-	Widget_CodeEditor*			  widget_CodeEditor = nullptr; 
-	Widget_Disassembler*          widget_Disassembler = nullptr;
+
 
 	// port widgets
-	Widget_Input0x08*			  widget_input0x08 = nullptr;
-	Widget_Output0x02*			  widget_output0x02 = nullptr;
 	Widget_Timer*				  widget_timer = nullptr;
 	Widget_Keyboard*			  widget_keyboard = nullptr;
+	Widget_Input0x08*			  widget_input0x08 = nullptr;
+	Widget_Output0x02*			  widget_output0x02 = nullptr;
 	Widget_PixelScreen*			  widget_PixelScreen = nullptr;
-	Widget_PixelScreenTwoBuffers* widget_PixelScreenTwoBuffers = nullptr;
 	Widget_SymbolScreen*		  widget_SymbolScreen = nullptr;
+	Widget_PixelScreenTwoBuffers* widget_PixelScreenTwoBuffers = nullptr;
+
 
 	// port widgets (helper)
 	Widget_ColorPicker*			  widget_ColorPicker = nullptr;

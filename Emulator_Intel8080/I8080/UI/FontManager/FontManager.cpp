@@ -2,7 +2,7 @@
 
 
 
-FontManager::FontManager():SaveSystem("Font") {
+FontManager::FontManager() : ISettingObject(u8"Шрифт",u8"Видео") {
 #ifdef WITH_DEBUG_OUTPUT
 	std::cout << "Reading icon font: Fonts\\fa-solid-900.ttf\n";
 #endif
@@ -18,73 +18,6 @@ FontManager::~FontManager() {
 #ifdef WITH_DEBUG_OUTPUT
 	std::cout << "FontManager::~FontManager()\n";
 #endif // !WITH_DEBUG_OUTPUT
-}
-
-void FontManager::Draw() {
-
-
-	ImGui::SeparatorText(u8"Шрифт");
-
-	if (ImGui::BeginCombo(u8"Шрифт", Name_Font_Selected.c_str(), ImGuiComboFlags_WidthFitPreview)) {
-
-		for (int i = 0; i < List_Fonts.size(); i++)
-		{
-			bool selected = List_Fonts[i].Name == Name_Font_Selected;
-
-			if (ImGui::Selectable(List_Fonts[i].Name.c_str(), &selected)) {
-				SetFont(List_Fonts[i].Name);
-			}
-
-			if (selected)
-				ImGui::SetItemDefaultFocus();
-		}
-
-
-		if(ButtonCenteredOnLine(u8"Добавить свой шрифт", 0.5f)){
-			nfdchar_t* outPath = NULL;
-			nfdresult_t result = NFD_OpenDialog("ttf,otf", NULL, &outPath);
-			if (result == NFD_OKAY) {
-				LoadFontFromFile(outPath);
-			}
-			else if (result == NFD_CANCEL) {
-#ifdef WITH_DEBUG_OUTPUT
-				std::cout << "User pressed cancel.\n";
-#endif
-			}
-			else {
-				printf("Error: %s\n", NFD_GetError());
-			}
-		}
-
-		ImGui::EndCombo();
-	}
-	ImGui::SameLine();
-	HelpMarker(u8"Выбор типа шрифта");
-
-
-
-	if (ImGui::BeginCombo(u8"Размер", std::to_string(Current_Scale).c_str(), ImGuiComboFlags_WidthFitPreview)) {
-
-		for (int i = 0; i < GetListSizes().size(); i++) {
-
-			bool selected = stoi(GetListSizes()[i]) == Current_Scale;
-
-			if (ImGui::Selectable(GetListSizes()[i].c_str(), &selected)) {
-				Current_Scale = stoi(GetListSizes()[i]);
-				NeedReloadFontSize = true;
-			}
-
-			if (selected)
-				ImGui::SetItemDefaultFocus();
-		}
-
-		ImGui::EndCombo();
-	}
-	ImGui::SameLine();
-	HelpMarker(u8"Единица измерения - пиксель.");
-
-
-
 }
 
 void FontManager::SetFont(const std::string& NameFont) {
@@ -259,45 +192,102 @@ std::vector<FontInfo> FontManager::GetList_FontInfo() {
 	return List_Fonts;
 }
 
-std::string FontManager::Save() {
-	std::string result = MakeBegin(2 + List_Fonts.size() - 1);
+
+
+void FontManager::DrawSetting() {
+
+	ISettingObject::DrawBegin();
+
+	if (ImGui::BeginCombo(u8"Шрифт", Name_Font_Selected.c_str(), ImGuiComboFlags_WidthFitPreview)) {
+
+		for (int i = 0; i < List_Fonts.size(); i++)
+		{
+			bool selected = List_Fonts[i].Name == Name_Font_Selected;
+
+			if (ImGui::Selectable(List_Fonts[i].Name.c_str(), &selected)) {
+				SetFont(List_Fonts[i].Name);
+			}
+
+			if (selected)
+				ImGui::SetItemDefaultFocus();
+		}
+
+
+		if (ButtonCenteredOnLine(u8"Добавить свой шрифт", 0.5f)) {
+			nfdchar_t* outPath = NULL;
+			nfdresult_t result = NFD_OpenDialog("ttf,otf", NULL, &outPath);
+			if (result == NFD_OKAY) {
+				LoadFontFromFile(outPath);
+			}
+			else if (result == NFD_CANCEL) {
+#ifdef WITH_DEBUG_OUTPUT
+				std::cout << "User pressed cancel.\n";
+#endif
+			}
+			else {
+				printf("Error: %s\n", NFD_GetError());
+			}
+		}
+
+		ImGui::EndCombo();
+	}
+	ImGui::SameLine();
+	HelpMarker(u8"Выбор типа шрифта");
+
+
+
+	if (ImGui::BeginCombo(u8"Размер", std::to_string(Current_Scale).c_str(), ImGuiComboFlags_WidthFitPreview)) {
+
+		for (int i = 0; i < GetListSizes().size(); i++) {
+
+			bool selected = stoi(GetListSizes()[i]) == Current_Scale;
+
+			if (ImGui::Selectable(GetListSizes()[i].c_str(), &selected)) {
+				Current_Scale = stoi(GetListSizes()[i]);
+				NeedReloadFontSize = true;
+			}
+
+			if (selected)
+				ImGui::SetItemDefaultFocus();
+		}
+
+		ImGui::EndCombo();
+	}
+	ImGui::SameLine();
+	HelpMarker(u8"Единица измерения - пиксель.");
+
+
+
+}
+
+std::string FontManager::SaveSetting() {
+	std::string result = save_MakeBegin(2 + List_Fonts.size() - 1);
 
 	for (int i = 0; i < List_Fonts.size(); i++) {
 		if (!List_Fonts[i].Path.empty())
-			result += MakeSaveItem("Path", List_Fonts[i].Path);
+			result += save_MakeItem("Path", List_Fonts[i].Path);
 	}
 
-	result += MakeSaveItem("Scale", std::to_string(Current_Scale));
-	result += MakeSaveItem("Font selected", Name_Font_Selected);
+	result += save_MakeItem("Scale", std::to_string(Current_Scale));
+	result += save_MakeItem("Font selected", Name_Font_Selected);
 
 
 	return result;
 }
 
-void FontManager::Load(const std::string& Data) {
-	PrintDebugInfoAboutData(Data);
+void FontManager::LoadSetting(const std::string& Data) {
+	auto info = load_TokenizeData(Data);
 
-	auto save_info = SplitData(Data);
-
-	for (int i = 0; i < save_info.size(); i++){
-
-		std::string Name_Element = save_info[i].first;
-		std::string Data_Element = save_info[i].second;
-
-		if (Name_Element == "Path"){
-			LoadFontFromFile(Data_Element);
-		}
-		else if (Name_Element == "Font selected") {
-			SetFont(Data_Element);
-		}
-		else if (Name_Element == "Scale") {
-			SetSize(stoi(Data_Element));
-		}
-		else {
-			std::cout << "Unknowed save element founded: [" << Name_Element << "] [" << Data_Element << "]\n";
-		}
+	for (SettingLoadData data : info) {
+		if (data.NameVar == "Path")
+			LoadFontFromFile(data.ValueVar);
+		else if (data.NameVar == "Font selected")
+			SetFont(data.ValueVar);
+		else if (data.NameVar == "Scale")
+			SetSize(stoi(data.ValueVar));
+		else
+			std::cout << "FontManager::LoadSetting -> Unknown name argument" << data.NameVar << std::endl;
 	}
-
 }
 
 

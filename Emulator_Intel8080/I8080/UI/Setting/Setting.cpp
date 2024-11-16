@@ -1,15 +1,8 @@
 #include "Setting.h"
 
 
-Setting::Setting(FontManager* font, WindowManager* window, I8080_WorkspaceManager* WorkspaceManager, NotificationManager* notification, EmulationThread* emulation, KeyCombinationHandler* keyCombinationHandler, ProjectManager* projectManager, Widget_CodeEditor* w_codeEditor) : SaveSystem("Setting") {
-	this->font = font;
-	this->window = window;
-	this->notification = notification;
-	this->emulation = emulation;
-	this->keyCombinationHandler = keyCombinationHandler;
-	this->projectManager = projectManager;
-	this->WorkspaceManager = WorkspaceManager;
-	this->w_codeEditor = w_codeEditor;
+Setting::Setting() : SaveSystem("Setting") {
+
 }
 
 Setting::~Setting() {
@@ -17,6 +10,24 @@ Setting::~Setting() {
 	std::cout << "Setting::~Setting()\n";
 #endif // !WITH_DEBUG_OUTPUT
 }
+
+
+
+void Setting::AddSettingObject(ISettingObject* object) {
+	bool CreateNewOne = false;
+	for (int i = 0; i < tabs.size(); i++) {
+		if (tabs[i].TabName == object->NameTab) {
+			tabs[i].setting_objects.emplace_back(object);
+			return;
+		}
+	}
+	Tabs newTab;
+	newTab.TabName = object->NameTab;
+	newTab.setting_objects.push_back(object);
+
+	tabs.emplace_back(newTab);
+}
+
 
 
 void Setting::Draw() {
@@ -51,15 +62,14 @@ void Setting::Draw() {
 		ImVec2 pos = ImGui::GetCursorScreenPos();
 
 
-		static int selected_setting_type = 0;
-		const char* names_setting_types[2] = { u8"Общие",u8"Управление" };
-
-
 		ImGui::BeginChild("left pane", ImVec2(ImGui::CalcTextSize(u8"  Управление  ").x, 0));
 
-		for (int i = 0; i < 2; i++) {
-			if (ImGui::Selectable(names_setting_types[i], selected_setting_type == i, ImGuiSelectableFlags_Centered, ImVec2(0, ImGui::GetTextLineHeight() * 2.f)))
-				selected_setting_type = i;
+
+		static int IndexChoosedTab = 0;
+
+		for (int i = 0; i < tabs.size(); i++){
+			if (ImGui::Selectable(tabs[i].TabName.c_str(), i == IndexChoosedTab, ImGuiSelectableFlags_Centered, ImVec2(0, ImGui::GetTextLineHeight() * 2.f)))
+				IndexChoosedTab = i;
 		}
 
 
@@ -70,34 +80,14 @@ void Setting::Draw() {
 
 		ImGui::BeginChild("right pane");
 
-		switch (selected_setting_type) {
-		case 0:
-			font->Draw();
-			window->Draw();
-			DrawNotificationSetting();
-			DrawEmulationSetting();
-			projectManager->DrawSetting();
-			WorkspaceManager->DrawSetting();
-			w_codeEditor->GetPtrTextEditor()->DrawSetting();
 
 
-			ImGui::Dummy(ImVec2(0, ImGui::GetTextLineHeight()));
-
-			break;
-		case 1:
-			keyCombinationHandler->DrawSetting();
-			break;
-		default:
-			break;
+		for (int j = 0; j < tabs[IndexChoosedTab].setting_objects.size(); j++) {
+			tabs[IndexChoosedTab].setting_objects[j]->DrawSetting();
 		}
 
 
 		ImGui::EndChild();
-
-
-
-
-
 
 
 		/*
@@ -113,59 +103,6 @@ void Setting::Draw() {
 	ImGui::PopStyleVar();
 	ImGui::PopStyleVar();
 
-}
-
-
-void Setting::DrawNotificationSetting() {
-
-	ImGui::SeparatorText(u8"Уведомления");
-
-	if (ImGui::RadioButton(u8"Показывать", notification->GetFlag_Enable())) {
-		notification->ToggleFlag_Enabled();
-	}
-}
-void Setting::DrawEmulationSetting() {
-	ImGui::SeparatorText(u8"Эмуляция");
-
-	string Selected = "";
-
-	if (emulation->GetSpeedMode() == SpeedMode::Infinity)
-		Selected = u8"Неограниченная";
-	if (emulation->GetSpeedMode() == SpeedMode::Intel8080)
-		Selected = u8"Intel8080 (3 Мгц)";
-	if (emulation->GetSpeedMode() == SpeedMode::Intel8085)
-		Selected = u8"Intel8085 (6 Мгц)";
-
-	if (ImGui::BeginCombo(u8"Скорость", Selected.c_str(), ImGuiComboFlags_WidthFitPreview)) {
-
-
-		bool selected = Selected == u8"Неограниченная";
-
-		if (ImGui::Selectable(u8"Неограниченная", &selected)) {
-			emulation->SetSpeedMode(SpeedMode::Infinity);
-		}
-		if (selected)
-			ImGui::SetItemDefaultFocus();
-
-		selected = Selected == u8"Intel8080 (3 Мгц)";
-
-		if (ImGui::Selectable(u8"Intel8080 (3 Мгц)", &selected)) {
-			emulation->SetSpeedMode(SpeedMode::Intel8080);
-		}
-		if (selected)
-			ImGui::SetItemDefaultFocus();
-
-		selected = Selected == u8"Intel8085 (6 Мгц)";
-
-		if (ImGui::Selectable(u8"Intel8085 (6 Мгц)", &selected)) {
-			emulation->SetSpeedMode(SpeedMode::Intel8085);
-		}
-		if (selected)
-			ImGui::SetItemDefaultFocus();
-
-
-		ImGui::EndCombo();
-	}
 }
 
 
@@ -191,13 +128,11 @@ bool Setting::isOpen() {
 std::string Setting::Save() {
 
 	std::string data = "";
-	data += font->Save();
-	data += window->Save();
-	data += notification->Save();
-	data += emulation->Save();
-	data += keyCombinationHandler->Save();
-	data += projectManager->Save();
-	data += w_codeEditor->GetPtrTextEditor()->Save();
+	for (int i = 0; i < tabs.size(); i++){
+		for (int j = 0; j < tabs[i].setting_objects.size(); j++){
+			data += tabs[i].setting_objects[j]->SaveSetting();
+		}
+	}
 
 	std::string output = MakeBegin(GetCountLines(data));
 
@@ -250,20 +185,15 @@ void Setting::Load(const std::string& Data) {
 					Data_save_object += line + '\n';
 			}
 
-			if (Name_Object == font->GetName())
-				font->Load(Data_save_object);
-			else if (Name_Object == window->GetName())
-				window->Load(Data_save_object);
-			else if (Name_Object == emulation->GetName())
-				emulation->Load(Data_save_object);
-			else if (Name_Object == notification->GetName())
-				notification->Load(Data_save_object);
-			else if (Name_Object == projectManager->GetName())
-				projectManager->Load(Data_save_object);
-			else if (Name_Object == keyCombinationHandler->GetName())
-				keyCombinationHandler->Load(Data_save_object);
-			else if (Name_Object == w_codeEditor->GetPtrTextEditor()->GetName())
-				w_codeEditor->GetPtrTextEditor()->Load(Data_save_object);
+			for (int i = 0; i < tabs.size(); i++){
+				for (int j = 0; j < tabs[i].setting_objects.size(); j++){
+					if (tabs[i].setting_objects[j]->GetSaveObjectName() == Name_Object)
+						tabs[i].setting_objects[j]->LoadSetting(Data_save_object);
+				}
+			}
+
+
+
 		}
 
 	}

@@ -1,6 +1,6 @@
 #include "I8080.WorkspaceManager.h"
 
-I8080_WorkspaceManager::I8080_WorkspaceManager(I8080_WidgetManager* widget_manager):SaveSystem("Workspaces") {
+I8080_WorkspaceManager::I8080_WorkspaceManager(I8080_WidgetManager* widget_manager) :SaveSystem(u8"Workspaces"), ISettingObject(u8"Рабочие пространства",u8"Общие") {
 	this->widget_manager = widget_manager;
 }
 
@@ -14,12 +14,7 @@ I8080_WorkspaceManager::~I8080_WorkspaceManager() {
 
 
 
-void I8080_WorkspaceManager::DrawSetting() {
-	ImGui::SeparatorText(u8"Рабочие пространтсва");
-	if (ImGui::RadioButton(u8"Перезаписывать текущее пространство перед выходом", SaveCurrentWorkspaceBeforeClosingApp)) {
-		SaveCurrentWorkspaceBeforeClosingApp = !SaveCurrentWorkspaceBeforeClosingApp;
-	}
-}
+
 
 
 void I8080_WorkspaceManager::AddWorkspace(const std::string& Name, const bool& LoadStyle) {
@@ -27,6 +22,34 @@ void I8080_WorkspaceManager::AddWorkspace(const std::string& Name, const bool& L
 	std::cout << "I8080_WorkspaceManager::AddWorkspace(const std::string& Name, const bool& LoadStyle)\n";
 #endif
 	workspaces.emplace_back(I8080_Workspace(Name, LoadStyle,widget_manager));
+}
+
+
+void I8080_WorkspaceManager::DrawSetting() {
+	ISettingObject::DrawBegin();
+
+	if (ImGui::RadioButton(u8"Перезаписывать текущее пространство перед выходом", SaveCurrentWorkspaceBeforeClosingApp)) {
+		SaveCurrentWorkspaceBeforeClosingApp = !SaveCurrentWorkspaceBeforeClosingApp;
+	}
+}
+
+std::string I8080_WorkspaceManager::SaveSetting() {
+	std::string output;
+
+	output += save_MakeBegin(1);
+	output += save_MakeItem("SaveCurrentWorkspaceBeforeClosingApp", std::to_string(SaveCurrentWorkspaceBeforeClosingApp));
+
+	return output;
+}
+void I8080_WorkspaceManager::LoadSetting(const std::string& Data) {
+	auto info = load_TokenizeData(Data);
+
+	for (SettingLoadData data: info){
+
+		if (data.NameVar == "SaveCurrentWorkspaceBeforeClosingApp")
+			SaveCurrentWorkspaceBeforeClosingApp = stoi(data.ValueVar);
+
+	}
 }
 
 
@@ -42,10 +65,9 @@ std::string I8080_WorkspaceManager::Save() {
 	for (int i = 0; i < workspaces.size(); i++)
 		Data_workspaces += workspaces[i].Save();
 
-	output += MakeBegin(GetCountLines(Data_workspaces) + 2);
+	output += MakeBegin(GetCountLines(Data_workspaces) + 1);
 	output += Data_workspaces;
 	output += MakeSaveItem("IndexChoosed", std::to_string(IndexChoosed));
-	output += MakeSaveItem("SaveCurrentWorkspaceBeforeClosingApp", std::to_string(SaveCurrentWorkspaceBeforeClosingApp));
 
 	return output;
 }
@@ -63,7 +85,7 @@ void I8080_WorkspaceManager::Load(const std::string& Data) {
 
 		std::string CurrentLine = Lines[index];
 
-		std::vector<std::string> info = SplitLine(CurrentLine);
+		std::vector<std::string> info = SaveSystem::SplitLine(CurrentLine);
 
 
 		if (info[0] == "BEGIN") {
@@ -103,9 +125,6 @@ void I8080_WorkspaceManager::Load(const std::string& Data) {
 				IndexChoosed = stoi(info[1]);
 			}
 			SetNeedLoad();
-		}
-		else if (info[0] == "SaveCurrentWorkspaceBeforeClosingApp") {
-			SaveCurrentWorkspaceBeforeClosingApp = stoi(info[1]);
 		}
 		index++;
 
@@ -322,8 +341,6 @@ bool I8080_WorkspaceManager::DrawText(const int& index) {
 	float offset = size / 6.f;
 	float offset_edge = size / 8.f;
 
-	
-
 	ImVec2 Delete_min = ImVec2(p.x, p.y);
 	ImVec2 Delete_max = ImVec2(p.x  + (ImGui::GetWindowWidth() - (p.x - (ImGui::GetWindowPos().x)) ) - size/4.f, p.y + size);
 	ImRect Delete_size = ImRect(Delete_min.x, Delete_min.y, Delete_max.x, Delete_max.y);
@@ -337,8 +354,7 @@ bool I8080_WorkspaceManager::DrawText(const int& index) {
 	ImU32 coll = ImGui::GetColorU32((held && hovered) ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
 
 
-	if (held && Draging == false)
-	{
+	if (held && Draging == false) {
 		Draging = true;
 		IndexDrag = index;
 	}

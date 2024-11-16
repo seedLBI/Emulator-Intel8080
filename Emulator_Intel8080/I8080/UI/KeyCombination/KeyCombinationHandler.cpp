@@ -1,7 +1,7 @@
 #include "KeyCombinationHandler.h"
 
 
-KeyCombinationHandler::KeyCombinationHandler(NotificationManager* notificationManager) : SaveSystem("KeyCombination") {
+KeyCombinationHandler::KeyCombinationHandler(NotificationManager* notificationManager) : ISettingObject(u8"KeyCombination",u8"Управление") {
 	this->notificationManager = notificationManager;
 }
 
@@ -191,61 +191,6 @@ std::vector<Key> KeyCombinationHandler::GetUniqueKeys() {
 	return result;
 }
 
-void KeyCombinationHandler::DrawSetting() {
-
-
-
-	ImGui::BeginTable("CombinationsTable", 2,ImGuiTableFlags_ScrollY | ImGuiTableFlags_Borders | ImGuiTableFlags_HighlightHoveredColumn);
-	
-	ImGui::TableSetupScrollFreeze(1, 1);
-
-	ImGui::TableSetupColumn(u8"Название команды", ImGuiTableColumnFlags_WidthStretch);
-	ImGui::TableSetupColumn(u8"Комбинация клавиш");
-	ImGui::TableHeadersRow();
-
-
-	static int selected = -1;
-
-	for (int i = 0; i < combinations.size(); i++) {
-		ImGui::TableNextRow(0,2.f * ImGui::GetTextLineHeight());
-
-		ImGui::TableSetColumnIndex(0);
-		TextCenteredOnLine(combinations[i].first.c_str(),0,i,0.5f,true);
-
-
-
-		ImGui::TableSetColumnIndex(1);
-
-		bool s = selected == i;
-
-
-		std::string key_name = combinations[i].second.GetKeysHumanStr();
-
-		if (key_name.empty()){
-			for (int j = 0; j < i; j++)
-				key_name += " ";
-		}
-
-		if(ImGui::Selectable(key_name.c_str(), &s, ImGuiSelectableFlags_Centered, ImVec2(0, 2.f * ImGui::GetTextLineHeight()))) {
-			selected = i;
-			SelectedCombination_For_setting = i;
-			PopupSetKeyIsOpen = true;
-
-		}
-		
-
-		if (PopupSetKeyIsOpen == false) {
-			selected = -1;
-			SelectedCombination_For_setting = -1;
-		}
-
-
-	}
-
-	ImGui::EndTable();
-
-	DrawPopupSetKey();
-}
 
 void KeyCombinationHandler::DrawPopupSetKey() {
 
@@ -381,8 +326,8 @@ void KeyCombinationHandler::DrawPopupSetKey() {
 				if (error == ErrorCombination::ERROR_COLLISION)
 				{
 					int index = GetIndexCollision(kkk);
-					combinations[index].second.keys.clear();
-
+					combinations[index].second.ChangeKeys({});
+					
 
 					static const ImVec4 color_Orange{ 0.45f,0.35f,0.1f,1.0f };
 					static const ImVec4 color_WHITE{ 1.f,1.f,1.f,1.f };
@@ -608,7 +553,62 @@ std::string KeyCombinationHandler::ErrorCombination_To_string(const ErrorCombina
 	}
 }
 
-std::string KeyCombinationHandler::Save() {
+void KeyCombinationHandler::DrawSetting() {
+
+
+	ImGui::BeginTable("CombinationsTable", 2, ImGuiTableFlags_ScrollY | ImGuiTableFlags_Borders | ImGuiTableFlags_HighlightHoveredColumn);
+
+	ImGui::TableSetupScrollFreeze(1, 1);
+
+	ImGui::TableSetupColumn(u8"Название команды", ImGuiTableColumnFlags_WidthStretch);
+	ImGui::TableSetupColumn(u8"Комбинация клавиш");
+	ImGui::TableHeadersRow();
+
+
+	static int selected = -1;
+
+	for (int i = 0; i < combinations.size(); i++) {
+		ImGui::TableNextRow(0, 2.f * ImGui::GetTextLineHeight());
+
+		ImGui::TableSetColumnIndex(0);
+		TextCenteredOnLine(combinations[i].first.c_str(), 0, i, 0.5f, true);
+
+
+
+		ImGui::TableSetColumnIndex(1);
+
+		bool s = selected == i;
+
+
+		std::string key_name = combinations[i].second.GetKeysHumanStr();
+
+		if (key_name.empty()) {
+			for (int j = 0; j < i; j++)
+				key_name += " ";
+		}
+
+		if (ImGui::Selectable(key_name.c_str(), &s, ImGuiSelectableFlags_Centered, ImVec2(0, 2.f * ImGui::GetTextLineHeight()))) {
+			selected = i;
+			SelectedCombination_For_setting = i;
+			PopupSetKeyIsOpen = true;
+
+		}
+
+
+		if (PopupSetKeyIsOpen == false) {
+			selected = -1;
+			SelectedCombination_For_setting = -1;
+		}
+
+
+	}
+
+	ImGui::EndTable();
+
+	DrawPopupSetKey();
+}
+
+std::string KeyCombinationHandler::SaveSetting() {
 	std::string data = "";
 	
 	for (int i = 0; i < combinations.size(); i++)
@@ -621,34 +621,28 @@ std::string KeyCombinationHandler::Save() {
 				Keys += KeyToStr(combinations[i].second.keys[j]);
 		}
 
-		data += MakeSaveItem(combinations[i].first, Keys);
+		data += save_MakeItem(combinations[i].first, Keys);
 	}
 
 	int countLines = GetCountLines(data);
 
-	std::string result = MakeBegin(countLines);
+	std::string result = save_MakeBegin(countLines);
 
 	result += data;
 
 	return result;
 }
 
-void KeyCombinationHandler::Load(const std::string& Data) {
-	PrintDebugInfoAboutData(Data);
+void KeyCombinationHandler::LoadSetting(const std::string& Data) {
 
-	auto save_info = SplitData(Data);
 
-	for (int i = 0; i < save_info.size(); i++) {
+	auto info = load_TokenizeData(Data);
 
-		std::string Name_Element = save_info[i].first;
-		std::string Data_Element = save_info[i].second;
-
-		int indexNameCombination = GetIndexCombinationByName(Name_Element);
+	for (SettingLoadData data : info) {
+		int indexNameCombination = GetIndexCombinationByName(data.NameVar);
 
 		if (indexNameCombination != -1)
-			combinations[indexNameCombination].second.SetKeysByStr(Data_Element);
-		else
-			std::cout << "Unknowed save element founded: [" << Name_Element << "] [" << Data_Element << "]\n";
+			combinations[indexNameCombination].second.SetKeysByStr(data.ValueVar);
 	}
 
 	KeysToCheck = GetUniqueKeys();

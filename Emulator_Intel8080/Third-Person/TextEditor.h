@@ -11,6 +11,7 @@
 #include "algorithm"
 
 #include <iostream>
+#include "UI/Setting/ISettingObject.h"
 #include "SaveSystem/SaveSystem.h"
 #include "OpenglWindow/OpenglWindow.h"
 #include "imgui.h"
@@ -22,7 +23,7 @@
 #include "Utils/UTF8.h"
 
 
-class TextEditor : public SaveSystem
+class TextEditor : public ISettingObject
 {
 private:
 
@@ -407,10 +408,9 @@ public:
 
 
 
-	void DrawSetting();
-
-	std::string Save() override;
-	void Load(const std::string& Data) override;
+	void DrawSetting() override;
+	std::string SaveSetting() override;
+	void LoadSetting(const std::string& Data) override;
 
 	bool Flag_EnableAutoTab = true;
 

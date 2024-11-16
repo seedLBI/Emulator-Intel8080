@@ -6,6 +6,7 @@
 #include <glew.h>
 #include <glfw3.h>
 
+#include "UI/Setting/ISettingObject.h"
 #include "SaveSystem/SaveSystem.h"
 #include "Emulator/I8080.h"
 #include "Emulator/EmulationThread/EmulationThread.h"
@@ -14,6 +15,7 @@
 #include "DataStructures/TranslatorOutput.h"
 #include "TextEditor.h"
 #include "Notification/NotificationManager.h"
+
 #include "UI/LastPathManager/LastPathManager.h"
 
 #include "Utils/File_Utils.h"
@@ -44,7 +46,7 @@ enum class AutoSaveTiming {
 };
 
 
-class ProjectManager : public SaveSystem
+class ProjectManager : public ISettingObject
 {
 public:
 	ProjectManager(GLFWwindow* window,I8080* processor,NotificationManager* notificationManager,LastPathManager* LastPathManager,EmulationThread* emulationThread,CompilerStable* Compiler);
@@ -66,14 +68,15 @@ public:
 
 	void Compile();
 
-	void DrawSetting();
+
 	void Update();
 
 	TranslatorOutput* GetPtrTranslatorOutput();
 
 
-	std::string Save() override;
-	void Load(const std::string& Data) override;
+	void DrawSetting() override;
+	std::string SaveSetting() override;
+	void LoadSetting(const std::string& Data) override;
 
 private:
 	GLFWwindow* window = nullptr;

@@ -12,15 +12,17 @@
 #include "Notification/NotificationManager.h"
 #include "Emulator/EmulationThread/EmulationThread.h"
 #include "UI/Widgets/I8080.UI.CodeEditor.h"
+#include "UI/Setting/ISettingObject.h"
 #include "Utils\TextUtils.h"
 
 
 class Setting : public SaveSystem
 {
 public:
-	Setting(FontManager* font, WindowManager* window, I8080_WorkspaceManager* WorkspaceManager,NotificationManager* notification, EmulationThread* emulation,KeyCombinationHandler* keyCombinationHandler, ProjectManager* projectManager, Widget_CodeEditor* w_codeEditor);
+	Setting();
 	~Setting();
 
+	void AddSettingObject(ISettingObject* object);
 
 	void Draw();
 
@@ -33,21 +35,16 @@ public:
 	void Load(const std::string& Data) override;
 
 private:
-	FontManager* font = nullptr;
-	I8080_WorkspaceManager* WorkspaceManager = nullptr;
-	WindowManager* window = nullptr;
-	NotificationManager* notification = nullptr;
-	EmulationThread* emulation = nullptr;
-	KeyCombinationHandler* keyCombinationHandler = nullptr;
-	ProjectManager* projectManager = nullptr;
-	Widget_CodeEditor* w_codeEditor = nullptr;
+
+	struct Tabs{
+		std::string TabName;
+		std::vector<ISettingObject*> setting_objects;
+	};
+
+	std::vector<Tabs> tabs;
+
 
 	bool Popup_Open = false;
-
-
-
-	void DrawNotificationSetting();
-	void DrawEmulationSetting();
 };
 
 #endif // !SETTING_H

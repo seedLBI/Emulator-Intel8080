@@ -8,12 +8,13 @@
 #include "KeyCombination.h"
 #include "Utils/Keyboard.Utils.h"
 #include "Utils/ImGui.Utils.h"
+#include "UI/Setting/ISettingObject.h"
 #include <functional>
 
 
 
 
-class KeyCombinationHandler : public SaveSystem
+class KeyCombinationHandler : public ISettingObject
 {
 public:
 
@@ -30,13 +31,12 @@ public:
 	std::string GetStrCombinationByName(const std::string& name);
 
 
-	void DrawSetting();
-
 	bool PopupIsOpen();
 
 
-	std::string Save() override;
-	void Load(const std::string& Data) override;
+	void DrawSetting() override;
+	std::string SaveSetting() override;
+	void LoadSetting(const std::string& Data) override;
 
 
 private:

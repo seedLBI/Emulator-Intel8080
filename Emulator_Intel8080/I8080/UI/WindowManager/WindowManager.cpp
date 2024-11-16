@@ -1,6 +1,6 @@
 #include "WindowManager.h"
 
-WindowManager::WindowManager() : SaveSystem("Window"){
+WindowManager::WindowManager() : ISettingObject(u8"Изображение",u8"Видео") {
 
 }
 
@@ -11,22 +11,23 @@ WindowManager::~WindowManager(){
 }
 
 
-void WindowManager::Draw() {
-	ImGui::SeparatorText(u8"Изображение");
+void WindowManager::DrawSetting() {
 
-	if (ImGui::RadioButton(u8"Оконный режим", IsWindowed)) {
+	ISettingObject::DrawBegin();
+
+	if (ImGui::RadioButton(u8"Оконный режим", IsWindowed))
 		SetWindowed();
-	}
+
 	ImGui::SameLine();
-	if (ImGui::RadioButton(u8"Полноэкранный режим", !IsWindowed)) {
+
+	if (ImGui::RadioButton(u8"Полноэкранный режим", !IsWindowed))
 		SetFullscreen();
-	}
+
 	ImGui::SameLine();
 	HelpMarker(u8"Переключает режим размера окна.");
 
-	if (ImGui::RadioButton(u8"VSync", VSync_state)) {
+	if (ImGui::RadioButton(u8"VSync", VSync_state))
 		ToggleVSync();
-	}
 
 	ImGui::SameLine();
 	HelpMarker(u8"Вертикальная синхронизация.");
@@ -40,8 +41,7 @@ void WindowManager::Draw() {
 	static std::vector<std::string> items = { "30","45","60","75","90","120","144","165", u8"Неограниченно" };
 
 	std::string preview_value = std::to_string((int)OpenglWindow::Vars::FPS_target);
-	if ((int)OpenglWindow::Vars::FPS_target == 32000)
-	{
+	if ((int)OpenglWindow::Vars::FPS_target == 32000){
 		preview_value = u8"Неограниченно";
 	}
 
@@ -155,7 +155,7 @@ bool WindowManager::GetStateVSync() {
 
 
 
-std::string WindowManager::Save() {
+std::string WindowManager::SaveSetting() {
 	int pos_x = 0, pos_y = 0;
 	int size_x = 0, size_y = 0;
 	glfwGetWindowPos(OpenglWindow::Vars::window, &pos_x, &pos_y);
@@ -172,62 +172,58 @@ std::string WindowManager::Save() {
 		str_vsync = std::to_string(VSync_state);
 
 
-	std::string save_window = MakeBegin(8);
-	save_window += MakeSaveItem("Position X", str_pos_x);
-	save_window += MakeSaveItem("Position Y", str_pos_y);
-	save_window += MakeSaveItem("Size Width", str_size_x);
-	save_window += MakeSaveItem("Size Height", str_size_y);
-	save_window += MakeSaveItem("IsMaximazed", str_is_maximazed);
-	save_window += MakeSaveItem("IsFullscreen", str_is_fullscreen);
-	save_window += MakeSaveItem("FPS target", str_fps);
-	save_window += MakeSaveItem("VSync", str_vsync);
+	std::string save_window = save_MakeBegin(8);
+	save_window += save_MakeItem("Position X", str_pos_x);
+	save_window += save_MakeItem("Position Y", str_pos_y);
+	save_window += save_MakeItem("Size Width", str_size_x);
+	save_window += save_MakeItem("Size Height", str_size_y);
+	save_window += save_MakeItem("IsMaximazed", str_is_maximazed);
+	save_window += save_MakeItem("IsFullscreen", str_is_fullscreen);
+	save_window += save_MakeItem("FPS target", str_fps);
+	save_window += save_MakeItem("VSync", str_vsync);
 
 
 	return save_window;
 }
 
-void WindowManager::Load(const std::string& Data) {
-	PrintDebugInfoAboutData(Data);
+void WindowManager::LoadSetting(const std::string& Data) {
 
-	auto save_info = SplitData(Data);
+	auto info = load_TokenizeData(Data);
 
 
 	int Position_X = -1, Position_Y = -1, Size_Width = -1, Size_Height = -1;
 
 
-	for (int i = 0; i < save_info.size(); i++) {
+	for (int i = 0; i < info.size(); i++) {
 
-		std::string Name_Element = save_info[i].first;
-		std::string Data_Element = save_info[i].second;
-
-		if (Name_Element == "Position X") {
-			Position_X = stoi(Data_Element);
+		if (info[i].NameVar == "Position X") {
+			Position_X = stoi(info[i].ValueVar);
 		}
-		else if (Name_Element == "Position Y") {
-			Position_Y = stoi(Data_Element);
+		else if (info[i].NameVar == "Position Y") {
+			Position_Y = stoi(info[i].ValueVar);
 		}
-		else if (Name_Element == "Size Width") {
-			Size_Width = stoi(Data_Element);
+		else if (info[i].NameVar == "Size Width") {
+			Size_Width = stoi(info[i].ValueVar);
 		}
-		else if (Name_Element == "Size Height") {
-			Size_Height = stoi(Data_Element);
+		else if (info[i].NameVar == "Size Height") {
+			Size_Height = stoi(info[i].ValueVar);
 		}
-		else if (Name_Element == "IsMaximazed") {
-			if (stoi(Data_Element))
+		else if (info[i].NameVar == "IsMaximazed") {
+			if (stoi(info[i].ValueVar))
 				SetMaximaze();
 		}
-		else if (Name_Element == "IsFullscreen") {
-			if (stoi(Data_Element))
+		else if (info[i].NameVar == "IsFullscreen") {
+			if (stoi(info[i].ValueVar))
 				SetFullscreen();
 		}
-		else if (Name_Element == "FPS target") {
-			OpenglWindow::Vars::FPS_target = stoi(Data_Element);
+		else if (info[i].NameVar == "FPS target") {
+			OpenglWindow::Vars::FPS_target = stoi(info[i].ValueVar);
 		}
-		else if (Name_Element == "VSync") {
-			SetVSync(stoi(Data_Element));
+		else if (info[i].NameVar == "VSync") {
+			SetVSync(stoi(info[i].ValueVar));
 		}
 		else {
-			std::cout << "Unknowed save element founded: [" << Name_Element << "] [" << Data_Element << "]\n";
+			std::cout << "Unknowed save element founded: [" << info[i].NameVar << "] [" << info[i].ValueVar << "]\n";
 		}
 	}
 

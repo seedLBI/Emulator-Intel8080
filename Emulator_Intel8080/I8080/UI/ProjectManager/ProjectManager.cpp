@@ -7,7 +7,7 @@ ProjectManager::ProjectManager(
 	NotificationManager* notificationManager,
 	LastPathManager* lastPathManager,
 	EmulationThread* emulationThread,
-	CompilerStable* Compiler) : SaveSystem("ProjectManager") {
+	CompilerStable* Compiler) : ISettingObject(u8"Проект",u8"Общие") {
 
 	this->window = window;
 	this->processor = processor;
@@ -597,7 +597,7 @@ void ProjectManager::UpdateTitleWindow() {
 
 
 
-std::string ProjectManager::Save() {
+std::string ProjectManager::SaveSetting() {
 	std::string output = "";
 
 	int countLines = 0;
@@ -607,43 +607,36 @@ std::string ProjectManager::Save() {
 	else
 		countLines = 5;
 
-	output += MakeBegin(countLines);
-	output += MakeSaveItem(string("flag_OpenLastFileWithOpenProgramm"), std::to_string(flag_OpenLastFileWithOpenProgramm));
-	output += MakeSaveItem(string("flag_SaveAfterCompile"), std::to_string(flag_SaveAfterCompile));
-	output += MakeSaveItem(string("flag_CompileAfterOpen"), std::to_string(flag_CompileAfterOpen));
-	output += MakeSaveItem(string("setedAutoTiming"), AutoSaveTiming_To_string(setedAutoTiming));
+	output += save_MakeBegin(countLines);
+	output += save_MakeItem(string("flag_OpenLastFileWithOpenProgramm"), std::to_string(flag_OpenLastFileWithOpenProgramm));
+	output += save_MakeItem(string("flag_SaveAfterCompile"), std::to_string(flag_SaveAfterCompile));
+	output += save_MakeItem(string("flag_CompileAfterOpen"), std::to_string(flag_CompileAfterOpen));
+	output += save_MakeItem(string("setedAutoTiming"), AutoSaveTiming_To_string(setedAutoTiming));
 
 	if (Path_LoadedFile.empty() == false)
-		output += MakeSaveItem(string("LastLoadedPathFile"), Path_LoadedFile);
+		output += save_MakeItem(string("LastLoadedPathFile"), Path_LoadedFile);
 
 
 	return output;
 }
-void ProjectManager::Load(const std::string& Data) {
-	PrintDebugInfoAboutData(Data);
-
+void ProjectManager::LoadSetting(const std::string& Data) {
+	auto info = load_TokenizeData(Data);
 
 	std::string path_temp;
 
-	std::vector<std::string> Lines = split(Data, "\n");
-	for (int i = 0; i < Lines.size(); i++) {
-		std::vector<std::string> info = SplitLine(Lines[i]);
-
-		std::string name_arg = info[0];
-		std::string value_arg = info[1];
-
-		if (name_arg == "flag_OpenLastFileWithOpenProgramm")
-			flag_OpenLastFileWithOpenProgramm = stoi(value_arg);
-		else if (name_arg == "flag_SaveAfterCompile")
-			flag_SaveAfterCompile = stoi(value_arg);
-		else if (name_arg == "flag_CompileAfterOpen")
-			flag_CompileAfterOpen = stoi(value_arg);
-		else if (name_arg == "setedAutoTiming")
-			setedAutoTiming = string_To_AutoSaveTiming(value_arg);
-		else if (name_arg == "LastLoadedPathFile")
-			path_temp = (value_arg);
+	for (SettingLoadData data : info) {
+		if (data.NameVar == "flag_OpenLastFileWithOpenProgramm")
+			flag_OpenLastFileWithOpenProgramm = stoi(data.ValueVar);
+		else if (data.NameVar == "flag_SaveAfterCompile")
+			flag_SaveAfterCompile = stoi(data.ValueVar);
+		else if (data.NameVar == "flag_CompileAfterOpen")
+			flag_CompileAfterOpen = stoi(data.ValueVar);
+		else if (data.NameVar == "setedAutoTiming")
+			setedAutoTiming = string_To_AutoSaveTiming(data.ValueVar);
+		else if (data.NameVar == "LastLoadedPathFile")
+			path_temp = data.ValueVar;
 		else
-			std::cout << "Unknown name argument for widget: " << name_arg << std::endl;
+			std::cout << "ProjectManager::LoadSetting -> Unknown name argument: " << data.NameVar << std::endl;
 	}
 
 	if (path_temp.empty() == false && flag_OpenLastFileWithOpenProgramm == true) {

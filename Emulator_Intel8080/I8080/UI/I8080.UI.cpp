@@ -10,15 +10,14 @@ I8080_UserInterface::I8080_UserInterface(GLFWwindow* window) {
 	notificationManager = new NotificationManager();
 	WorkspaceManager = new I8080_WorkspaceManager(&WidgetManager);
 	lastPathManager = new LastPathManager();
-	
+	keyCombination_handler = new KeyCombinationHandler(notificationManager);
+	font_manager = new FontManager();
+	window_manager = new WindowManager();
+	settings = new Setting();
 
 	processor = new I8080();
 	Compiler = new CompilerStable();
 	emulationThread = new EmulationThread(processor);
-
-	keyCombination_handler = new KeyCombinationHandler(notificationManager);
-	font_manager = new FontManager();
-	window_manager = new WindowManager();
 
 
 	projectManager = new ProjectManager(
@@ -30,14 +29,8 @@ I8080_UserInterface::I8080_UserInterface(GLFWwindow* window) {
 		Compiler);
 
 
-
-
 	InitWidgets();
-
-	settings = new Setting(font_manager, window_manager, WorkspaceManager, notificationManager, emulationThread, keyCombination_handler, projectManager, widget_CodeEditor);
-
-
-
+	InitSetting();
 	InitSaveManager();
 	InitKeyCombinationHandler();
 
@@ -62,11 +55,6 @@ I8080_UserInterface::~I8080_UserInterface() {
 void I8080_UserInterface::Draw() {
 	BeginDraw();
 
-
-
-
-
-
 	DrawMainMenu();
 
 	WidgetManager.Draw();
@@ -74,7 +62,6 @@ void I8080_UserInterface::Draw() {
 	settings->Draw();
 
 	authorPopup.Draw();
-
 
 
 	//ImGui::ShowDemoWindow();
@@ -85,8 +72,6 @@ void I8080_UserInterface::Draw() {
 
 
 	EndDraw();
-
-
 }
 void I8080_UserInterface::Update() {
 	projectManager->Update();
@@ -369,6 +354,9 @@ void I8080_UserInterface::DrawMainMenu() {
 		if (ImGui::IsItemHovered())
 			ImGui::SetTooltip(u8"Режим работы с загруженным файлом:\n\n* USER - пользователю доступно всё.\n\n* BIN - отключен редактор и компиляция.\n\n* COM - отключен редактор и компиляция.\nPC установливается в 0x0100 и внедряется несколько\nбайт в начало программы для реализации функций вывода CP/M.");
 
+		emulationThread->DrawMainMenu();
+		widget_MnemocodeViewer->DrawMainMenu();
+
 		{
 			wind = ImGui::GetCurrentWindow();
 
@@ -410,7 +398,18 @@ void I8080_UserInterface::DrawMainMenu() {
 
 
 
-
+void I8080_UserInterface::InitSetting() {
+	settings->AddSettingObject(font_manager);
+	settings->AddSettingObject(window_manager);
+	settings->AddSettingObject(WorkspaceManager);
+	settings->AddSettingObject(notificationManager);
+	settings->AddSettingObject(emulationThread);
+	settings->AddSettingObject(keyCombination_handler);
+	settings->AddSettingObject(projectManager);
+	settings->AddSettingObject(widget_CodeEditor->GetPtrTextEditor());
+	settings->AddSettingObject(lastPathManager);
+	settings->AddSettingObject(widget_MnemocodeViewer);
+}
 void I8080_UserInterface::InitWidgets() {
 	widget_CodeEditor = new Widget_CodeEditor();
 	widget_Disassembler = new Widget_Disassembler(processor);
@@ -478,6 +477,11 @@ void I8080_UserInterface::InitKeyCombinationHandler() {
 	keyCombination_handler->AddCombination(u8"Настройки", KeyCombination({}, std::bind(&Setting::Toggle, settings)));
 
 	keyCombination_handler->AddCombination(u8"Полноэкранный\\Оконный", KeyCombination({ GLFW_KEY_F11 }, std::bind(&WindowManager::ToggleFullscreen, window_manager)));
+
+	keyCombination_handler->AddCombination(u8"Постоянный фокус в просмотре памяти", KeyCombination({}, std::bind(&Widget_MnemocodeViewer::ToggleFlagAlwaysFocus, widget_MnemocodeViewer)));
+
+	keyCombination_handler->AddCombination(u8"Cледующая скорость процессора", KeyCombination({}, std::bind(&EmulationThread::LoadNextSpeed, emulationThread)));
+	keyCombination_handler->AddCombination(u8"Предыдущая скорость процессора", KeyCombination({}, std::bind(&EmulationThread::LoadPreviousSpeed, emulationThread)));
 
 	keyCombination_handler->AddCombination(u8"Следующее рабочее пространство", KeyCombination({ GLFW_KEY_LEFT_CONTROL, GLFW_KEY_RIGHT_BRACKET }, std::bind(&I8080_WorkspaceManager::LoadNext, WorkspaceManager)));
 	keyCombination_handler->AddCombination(u8"Предыдущее рабочее пространство", KeyCombination({ GLFW_KEY_LEFT_CONTROL, GLFW_KEY_LEFT_BRACKET }, std::bind(&I8080_WorkspaceManager::LoadPrevious, WorkspaceManager)));

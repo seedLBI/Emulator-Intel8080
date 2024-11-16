@@ -2,10 +2,9 @@
 
 
 
-Widget_MnemocodeViewer::Widget_MnemocodeViewer(I8080* processor, TranslatorOutput* translator) :I8080_Widget(u8"Мнемо код") {
+Widget_MnemocodeViewer::Widget_MnemocodeViewer(I8080* processor, TranslatorOutput* translator) :I8080_Widget(u8"Мнемо код"), ISettingObject(u8"Просмотр кода",u8"Общие") {
 	this->processor = processor;
 	this->translator = translator;
-
 }
 Widget_MnemocodeViewer::~Widget_MnemocodeViewer() {
 
@@ -22,8 +21,22 @@ void Widget_MnemocodeViewer::Draw() {
 
 	ImGui::SetNextWindowSize(ImVec2(200, 200), ImGuiCond_FirstUseEver);
 
+
+	//pos_follow
+
+
 	if (ImGui::Begin(GetName_c_str(), GetPtrFlagShow())) {
-		static ImGuiTableFlags flags = ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_NoBordersInBody| ImGuiTableFlags_ScrollY;
+
+
+		ImGuiTableFlags flags;
+
+		if (flag_EnableAlwaysFocus)
+			pos_follow = processor->GetProgrammCounter();
+
+		flags = ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_NoBordersInBody | ImGuiTableFlags_ScrollY;
+
+
+
 		ImVec2 outer_size = ImVec2(0.0f, 20 * 8);
 		if (ImGui::BeginTable("MnemoCode", 4, flags))
 		{
@@ -48,9 +61,8 @@ void Widget_MnemocodeViewer::Draw() {
 			while (clipper.Step()) {
 				for (int row = clipper.DisplayStart; row < clipper.DisplayEnd; row++) {
 					ImGui::TableNextRow();
+
 					if (pos_follow != -1 && row != 0) {
-
-
 
 						int count = abs(clipper.DisplayStart - clipper.DisplayEnd);
 						int start = pos_follow - (count / 2) + 2;
@@ -60,13 +72,8 @@ void Widget_MnemocodeViewer::Draw() {
 							start = 0;
 						}
 
-						double koef = 24;
+						double koef = ImGui::GetFontSize() + 2;
 
-
-						// 20 - 22.0
-						koef = ImGui::GetFontSize() + 2;
-
-						//ImGui::SetScrollY(pos_follow * ImGui::GetTextLineHeightWithSpacing() - ImGui::GetFrameHeight() - ImGui::GetStyle().ItemSpacing.y - ImGui::GetStyle().WindowPadding.y - ImGui::GetStyle().FramePadding.y);
 						ImGui::SetScrollY(pos_follow * koef);
 
 
@@ -74,8 +81,7 @@ void Widget_MnemocodeViewer::Draw() {
 					}
 
 
-					if (processor->GetVisetedMemory()[row])
-					{
+					if (processor->GetVisetedMemory()[row]) {
 						ImU32 row_bg_color = ImGui::GetColorU32(ImVec4(0.9f, 0.2f, 0.9f, 0.25f));
 						ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, row_bg_color);
 					}
@@ -160,7 +166,7 @@ void Widget_MnemocodeViewer::Load(const std::string& Data) {
 
 	std::vector<std::string> Lines = split(Data, "\n");
 	for (int i = 0; i < Lines.size(); i++) {
-		std::vector<std::string> info = SplitLine(Lines[i]);
+		std::vector<std::string> info = SaveSystem::SplitLine(Lines[i]);
 
 		std::string name_arg = info[0];
 		std::string value_arg = info[1];
@@ -173,5 +179,43 @@ void Widget_MnemocodeViewer::Load(const std::string& Data) {
 		}
 		else
 			std::cout << "Unknown name argument for widget: " << name_arg << std::endl;
+	}
+}
+
+void Widget_MnemocodeViewer::ToggleFlagAlwaysFocus() {
+	flag_EnableAlwaysFocus = !flag_EnableAlwaysFocus;
+}
+
+void Widget_MnemocodeViewer::DrawMainMenu() {
+	ImGui::Checkbox("", &flag_EnableAlwaysFocus);
+	if (ImGui::IsItemHovered())
+		ImGui::SetTooltip(u8"Отключает возможность прокрутки для окна Мнемокод\nпостоянно устанавливая позицию так чтобы\nтекущая выполняемая команда была в середине.");
+}
+void Widget_MnemocodeViewer::DrawSetting() {
+	ISettingObject::DrawBegin();
+
+	if (ImGui::RadioButton(u8"Постоянный фокус на регистр PC", flag_EnableAlwaysFocus))
+		ToggleFlagAlwaysFocus();
+
+	ImGui::SameLine();
+	
+	HelpMarker(u8"Отключает возможность прокрутки для окна Мнемокод\nпостоянно устанавливая позицию так чтобы\nтекущая выполняемая команда была в середине.");
+
+}
+std::string Widget_MnemocodeViewer::SaveSetting() {
+	std::string result = save_MakeBegin(1);
+
+	result += save_MakeItem("flag_EnableAlwaysFocus", std::to_string(flag_EnableAlwaysFocus));
+
+	return result;
+}
+void Widget_MnemocodeViewer::LoadSetting(const std::string& Data) {
+	auto info = load_TokenizeData(Data);
+
+	for (SettingLoadData data : info) {
+		if (data.NameVar == "flag_EnableAlwaysFocus")
+			flag_EnableAlwaysFocus = std::stoi(data.ValueVar);
+		else
+			std::cout << "Widget_MnemocodeViewer::LoadSetting -> Unknown name argument: " << data.NameVar << std::endl;
 	}
 }
