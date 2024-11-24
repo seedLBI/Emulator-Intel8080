@@ -1,8 +1,8 @@
 ﻿//#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
 #include "Config_Compilier.h"
-#include "I8080/UI/I8080.UI.h"
-#include "I8080/Scene_Intro/I8080.Scene.Intro.h"
+#include "UI/I8080.UI.h"
+#include "Scene_Intro/I8080.Scene.Intro.h"
 
 
 using namespace std;

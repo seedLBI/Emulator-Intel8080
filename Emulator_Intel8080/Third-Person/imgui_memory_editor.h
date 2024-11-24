@@ -65,7 +65,7 @@
 #pragma warning (disable: 4996) // warning C4996: 'sprintf': This function or variable may be unsafe.
 #endif
 
-#include "Emulator\I8080.h"
+#include "Emulator\Processors\Intel8080\I8080.h"
 
 struct MemoryEditor
 {
