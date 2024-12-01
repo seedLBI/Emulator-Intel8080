@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include "DataStructures/TranslatorOutput.h"
+#include "Utils/Values/Values.Utils.h"
 #include "Utils/TextUtils.h"
 #include "Utils/UTF8.h"
 #include "robin_hood.h"
@@ -22,12 +23,13 @@ public:
 
     virtual void Clear();
 
+
+
 protected:
     TranslatorOutput CompilerOutput;
 
-	std::vector<std::string> split_line(const std::string& line, bool& state_MultiLineComment);
-	std::vector<std::vector<std::string>> split_code (const std::vector<std::string>& code);
-
+    std::vector<std::string> split_line(const std::string& line, bool& state_MultiLineComment);
+    std::vector<std::vector<std::string>> split_code(const std::vector<std::string>& code);
 
 	bool IsAllSpecialSymbols(const std::string& command);
 
@@ -38,7 +40,7 @@ protected:
         UNKNOWN
     };
 
-    std::pair<uint64_t, TypeValue> FromString2Int(const std::string& value);
+    static std::pair<uint64_t, TypeValue> FromString2Int(const std::string& value);
 
 
     bool CheckName(const std::string& name);
@@ -48,18 +50,6 @@ protected:
 
 
     std::vector<uint8_t> TranslateInstruction(const std::vector<std::string>& splitted_command);
-
-
-private:
-
-
-     bool IsHexValue(const std::string& value);
-     bool IsDecValue(const std::string& value);
-     bool IsBinValue(const std::string& value);
-
-     uint64_t StrHex2int(const std::string& value);
-     uint64_t StrDec2int(const std::string& value);
-     uint64_t StrBin2int(const std::string& value);
 
 
 };

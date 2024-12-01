@@ -16,6 +16,8 @@ enum class UTF8_to_CP1251_CONVERTER_ERROR {
     UNSUPPORTED_SYMBOL
 };
 
+int count_symbols_utf8(const std::string& line, UTF8_SPLITER_ERROR& error);
+
 std::vector<std::string> utf8_splitter(const std::string& line, UTF8_SPLITER_ERROR& error);
 std::pair<uint8_t, UTF8_to_CP1251_CONVERTER_ERROR> convert_utf8_toCP1251(const std::string& symbol);
 

@@ -714,6 +714,19 @@ std::string TextEditor::GetWordAt(const Coordinates & aCoords) const
 	return r;
 }
 
+std::string TextEditor::GetTextAfterTextUnderCursor(const Coordinates& aCoords) const {
+	auto end = FindWordEnd(aCoords);
+
+	std::string r;
+
+	auto iend = GetCharacterIndex(end);
+
+	for (auto it = iend; it < mLines[aCoords.mLine].size(); ++it)
+		r.push_back(mLines[aCoords.mLine][it].mChar);
+
+	return r;
+}
+
 ImU32 TextEditor::GetGlyphColor(const Glyph & aGlyph) const
 {
 	if (!mColorizerEnabled)
@@ -1201,13 +1214,19 @@ void TextEditor::DrawSetting() {
 	ImGui::SameLine();
 	HelpMarker(u8"Сохраняет отступы до начала текста при создании новой строки.\nТакже создаёт дополнительный отступ если в строчке присутствует маркер");
 
+	if (ImGui::RadioButton(u8"Анализировать текст строки при наведении на инструкцию", Flag_AnalyzeLineForInstruction)) {
+		Flag_AnalyzeLineForInstruction = !Flag_AnalyzeLineForInstruction;
+	}
+	ImGui::SameLine();
+	HelpMarker(u8"При всплывающей подсказке в пункте Псевдокод вместо\nкатегорий аргументов, будут соответсвующие аргументы из строки.");
 
 }
 std::string TextEditor::SaveSetting() {
 	std::string output = "";
 
-	output += save_MakeBegin(1);
+	output += save_MakeBegin(2);
 	output += save_MakeItem(std::string("Flag_EnableAutoTab"), std::to_string(Flag_EnableAutoTab));
+	output += save_MakeItem(std::string("Flag_AnalyzeLineForInstruction"), std::to_string(Flag_AnalyzeLineForInstruction));
 
 	return output;
 }
@@ -1218,11 +1237,14 @@ void TextEditor::LoadSetting(const std::string& Data) {
 	for (SettingLoadData data : info) {
 		if (data.NameVar == "Flag_EnableAutoTab")
 			Flag_EnableAutoTab = std::stoi(data.ValueVar);
+		else if (data.NameVar == "Flag_AnalyzeLineForInstruction")
+			Flag_AnalyzeLineForInstruction = std::stoi(data.ValueVar);
 		else
 			std::cout << "TextEditor::LoadSetting -> Unknown name argument" << data.NameVar << std::endl;
 	}
 
 }
+
 
 
 
@@ -1539,7 +1561,10 @@ void TextEditor::Render()
 			mousePos.x >= cursorScreenPos.x && mousePos.x <= cursorScreenPos.x + contentSize.x &&
 			mousePos.y >= cursorScreenPos.y && mousePos.y <= cursorScreenPos.y + contentSize.y)
 		{
-			auto id = GetWordAt(ScreenPosToCoordinates(ImGui::GetMousePos()));
+
+			auto mouseCoord = ScreenPosToCoordinates(ImGui::GetMousePos());
+
+			auto id = GetWordAt(mouseCoord);
 			if (!id.empty())
 			{
 
@@ -1549,8 +1574,11 @@ void TextEditor::Render()
 				auto it = mLanguageDefinition.mIdentifiers.find(id);
 				if (it != mLanguageDefinition.mIdentifiers.end())
 				{
-					Draw_InstructionInfo(id);
-					
+					if (Flag_AnalyzeLineForInstruction)
+						Singletone_InfoInstruction::Instance().Display(id, GetTextAfterTextUnderCursor(mouseCoord));
+					else
+						Singletone_InfoInstruction::Instance().Display(id, "");
+
 					ImGui::SetWindowFontScale(mVirtualFontSize);
 				}
 			}

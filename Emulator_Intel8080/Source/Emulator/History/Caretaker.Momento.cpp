@@ -38,7 +38,7 @@ void Caretaker_Momento::ClearHistory() {
 	momentos.clear();
 }
 
-std::vector<std::string> Caretaker_Momento::GetHistory() {
+std::vector<std::pair<std::string, std::string>> Caretaker_Momento::GetHistory() {
 	return {};
 }
 

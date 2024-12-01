@@ -1,7 +1,7 @@
 #ifndef INFO_INSTRUCTION_DATA_H
 #define INFO_INSTRUCTION_DATA_H
 
-#include "UI/InfoInstruction/InfoInstruction.Structures.h"
+#include "InfoInstruction.Structures.h"
 #include "robin_hood.h"
 
 

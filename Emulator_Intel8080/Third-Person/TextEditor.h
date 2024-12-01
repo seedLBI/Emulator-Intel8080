@@ -17,7 +17,7 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 #include "IconFontCppHeaders/IconsFontAwesome6.h"
-#include "UI/InfoInstruction/InfoInstruction.Display.h"
+#include "Emulator/Processors/Intel8080/InfoInstruction/InfoInstruction.Display.h"
 #include "Utils/ImGui.Utils.h"
 #include "Utils/TextUtils.h"
 #include "Utils/UTF8.h"
@@ -413,6 +413,7 @@ public:
 	void LoadSetting(const std::string& Data) override;
 
 	bool Flag_EnableAutoTab = true;
+	bool Flag_AnalyzeLineForInstruction = true;
 
 private:
 	typedef std::vector<std::pair<std::regex, PaletteIndex>> RegexList;
@@ -490,6 +491,9 @@ private:
 	void DeleteSelection();
 	std::string GetWordUnderCursor() const;
 	std::string GetWordAt(const Coordinates& aCoords) const;
+	std::string GetTextAfterTextUnderCursor(const Coordinates& aCoords) const;
+
+
 	ImU32 GetGlyphColor(const Glyph& aGlyph) const;
 
 	void HandleKeyboardInputs();

@@ -35,30 +35,6 @@
     <ClCompile Include="Source\Emulator\Processors\Intel8080\I8080.cpp">
       <Filter>Source\Emulator\Processor\Processors\I8080</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Emulator\Port\I8080.Port.cpp">
-      <Filter>Source\Emulator\Port\Port</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Emulator\Port\I8080.Port.AsyncKeyboard.cpp">
-      <Filter>Source\Emulator\Port\AsyncKeyboard</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Emulator\Port\I8080.Port.ConsoleOutput.cpp">
-      <Filter>Source\Emulator\Port\ConsoleOutput</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Emulator\Port\I8080.Port.GeneratorRandomValues.cpp">
-      <Filter>Source\Emulator\Port\GeneratorRandomValues</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Emulator\Port\I8080.Port.PixelScreen.cpp">
-      <Filter>Source\Emulator\Port\PixelScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Emulator\Port\I8080.Port.PixelScreenTwoBuffers.cpp">
-      <Filter>Source\Emulator\Port\PixelScreenTwoBuffers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Emulator\Port\I8080.Port.SymbolScreen.cpp">
-      <Filter>Source\Emulator\Port\SymbolScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Emulator\Port\I8080.Port.Timer.cpp">
-      <Filter>Source\Emulator\Port\Timer</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Emulator\EmulationThread\EmulationThread.cpp">
       <Filter>Source\Emulator\EmulationThread</Filter>
     </ClCompile>
@@ -145,15 +121,6 @@
     </ClCompile>
     <ClCompile Include="Source\UI\FontManager\FontManager.cpp">
       <Filter>Source\UI\FontManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI\InfoInstruction\InfoInstruction.Data.cpp">
-      <Filter>Source\UI\InfoInstruction</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI\InfoInstruction\InfoInstruction.Display.cpp">
-      <Filter>Source\UI\InfoInstruction</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI\InfoInstruction\InfoInstruction.Structures.cpp">
-      <Filter>Source\UI\InfoInstruction</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\KeyCombination\KeyCombinationHandler.cpp">
       <Filter>Source\UI\KeyCombination</Filter>
@@ -308,26 +275,65 @@
     <ClCompile Include="Source\DataStructures\RingBuffer.cpp">
       <Filter>Source\DataStructures</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Emulator\Port\AsyncKeyboardMomento\AsyncKeyboard.Momento.cpp">
-      <Filter>Source\Emulator\Port\AsyncKeyboard\Momento</Filter>
+    <ClCompile Include="Source\Emulator\Port\I8080.Port.cpp">
+      <Filter>Source\Emulator\Port</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Emulator\Port\ConsoleOutputMomento\ConsoleOutput.Momento.cpp">
-      <Filter>Source\Emulator\Port\ConsoleOutput\Momento</Filter>
+    <ClCompile Include="Source\Emulator\Port\Timer\Momento\Timer.Momento.cpp">
+      <Filter>Source\Emulator\Port\Timer\Momento</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Emulator\Port\GeneratorRandomValuesMomento\GeneratorRandomValues.Momento.cpp">
-      <Filter>Source\Emulator\Port\GeneratorRandomValues\Momento</Filter>
+    <ClCompile Include="Source\Emulator\Port\Timer\I8080.Port.Timer.cpp">
+      <Filter>Source\Emulator\Port\Timer</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Emulator\Port\PixelScreenMomento\PixelScreen.Momento.cpp">
-      <Filter>Source\Emulator\Port\PixelScreen\Momento</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Emulator\Port\PixelScreenTwoBuffersMomento\PixelScreenTwoBuffers.Momento.cpp">
-      <Filter>Source\Emulator\Port\PixelScreenTwoBuffers\Momento</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Emulator\Port\SymbolScreenMomento\SymbolScreen.Momento.cpp">
+    <ClCompile Include="Source\Emulator\Port\SymbolScreen\Momento\SymbolScreen.Momento.cpp">
       <Filter>Source\Emulator\Port\SymbolScreen\Momento</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Emulator\Port\TimerMomento\Timer.Momento.cpp">
-      <Filter>Source\Emulator\Port\Timer\Momento</Filter>
+    <ClCompile Include="Source\Emulator\Port\SymbolScreen\I8080.Port.SymbolScreen.cpp">
+      <Filter>Source\Emulator\Port\SymbolScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Emulator\Port\PixelScreenTwoBuffers\I8080.Port.PixelScreenTwoBuffers.cpp">
+      <Filter>Source\Emulator\Port\PixelScreenTwoBuffers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Emulator\Port\PixelScreenTwoBuffers\Momento\PixelScreenTwoBuffers.Momento.cpp">
+      <Filter>Source\Emulator\Port\PixelScreenTwoBuffers\Momento</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Emulator\Port\PixelScreen\I8080.Port.PixelScreen.cpp">
+      <Filter>Source\Emulator\Port\PixelScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Emulator\Port\PixelScreen\Momento\PixelScreen.Momento.cpp">
+      <Filter>Source\Emulator\Port\PixelScreen\Momento</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Emulator\Port\GeneratorRandomValues\I8080.Port.GeneratorRandomValues.cpp">
+      <Filter>Source\Emulator\Port\GeneratorRandomValues</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Emulator\Port\GeneratorRandomValues\Momento\GeneratorRandomValues.Momento.cpp">
+      <Filter>Source\Emulator\Port\GeneratorRandomValues\Momento</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Emulator\Port\ConsoleOutput\I8080.Port.ConsoleOutput.cpp">
+      <Filter>Source\Emulator\Port\ConsoleOutput</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Emulator\Port\ConsoleOutput\Momento\ConsoleOutput.Momento.cpp">
+      <Filter>Source\Emulator\Port\ConsoleOutput\Momento</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Emulator\Port\AsyncKeyboard\I8080.Port.AsyncKeyboard.cpp">
+      <Filter>Source\Emulator\Port\AsyncKeyboard</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Emulator\Port\AsyncKeyboard\Momento\AsyncKeyboard.Momento.cpp">
+      <Filter>Source\Emulator\Port\AsyncKeyboard\Momento</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Data.cpp">
+      <Filter>Source\Emulator\Processor\Processors\I8080\InfoInstruction</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Display.cpp">
+      <Filter>Source\Emulator\Processor\Processors\I8080\InfoInstruction</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Structures.cpp">
+      <Filter>Source\Emulator\Processor\Processors\I8080\InfoInstruction</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\Widgets\UI.ListInstruction.cpp">
+      <Filter>Source\UI\Widgets\ListInstruction</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils\Values\Values.Utils.cpp">
+      <Filter>Source\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -384,30 +390,6 @@
     </ClInclude>
     <ClInclude Include="Source\Emulator\Processors\Intel8080\I8080.h">
       <Filter>Source\Emulator\Processor\Processors\I8080</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Emulator\Port\I8080.Port.h">
-      <Filter>Source\Emulator\Port\Port</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Emulator\Port\I8080.Port.AsyncKeyboard.h">
-      <Filter>Source\Emulator\Port\AsyncKeyboard</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Emulator\Port\I8080.Port.ConsoleOutput.h">
-      <Filter>Source\Emulator\Port\ConsoleOutput</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Emulator\Port\I8080.Port.GeneratorRandomValues.h">
-      <Filter>Source\Emulator\Port\GeneratorRandomValues</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Emulator\Port\I8080.Port.PixelScreen.h">
-      <Filter>Source\Emulator\Port\PixelScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Emulator\Port\I8080.Port.PixelScreenTwoBuffers.h">
-      <Filter>Source\Emulator\Port\PixelScreenTwoBuffers</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Emulator\Port\I8080.Port.SymbolScreen.h">
-      <Filter>Source\Emulator\Port\SymbolScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Emulator\Port\I8080.Port.Timer.h">
-      <Filter>Source\Emulator\Port\Timer</Filter>
     </ClInclude>
     <ClInclude Include="Source\Emulator\EmulationThread\EmulationThread.h">
       <Filter>Source\Emulator\EmulationThread</Filter>
@@ -543,15 +525,6 @@
     </ClInclude>
     <ClInclude Include="Source\UI\FontManager\FontManager.h">
       <Filter>Source\UI\FontManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\InfoInstruction\InfoInstruction.Data.h">
-      <Filter>Source\UI\InfoInstruction</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\InfoInstruction\InfoInstruction.Display.h">
-      <Filter>Source\UI\InfoInstruction</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\InfoInstruction\InfoInstruction.Structures.h">
-      <Filter>Source\UI\InfoInstruction</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI\KeyCombination\KeyCombination.h">
       <Filter>Source\UI\KeyCombination</Filter>
@@ -712,26 +685,65 @@
     <ClInclude Include="Source\DataStructures\RingBuffer.h">
       <Filter>Source\DataStructures</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Emulator\Port\AsyncKeyboardMomento\AsyncKeyboard.Momento.h">
-      <Filter>Source\Emulator\Port\AsyncKeyboard\Momento</Filter>
+    <ClInclude Include="Source\Emulator\Port\I8080.Port.h">
+      <Filter>Source\Emulator\Port</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Emulator\Port\ConsoleOutputMomento\ConsoleOutput.Momento.h">
-      <Filter>Source\Emulator\Port\ConsoleOutput\Momento</Filter>
+    <ClInclude Include="Source\Emulator\Port\Timer\Momento\Timer.Momento.h">
+      <Filter>Source\Emulator\Port\Timer\Momento</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Emulator\Port\GeneratorRandomValuesMomento\GeneratorRandomValues.Momento.h">
-      <Filter>Source\Emulator\Port\GeneratorRandomValues\Momento</Filter>
+    <ClInclude Include="Source\Emulator\Port\Timer\I8080.Port.Timer.h">
+      <Filter>Source\Emulator\Port\Timer</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Emulator\Port\PixelScreenMomento\PixelScreen.Momento.h">
-      <Filter>Source\Emulator\Port\PixelScreen\Momento</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Emulator\Port\PixelScreenTwoBuffersMomento\PixelScreenTwoBuffers.Momento.h">
-      <Filter>Source\Emulator\Port\PixelScreenTwoBuffers\Momento</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Emulator\Port\SymbolScreenMomento\SymbolScreen.Momento.h">
+    <ClInclude Include="Source\Emulator\Port\SymbolScreen\Momento\SymbolScreen.Momento.h">
       <Filter>Source\Emulator\Port\SymbolScreen\Momento</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Emulator\Port\TimerMomento\Timer.Momento.h">
-      <Filter>Source\Emulator\Port\Timer\Momento</Filter>
+    <ClInclude Include="Source\Emulator\Port\SymbolScreen\I8080.Port.SymbolScreen.h">
+      <Filter>Source\Emulator\Port\SymbolScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Emulator\Port\PixelScreenTwoBuffers\I8080.Port.PixelScreenTwoBuffers.h">
+      <Filter>Source\Emulator\Port\PixelScreenTwoBuffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Emulator\Port\PixelScreenTwoBuffers\Momento\PixelScreenTwoBuffers.Momento.h">
+      <Filter>Source\Emulator\Port\PixelScreenTwoBuffers\Momento</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Emulator\Port\PixelScreen\I8080.Port.PixelScreen.h">
+      <Filter>Source\Emulator\Port\PixelScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Emulator\Port\PixelScreen\Momento\PixelScreen.Momento.h">
+      <Filter>Source\Emulator\Port\PixelScreen\Momento</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Emulator\Port\GeneratorRandomValues\I8080.Port.GeneratorRandomValues.h">
+      <Filter>Source\Emulator\Port\GeneratorRandomValues</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Emulator\Port\GeneratorRandomValues\Momento\GeneratorRandomValues.Momento.h">
+      <Filter>Source\Emulator\Port\GeneratorRandomValues\Momento</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Emulator\Port\ConsoleOutput\I8080.Port.ConsoleOutput.h">
+      <Filter>Source\Emulator\Port\ConsoleOutput</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Emulator\Port\ConsoleOutput\Momento\ConsoleOutput.Momento.h">
+      <Filter>Source\Emulator\Port\ConsoleOutput\Momento</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Emulator\Port\AsyncKeyboard\I8080.Port.AsyncKeyboard.h">
+      <Filter>Source\Emulator\Port\AsyncKeyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Emulator\Port\AsyncKeyboard\Momento\AsyncKeyboard.Momento.h">
+      <Filter>Source\Emulator\Port\AsyncKeyboard\Momento</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Data.h">
+      <Filter>Source\Emulator\Processor\Processors\I8080\InfoInstruction</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Display.h">
+      <Filter>Source\Emulator\Processor\Processors\I8080\InfoInstruction</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Structures.h">
+      <Filter>Source\Emulator\Processor\Processors\I8080\InfoInstruction</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\Widgets\UI.ListInstruction.h">
+      <Filter>Source\UI\Widgets\ListInstruction</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Values\Values.Utils.h">
+      <Filter>Source\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -770,9 +782,6 @@
     </Filter>
     <Filter Include="Source\Emulator\Port\ConsoleOutput">
       <UniqueIdentifier>{d3682c98-b11c-49f0-8751-013b78bcc846}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Emulator\Port\Port">
-      <UniqueIdentifier>{9b07f0b9-0b7b-4754-9a9d-dffa6f16070e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Emulator\EmulationThread">
       <UniqueIdentifier>{2774dcb8-7116-4f73-acb9-e3d88c69053d}</UniqueIdentifier>
@@ -942,9 +951,6 @@
     <Filter Include="Source\UI\AuthorPopup">
       <UniqueIdentifier>{c5e5a52e-234e-4d7e-99b8-895f824e719b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\UI\InfoInstruction">
-      <UniqueIdentifier>{9919ecd1-ce9c-49d1-9426-d931b983174f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\FontsData">
       <UniqueIdentifier>{ca3d4caf-cb5b-4785-9e0a-6296520b4583}</UniqueIdentifier>
     </Filter>
@@ -1010,6 +1016,12 @@
     </Filter>
     <Filter Include="Source\Emulator\Port\Timer\Momento">
       <UniqueIdentifier>{79c47ad0-8d27-4055-ada1-14af884919e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\UI\Widgets\ListInstruction">
+      <UniqueIdentifier>{396d0ca3-6c28-4e56-8b4a-114513411423}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Emulator\Processor\Processors\I8080\InfoInstruction">
+      <UniqueIdentifier>{9919ecd1-ce9c-49d1-9426-d931b983174f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

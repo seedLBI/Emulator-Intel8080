@@ -197,7 +197,7 @@ void Widget_Help::DrawTextWithAbbrivs(const std::vector < std::vector< std::any 
 
 				ImGui::TextColored(ImVec4(1.f, 0.4f, 0.4f, 1.f), elem_code.text.c_str());
 				if (ImGui::IsItemHovered())
-					Draw_InstructionInfo(elem_code.text);
+					Singletone_InfoInstruction::Instance().Display(elem_code.text, "");
 
 			}
 			else if (Text[line][element].type() == typeid(HyperTextForWidget)) {

@@ -3,7 +3,7 @@
 
 #include "Emulator\Processors\Intel8080\I8080.h"
 #include "UI\Widget\I8080.Widget.h"
-#include "Emulator/Port/I8080.Port.ConsoleOutput.h"
+#include "Emulator/Port/ConsoleOutput/I8080.Port.ConsoleOutput.h"
 #include "Utils/ImGui.Utils.h"
 #include <string>
 #include <vector>

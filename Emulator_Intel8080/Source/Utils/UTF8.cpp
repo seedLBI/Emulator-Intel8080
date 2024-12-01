@@ -1,6 +1,71 @@
 #include "UTF8.h"
 
 
+int count_symbols_utf8(const std::string& line, UTF8_SPLITER_ERROR& error) {
+
+    int result = 0;
+
+    size_t i = 0;
+    size_t length = line.size();
+
+    while (i < length) {
+        unsigned char byte = line[i];
+
+        // Single-byte character (ASCII)
+        if ((byte & 0b10000000) == 0b00000000) {
+            result++;
+            i++;
+        }
+        // Two-byte character
+        else if ((byte & 0b11100000) == 0b11000000) {
+            if (i + 1 < length
+                && ((line[i + 1] & 0b11000000) == 0b10000000)) {
+                result++;
+                i += 2;
+            }
+            else {
+                error = UTF8_SPLITER_ERROR::NOT_HAVE_ENOUGH_SIZE;
+                return result;
+            }
+        }
+        // Three-byte character
+        else if ((byte & 0b11110000) == 0b11100000) {
+            if (i + 2 < length
+                && ((line[i + 1] & 0b11000000) == 0b10000000)
+                && ((line[i + 2] & 0b11000000) == 0b10000000)) {
+                result++;
+                i += 3;
+            }
+            else {
+                error = UTF8_SPLITER_ERROR::NOT_HAVE_ENOUGH_SIZE;
+                return result;
+            }
+        }
+        // Four-byte character
+        else if ((byte & 0b11111000) == 0b11110000) {
+            if (i + 3 < length
+                && ((line[i + 1] & 0b11000000) == 0b10000000)
+                && ((line[i + 2] & 0b11000000) == 0b10000000)
+                && ((line[i + 3] & 0b11000000) == 0b10000000)) {
+                result++;
+                i += 4;
+            }
+            else {
+                error = UTF8_SPLITER_ERROR::NOT_HAVE_ENOUGH_SIZE;
+                return result;
+            }
+        }
+        // Unsupported symbol
+        else {
+            error = UTF8_SPLITER_ERROR::UNSUPORTED_SYMBOL;
+            return result;
+        }
+    }
+
+    error = UTF8_SPLITER_ERROR::NOTHING;  // No errors
+    return result;
+}
+
 std::vector<std::string> utf8_splitter(const std::string& line, UTF8_SPLITER_ERROR& error) {
     std::vector<std::string> result;
     size_t i = 0;

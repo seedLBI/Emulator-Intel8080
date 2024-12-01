@@ -7,7 +7,7 @@
 #include "Emulator/History/Momento.h"
 #include "Emulator/Processors/Intel8080/History/Momento/I8080.Momento.h"
 
-
+#include "Utils/TextUtils.h"
 #include <vector>
 #include <string>
 
@@ -17,7 +17,7 @@ public:
 	I8080_Caretaker_Momento(I8080* processor);
 	~I8080_Caretaker_Momento();
 
-	std::vector<std::string> GetHistory() override;
+	std::vector<std::pair<std::string, std::string>> GetHistory() override;
 };
 
 

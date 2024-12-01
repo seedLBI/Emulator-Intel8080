@@ -54,9 +54,6 @@ void Widget_MnemocodeViewer::Draw() {
 
 			ImGuiListClipper clipper;
 
-
-
-
 			clipper.Begin(SIZE_MEMORY);
 			while (clipper.Step()) {
 				for (int row = clipper.DisplayStart; row < clipper.DisplayEnd; row++) {

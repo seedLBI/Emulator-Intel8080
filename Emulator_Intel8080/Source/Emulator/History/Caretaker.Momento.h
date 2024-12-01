@@ -19,7 +19,7 @@ public:
 	void Backup();
 	void Undo(const int& count = 1);
 	void ClearHistory();
-	virtual std::vector<std::string> GetHistory();
+	virtual std::vector<std::pair<std::string, std::string>> GetHistory();
 
 	void	 SetMaxCount(uint64_t count);
 	uint64_t GetMaxCount();

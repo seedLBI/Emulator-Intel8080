@@ -1942,7 +1942,7 @@ void I8080::Hi_RST_7() {
 void I8080::Hi_PUSH_B() {
 	CountTicks += 11;
 
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {uint16_t(SP - 1),B},{uint16_t(SP - 2),C} });
+	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {uint16_t(SP - 1),Memory[uint16_t(SP - 1)]},{uint16_t(SP - 2),Memory[uint16_t(SP - 2)]} });
 
 	SP--;
 	Memory[SP] = B;
@@ -1953,8 +1953,7 @@ void I8080::Hi_PUSH_B() {
 void I8080::Hi_PUSH_D() {
 	CountTicks += 11;
 
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {uint16_t(SP - 1),D},{uint16_t(SP - 2),E} });
-
+	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {uint16_t(SP - 1),Memory[uint16_t(SP - 1)]},{uint16_t(SP - 2),Memory[uint16_t(SP - 2)]} });
 	SP--;
 	Memory[SP] = D;
 	SP--;
@@ -1964,8 +1963,7 @@ void I8080::Hi_PUSH_D() {
 void I8080::Hi_PUSH_H() {
 	CountTicks += 11;
 
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {uint16_t(SP - 1),H},{uint16_t(SP - 2),L} });
-
+	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {uint16_t(SP - 1),Memory[uint16_t(SP - 1)]},{uint16_t(SP - 2),Memory[uint16_t(SP - 2)]} });
 	SP--;
 	Memory[SP] = H;
 	SP--;
@@ -1977,8 +1975,7 @@ void I8080::Hi_PUSH_PSW() {
 
 	uint8_t Flags = GetRegisterFlags();
 
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {uint16_t(SP - 1),A},{uint16_t(SP - 2),Flags} });
-
+	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {uint16_t(SP - 1),Memory[uint16_t(SP - 1)]},{uint16_t(SP - 2),Memory[uint16_t(SP - 2)]} });
 	SP--;
 	Memory[SP] = A;
 	SP--;

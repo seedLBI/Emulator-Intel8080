@@ -7,7 +7,7 @@
 #include "Utils/File_Utils.h"
 #include "Utils/ImGui.Utils.h"
 #include "Utils/TextUtils.h"
-#include "UI/InfoInstruction/InfoInstruction.Display.h"
+#include "Emulator/Processors/Intel8080/InfoInstruction/InfoInstruction.Display.h"
 
 #include <string>
 #include <fstream>

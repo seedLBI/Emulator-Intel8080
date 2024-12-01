@@ -4,6 +4,8 @@
 #include "UI/I8080.UI.h"
 #include "Scene_Intro/I8080.Scene.Intro.h"
 
+#include "Emulator/Processors/Intel8080/InfoInstruction/InfoInstruction.Data.h"
+
 
 using namespace std;
 
@@ -12,6 +14,7 @@ I8080_UserInterface* i8080_ui = nullptr;
 
 int main(int argc, char* argv[]) {
 	//setlocale(LC_ALL, "russian");
+
 
 
 	OpenglWindow::Init();

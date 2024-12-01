@@ -6,13 +6,15 @@
 #ifndef I8080_H
 #define I8080_H
 
-#include "Emulator/Port/I8080.Port.ConsoleOutput.h"
-#include "Emulator/Port/I8080.Port.SymbolScreen.h"
-#include "Emulator/Port/I8080.Port.GeneratorRandomValues.h"
-#include "Emulator/Port/I8080.Port.Timer.h"
-#include "Emulator/Port/I8080.Port.PixelScreen.h"
-#include "Emulator/Port/I8080.Port.PixelScreenTwoBuffers.h"
-#include "Emulator/Port/I8080.Port.AsyncKeyboard.h"
+
+#include "Emulator/Port/ConsoleOutput/I8080.Port.ConsoleOutput.h"
+#include "Emulator/Port/SymbolScreen/I8080.Port.SymbolScreen.h"
+#include "Emulator/Port/GeneratorRandomValues/I8080.Port.GeneratorRandomValues.h"
+#include "Emulator/Port/Timer/I8080.Port.Timer.h"
+#include "Emulator/Port/PixelScreen/I8080.Port.PixelScreen.h"
+#include "Emulator/Port/PixelScreenTwoBuffers/I8080.Port.PixelScreenTwoBuffers.h"
+#include "Emulator/Port/AsyncKeyboard/I8080.Port.AsyncKeyboard.h"
+
 
 #include "DataStructures\TypeTranslatorError.h"
 #include "DataStructures\OpcodeAdressed.h"

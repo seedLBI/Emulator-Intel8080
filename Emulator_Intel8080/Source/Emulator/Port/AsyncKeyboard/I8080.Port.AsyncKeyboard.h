@@ -1,17 +1,19 @@
-#ifndef I8080_PORT_GENERATORRANDOMVALUES
-#define I8080_PORT_GENERATORRANDOMVALUES
+#ifndef I8080_PORT_ASYNCKEYBOARD
+#define I8080_PORT_ASYNCKEYBOARD
 
+#include "imgui.h"
+
+#include "Momento/AsyncKeyboard.Momento.h"
 #include "Config_Compilier.h"
 #include "Emulator/Port/I8080.Port.h"
-#include "GeneratorRandomValuesMomento/GeneratorRandomValues.Momento.h"
-
-#include <cstdint>
 #include <vector>
 #include <iostream>
 
-class I8080_GeneratorRandomValues : public I8080_Port {
+
+class I8080_AsyncKeyboard : public I8080_Port {
 public:
-	I8080_GeneratorRandomValues();
+	I8080_AsyncKeyboard();
+
 	void virtual SetInput(uint8_t value) override;
 	uint8_t virtual GetOutput() override;
 	void virtual Reset() override;
@@ -22,10 +24,10 @@ public:
 
 private:
 	uint8_t count_input = 0;
-	uint8_t range = 0;
-
-	void Init();
+	uint8_t currentKey = -1;
 };
 
-#endif // !I8080_PORT_GENERATORRANDOMVALUES
 
+
+
+#endif // !I8080_PORT_ASYNCKEYBOARD

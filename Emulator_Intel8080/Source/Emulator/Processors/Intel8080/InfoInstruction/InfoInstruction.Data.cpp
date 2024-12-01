@@ -1,14 +1,14 @@
 #include "InfoInstruction.Data.h"
 
 
-
-
 const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_InstructionInfo = {
 	// HLT------------------------------------------
 		{"hlt",{
 		{},{},
 		u8"Остановка работы процессора.",
-		u8"Stop",
+		{
+			{u8"Стоп"}
+		},
 		{7},
 		ENUM_TicksMean::Always,
 		FlagsList{
@@ -16,7 +16,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 			ENUM_FlagsState::Unaffected,
 			ENUM_FlagsState::Unaffected,
 			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected}}
+			ENUM_FlagsState::Unaffected},
+		{ENUM_Category::CONTROL}}
 	},
 
 	// NOP------------------------------------------
@@ -24,7 +25,9 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		{},
 		{},
 		u8"Пустая команда которая занимает один байт",
-		u8"1. [PC] = [PC] + 1",
+		{
+			{"[PC]","=","[PC] + 1"}
+		},
 		{4},
 		ENUM_TicksMean::Always,
 		FlagsList{
@@ -32,7 +35,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 			ENUM_FlagsState::Unaffected,
 			ENUM_FlagsState::Unaffected,
 			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected}}
+			ENUM_FlagsState::Unaffected},
+		{ENUM_Category::CONTROL}}
 	},
 
 	// IN------------------------------------------
@@ -40,8 +44,10 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		{ENUM_Arguments::Value8},
 		{ENUM_Bytes::Value},
 		u8"Чтение значения в аккумулятор из внешнего порта",
-		u8"1. [A]  = Port[Число.8]\n"
-		  "2. [PC] = [PC] + 2",
+		{
+			{"[A]",		"=", "Port[", ENUM_Arguments::Value8, "]"},
+			{"[PC]",	"=", "[PC] + 2"}
+		},
 		{10},
 		ENUM_TicksMean::Always,
 		FlagsList{
@@ -49,7 +55,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 			ENUM_FlagsState::Unaffected,
 			ENUM_FlagsState::Unaffected,
 			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected}}
+			ENUM_FlagsState::Unaffected},
+		{ENUM_Category::INPUT_OUTPUT}}
 	},
 
 	// OUT------------------------------------------
@@ -57,8 +64,10 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		{ENUM_Arguments::Value8},
 		{ENUM_Bytes::Value},
 		u8"Отправка значения из аккумулятора во внешний порт",
-		u8"1. Port[Число.8] = [A]\n"
-		  "2. [PC]          = [PC] + 2",
+		{
+			{"Port[", ENUM_Arguments::Value8,"]",	"=", "[A]"},
+			{"[PC]",								"=", "[PC] + 2" }
+		},
 		{10},
 		ENUM_TicksMean::Always,
 		FlagsList{
@@ -66,7 +75,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 			ENUM_FlagsState::Unaffected,
 			ENUM_FlagsState::Unaffected,
 			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected}}
+			ENUM_FlagsState::Unaffected},
+		{ENUM_Category::INPUT_OUTPUT}}
 	},
 
 	// MOV------------------------------------------
@@ -74,8 +84,10 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		{ENUM_Arguments::Register8,ENUM_Arguments::Register8},
 		{},
 		u8"Перемешение значений между регистрами или памятью(по адресу HL)",
-		u8"1. [Рег.8] = [Рег.8]\n"
-		  "2. [PC]    = [PC] + 1",
+		{
+			{ENUM_Arguments::Register8,	"=", ENUM_Arguments::Register8},
+			{"[PC]",					"=", "[PC] + 1"}
+		},
 		{7,5},
 		ENUM_TicksMean::M_Used,
 		FlagsList{
@@ -83,7 +95,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 			ENUM_FlagsState::Unaffected,
 			ENUM_FlagsState::Unaffected,
 			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected}}
+			ENUM_FlagsState::Unaffected},
+		{ENUM_Category::MOVE_LOAD_STORE}}
 	},
 
 	// MVI------------------------------------------
@@ -91,8 +104,10 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		{ENUM_Arguments::Register8,ENUM_Arguments::Value8},
 		{ENUM_Bytes::Value},
 		u8"Запись константы в регистр или память",
-		u8"1. [Рег.8] = [Число.8]\n"
-		  "2. [PC]    = [PC] + 2",
+		{
+			{ENUM_Arguments::Register8,	"=",ENUM_Arguments::Value8},
+			{"[PC]",					"=", "[PC] + 2"}
+		},
 		{10,7},
 		ENUM_TicksMean::M_Used,
 		FlagsList{
@@ -100,7 +115,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 			ENUM_FlagsState::Unaffected,
 			ENUM_FlagsState::Unaffected,
 			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected}}
+			ENUM_FlagsState::Unaffected},
+		{ENUM_Category::MOVE_LOAD_STORE}}
 	},
 
 	// CMP------------------------------------------
@@ -108,10 +124,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		{ENUM_Arguments::Register8},
 		{},
 		u8"Сравнение значений между акуммулятором и регистрами или памятью(по адресу HL)",
-		u8"1. Temp    = ([A] - [Рег.8])\n"
-		  "2. [Zero]  = [Temp == 0]\n"
-		  "3. [Carry] = [A] < [Рег.8]\n"
-		  "4. [PC]    = [PC] + 1",
+		{
+			{"Temp",    "=", "([A] - ",ENUM_Arguments::Register8,")"},
+			{"[Zero]",  "=", "[Temp == 0]"},
+			{"[Carry]", "=", "[A] < ",ENUM_Arguments::Register8},
+			{"[PC]",    "=", "[PC] + 1"}
+		},
 		{7,4},
 		ENUM_TicksMean::M_Used,
 		FlagsList{
@@ -119,7 +137,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 			ENUM_FlagsState::Affected,
 			ENUM_FlagsState::Affected,
 			ENUM_FlagsState::Affected,
-			ENUM_FlagsState::Affected}}
+			ENUM_FlagsState::Affected},
+	{ENUM_Category::LOGICAL}}
 	},
 
 	// CPI------------------------------------------
@@ -127,10 +146,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value8},
 	{ENUM_Bytes::Value},
 	u8"Сравнение значения аккумулятора с константой",
-	u8"1. Temp    = [A] - [Число.8]\n"
-	  "2. [Zero]  = [Temp == 0]\n"
-	  "3. [Carry] = [A] < [Число.8]\n"
-	  "4. [PC]    = [PC] + 1",
+	{
+		{"Temp",   "=", "[A] - ",ENUM_Arguments::Value8},
+		{"[Zero]", "=", "[Temp == 0]"},
+		{"[Carry]","=", "[A] < ",ENUM_Arguments::Value8},
+		{"[PC]",   "=", "[PC] + 1"}
+	},
 	{7},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -138,7 +159,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected}}
+		ENUM_FlagsState::Affected},
+	{ENUM_Category::LOGICAL}}
 	},
 
 	// ANA------------------------------------------
@@ -146,10 +168,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Register8},
 	{},
 	u8"Логическое И значения аккумулятора с регистром или памятью(по адресу HL)",
-	u8"1. [A]     = [A] & [Рег.8]\n"
-	  "2. [Zero]  = ([A] == 0)\n"
-	  "3. [Carry] = 0\n"
-	  "4. [PC]    = [PC] + 1",
+	{
+		{"[A]",    "=", "[A] & ",ENUM_Arguments::Register8},
+		{"[Zero]", "=", "([A] == 0)"},
+		{"[Carry]","=", "0"},
+		{"[PC]",   "=", "[PC] + 1"}
+	},
 	{7,4},
 	ENUM_TicksMean::M_Used,
 	FlagsList{
@@ -157,7 +181,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Reset}}
+		ENUM_FlagsState::Reset},
+	{ENUM_Category::LOGICAL}}
 	},
 
 
@@ -166,10 +191,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value8},
 	{ENUM_Bytes::Value},
 	u8"Логическое И аккумулятора с константой",
-	u8"1. [A]     = [A] & [Число.8]\n"
-	  "2. [Zero]  = ([A] == 0)\n"
-	  "3. [Carry] = 0\n"
-	  "4. [PC]    = [PC] + 2",
+	{
+		{"[A]",    "=","[A] & ",ENUM_Arguments::Value8},
+		{"[Zero]", "=","([A] == 0)"},
+		{"[Carry]","=","0"},
+		{"[PC]",   "=","[PC] + 2"}
+	},
 	{7},
 	ENUM_TicksMean::Always,
 		FlagsList{
@@ -177,7 +204,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Reset}}
+		ENUM_FlagsState::Reset},
+	{ENUM_Category::LOGICAL}}
 	},
 
 	// ORA------------------------------------------
@@ -185,10 +213,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Register8},
 	{},
 	u8"Логическое ИЛИ значения аккумулятора с регистром или памятью(по адресу HL)",
-	u8"1. [A]     = [A] | [Рег.8]\n"
-	  "2. [Zero]  = ([A] == 0)\n"
-	  "3. [Carry] = 0\n"
-	  "4. [PC]    = [PC] + 1",
+	{
+		{"[A]",    "=","[A] | ",ENUM_Arguments::Register8},
+		{"[Zero]", "=","([A] == 0)"},
+		{"[Carry]","=","0"},
+		{"[PC]",   "=","[PC] + 1"}
+	},
 	{7,4},
 	ENUM_TicksMean::M_Used,
 		FlagsList{
@@ -196,7 +226,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Reset,
 		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Reset}}
+		ENUM_FlagsState::Reset},
+	{ENUM_Category::LOGICAL}}
 	},
 
 	// ORI------------------------------------------
@@ -204,11 +235,13 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value8},
 	{ENUM_Bytes::Value},
 	u8"Логическое ИЛИ значения аккумулятора с константой",
-	u8"1. [A]           = [A] | [Число.8]\n"
-	  "2. [Zero]        = ([A] == 0)\n"
-	  "3. [Carry]       = 0\n"
-	  "4. [Auxilary C.] = 0\n"
-	  "5. [PC]          = [PC] + 2",
+	{
+		{"[A]",				"=","[A] | ", ENUM_Arguments::Value8},
+		{"[Zero]",			"=","([A] == 0)"},
+		{"[Carry]",			"=","0"},
+		{"[Auxilary C.]",	"=","0"},
+		{"[PC]",			"=","[PC] + 2"}
+	},
 	{7},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -216,7 +249,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Reset,
 		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Reset}}
+		ENUM_FlagsState::Reset},
+	{ENUM_Category::LOGICAL}}
 	},
 
 	// XRA------------------------------------------
@@ -224,11 +258,13 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Register8},
 	{},
 	u8"Логическое исключающее ИЛИ значение аккумулятора с регистром или памятью(по адресу HL)",
-	u8"1. [A]           = [A] ^ [Рег.8]\n"
-	  "2. [Zero]        = ([A] == 0)\n"
-	  "3. [Carry]       = 0\n"
-	  "4. [Auxilary C.] = 0\n"
-	  "5. [PC] = [PC] + 1",
+	{
+		{"[A]",				"=","[A] ^ ",ENUM_Arguments::Register8},
+		{"[Zero]",			"=","([A] == 0)"},
+		{"[Carry]",			"=","0"},
+		{"[Auxilary C.]",	"=","0"},
+		{"[PC]",			"=","[PC] + 1"}
+	},
 	{7,4},
 	ENUM_TicksMean::M_Used,
 	FlagsList{
@@ -236,7 +272,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Reset,
 		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Reset}}
+		ENUM_FlagsState::Reset},
+	{ENUM_Category::LOGICAL}}
 	},
 
 	// XRI------------------------------------------
@@ -244,11 +281,13 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value8},
 	{ENUM_Bytes::Value},
 	u8"Логичиское исключающее ИЛИ значение аккумулятора с константой",
-	u8"1. [A]           = [A] ^ [Число.8]\n"
-	  "2. [Zero]        = ([A] == 0)\n"
-	  "3. [Carry]       = 0\n"
-	  "4. [Auxilary C.] = 0\n"
-	  "5. [PC]          = [PC] + 2",
+	{
+		{"[A]",				"=","[A] ^ ",ENUM_Arguments::Value8},
+		{"[Zero]",			"=","([A] == 0)"},
+		{"[Carry]",			"=","0"},
+		{"[Auxilary C.]",	"=","0"},
+		{"[PC]",			"=","[PC] + 2"}
+	},
 	{7},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -256,7 +295,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Reset,
 		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Reset}}
+		ENUM_FlagsState::Reset},
+	{ENUM_Category::LOGICAL}}
 	},
 
 	// RLC------------------------------------------
@@ -264,9 +304,11 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	{},
 	u8"Все биты аккумулятора сдвигаются влево на один бит. Значение последнего сдвинутого бита устанавливается в флаг Carry и устанавливается в первый бит аккумулятора",
-	u8"1. [Carry] = A[7]\n"
-	  "2. [A]     = (A << 1) | Carry\n"
-	  "3. [PC]    = PC + 1",
+	{
+		{"[Carry]",	"=","A[7]"},
+		{"[A]",		"=","([A] << 1) | [Carry]"},
+		{"[PC]",	"=","[PC] + 1"}
+	},
 	{4},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -274,7 +316,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Affected}}
+		ENUM_FlagsState::Affected},
+	{ENUM_Category::ROTATE}}
 	},
 
 	// RAL------------------------------------------
@@ -282,10 +325,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	{},
 	u8"Все биты аккумулятора сдвигаются влево на один бит. Состояние флага Carry устанавливается в первый бит аккумулятора. Значение последнего бита (не сдвинутого аккумулятора) устанавливается в флаг Carry",
-	u8"1. Temp    = A[7]\n"
-	  "2. [A]     = (A << 1) | Carry\n"
-	  "3. [Carry] = Temp\n"
-	  "4. [PC]    = PC + 1",
+	{
+		{"Temp",	"=","A[7]"},
+		{"[A]",		"=","(A << 1) | [Carry]"},
+		{"[Carry]",	"=","Temp"},
+		{"[PC]",	"=","PC + 1"}
+	},
 	{4},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -293,7 +338,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Affected}}
+		ENUM_FlagsState::Affected},
+	{ENUM_Category::ROTATE}}
 	},
 
 	// RRC------------------------------------------
@@ -301,9 +347,11 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	{},
 	u8"Все биты аккумулятора сдвигаются вправо на один бит. Значение первого бита аккумулятора устанавливается в флаг Carry и устанавливается в последний бит аккумулятора",
-	u8"1. Carry = A[0]\n"
-	  "2. [A]   = (A >> 1) | (Carry << 7)\n"
-	  "3. [PC]  = PC + 1",
+	{
+		{"[Carry]",	"=","A[0]"},
+		{"[A]",		"=","([A] >> 1) | ([Carry] << 7)"},
+		{"[PC]",	"=","[PC] + 1"}
+	},
 	{4},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -311,7 +359,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Affected}}
+		ENUM_FlagsState::Affected},
+	{ENUM_Category::ROTATE}}
 	},
 
 	// RAR------------------------------------------
@@ -319,10 +368,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	{},
 	u8"Все биты аккумулятора сдвигаются вправо на один бит. Состояние флага Carry устанавливается в последний бит аккумулятора. Значение первого бита (не сдвинутого аккумулятора) устанавливается в флаг Carry",
-	u8"1. Temp = A[0]\n"
-	  "2. [A] = (A >> 1) | (Carry << 7)\n"
-	  "3. [Carry] = Temp\n"
-	  "4. [PC] = PC + 1",
+	{
+		{"Temp",	"=","A[0]"},
+		{"[A]",		"=","([A] >> 1) | ([Carry] << 7)"},
+		{"[Carry]",	"=","Temp"},
+		{"[PC]",	"=","[PC] + 1"}
+	},
 	{4},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -330,7 +381,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Affected}}
+		ENUM_FlagsState::Affected},
+	{ENUM_Category::ROTATE}}
 	},
 
 	// STC------------------------------------------
@@ -338,8 +390,10 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	{},
 	u8"Устанавливает флаг Carry в состояние True.",
-	u8"1. [Carry] = [True]\n"
-	  "2. [PC]    = [PC] + 1",
+	{
+		{"[Carry]",	"=","True"},
+		{"[PC]",	"=","[PC] + 1"}
+	},
 	{4},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -347,7 +401,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Set}}
+		ENUM_FlagsState::Set},
+	{ENUM_Category::SPECIALS}}
 	},
 
 	// CMA------------------------------------------
@@ -355,8 +410,10 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	{},
 	u8"Инвентирует побитово значение аккумулятора.",
-	u8"1. [A]  = ![A]\n"
-	  "2. [PC] = [PC] + 1",
+	{
+		{"[A]",		"=", "![A]"},
+		{"[PC]",	"=", "[PC] + 1"}
+	},
 	{4},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -364,7 +421,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+	{ENUM_Category::SPECIALS}}
 	},
 
 	// CMC------------------------------------------
@@ -372,8 +430,10 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	{},
 	u8"Инвентирует флаг Carry.",
-	u8"1. [Carry] = ![Carry]\n"
-	  "2. [PC]    = [PC] + 1",
+	{
+		{"[Carry]",	"=", "![Carry]"},
+		{"[PC]",	"=", "[PC] + 1"}
+	},
 	{4},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -381,7 +441,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Affected }}
+		ENUM_FlagsState::Affected },
+	{ENUM_Category::SPECIALS}}
 	},
 
 	// RET------------------------------------------
@@ -389,9 +450,11 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	{},
 	u8"Прыжок на адрес записанный в верхушке стэка.",
-	u8"1. [PC].low  = M[SP]\n"
-	  "2. [PC].high = M[SP + 1]\n"
-	  "3. [SP]      = [SP] + 2",
+	{
+		{"[PC].low",	"=","M[SP]"},
+		{"[PC].high",	"=","M[SP + 1]" },
+		{"[SP]",		"=","[SP] + 2"},
+	},
 	{10},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -399,7 +462,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::RETURN}}
 	},
 
 	// RZ------------------------------------------
@@ -407,12 +471,14 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	{},
 	u8"Если флаг Zero = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
-	u8"Если условие выполненно:\n"
-	  "1. [PC].low  = M[SP]\n"
-	  "2. [PC].high = M[SP + 1]\n"
-	  "3. [SP]      = [SP] + 2\n"
-	  "Иначе:\n"
-	  "1. [PC]      = [PC] + 1",
+	{
+		{ENUM_Branching::IF},
+			{"[PC].low",	"=","M[SP]"},
+			{"[PC].high",	"=","M[SP + 1]" },
+			{"[SP]",		"=","[SP] + 2"},
+		{ENUM_Branching::ELSE},
+			{"[PC]",		"=","[PC] + 1"}
+	},
 	{11,5},
 	ENUM_TicksMean::Condition,
 	FlagsList{
@@ -420,7 +486,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::RETURN}}
 	},
 
 	// RC------------------------------------------
@@ -428,12 +495,14 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	{},
 	u8"Если флаг Carry = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
-	u8"Если условие выполненно:\n"
-	  "1. [PC].low  = M[SP]\n"
-	  "2. [PC].high = M[SP + 1]\n"
-	  "3. [SP]      = [SP] + 2\n"
-	  "Иначе:\n"
-	  "1. [PC]      = [PC] + 1",
+	{
+		{ENUM_Branching::IF},
+			{"[PC].low",	"=","M[SP]"},
+			{"[PC].high",	"=","M[SP + 1]" },
+			{"[SP]",		"=","[SP] + 2"},
+		{ENUM_Branching::ELSE},
+			{"[PC]",		"=","[PC] + 1"}
+	},
 	{11,5},
 	ENUM_TicksMean::Condition,
 	FlagsList{
@@ -441,7 +510,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::RETURN}}
 	},
 
 	// RPE------------------------------------------
@@ -449,12 +519,14 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	{},
 	u8"Если флаг Paruty = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
-	u8"Если условие выполненно:\n"
-	  "1. [PC].low  = M[SP]\n"
-	  "2. [PC].high = M[SP + 1]\n"
-	  "3. [SP]      = [SP] + 2\n"
-	  "Иначе:\n"
-	  "1. [PC]      = [PC] + 1",
+	{
+		{ENUM_Branching::IF},
+			{"[PC].low",	"=","M[SP]"},
+			{"[PC].high",	"=","M[SP + 1]" },
+			{"[SP]",		"=","[SP] + 2"},
+		{ENUM_Branching::ELSE},
+			{"[PC]",		"=","[PC] + 1"}
+	},
 	{11,5},
 	ENUM_TicksMean::Condition,
 	FlagsList{
@@ -462,7 +534,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::RETURN}}
 	},
 
 	// RM------------------------------------------
@@ -470,12 +543,14 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	{},
 	u8"Если флаг Sign = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
-	u8"Если условие выполненно:\n"
-	  "1. [PC].low  = M[SP]\n"
-	  "2. [PC].high = M[SP + 1]\n"
-	  "3. [SP]      = [SP] + 2\n"
-	  "Иначе:\n"
-	  "1. [PC]      = [PC] + 1",
+	{
+		{ENUM_Branching::IF},
+			{"[PC].low",	"=","M[SP]"},
+			{"[PC].high",	"=","M[SP + 1]" },
+			{"[SP]",		"=","[SP] + 2"},
+		{ENUM_Branching::ELSE},
+			{"[PC]",		"=","[PC] + 1"}
+	},
 	{11,5},
 	ENUM_TicksMean::Condition,
 	FlagsList{
@@ -483,7 +558,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::RETURN}}
 	},
 
 	// RNZ------------------------------------------
@@ -491,12 +567,14 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	{},
 	u8"Если флаг Zero = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
-	u8"Если условие выполненно:\n"
-	  "1. [PC].low  = M[SP]\n"
-	  "2. [PC].high = M[SP + 1]\n"
-	  "3. [SP]      = [SP] + 2\n"
-	  "Иначе:\n"
-	  "1. [PC]      = [PC] + 1",
+	{
+		{ENUM_Branching::IF},
+			{"[PC].low",	"=","M[SP]"},
+			{"[PC].high",	"=","M[SP + 1]" },
+			{"[SP]",		"=","[SP] + 2"},
+		{ENUM_Branching::ELSE},
+			{"[PC]",		"=","[PC] + 1"}
+	},
 	{11,5},
 	ENUM_TicksMean::Condition,
 	FlagsList{
@@ -504,7 +582,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::RETURN}}
 	},
 
 	// RNC------------------------------------------
@@ -512,12 +591,14 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	{},
 	u8"Если флаг Carry = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
-	u8"Если условие выполненно:\n"
-	  "1. [PC].low  = M[SP]\n"
-	  "2. [PC].high = M[SP + 1]\n"
-	  "3. [SP]      = [SP] + 2\n"
-	  "Иначе:\n"
-	  "1. [PC]      = [PC] + 1",
+	{
+		{ENUM_Branching::IF},
+			{"[PC].low",	"=","M[SP]"},
+			{"[PC].high",	"=","M[SP + 1]" },
+			{"[SP]",		"=","[SP] + 2"},
+		{ENUM_Branching::ELSE},
+			{"[PC]",		"=","[PC] + 1"}
+	},
 	{11,5},
 	ENUM_TicksMean::Condition,
 	FlagsList{
@@ -525,7 +606,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::RETURN}}
 	},
 
 	// RPO------------------------------------------
@@ -533,12 +615,14 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	{},
 	u8"Если флаг Paruty = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
-	u8"Если условие выполненно:\n"
-	"1. [PC].low  = M[SP]\n"
-	"2. [PC].high = M[SP + 1]\n"
-	"3. [SP]      = [SP] + 2\n"
-	"Иначе:\n"
-	"1. [PC]      = [PC] + 1",
+	{
+		{ENUM_Branching::IF},
+			{"[PC].low",	"=","M[SP]"},
+			{"[PC].high",	"=","M[SP + 1]" },
+			{"[SP]",		"=","[SP] + 2"},
+		{ENUM_Branching::ELSE},
+			{"[PC]",		"=","[PC] + 1"}
+	},
 	{11,5},
 	ENUM_TicksMean::Condition,
 	FlagsList{
@@ -546,19 +630,22 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
-		},
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::RETURN}}
+	},
 	// RP------------------------------------------
 	{ "rp",{
 	{},
 	{},
 	u8"Если флаг Sign = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
-	u8"Если условие выполненно:\n"
-	  "1. [PC].low  = M[SP]\n"
-	  "2. [PC].high = M[SP + 1]\n"
-	  "3. [SP]      = [SP] + 2\n"
-	  "Иначе:\n"
-	  "1. [PC]      = [PC] + 1",
+	{
+		{ENUM_Branching::IF},
+			{"[PC].low",	"=","M[SP]"},
+			{"[PC].high",	"=","M[SP + 1]" },
+			{"[SP]",		"=","[SP] + 2"},
+		{ENUM_Branching::ELSE},
+			{"[PC]",		"=","[PC] + 1"}
+	},
 	{11,5},
 	ENUM_TicksMean::Condition,
 	FlagsList{
@@ -566,7 +653,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::RETURN}}
 	},
 
 	// JMP------------------------------------------
@@ -574,7 +662,9 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value16},
 	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
 	u8"Прыжок PC по адресу заданной константы",
-	u8"1. [PC] = [Число.16]",
+	{
+		{"[PC]", "=", ENUM_Arguments::Value16}
+	},
 	{10},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -582,7 +672,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::JUMP}}
 	},
 
 	// JZ------------------------------------------
@@ -590,10 +681,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value16},
 	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
 	u8"Если флаг Zero = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
-	u8"Если условие выполненно:\n"
-	  "1. [PC] = [Число.16]\n"
-	  "Иначе:\n"
-	  "1. [PC] = [PC] + 3",
+	{
+		{ENUM_Branching::IF},
+			{"[PC]",	"=", ENUM_Arguments::Value16},
+		{ENUM_Branching::ELSE},
+			{"[PC]",	"=", "[PC] + 3"}
+	},
 	{10},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -601,7 +694,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::JUMP}}
 	},
 
 	// JC------------------------------------------
@@ -609,10 +703,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value16},
 	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
 	u8"Если флаг Carry = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
-	u8"Если условие выполненно:\n"
-	  "1. [PC] = [Число.16]\n"
-	  "Иначе:\n"
-	  "1. [PC] = [PC] + 3",
+	{
+		{ENUM_Branching::IF},
+			{"[PC]",	"=", ENUM_Arguments::Value16},
+		{ENUM_Branching::ELSE},
+			{"[PC]",	"=", "[PC] + 3"}
+	},
 	{10},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -620,7 +716,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::JUMP}}
 	},
 
 	// JPE------------------------------------------
@@ -628,10 +725,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value16},
 	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
 	u8"Если флаг Paruty = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
-	u8"Если условие выполненно:\n"
-	  "1. [PC] = [Число.16]\n"
-	  "Иначе:\n"
-	  "1. [PC] = [PC] + 3",
+	{
+		{ENUM_Branching::IF},
+			{"[PC]",	"=", ENUM_Arguments::Value16},
+		{ENUM_Branching::ELSE},
+			{"[PC]",	"=", "[PC] + 3"}
+	},
 	{10},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -639,7 +738,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::JUMP}}
 	},
 
 	// JM------------------------------------------
@@ -647,10 +747,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value16},
 	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
 	u8"Если флаг Sign = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
-	u8"Если условие выполненно:\n"
-	  "1. [PC] = [Число.16]\n"
-	  "Иначе:\n"
-	  "1. [PC] = [PC] + 3",
+	{
+		{ENUM_Branching::IF},
+			{"[PC]",	"=", ENUM_Arguments::Value16},
+		{ENUM_Branching::ELSE},
+			{"[PC]",	"=", "[PC] + 3"}
+	},
 	{10},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -658,7 +760,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::JUMP}}
 	},
 
 
@@ -666,10 +769,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value16},
 	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
 	u8"Если флаг Zero = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
-	u8"Если условие выполненно:\n"
-	  "1. [PC] = [Число.16]\n"
-	  "Иначе:\n"
-	  "1. [PC] = [PC] + 3",
+	{
+		{ENUM_Branching::IF},
+			{"[PC]",	"=", ENUM_Arguments::Value16},
+		{ENUM_Branching::ELSE},
+			{"[PC]",	"=", "[PC] + 3"}
+	},
 	{10},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -677,7 +782,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::JUMP}}
 	},
 
 
@@ -685,10 +791,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value16},
 	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
 	u8"Если флаг Carry = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
-	u8"Если условие выполненно:\n"
-	  "1. [PC] = [Число.16]\n"
-	  "Иначе:\n"
-	  "1. [PC] = [PC] + 3",
+	{
+		{ENUM_Branching::IF},
+			{"[PC]",	"=", ENUM_Arguments::Value16},
+		{ENUM_Branching::ELSE},
+			{"[PC]",	"=", "[PC] + 3"}
+	},
 	{10},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -696,7 +804,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::JUMP}}
 	},
 
 
@@ -704,10 +813,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value16},
 	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
 	u8"Если флаг Paruty = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
-	u8"Если условие выполненно:\n"
-	"1. [PC] = [Число.16]\n"
-	"Иначе:\n"
-	"1. [PC] = [PC] + 3",
+	{
+		{ENUM_Branching::IF},
+			{"[PC]",	"=", ENUM_Arguments::Value16},
+		{ENUM_Branching::ELSE},
+			{"[PC]",	"=", "[PC] + 3"}
+	},
 	{10},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -715,7 +826,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::JUMP}}
 	},
 
 
@@ -723,10 +835,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value16},
 	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
 	u8"Если флаг  Sign = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
-	u8"Если условие выполненно:\n"
-	  "1. [PC] = [Число.16]\n"
-	  "Иначе:\n"
-	  "1. [PC] = [PC] + 3",
+	{
+		{ENUM_Branching::IF},
+			{"[PC]",	"=", ENUM_Arguments::Value16},
+		{ENUM_Branching::ELSE},
+			{"[PC]",	"=", "[PC] + 3"}
+	},
 	{10},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -734,7 +848,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::JUMP}}
 	},
 
 
@@ -742,10 +857,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value16},
 	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
 	u8"Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
-	u8"1. [SP]      = [SP] - 2\n"
-	  "2. M[SP]     = [PC + 3].low\n"
-	  "3. M[SP + 1] = [PC + 3].high\n"
-	  "4. [PC]      = [Число.16]",
+	{
+		{"[SP]",		"=","[SP] - 2"},
+		{"M[SP]",		"=","([PC] + 3).low"},
+		{"M[SP + 1]",	"=","([PC] + 3).high"},
+		{"[PC]",		"=",ENUM_Arguments::Value16}
+	},
 	{17},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -753,7 +870,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::CALL}}
 	},
 
 
@@ -761,13 +879,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value16},
 	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
 	u8"Если флаг Zero = 1, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
-	u8"Если условие выполненно:\n"
-	  "1. [SP]      = [SP] - 2\n"
-	  "2. M[SP]     = [PC + 3].low\n"
-	  "3. M[SP + 1] = [PC + 3].high\n"
-	  "4. [PC]      = [Число.16]\n"
-	  "Иначе:\n"
-	  "1. [PC]      = [PC] + 3",
+	{
+		{ENUM_Branching::IF},
+			{"[SP]",		"=","[SP] - 2"},
+			{"M[SP]",		"=","(PC + 3).low"},
+			{"M[SP + 1]",	"=","(PC + 3).high"},
+			{"[PC]",		"=",ENUM_Arguments::Value16},
+		{ENUM_Branching::ELSE},
+			{"[PC]",		"=","[PC] + 3"}
+	},
 	{17,11},
 	ENUM_TicksMean::Condition,
 	FlagsList{
@@ -775,7 +895,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::CALL}}
 	},
 
 
@@ -783,13 +904,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value16},
 	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
 	u8"Если флаг Carry = 1, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
-	u8"Если условие выполненно:\n"
-	  "1. [SP]      = [SP] - 2\n"
-	  "2. M[SP]     = [PC + 3].low\n"
-	  "3. M[SP + 1] = [PC + 3].high\n"
-	  "4. [PC]      = [Число.16]\n"
-	  "Иначе:\n"
-	  "1. [PC]      = [PC] + 3",
+	{
+		{ENUM_Branching::IF},
+			{"[SP]",		"=","[SP] - 2"},
+			{"M[SP]",		"=","(PC + 3).low"},
+			{"M[SP + 1]",	"=","(PC + 3).high"},
+			{"[PC]",		"=",ENUM_Arguments::Value16},
+		{ENUM_Branching::ELSE},
+			{"[PC]",		"=","[PC] + 3"}
+	},
 	{17,11},
 	ENUM_TicksMean::Condition,
 	FlagsList{
@@ -797,7 +920,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::CALL}}
 	},
 
 
@@ -805,13 +929,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value16},
 	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
 	u8"Если флаг Paruty = 1, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
-	u8"Если условие выполненно:\n"
-	  "1. [SP]      = [SP] - 2\n"
-	  "2. M[SP]     = [PC + 3].low\n"
-	  "3. M[SP + 1] = [PC + 3].high\n"
-	  "4. [PC]      = [Число.16]\n"
-	  "Иначе:\n"
-	  "1. [PC]      = [PC] + 3",
+	{
+		{ENUM_Branching::IF},
+			{"[SP]",		"=","[SP] - 2"},
+			{"M[SP]",		"=","(PC + 3).low"},
+			{"M[SP + 1]",	"=","(PC + 3).high"},
+			{"[PC]",		"=",ENUM_Arguments::Value16},
+		{ENUM_Branching::ELSE},
+			{"[PC]",		"=","[PC] + 3"}
+	},
 	{17,11},
 	ENUM_TicksMean::Condition,
 	FlagsList{
@@ -819,7 +945,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::CALL}}
 	},
 
 
@@ -827,13 +954,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value16},
 	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
 	u8"Если флаг Sign = 1, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
-	u8"Если условие выполненно:\n"
-	  "1. [SP]      = [SP] - 2\n"
-	  "2. M[SP]     = [PC + 3].low\n"
-	  "3. M[SP + 1] = [PC + 3].high\n"
-	  "4. [PC]      = [Число.16]\n"
-	  "Иначе:\n"
-	  "1. [PC]      = [PC] + 3",
+	{
+		{ENUM_Branching::IF},
+			{"[SP]",		"=","[SP] - 2"},
+			{"M[SP]",		"=","(PC + 3).low"},
+			{"M[SP + 1]",	"=","(PC + 3).high"},
+			{"[PC]",		"=",ENUM_Arguments::Value16},
+		{ENUM_Branching::ELSE},
+			{"[PC]",		"=","[PC] + 3"}
+	},
 	{17,11},
 	ENUM_TicksMean::Condition,
 	FlagsList{
@@ -841,7 +970,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 			ENUM_FlagsState::Unaffected,
 			ENUM_FlagsState::Unaffected,
 			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected}}
+			ENUM_FlagsState::Unaffected},
+		{ENUM_Category::CALL}}
 	},
 
 
@@ -849,13 +979,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value16},
 	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
 	u8"Если флаг Zero = 0, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
-	u8"Если условие выполненно:\n"
-	  "1. [SP]      = [SP] - 2\n"
-	  "2. M[SP]     = [PC + 3].low\n"
-	  "3. M[SP + 1] = [PC + 3].high\n"
-	  "4. [PC]      = [Число.16]\n"
-	  "Иначе:\n"
-	  "1. [PC]      = [PC] + 3",
+	{
+		{ENUM_Branching::IF},
+			{"[SP]",		"=","[SP] - 2"},
+			{"M[SP]",		"=","(PC + 3).low"},
+			{"M[SP + 1]",	"=","(PC + 3).high"},
+			{"[PC]",		"=",ENUM_Arguments::Value16},
+		{ENUM_Branching::ELSE},
+			{"[PC]",		"=","[PC] + 3"}
+	},
 	{17,11},
 	ENUM_TicksMean::Condition,
 	FlagsList{
@@ -863,7 +995,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::CALL}}
 	},
 
 
@@ -871,13 +1004,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value16},
 	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
 	u8"Если флаг Carry = 0, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
-	u8"Если условие выполненно:\n"
-	  "1. [SP]      = [SP] - 2\n"
-	  "2. M[SP]     = [PC + 3].low\n"
-	  "3. M[SP + 1] = [PC + 3].high\n"
-	  "4. [PC]      = [Число.16]\n"
-	  "Иначе:\n"
-	  "1. [PC]      = [PC] + 3",
+	{
+		{ENUM_Branching::IF},
+			{"[SP]",		"=","[SP] - 2"},
+			{"M[SP]",		"=","(PC + 3).low"},
+			{"M[SP + 1]",	"=","(PC + 3).high"},
+			{"[PC]",		"=",ENUM_Arguments::Value16},
+		{ENUM_Branching::ELSE},
+			{"[PC]",		"=","[PC] + 3"}
+	},
 	{17,11},
 	ENUM_TicksMean::Condition,
 	FlagsList{
@@ -885,7 +1020,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::CALL}}
 	},
 
 
@@ -893,13 +1029,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value16},
 	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
 	u8"Если флаг Paruty = 0, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
-	u8"Если условие выполненно:\n"
-	  "1. [SP]      = [SP] - 2\n"
-	  "2. M[SP]     = [PC + 3].low\n"
-	  "3. M[SP + 1] = [PC + 3].high\n"
-	  "4. [PC]      = [Число.16]\n"
-	  "Иначе:\n"
-	  "1. [PC]      = [PC] + 3",
+	{
+		{ENUM_Branching::IF},
+			{"[SP]",		"=","[SP] - 2"},
+			{"M[SP]",		"=","(PC + 3).low"},
+			{"M[SP + 1]",	"=","(PC + 3).high"},
+			{"[PC]",		"=",ENUM_Arguments::Value16},
+		{ENUM_Branching::ELSE},
+			{"[PC]",		"=","[PC] + 3"}
+	},
 	{17,11},
 	ENUM_TicksMean::Condition,
 	FlagsList{
@@ -907,7 +1045,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::CALL}}
 	},
 
 
@@ -915,13 +1054,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value16},
 	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
 	u8"Если флаг Sign = 0, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
-	u8"Если условие выполненно:\n"
-	  "1. [SP]      = [SP] - 2\n"
-	  "2. M[SP]     = [PC + 3].low\n"
-	  "3. M[SP + 1] = [PC + 3].high\n"
-	  "4. [PC]      = [Число.16]\n"
-	  "Иначе:\n"
-	  "1. [PC]      = [PC] + 3",
+	{
+		{ENUM_Branching::IF},
+			{"[SP]",		"=","[SP] - 2"},
+			{"M[SP]",		"=","(PC + 3).low"},
+			{"M[SP + 1]",	"=","(PC + 3).high"},
+			{"[PC]",		"=",ENUM_Arguments::Value16},
+		{ENUM_Branching::ELSE},
+			{"[PC]",		"=","[PC] + 3"}
+	},
 	{17,11},
 	ENUM_TicksMean::Condition,
 	FlagsList{
@@ -929,7 +1070,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::CALL}}
 	},
 
 
@@ -937,10 +1079,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Register16_WithPSW},
 	{},
 	u8"Сохранение двухбайтового числа из пары регистров в верхушку стэка",
-	u8"1. [SP]      = [SP] - 2\n"
-	  "2. M[SP + 1] = [Рег.16].high\n"
-	  "3. M[SP]     = [Рег.16].low.\n"
-	  "4. [PC]      = [PC] + 1",
+	{
+		{"[SP]",			"=","[SP] - 2"},
+		{"M[SP + 1]",		"=",ENUM_Arguments::Register16_WithPSW_high},
+		{"M[SP]",			"=",ENUM_Arguments::Register16_WithPSW_low},
+		{"[PC]",			"=","[PC] + 1"}
+	},
 	{11},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -948,7 +1092,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::STACK_OPS}}
 	},
 
 
@@ -956,10 +1101,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Register16_WithPSW},
 	{},
 	u8"Извлечение из верхушки стэка двухбайтового числа в пару регистров",
-	u8"1. M[SP]     = [Рег.16].low\n"
-	  "2. M[SP + 1] = [Рег.16].high\n"
-	  "3. [SP]      = [SP] + 2\n"
-	  "4. [PC]      = [PC] + 1",
+	{
+		{ENUM_Arguments::Register16_WithPSW_low,	"=", "M[SP]"},
+		{ENUM_Arguments::Register16_WithPSW_high,	"=", "M[SP + 1]"},
+		{"[SP]",									"=", "[SP] + 2"},
+		{"[PC]",									"=", "[PC] + 1"}
+},
 	{10},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -967,7 +1114,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::STACK_OPS}}
 	},
 
 
@@ -975,9 +1123,11 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value16},
 	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
 	u8"Сохраняет двухбайтовое значение пары регистров HL по адресу памяти заданной константой",
-	u8"1. M[Число.16]     = [L]\n"
-	  "2. M[Число.16 + 1] = [H]\n"
-	  "3. [PC]            = [PC] + 3",
+	{
+		{"M[",ENUM_Arguments::Value16,"]",		"=","[L]"},
+		{"M[",ENUM_Arguments::Value16," + 1]",	"=","[H]"},
+		{"[PC]",								"=","[PC] + 3"}
+	},
 	{16},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -985,7 +1135,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+	{ENUM_Category::MOVE_LOAD_STORE}}
 	},
 
 
@@ -993,9 +1144,11 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value16},
 	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
 	u8"Загружает двухбайтовое значение по адресу памяти заданной константой в пару регистров HL",
-	u8"1. [L]  = M[Число.16]\n"
-	  "2. [H]  = M[Число.16 + 1]\n"
-	  "3. [PC] = [PC] + 3",
+	{
+		{"[L]",		"=","M[",ENUM_Arguments::Value16 ,"]"},
+		{"[H]",		"=","M[",ENUM_Arguments::Value16," + 1]"},
+		{"[PC]",	"=","[PC] + 3" }
+	},
 	{16},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -1003,24 +1156,28 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+	{ENUM_Category::MOVE_LOAD_STORE}}
 	},
 
 
-		{ "stax",{
-		{ENUM_Arguments::Register16_OnlyBD},
-		{},
-		u8"Сохраняет значение аккумулятора в память по адресу пары регистров",
-		u8"1. M[Рег.16] = [A]\n"
-		  "2. [PC]      = [PC] + 1",
-		{7},
-		ENUM_TicksMean::Always,
-		FlagsList{
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected}}
+	{ "stax",{
+	{ENUM_Arguments::Register16_OnlyBD},
+	{},
+	u8"Сохраняет значение аккумулятора в память по адресу пары регистров",
+	{
+		{"M[",ENUM_Arguments::Register16_OnlyBD,"]","=","[A]"},
+		{"[PC]",									"=","[PC] + 1"}
+	},
+	{7},
+	ENUM_TicksMean::Always,
+	FlagsList{
+		ENUM_FlagsState::Unaffected,
+		ENUM_FlagsState::Unaffected,
+		ENUM_FlagsState::Unaffected,
+		ENUM_FlagsState::Unaffected,
+		ENUM_FlagsState::Unaffected},
+	{ENUM_Category::MOVE_LOAD_STORE}}
 	},
 
 
@@ -1028,8 +1185,10 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Register16_OnlyBD},
 	{},
 	u8"Загружает число по адресу пары регистров в аккумулятор",
-	u8"1. [A]  = M[Рег.16]\n"
-	  "2. [PC] = [PC] + 1",
+	{
+		{"[A]",		"=","M[",ENUM_Arguments::Register16_OnlyBD,"]"},
+		{"[PC]",	"=","[PC] + 1"}
+	},
 	{7},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -1037,7 +1196,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 			ENUM_FlagsState::Unaffected,
 			ENUM_FlagsState::Unaffected,
 			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected}}
+			ENUM_FlagsState::Unaffected},
+	{ENUM_Category::MOVE_LOAD_STORE}}
 	},
 
 
@@ -1045,8 +1205,10 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value16},
 	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
 	u8"Сохраняет значение из аккумулятор по адресу памяти заданной константой",
-	u8"1. M[Число.16] = [A]\n"
-	  "2. [PC]        = [PC] + 3",
+	{
+		{"M[",ENUM_Arguments::Value16,"]",	"=","[A]"},
+		{"[PC]",							"=","[PC] + 3"}
+	},
 	{13},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -1054,7 +1216,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 			ENUM_FlagsState::Unaffected,
 			ENUM_FlagsState::Unaffected,
 			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected}}
+			ENUM_FlagsState::Unaffected},
+	{ENUM_Category::MOVE_LOAD_STORE}}
 	},
 
 
@@ -1062,8 +1225,10 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value16},
 	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
 	u8"Загружает значение из памяти по адресу заданной константой в аккумулятор",
-	u8"1. [A]  = M[Число.16]\n"
-	  "2. [PC] = [PC] + 3",
+	{
+		{"[A]",		"=","M[",ENUM_Arguments::Value16,"]"},
+		{"[PC]",	"=","[PC] + 3"}
+	},
 	{13},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -1071,7 +1236,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+	{ENUM_Category::MOVE_LOAD_STORE}}
 	},
 
 
@@ -1079,8 +1245,11 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Register16_WithSP,ENUM_Arguments::Value16},
 	{ENUM_Bytes::Value_low,ENUM_Bytes::Value_high},
 	u8"Записывает двухбайтовую константу в пару регистров",
-	u8"1. [Рег.16] = [Число.16]\n"
-	  "2. [PC]     = [PC] + 3",
+	{
+		{ENUM_Arguments::Register16_WithSP_low,	"=",ENUM_Arguments::Value16_low},
+		{ENUM_Arguments::Register16_WithSP_high,"=",ENUM_Arguments::Value16_high},
+		{"[PC]",								"=","[PC] + 3"}
+	},
 	{10},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -1088,7 +1257,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+	{ENUM_Category::MOVE_LOAD_STORE, ENUM_Category::STACK_OPS}}
 	},
 
 
@@ -1096,8 +1266,10 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	{},
 	u8"Меняет местами значения двухбайтовых чисел пар регистров DE и HL",
-	u8"1. swap([DE], [HL])\n"
-	  "2. [PC] = [PC] + 1",
+	{
+		{"swap([DE], [HL])"},
+		{"[PC] = [PC] + 1"}
+	},
 	{4},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -1105,7 +1277,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+	{ENUM_Category::MOVE_LOAD_STORE}}
 	},
 
 
@@ -1114,9 +1287,11 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	{},
 	u8"Меняет местами значение памяти по адресу SP c значением регистра L, и также с адресом памяти (SP + 1) и регистром H. Память поменяется, а значение SP не поменяется",
-	u8"1. swap([H], Memory[SP + 1])\n"
-	  "2. swap([L], Memory[SP])\n"
-	  "3. [PC] = [PC] + 1",
+	{
+		{"swap([H], Memory[SP + 1])"},
+		{"swap([L], Memory[SP])"},
+		{"[PC] = [PC] + 1"}
+	},
 	{18},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -1124,7 +1299,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::STACK_OPS}}
 	},
 
 
@@ -1132,7 +1308,9 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	{},
 	u8"Загружает значение числа из пар регистров HL в адрес текущей позиции процессора PC",
-	u8"1. [PC] = [HL]",
+	{
+		{"[PC] = [HL]"}
+	},
 	{5},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -1140,7 +1318,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::JUMP}}
 	},
 
 
@@ -1148,8 +1327,10 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	{},
 	u8"Загружает значение двух байтвого числа пары регистров HL в стэк SP. При этом SP увеличится на два",
-	u8"1. [SP] = [HL]\n"
-	  "2. [PC] = [PC] + 1",
+	{
+		{"[SP]",	"=","[HL]"},
+		{"[PC]",	"=","[PC] + 1"}
+	},
 	{5},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -1157,7 +1338,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+	{ENUM_Category::STACK_OPS}}
 	},
 
 
@@ -1165,10 +1347,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Register16_WithSP},
 	{},
 	u8"Прибавляние к числу из пары регистров HL, числа из указанной пары регистров",
-	u8"1. Temp    = [HL] + [Рег.16]\n"
-	  "2. [Carry] = (Temp > 0xffff)\n"
-	  "3. [HL]    = Temp\n"
-	  "4. [PC]    = [PC] + 1",
+	{
+		{"Temp",		"=","[HL] + ",ENUM_Arguments::Register16_WithSP},
+		{"[Carry]",		"=","(Temp > 0xffff)"},
+		{"[HL]",		"=","Temp" },
+		{"[PC]",		"=","[PC] + 1"}
+	},
 	{10},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -1176,7 +1360,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Affected}}
+		ENUM_FlagsState::Affected},
+	{ENUM_Category::ADD}}
 	},
 
 
@@ -1184,8 +1369,10 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Register16_WithSP},
 	{},
 	u8"Увелечение на единицу числа записанного в паре регистров",
-	u8"1. [Рег.16] = [Рег.16] + 1\n"
-	  "2. [PC]     = [PC] + 1",
+	{
+		{ENUM_Arguments::Register16_WithSP,	"=",ENUM_Arguments::Register16_WithSP," + 1"},
+		{"[PC]",							"=","[PC] + 1"}
+	},
 	{5},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -1193,7 +1380,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::INCREMENT,ENUM_Category::STACK_OPS}}
 	},
 
 
@@ -1201,9 +1389,11 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Register8},
 	{},
 	u8"Увелечение регистра или памяти на единицу",
-	u8"1. [Рег.8] = [Рег.8] + 1\n"
-	  "2. [Zero]  = ([Рег.8] == 0)\n"
-	  "3. [PC]    = [PC] + 1",
+	{
+		{ENUM_Arguments::Register8,	"=",ENUM_Arguments::Register8," + 1"},
+		{"[Zero]",					"=","(",ENUM_Arguments::Register8," == 0)"},
+		{"[PC]",					"=","[PC] + 1"}
+	},
 	{10,5},
 	ENUM_TicksMean::M_Used,
 	FlagsList{
@@ -1211,7 +1401,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::INCREMENT}}
 	},
 
 
@@ -1219,8 +1410,10 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Register16_WithSP},
 	{},
 	u8"Уменьшение на единицу числа записанного в паре регистров",
-	u8"1. [Рег.16] = [Рег.16] - 1\n"
-	  "2. [PC]     = [PC] + 1",
+	{
+		{ENUM_Arguments::Register16_WithSP,	"=",ENUM_Arguments::Register16_WithSP," - 1"},
+		{"[PC]",							"=","[PC] + 1" }
+	},
 	{5},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -1228,7 +1421,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ ENUM_Category::DECREMENT, ENUM_Category::STACK_OPS}}
 	},
 
 
@@ -1236,9 +1430,11 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Register8},
 	{},
 	u8"Уменьшение регистра или памяти на единицу",
-	u8"1. [Рег.8] = [Рег.8] - 1\n"
-	  "2. [Zero]  = ([Рег.8] == 0)\n"
-	  "3. [PC]    = [PC] + 1",
+	{
+		{ENUM_Arguments::Register8,	"=",ENUM_Arguments::Register8," - 1"},
+		{"[Zero]",					"=","(",ENUM_Arguments::Register8," == 0)"},
+		{"[PC]",					"=","[PC] + 1"}
+	},
 	{10,5},
 	ENUM_TicksMean::M_Used,
 	FlagsList{
@@ -1246,7 +1442,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::DECREMENT}}
 	},
 
 
@@ -1254,11 +1451,13 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Register8},
 	{},
 	u8"Арифмитическое сложение значения аккумулятора и регистра или памяти(по адресу HL)",
-	u8"1. Temp    = [A] + [Рег.8]\n"
-	  "2. [A]     = Temp\n"
-	  "3. [Carry] = (Temp> 0xff)\n"
-	  "4. [Zero]  = (A == 0)\n"
-	  "5. [PC]    = [PC] + 1",
+	{
+		{"Temp",	"=","[A] + ",ENUM_Arguments::Register8},
+		{"[A]",		"=","Temp"},
+		{"[Carry]",	"=","(Temp > 0xff)"},
+		{"[Zero]",	"=","([A] == 0)" },
+		{"[PC]",	"=","[PC] + 1"}
+	},
 	{7,4},
 	ENUM_TicksMean::M_Used,
 	FlagsList{
@@ -1266,7 +1465,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected}}
+		ENUM_FlagsState::Affected},
+		{ENUM_Category::ADD}}
 	},
 
 
@@ -1274,11 +1474,13 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Register8},
 	{},
 	u8"Арифмитическое сложение значения аккумулятора и (регистра или памяти(по адресу HL)) с флагом Carry",
-	u8"1. Temp    = [A] + [Рег.8] + [Carry]\n"
-	  "2. [A]     = Temp\n"
-	  "3. [Carry] = (Temp > 0xff)\n"
-	  "4. [Zero]  = (A == 0)\n"
-	  "5. [PC]    = [PC] + 1",
+	{
+		{"Temp",	"=","[A] + ",ENUM_Arguments::Register8," + [Carry]"},
+		{"[A]",		"=","Temp"},
+		{"[Carry]",	"=","(Temp > 0xff)"},
+		{"[Zero]",	"=","([A] == 0)"},
+		{"[PC]",	"=","[PC] + 1"}
+	},
 	{7,4},
 	ENUM_TicksMean::M_Used,
 	FlagsList{
@@ -1286,39 +1488,22 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected}}
-		},
-
-
-		{ "adi",{
-		{ENUM_Arguments::Value8},
-		{ENUM_Bytes::Value},
-		u8"Арифмитическое сложения значения аккумулятора с константой",
-		u8"1. Temp    = [A] + [Число.8]\n"
-		  "2. [A]     = Temp\n"
-		  "3. [Carry] = (Temp> 0xff)\n"
-		  "4. [Zero]  = (A == 0)\n"
-		  "5. [PC]    = [PC] + 2",
-		{7},
-		ENUM_TicksMean::Always,
-		FlagsList{
-			ENUM_FlagsState::Affected,
-			ENUM_FlagsState::Affected,
-			ENUM_FlagsState::Affected,
-			ENUM_FlagsState::Affected,
-			ENUM_FlagsState::Affected}}
+		ENUM_FlagsState::Affected},
+	{ENUM_Category::ADD}}
 	},
 
 
-	{ "aci",{
+	{ "adi",{
 	{ENUM_Arguments::Value8},
 	{ENUM_Bytes::Value},
-	u8"Арифмитическое сложения значения аккумулятора с константой и флагом Carry",
-	u8"1. Temp    = [A] + [Число.8] + [Carry]\n"
-	  "2. [A]     = Temp\n"
-	  "3. [Carry] = (Temp > 0xff)\n"
-	  "4. [Zero]  = (A == 0)\n"
-	  "5. [PC]    = [PC] + 2",
+	u8"Арифмитическое сложение значения аккумулятора с константой",
+	{
+		{"Temp",	"=","[A] + ",ENUM_Arguments::Value8},
+		{"[A]",		"=","Temp"},
+		{"[Carry]",	"=","(Temp > 0xff)"},
+		{"[Zero]",	"=","([A] == 0)"},
+		{"[PC]",	"=","[PC] + 2"}
+	},
 	{7},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -1326,7 +1511,31 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected}}
+		ENUM_FlagsState::Affected},
+	{ENUM_Category::ADD}}
+	},
+
+
+	{ "aci",{
+	{ENUM_Arguments::Value8},
+	{ENUM_Bytes::Value},
+	u8"Арифмитическое сложение значения аккумулятора с константой и флагом Carry",
+	{
+		{"Temp",	"=","[A] + ",ENUM_Arguments::Value8," + [Carry]"},
+		{"[A]",		"=","Temp"},
+		{"[Carry]",	"=","(Temp > 0xff)"},
+		{"[Zero]",	"=","([A] == 0)"},
+		{"[PC]",	"=","[PC] + 2"}
+	},
+	{7},
+	ENUM_TicksMean::Always,
+	FlagsList{
+		ENUM_FlagsState::Affected,
+		ENUM_FlagsState::Affected,
+		ENUM_FlagsState::Affected,
+		ENUM_FlagsState::Affected,
+		ENUM_FlagsState::Affected},
+		{ENUM_Category::ADD}}
 	},
 
 
@@ -1334,10 +1543,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Register8},
 	{},
 	u8"Арифмитическое вычитание из значения аккумулятора значение памяти(по адресу HL) или регистра",
-	u8"1. [Carry] = (A < Рег.8)\n"
-	  "2. [A]     = [A] - [Рег.8]\n"
-	  "3. [Zero]  = (A == 0)\n"
-	  "4. [PC]    = [PC] + 1",
+	{
+		{"[Carry]",	"=","([A] < ",ENUM_Arguments::Register8,")"},
+		{"[A]",		"=","[A] - ",ENUM_Arguments::Register8},
+		{"[Zero]",	"=","([A] == 0)"},
+		{"[PC]",	"=","[PC] + 1"}
+	},
 	{7,4},
 	ENUM_TicksMean::M_Used,
 	FlagsList{
@@ -1345,7 +1556,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected}}
+		ENUM_FlagsState::Affected},
+		{ENUM_Category::SUBTRACT}}
 	},
 
 
@@ -1353,10 +1565,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Register8},
 	{},
 	u8"Арифмитическое вычитание из значения аккумулятора значение (памяти(по адресу HL) или регистра) с флагом Carry",
-	u8"1. [Carry] = (A < Рег.8 + Carry)\n"
-	  "2. [A]     = [A] - [Рег.8] - [Carry]\n"
-	  "3. [Zero]  = (A == 0)\n"
-	  "4. [PC]    = [PC] + 1",
+	{
+		{"[Carry]",	"=","([A] < ",ENUM_Arguments::Register8," + [Carry])"},
+		{"[A]",		"=","[A] - ",ENUM_Arguments::Register8," - [Carry]"},
+		{"[Zero]",	"=","([A] == 0)"},
+		{"[PC]",	"=","[PC] + 1" }
+	},
 	{7,4},
 	ENUM_TicksMean::M_Used,
 	FlagsList{
@@ -1364,7 +1578,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected}}
+		ENUM_FlagsState::Affected},
+		{ENUM_Category::SUBTRACT}}
 	},
 
 
@@ -1372,10 +1587,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value8},
 	{ENUM_Bytes::Value},
 	u8"Арифмитическое вычитание из значения аккумулятора константы",
-	u8"1. [Carry] = (A < Число.8)\n"
-	  "2. [A]     = [A] - [Рег.8]\n"
-	  "3. [Zero]  = (A == 0)\n"
-	  "4. [PC]    = [PC] + 2",
+	{
+		{"[Carry]",	"=","([A] < ",ENUM_Arguments::Value8,")"},
+		{"[A]",		"=","[A] - ",ENUM_Arguments::Value8},
+		{"[Zero]",	"=","([A] == 0)"},
+		{"[PC]",	"=","[PC] + 2"}
+	},
 	{7},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -1383,7 +1600,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected}}
+		ENUM_FlagsState::Affected},
+		{ENUM_Category::SUBTRACT}}
 	},
 
 
@@ -1391,10 +1609,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::Value8},
 	{ENUM_Bytes::Value},
 	u8"Арифмитическое вычитание из значения аккумулятора константы и флага Carry",
-	u8"1. [Carry] = (A < Число.8 + Carry)\n"
-	  "2. [A]     = [A] - [Число.8] - [Carry]\n"
-	  "3. [Zero]  = (A == 0)\n"
-	  "4. [PC]    = [PC] + 2",
+	{
+		{"[Carry]",	"=","([A] < ",ENUM_Arguments::Value8," + [Carry])"},
+		{"[A]",		"=","([A] - ",ENUM_Arguments::Value8," - [Carry])"},
+		{"[Zero]",	"=","([A] == 0)"},
+		{"[PC]",	"=","([PC] + 2)"}
+},
 	{7},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -1402,7 +1622,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
 		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected}}
+		ENUM_FlagsState::Affected},
+		{ENUM_Category::SUBTRACT}}
 	},
 
 
@@ -1410,10 +1631,12 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ENUM_Arguments::ValueSpecial},
 	{ENUM_Bytes::Value},
 	u8"Call [Число * 8]",
-	u8"1. [SP]      = [SP] - 2\n"
-	  "2. M[SP]     = [PC + 3].low\n"
-	  "3. M[SP + 1] = [PC + 3].high\n"
-	  "4. [PC]      = [Число * 8]",
+	{
+		{"[SP]",			"=","[SP] - 2"},
+		{"M[SP]",			"=","([PC] + 3).low"},
+		{"M[SP + 1]",		"=","([PC] + 3).high"},
+		{"[PC]",			"=","(",ENUM_Arguments::ValueSpecial," * 8)"}
+	},
 	{11},
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -1421,7 +1644,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+		{ENUM_Category::RESTART}}
 	 },
 
 
@@ -1430,7 +1654,9 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	 {},
 	 {},
 	 u8"Корректирует содержимое регистра A для соответствия формату BCD",
-	 u8"Не знаю как это описать.",
+	 {
+		 {u8"Не знаю как это описать."}
+	 },
 	 {4},
 	 ENUM_TicksMean::Always,
 	 FlagsList{
@@ -1438,7 +1664,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		 ENUM_FlagsState::Affected,
 		 ENUM_FlagsState::Affected,
 		 ENUM_FlagsState::Affected,
-		 ENUM_FlagsState::Affected }}
+		 ENUM_FlagsState::Affected },
+	{ENUM_Category::SPECIALS}}
 
 	},
 
@@ -1446,7 +1673,9 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	{},
 	u8"Включает прерывание",
-	u8"Эта инструкция не реализована.",
+	{
+		{u8"Эта инструкция не реализована."}
+	},
 	{ 4 },
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -1454,7 +1683,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected}}
+		ENUM_FlagsState::Unaffected},
+	{ENUM_Category::CONTROL}}
 	},
 
 
@@ -1462,7 +1692,9 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	{},
 	u8"Отключает прерывание",
-	u8"Эта инструкция не реализована.",
+	{
+		{u8"Эта инструкция не реализована."}
+	},
 	{ 4 },
 	ENUM_TicksMean::Always,
 	FlagsList{
@@ -1470,8 +1702,8 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
 		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected }}
-
+		ENUM_FlagsState::Unaffected },
+	{ENUM_Category::CONTROL}}
 	}
 
 };

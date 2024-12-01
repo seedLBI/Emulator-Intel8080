@@ -209,22 +209,22 @@ void I8080_UserInterface::DrawMainMenu() {
 			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0, 0.2, 0.2, 1.0));
 				ImGui::SeparatorText(u8"Основное");
 			ImGui::PopStyleColor();
-			ImGui::MenuItem((string(ICON_FA_CODE) + u8" Редактор кода").c_str(), "", widget_CodeEditor->GetPtrFlagShow());
-			ImGui::MenuItem((string(ICON_FA_FILE_LINES) + u8" Просмотр мнемо кода").c_str(), "", widget_MnemocodeViewer->GetPtrFlagShow());
-			ImGui::MenuItem((string(ICON_FA_CUBE) + u8" Hex просмотр").c_str(), "", widget_HexViewer->GetPtrFlagShow());
-			ImGui::MenuItem((string(ICON_FA_FONT_AWESOME) + u8" Регистры и флаги").c_str(), "", widget_RegisterFlagsInfo->GetPtrFlagShow());
+			ImGui::MenuItem((string(ICON_FA_CODE)				+ u8" Редактор кода").c_str(), "", widget_CodeEditor->GetPtrFlagShow());
+			ImGui::MenuItem((string(ICON_FA_FILE_LINES)			+ u8" Просмотр мнемо кода").c_str(), "", widget_MnemocodeViewer->GetPtrFlagShow());
+			ImGui::MenuItem((string(ICON_FA_CUBE)				+ u8" Hex просмотр").c_str(), "", widget_HexViewer->GetPtrFlagShow());
+			ImGui::MenuItem((string(ICON_FA_FONT_AWESOME)		+ u8" Регистры и флаги").c_str(), "", widget_RegisterFlagsInfo->GetPtrFlagShow());
 
 			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0, 0.6, 0.0, 1.0));
 				ImGui::SeparatorText(u8"Вспомогательное");
 			ImGui::PopStyleColor();
-			ImGui::MenuItem((string(ICON_FA_HIGHLIGHTER) + u8" Список маркеров").c_str(), "", widget_MarkerList->GetPtrFlagShow());
-			ImGui::MenuItem((string(ICON_FA_BARS) + u8" Список переменных").c_str(), "", widget_VarList->GetPtrFlagShow());
-			ImGui::MenuItem((string(ICON_FA_HAMMER) + u8" Список постоянных").c_str(), "", widget_ConstList->GetPtrFlagShow());
-			ImGui::MenuItem((string(ICON_FA_LIST) + u8" История выполнения").c_str(), "", widget_HistoryInstruction->GetPtrFlagShow());
-			ImGui::MenuItem((string(ICON_FA_GAUGE_HIGH) + u8" Быстродействие").c_str(), "", widget_EmulatorInfo->GetPtrFlagShow());
-			ImGui::MenuItem((string(ICON_FA_CODE) + u8" Дизассемблер").c_str(), "", widget_Disassembler->GetPtrFlagShow());
-			ImGui::MenuItem((string(ICON_FA_PALETTE) + u8" Вывод всевозможных цветов").c_str(), "", widget_ColorPicker->GetPtrFlagShow());
-			ImGui::MenuItem((string(ICON_FA_FONT) + u8" Вывод всевозможных символов").c_str(), "", widget_SymbolPicker->GetPtrFlagShow());
+			ImGui::MenuItem((string(ICON_FA_CODE)				+ u8" Дизассемблер").c_str(), "", widget_Disassembler->GetPtrFlagShow());
+			ImGui::MenuItem((string(ICON_FA_GAUGE_HIGH)			+ u8" Быстродействие").c_str(), "", widget_EmulatorInfo->GetPtrFlagShow());
+			ImGui::MenuItem((string(ICON_FA_HIGHLIGHTER)		+ u8" Список маркеров").c_str(), "", widget_MarkerList->GetPtrFlagShow());
+			ImGui::MenuItem((string(ICON_FA_BARS)				+ u8" Список переменных").c_str(), "", widget_VarList->GetPtrFlagShow());
+			ImGui::MenuItem((string(ICON_FA_HAMMER)				+ u8" Список постоянных").c_str(), "", widget_ConstList->GetPtrFlagShow());
+			ImGui::MenuItem((string(ICON_FA_LIST)				+ u8" История выполнения").c_str(), "", widget_HistoryInstruction->GetPtrFlagShow());
+			ImGui::MenuItem((string(ICON_FA_PALETTE)			+ u8" Вывод всевозможных цветов").c_str(), "", widget_ColorPicker->GetPtrFlagShow());
+			ImGui::MenuItem((string(ICON_FA_FONT)				+ u8" Вывод всевозможных символов").c_str(), "", widget_SymbolPicker->GetPtrFlagShow());
 
 
 			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0, 0.6, 0.0, 1.0));
@@ -241,7 +241,9 @@ void I8080_UserInterface::DrawMainMenu() {
 			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.4, 1.0, 0.4, 1.0));
 				ImGui::SeparatorText(u8"Помощь");
 			ImGui::PopStyleColor();
-			ImGui::MenuItem((string(ICON_FA_BOOK_BOOKMARK) + u8" Руководство к программе").c_str(), "", widget_Help->GetPtrFlagShow());
+			ImGui::MenuItem((string(ICON_FA_BOOK_BOOKMARK)		+ u8" Руководство к программе").c_str(), "", widget_Help->GetPtrFlagShow());
+			ImGui::MenuItem((string(ICON_FA_TABLE)				+ u8" Таблица инструкций").c_str(), "", false);
+			ImGui::MenuItem((string(ICON_FA_LIST)				+ u8" Список инструкций").c_str(), "", widget_ListInstruction->GetPtrFlagShow());
 
 
 			ImGui::EndMenu();
@@ -337,6 +339,7 @@ void I8080_UserInterface::InitSetting() {
 void I8080_UserInterface::InitWidgets() {
 	widget_CodeEditor = new Widget_CodeEditor();
 	widget_HistoryInstruction = new Widget_HistoryInstruction(processor, emulationThread, processorCaratakerMomento);
+	widget_ListInstruction = new Widget_ListInstruction();
 	widget_Disassembler = new Widget_Disassembler(processor);
 	widget_ColorPicker = new Widget_ColorPicker(widget_CodeEditor->GetPtrTextEditor());
 	widget_SymbolPicker = new Widget_SymbolPicker(widget_CodeEditor->GetPtrTextEditor());
@@ -358,6 +361,7 @@ void I8080_UserInterface::InitWidgets() {
 
 	WidgetManager.AddWidgetPtr(widget_Help);
 	WidgetManager.AddWidgetPtr(widget_HistoryInstruction);
+	WidgetManager.AddWidgetPtr(widget_ListInstruction);
 	WidgetManager.AddWidgetPtr(widget_Disassembler);
 	WidgetManager.AddWidgetPtr(widget_ColorPicker);
 	WidgetManager.AddWidgetPtr(widget_SymbolPicker);

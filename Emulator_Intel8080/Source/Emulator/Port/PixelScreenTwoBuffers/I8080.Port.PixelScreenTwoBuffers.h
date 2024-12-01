@@ -2,8 +2,7 @@
 #define I8080_PORT_PIXELSCREEN_TWO_BUFFERS
 
 #include "Emulator/Port/I8080.Port.h"
-#include "PixelScreenTwoBuffersMomento/PixelScreenTwoBuffers.Momento.h"
-
+#include "Momento/PixelScreenTwoBuffers.Momento.h"
 #include "Config_Compilier.h"
 
 #include <vector>

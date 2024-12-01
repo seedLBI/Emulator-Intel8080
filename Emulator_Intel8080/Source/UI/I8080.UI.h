@@ -53,6 +53,7 @@
 #include "UI\Widgets\I8080.UI.Help.h"
 #include "UI\Widgets\I8080.UI.Disassembler.h"
 #include "UI\Widgets\UI.HistoryInstruction.h"
+#include "UI\Widgets\UI.ListInstruction.h"
 
 #include "UI\Widget\I8080.WidgetManager.h"
 #include "UI\Workspaces\I8080.WorkspaceManager.h"
@@ -134,6 +135,7 @@ private:
 	Widget_MarkerList*			  widget_MarkerList = nullptr;
 	Widget_Disassembler*		  widget_Disassembler = nullptr;
 	Widget_EmulatorInfo*		  widget_EmulatorInfo = nullptr;
+	Widget_ListInstruction*		  widget_ListInstruction = nullptr;
 	Widget_MnemocodeViewer*		  widget_MnemocodeViewer = nullptr;
 	Widget_RegisterFlagsInfo*	  widget_RegisterFlagsInfo = nullptr;
 	Widget_HistoryInstruction*	  widget_HistoryInstruction = nullptr;

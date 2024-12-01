@@ -534,6 +534,10 @@ std::vector<uint8_t> Compiler::TranslateInstruction(const std::vector<std::strin
 		}
 
 		int value = FromString2Int(params[1]).first;
+		if (value > MAX8BIT) {
+			CompilerOutput.Error = ERROR_OVERFLOW_VALUE_8BIT;
+			return result;
+		}
 
 		result.emplace_back(mvi_imm8_map.find(params[0])->second);
 		result.emplace_back(value);
@@ -687,83 +691,5 @@ std::vector<uint8_t> Compiler::TranslateInstruction(const std::vector<std::strin
 
 }
 
-
-bool Compiler::IsHexValue(const std::string& value) {
-    if (value.size() <= 2)
-        return false;
-
-    //ToLowerAll(value);
-
-    if (value[0] != '0' || (value[1] != 'x' && value[1] != 'X'))
-        return false;
-
-
-    // it's hex begin
-    for (int i = 2; i < value.size(); ++i) {
-        char current_symbol = value[i];
-
-        bool is_number = (current_symbol >= 48 && current_symbol <= 57);
-        bool is_letter = (current_symbol >= 97 && current_symbol <= 102) || (current_symbol >= 65 && current_symbol <= 70);
-
-        if (is_number || is_letter) {
-            continue;
-        }
-        else {
-            return false;
-        }
-    }
-
-    return true;
-}
-bool Compiler::IsDecValue(const std::string& value) {
-    if (value.size() > 1) {
-        if (value[0] == '0')
-        {
-            return false;
-        }
-    }
-    for (int i = 0; i < value.size(); ++i) {
-        char current_symbol = value[i];
-
-        bool is_number = (current_symbol >= 48 && current_symbol <= 57);
-        if (is_number == false) {
-            return false;
-        }
-    }
-    return true;
-}
-bool Compiler::IsBinValue(const std::string& value) {
-    if (value.size() <= 2)
-        return false;
-
-    //ToLowerAll(value);
-
-    if (value[0] != '0' || (value[1] != 'b' && value[1] != 'B'))
-        return false;
-
-    // it's bin begin
-    for (int i = 2; i < value.size(); ++i) {
-        char current_symbol = value[i];
-
-        bool is_number = (current_symbol >= 48 && current_symbol <= 49);
-
-        if (is_number == false) {
-            return false;
-        }
-    }
-
-    return true;
-
-}
-
-uint64_t Compiler::StrHex2int(const std::string& value) {
-    return std::stoull(value.substr(2), nullptr, 16);
-}
-uint64_t Compiler::StrDec2int(const std::string& value) {
-    return std::stoull(value, nullptr, 10);
-}
-uint64_t Compiler::StrBin2int(const std::string& value) {
-    return std::stoull(value.substr(2), nullptr, 2);
-}
 
 

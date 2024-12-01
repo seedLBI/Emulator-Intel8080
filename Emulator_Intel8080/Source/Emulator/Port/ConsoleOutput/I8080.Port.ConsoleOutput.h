@@ -11,7 +11,7 @@
 #include <iostream>
 #include <chrono>
 
-#include "ConsoleOutputMomento/ConsoleOutput.Momento.h"
+#include "Momento/ConsoleOutput.Momento.h"
 
 class I8080_ConsoleOutput : public I8080_Port {
 public:

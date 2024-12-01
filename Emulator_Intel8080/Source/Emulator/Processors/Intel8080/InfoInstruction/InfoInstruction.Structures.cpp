@@ -1,5 +1,4 @@
-#include "UI/InfoInstruction/InfoInstruction.Structures.h"
-
+#include "InfoInstruction.Structures.h"
 
 CommandArguments ENUM_Arguments_to_CommandArguments(const ENUM_Arguments& object) {
 	switch (object)
@@ -10,8 +9,20 @@ CommandArguments ENUM_Arguments_to_CommandArguments(const ENUM_Arguments& object
 	case ENUM_Arguments::Register16_WithSP:
 		return CommandArguments{ u8"Рег.16",{"B","D","H","SP"} };
 		break;
+	case ENUM_Arguments::Register16_WithSP_low:
+		return CommandArguments{ u8"Рег.16.Млад",{"C","E","L",u8"SP.Млад"} };
+		break;
+	case ENUM_Arguments::Register16_WithSP_high:
+		return CommandArguments{ u8"Рег.16.Стар",{"B","D","H",u8"SP.Стар"} };
+		break;
 	case ENUM_Arguments::Register16_WithPSW:
 		return CommandArguments{ u8"Рег.16",{"B","D","H","PSW"} };
+		break;
+	case ENUM_Arguments::Register16_WithPSW_low:
+		return CommandArguments{ u8"Рег.16.Млад",{"C","E","L","A"} };
+		break;
+	case ENUM_Arguments::Register16_WithPSW_high:
+		return CommandArguments{ u8"Рег.16.Стар",{"B","D","H","PSW"} };
 		break;
 	case ENUM_Arguments::Register16_OnlyBD:
 		return CommandArguments{ u8"Рег.16",{"B","D"} };
@@ -21,6 +32,12 @@ CommandArguments ENUM_Arguments_to_CommandArguments(const ENUM_Arguments& object
 		break;
 	case ENUM_Arguments::Value16:
 		return CommandArguments{ u8"Число.16",{"0-65535","0x0000-0xffff"} };
+		break;
+	case ENUM_Arguments::Value16_low :
+		return CommandArguments{ u8"Число.16.Млад",{} };
+		break;
+	case ENUM_Arguments::Value16_high:
+		return CommandArguments{ u8"Число.16.Стар",{} };
 		break;
 	case ENUM_Arguments::ValueSpecial:
 		return CommandArguments{ u8"Число.Спец",{"0-8","0x00-0x08"} };
@@ -85,4 +102,17 @@ std::string Get_info_ticks_mean(std::vector<int> ticks, ENUM_TicksMean mean) {
 		return std::to_string(ticks[0]) + u8" - Используется регистр M.\n" + std::to_string(ticks[1]) + u8" - Иначе.";
 	else if (mean == ENUM_TicksMean::Always)
 		return std::to_string(ticks[0]) + u8" - Всегда.";
+}
+
+std::string ENUM_Branching_to_str(const ENUM_Branching& object) {
+	switch (object){
+	case ENUM_Branching::IF:
+		return u8"Если условие выполняется:";
+		break;
+	case ENUM_Branching::ELSE:
+		return u8"Иначе:";
+		break;
+	default:
+		break;
+	}
 }

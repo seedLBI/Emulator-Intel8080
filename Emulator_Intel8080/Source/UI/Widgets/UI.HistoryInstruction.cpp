@@ -16,22 +16,117 @@ void Widget_HistoryInstruction::Draw() {
 	if (GetFlagShow() == false)
 		return;
 
-	if (ImGui::Begin(GetName_c_str(), GetPtrFlagShow(),  ImGuiWindowFlags_AlwaysAutoResize)) {
 
-		if (emulationThread->GetControlMode() != ControlMode::Continous){
+
+
+
+	ImGuiStyle& style = ImGui::GetStyle();
+	int prev_cellPadding = style.CellPadding.y;
+	style.CellPadding.y = 1;
+
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+
+	ImGui::SetNextWindowSize(ImVec2(200, 200), ImGuiCond_FirstUseEver);
+
+
+	if (ImGui::Begin(GetName_c_str(), GetPtrFlagShow())) {
+
+		if (emulationThread->GetControlMode() != ControlMode::Continous && processor->isHistoryModeEnabled()){
 
 			auto data = processor_CaretakerMomento->GetHistory();
 
-			for (int i = 0; i < data.size(); i++) {
-				if (ImGui::Selectable((std::to_string(i) + ". " + data[i]).c_str(), false)) {
+			const ImGuiTableFlags flags = ImGuiTableFlags_RowBg |
+				ImGuiTableFlags_BordersOuter |
+				ImGuiTableFlags_BordersV |
+				ImGuiTableFlags_Reorderable |
+				ImGuiTableFlags_Hideable |
+				ImGuiTableFlags_NoBordersInBody |
+				ImGuiTableFlags_ScrollY;
 
+
+			if (ImGui::BeginTable(u8"HistoryInstructionsTable",3, flags)) {
+
+
+				ImGui::TableSetupColumn(u8"Номер", ImGuiTableColumnFlags_WidthFixed);
+				ImGui::TableSetupColumn(u8"Опкод", ImGuiTableColumnFlags_WidthFixed);
+				ImGui::TableSetupColumn(u8"Мнемокод", ImGuiTableColumnFlags_WidthStretch);
+
+				ImGui::TableSetupScrollFreeze(0, 1);
+				ImGui::TableSetupScrollFreeze(1, 1);
+				ImGui::TableSetupScrollFreeze(2, 1);
+				ImGui::TableHeadersRow();
+
+				ImGuiListClipper clipper;
+				clipper.Begin(data.size());
+
+				while (clipper.Step())
+				{
+					for (int row = clipper.DisplayStart; row < clipper.DisplayEnd; row++) {
+						ImGui::TableNextRow();
+
+						ImGui::TableSetColumnIndex(0);
+
+						if (ImGui::Selectable(std::to_string(row).c_str(), false, ImGuiSelectableFlags_SpanAllColumns)) {
+							for (int i = 0; i < row + 1; i++)
+								processor_CaretakerMomento->Undo();
+						}
+
+						ImGui::TableSetColumnIndex(1);
+
+						ImGui::Text(data[row].first.c_str());
+
+						ImGui::TableSetColumnIndex(2);
+
+						ImGui::Text(data[row].second.c_str());
+
+					}
 				}
+
+				ImGui::EndTable();
 			}
+
 		}
-		
+		else {
+
+			ImGuiStyle& style = ImGui::GetStyle();
+			auto contentSize = ImGui::GetWindowSize();
+			auto drawList = ImGui::GetWindowDrawList();
+			auto cursorScreenPos = ImGui::GetWindowPos();
+
+			const float scrollbarsSize = style.ScrollbarSize + 2.f;
+
+			const ImVec2 LeftUpperCorner = { cursorScreenPos.x, cursorScreenPos.y };
+			const ImVec2 RightUpperCorner = { cursorScreenPos.x + contentSize.x - scrollbarsSize, cursorScreenPos.y };
+			const ImVec2 LeftDownCorner = { cursorScreenPos.x, cursorScreenPos.y + contentSize.y - scrollbarsSize };
+			const ImVec2 RightDownCorner = { cursorScreenPos.x + contentSize.x - scrollbarsSize,cursorScreenPos.y + contentSize.y - scrollbarsSize };
+
+			const ImVec2 Center = { cursorScreenPos.x + contentSize.x / 2.f, cursorScreenPos.y + contentSize.y / 2.f };
+
+			const char* TextDisableInput;
+			if (processor->isHistoryModeEnabled() == false){
+				TextDisableInput =
+					u8"     Выключен режим истории.\n"
+				      "(это можно изменить в настройках)";
+			}
+			else{
+				TextDisableInput =
+					u8"    Программа эмулируется...  \n"
+					  "Останови эмуляцию для просмотра.";
+			}
+
+
+
+			ImVec2 SizeText = ImGui::CalcTextSize(TextDisableInput);
+
+
+			ImGui::SetCursorScreenPos({ Center.x - SizeText.x / 2.f ,Center.y - SizeText.y / 2.f });
+
+			ImGui::TextColored(ImColor(1.f, 0.2f, 0.2f, 1.f), TextDisableInput);
+		}
 		ImGui::End();
 	}
 
+	ImGui::PopStyleVar();
 
 }
 void Widget_HistoryInstruction::Update() {
