@@ -117,7 +117,7 @@ bool EmulationThread::isThreadWorking() {
 	return flag_ThreadWorking;
 }
 
-EmulationThread::EmulationThread(Processor* processor, Caretaker_Momento* processor_CaretakerMomento) : ISettingObject(u8"Ёмул€ци€",u8"ќбщие") {
+EmulationThread::EmulationThread(Processor* processor, Caretaker_Momento* processor_CaretakerMomento) : ISettingObject(u8"Ёмул€ци€",u8"Ёмул€ци€") {
 #ifdef WITH_DEBUG_OUTPUT
 	cout << "Creating second thread for processor\n";
 #endif
@@ -332,10 +332,11 @@ void EmulationThread::DrawMainMenu() {
 }
 
 void EmulationThread::DrawSetting() {
-	ISettingObject::DrawBegin();
+	//ISettingObject::DrawBegin();
 
 
 	//flag_EnableHistory
+	ImGui::SeparatorText(u8"»стори€ выполнени€");
 
 	if (ImGui::RadioButton(u8"¬ключить сохранение истории выполненных инструкций", processor->isHistoryModeEnabled())) {
 		while (isThreadWorking() == true)
@@ -364,8 +365,9 @@ void EmulationThread::DrawSetting() {
 		processor_CaretakerMomento->SetMaxCount(CountMaxHistory);
 	}
 
+	ImGui::Text("");
 
-	ImGui::Separator();
+	ImGui::SeparatorText(u8"—корость выполнени€");
 
 	string Selected = "";
 

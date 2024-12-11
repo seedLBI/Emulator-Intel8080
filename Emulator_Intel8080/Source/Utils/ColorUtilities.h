@@ -13,6 +13,7 @@ struct RGB {
     double b;
 };
 
+
 // CIELAB
 struct LAB {
     double L;
@@ -32,5 +33,6 @@ std::vector<RGB> GetSortedByDeltaColors(const std::vector<RGB>& Colors, RGB Sour
 std::vector<RGB> GetSortedByDeltaColors_Eucledean(const std::vector<RGB>& Colors, RGB Source);
 std::vector<RGB> GetSortedByDeltaColors_CIE76(const std::vector<RGB>& Colors, RGB Source);
 std::vector<RGB> GetSortedByDeltaColors_CIE94(const std::vector<RGB>& Colors, RGB Source);
+
 
 #endif

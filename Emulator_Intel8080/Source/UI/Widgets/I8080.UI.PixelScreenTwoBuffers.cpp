@@ -48,6 +48,12 @@ void Widget_PixelScreenTwoBuffers::Draw() {
 		{
 			MouseInPopup = true;
 
+			ImGui::SeparatorText(u8"Выбор буфера для вывода");
+
+			ImGui::RadioButton(u8"Передний", &DrawFrontBuffer, 1);
+			ImGui::SameLine();
+			ImGui::RadioButton(u8"Задний", &DrawFrontBuffer, 0);
+
 			ImGui::SeparatorText(u8"Соотношение");
 
 			ImGui::RadioButton(u8"Квадратное", &Ratio_Mode, 0);
@@ -105,9 +111,10 @@ void Widget_PixelScreenTwoBuffers::Draw() {
 
 std::string Widget_PixelScreenTwoBuffers::Save() {
 	std::string output = "";
-	output += MakeBegin(9);
+	output += MakeBegin(10);
 	output += MakeSaveItem(std::string("Flag_Show"), std::to_string(GetFlagShow()));
 	output += MakeSaveItem(std::string("Flag_Active"), std::to_string(WindowIsVisiable()));
+	output += MakeSaveItem(std::string("DrawFrontBuffer"), std::to_string(DrawFrontBuffer));
 	output += MakeSaveItem(std::string("Ratio_Mode"), std::to_string(Ratio_Mode));
 	output += MakeSaveItem(std::string("DrawLines"), std::to_string(DrawLines));
 	output += MakeSaveItem(std::string("ThiknessLines"), std::to_string(ThiknessLines));
@@ -134,6 +141,8 @@ void Widget_PixelScreenTwoBuffers::Load(const std::string& Data) {
 			if (stoi(value_arg) == 1)
 				SetActive();
 		}
+		else if (name_arg == "DrawFrontBuffer")
+			DrawFrontBuffer = stoi(value_arg);
 		else if (name_arg == "Ratio_Mode")
 			Ratio_Mode = stoi(value_arg);
 		else if (name_arg == "DrawLines")
@@ -163,7 +172,14 @@ void Widget_PixelScreenTwoBuffers::Update() {
 	static vector<vector<unsigned char>> last_array_colors;
 
 	I8080_PixelScreenTwoBuffers* p = dynamic_cast<I8080_PixelScreenTwoBuffers*>(processor->Get_External_Peripherals()[0x06]);
-	vector<vector<unsigned char>> array_colors = p->Get_Array_colors();
+
+	vector<vector<unsigned char>> array_colors;
+
+	if (DrawFrontBuffer)
+		array_colors = p->Get_Array_colors_FrontBuffer();
+	else
+		array_colors = p->Get_Array_colors_BackBuffer();
+
 	for (int i = 0; i < 256; i++)
 	{
 		for (int j = 0; j < 256; j++)

@@ -17,7 +17,8 @@ public:
 	void virtual Reset() override;
 	uint8_t GetPort();
 
-	std::vector<std::vector<uint8_t>> Get_Array_colors();
+	std::vector<std::vector<uint8_t>> Get_Array_colors_FrontBuffer();
+	std::vector<std::vector<uint8_t>> Get_Array_colors_BackBuffer();
 
 	std::shared_ptr<Momento> SaveState() override;
 	void					 RestoreState(const std::shared_ptr<Momento>& momento) override;

@@ -103,7 +103,7 @@ private:
 	bool flag_OpenLastFileWithOpenProgramm = false;
 	bool flag_SaveAfterCompile = true;
 	bool flag_CompileAfterOpen = true;
-	AutoSaveTiming setedAutoTiming = AutoSaveTiming::OneMinute;
+	AutoSaveTiming setedAutoTiming = AutoSaveTiming::FiveMinute;
 
 
 

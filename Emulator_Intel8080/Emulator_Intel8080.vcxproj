@@ -125,7 +125,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\Emulator_Intel8080\Third-Person\Opengl\include;$(SolutionDir)\Emulator_Intel8080\Source;$(SolutionDir)\Emulator_Intel8080\Third-Person;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
@@ -202,6 +202,8 @@
     <ClCompile Include="Source\SaveSystem\SaveSystemManager.cpp" />
     <ClCompile Include="Source\UI\AuthorPopup\AuthorPopup.cpp" />
     <ClCompile Include="Source\UI\FontManager\FontManager.cpp" />
+    <ClCompile Include="Source\UI\HighlighterInstruction\Highlighter.cpp" />
+    <ClCompile Include="Source\UI\HighlighterInstruction\I8080\I8080.HighlighterInstruction.cpp" />
     <ClCompile Include="Source\UI\I8080.UI.cpp" />
     <ClCompile Include="Source\UI\KeyCombination\KeyCombinationHandler.cpp" />
     <ClCompile Include="Source\UI\LastPathManager\LastPathManager.cpp" />
@@ -210,6 +212,9 @@
     <ClCompile Include="Source\UI\Setting\ISettingObject.cpp" />
     <ClCompile Include="Source\UI\Setting\ISettingSavable.cpp" />
     <ClCompile Include="Source\UI\Setting\Setting.cpp" />
+    <ClCompile Include="Source\UI\Theme\BaseColors\BaseColors.cpp" />
+    <ClCompile Include="Source\UI\Theme\interface\IThemeLoadable.cpp" />
+    <ClCompile Include="Source\UI\Theme\ThemeManager\ThemeManager.cpp" />
     <ClCompile Include="Source\UI\Widgets\I8080.UI.CodeEditor.cpp" />
     <ClCompile Include="Source\UI\Widgets\I8080.UI.ColorPicker.cpp" />
     <ClCompile Include="Source\UI\Widgets\I8080.UI.ConstList.cpp" />
@@ -222,6 +227,7 @@
     <ClCompile Include="Source\UI\Widgets\I8080.UI.MarkerList.cpp" />
     <ClCompile Include="Source\UI\Widgets\I8080.UI.MemoryMonoPixelScreen.cpp" />
     <ClCompile Include="Source\UI\Widgets\I8080.UI.MnemoCodeViewer.cpp" />
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.MnemoCodeViewerTargeted.cpp" />
     <ClCompile Include="Source\UI\Widgets\I8080.UI.Output0x02.cpp" />
     <ClCompile Include="Source\UI\Widgets\I8080.UI.PixelScreen.cpp" />
     <ClCompile Include="Source\UI\Widgets\I8080.UI.PixelScreenTwoBuffers.cpp" />
@@ -232,6 +238,7 @@
     <ClCompile Include="Source\UI\Widgets\I8080.UI.VarList.cpp" />
     <ClCompile Include="Source\UI\Widgets\UI.HistoryInstruction.cpp" />
     <ClCompile Include="Source\UI\Widgets\UI.ListInstruction.cpp" />
+    <ClCompile Include="Source\UI\Widgets\UI.TableInstruction.cpp" />
     <ClCompile Include="Source\UI\Widget\I8080.Widget.cpp" />
     <ClCompile Include="Source\UI\Widget\I8080.WidgetManager.cpp" />
     <ClCompile Include="Source\UI\WindowManager\WindowManager.cpp" />
@@ -332,6 +339,8 @@
     <ClInclude Include="Source\UI\AuthorPopup\AuthorPopup.h" />
     <ClInclude Include="Source\UI\AuthorPopup\OpenglTexture.h" />
     <ClInclude Include="Source\UI\FontManager\FontManager.h" />
+    <ClInclude Include="Source\UI\HighlighterInstruction\Highlighter.h" />
+    <ClInclude Include="Source\UI\HighlighterInstruction\I8080\I8080.HighlighterInstruction.h" />
     <ClInclude Include="Source\UI\I8080.UI.h" />
     <ClInclude Include="Source\UI\KeyCombination\KeyCombination.h" />
     <ClInclude Include="Source\UI\KeyCombination\KeyCombinationHandler.h" />
@@ -341,7 +350,10 @@
     <ClInclude Include="Source\UI\Setting\ISettingObject.h" />
     <ClInclude Include="Source\UI\Setting\ISettingSavable.h" />
     <ClInclude Include="Source\UI\Setting\Setting.h" />
+    <ClInclude Include="Source\UI\Theme\BaseColors\BaseColors.h" />
+    <ClInclude Include="Source\UI\Theme\interface\IThemeLoadable.h" />
     <ClInclude Include="Source\UI\Theme\Theme.h" />
+    <ClInclude Include="Source\UI\Theme\ThemeManager\ThemeManager.h" />
     <ClInclude Include="Source\UI\Widgets\I8080.UI.CodeEditor.h" />
     <ClInclude Include="Source\UI\Widgets\I8080.UI.ColorPicker.h" />
     <ClInclude Include="Source\UI\Widgets\I8080.UI.ConstList.h" />
@@ -354,6 +366,7 @@
     <ClInclude Include="Source\UI\Widgets\I8080.UI.MarkerList.h" />
     <ClInclude Include="Source\UI\Widgets\I8080.UI.MemoryMonoPixelScreen.h" />
     <ClInclude Include="Source\UI\Widgets\I8080.UI.MnemoCodeViewer.h" />
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.MnemoCodeViewerTargeted.h" />
     <ClInclude Include="Source\UI\Widgets\I8080.UI.Output0x02.h" />
     <ClInclude Include="Source\UI\Widgets\I8080.UI.PixelScreen.h" />
     <ClInclude Include="Source\UI\Widgets\I8080.UI.PixelScreenTwoBuffers.h" />
@@ -364,6 +377,7 @@
     <ClInclude Include="Source\UI\Widgets\I8080.UI.VarList.h" />
     <ClInclude Include="Source\UI\Widgets\UI.HistoryInstruction.h" />
     <ClInclude Include="Source\UI\Widgets\UI.ListInstruction.h" />
+    <ClInclude Include="Source\UI\Widgets\UI.TableInstruction.h" />
     <ClInclude Include="Source\UI\Widget\I8080.Widget.h" />
     <ClInclude Include="Source\UI\Widget\I8080.WidgetManager.h" />
     <ClInclude Include="Source\UI\WindowManager\WindowManager.h" />

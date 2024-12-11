@@ -16,10 +16,10 @@ std::pair<std::vector<std::string>, int> Instructuion_to_String(const uint8_t& o
 		{"SUB  B"},   {"SUB  C"},        {"SUB  D"},    {"SUB  E"},   {"SUB  H"},   {"SUB  L"},   {"SUB  M"},      {"SUB  A"},   {"SBB  B"},  {"SBB  C"},  {"SBB D"},     {"SBB  E"},     {"SBB  H"},   {"SBB  L"},     {"SBB  M"},      {"SBB  A"},
 		{"ANA  B"},   {"ANA  C"},        {"ANA  D"},    {"ANA  E"},   {"ANA  H"},   {"ANA  L"},   {"ANA  M"},      {"ANA  A"},   {"XRA  B"},  {"XRA  C"},  {"XRA D"},     {"XRA  E"},     {"XRA  H"},   {"XRA  L"},     {"XRA  M"},      {"XRA  A"},
 		{"ORA  B"},   {"ORA  C"},        {"ORA  D"},    {"ORA  E"},   {"ORA  H"},   {"ORA  L"},   {"ORA  M"},      {"ORA  A"},   {"CMP  B"},  {"CMP  C"},  {"CMP D"},     {"CMP  E"},     {"CMP  H"},   {"CMP  L"},     {"CMP  M"},      {"CMP  A"},
-		{"RNZ"},      {"POP  B"},        {"JNZ ","16"}, {"JMP ","16"},{"CNZ ","16"},{"PUSH  B"},  {"ADI ","8"},    {"RST  0"},   {"RZ"},      {"RET"},     {"JZ ","16"},  {"*JMP ", "16"},{"CZ ","16"}, {"CALL ","16"}, {"ACI ","8"},    {"RST  1"},
-		{"RNC"},      {"POP  D"},        {"JNC ","16"}, {"OUT ","8"}, {"CNC ","16"},{"PUSH  D"},  {"SUI ","8"},    {"RST  2"},   {"RC"},      {"*RET"},    {"JC ","16"},  {"IN ","8"},    {"CC ","16"}, {"*CALL", "16"},{"SBI ","8"},    {"RST  3"},
-		{"RPO"},      {"POP  H"},        {"JPO ","16"}, {"XTHL"},     {"CPO ","16"},{"PUSH  H"},  {"ANI ","8"},    {"RST  4"},   {"RPE"},     {"PCHL"},    {"JPE ","16"}, {"XCHG"},       {"CPE ","16"},{"*CALL", "16"},{"XRI ","8"},    {"RST  5"},
-		{"RP"},       {"POP  PSW"},      {"JP ","16"},  {"DI"},       {"CP ","16"}, {"PUSH  PSW"},{"ORI ","8"},    {"RST  6"},   {"RM"},      {"SPHL"},    {"JM ","16"},  {"EI"},         {"CM ","16"}, {"*CALL", "16"},{"CPI ","8"},    {"RST  7"}
+		{"RNZ"},      {"POP  B"},        {"JNZ ","16"}, {"JMP ","16"},{"CNZ ","16"},{"PUSH B"},   {"ADI ","8"},    {"RST  0"},   {"RZ"},      {"RET"},     {"JZ ","16"},  {"*JMP ", "16"},{"CZ ","16"}, {"CALL ","16"}, {"ACI ","8"},    {"RST  1"},
+		{"RNC"},      {"POP  D"},        {"JNC ","16"}, {"OUT ","8"}, {"CNC ","16"},{"PUSH D"},   {"SUI ","8"},    {"RST  2"},   {"RC"},      {"*RET"},    {"JC ","16"},  {"IN ","8"},    {"CC ","16"}, {"*CALL", "16"},{"SBI ","8"},    {"RST  3"},
+		{"RPO"},      {"POP  H"},        {"JPO ","16"}, {"XTHL"},     {"CPO ","16"},{"PUSH H"},   {"ANI ","8"},    {"RST  4"},   {"RPE"},     {"PCHL"},    {"JPE ","16"}, {"XCHG"},       {"CPE ","16"},{"*CALL", "16"},{"XRI ","8"},    {"RST  5"},
+		{"RP"},       {"POP  PSW"},      {"JP ","16"},  {"DI"},       {"CP ","16"}, {"PUSH PSW"}, {"ORI ","8"},    {"RST  6"},   {"RM"},      {"SPHL"},    {"JM ","16"},  {"EI"},         {"CM ","16"}, {"*CALL", "16"},{"CPI ","8"},    {"RST  7"}
 	};
 
 	std::string result = translate[opcode][0];

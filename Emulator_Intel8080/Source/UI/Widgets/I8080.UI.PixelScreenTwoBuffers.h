@@ -23,6 +23,9 @@ private:
 	PBO* pbo = nullptr;
 	unsigned char* bufferPixelScreen = nullptr;
 
+
+	int DrawFrontBuffer = true;
+
 	float ColorsLine[4] = { 0.f,0.f,0.f,0.2f };
 	bool DrawLines = false;
 	int ThiknessLines = 1;

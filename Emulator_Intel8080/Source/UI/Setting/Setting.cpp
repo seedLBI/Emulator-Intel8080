@@ -76,7 +76,10 @@ void Setting::Draw() {
 
 		ImGui::EndChild();
 
-		ImGui::SameLine();
+
+		ImGui::SameLine(0.f, 0.f);
+		ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical, 4.f);
+		ImGui::SameLine(0.f, 10.f);
 
 		ImGui::BeginChild("right pane");
 
@@ -84,6 +87,7 @@ void Setting::Draw() {
 
 		for (int j = 0; j < tabs[IndexChoosedTab].setting_objects.size(); j++) {
 			tabs[IndexChoosedTab].setting_objects[j]->DrawSetting();
+			ImGui::Dummy(ImVec2(1, 4));
 		}
 
 

@@ -30,7 +30,8 @@ bool equals(InputIt1 first1, InputIt1 last1,
 }
 
 TextEditor::TextEditor()
-	: ISettingObject(u8"Редактор кода", u8"Общие")
+	: ISettingObject(u8"Редактор кода", u8"Общие"), IThemeLoadable(u8"Редактор кода")
+
 	, mLineSpacing(1.0f)
 	, mUndoIndex(0)
 	, mTabSize(4)
@@ -55,9 +56,19 @@ TextEditor::TextEditor()
 	, mShowWhitespaces(true)
 	, mStartTime(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
 {
+
+	IThemeLoadable::InitListWord(
+	{
+		u8"Ничего",u8"Ключевые",u8"Числа",u8"Строки (\"\")",u8"Символы (\'\')",
+		u8"Пунктуация",u8"Индификаторы",u8"Комментарии (однострочные)",
+		u8"Комментарии (многострочные)",u8"Фон",u8"Курсор",u8"Выделение",
+		u8"Ошибка",u8"Точка останова",u8"Номер строки",u8"Строка (активная)",
+		u8"Строка (не активная)",u8"Строка (границы)", u8"Дерективы компилятора",
+	});
+
 	SetPalette(GetDarkPalette());
-	//SetPalette(GetLightPalette());
 	SetLanguageDefinition(LanguageDefinition::I8080());
+
 	mLines.push_back(Line());
 
 	mVirtualFontSize = 1.f;
@@ -97,12 +108,12 @@ void TextEditor::SetLanguageDefinition(const LanguageDefinition & aLanguageDef)
 	mRegexList.clear();
 
 	for (auto& r : mLanguageDefinition.mTokenRegexStrings)
-		mRegexList.push_back(std::make_pair(std::regex(r.first, std::regex_constants::optimize), r.second));
+		mRegexList.push_back(std::make_pair(std::regex(r.first, std::regex_constants::optimize | std::regex_constants::icase), r.second));
 
 	Colorize();
 }
 
-void TextEditor::SetPalette(const Palette & aValue)
+void TextEditor::SetPalette(const Palette& aValue)
 {
 	mPaletteBase = aValue;
 }
@@ -735,7 +746,14 @@ ImU32 TextEditor::GetGlyphColor(const Glyph & aGlyph) const
 		return mPalette[(int)PaletteIndex::Comment];
 	if (aGlyph.mMultiLineComment)
 		return mPalette[(int)PaletteIndex::MultiLineComment];
+
 	auto const color = mPalette[(int)aGlyph.mColorIndex];
+
+	if (aGlyph.mColorCustomIndex != -1) {
+		return Singleton_I8080_HighlighterInstruction::Instance().GetColorFromIndex(aGlyph.mColorCustomIndex);
+	}
+
+
 	if (aGlyph.mPreprocessor)
 	{
 		const auto ppcolor = mPalette[(int)PaletteIndex::Preprocessor];
@@ -1143,7 +1161,6 @@ void TextEditor::HandleMouseInputs_Step1() {
 	}
 
 }
-
 void TextEditor::HandleMouseInputs_Step2() {
 	ImGuiIO& io = ImGui::GetIO();
 	auto shift = io.KeyShift;
@@ -1188,7 +1205,6 @@ void TextEditor::HandleMouseInputs_Step2() {
 
 	}
 }
-
 void TextEditor::HandleMouseInputs_Step2Again() {
 	if (SetAgain_Step2) {
 
@@ -1246,6 +1262,99 @@ void TextEditor::LoadSetting(const std::string& Data) {
 }
 
 
+
+std::vector<NamedColor> TextEditor::GetDefaultLightColors() {
+
+	std::vector<NamedColor> colors = {
+		{u8"Ничего",ImColor(0xff7f7f7f)},
+		{u8"Ключевые",ImColor(0xffff0c06)},
+		{u8"Числа",ImColor(0xff008000)},
+		{u8"Строки (\"\")",ImColor(0xff2020a0)},
+		{u8"Символы (\'\')",ImColor(0xff304070)},
+		{u8"Пунктуация",ImColor(0xff000000)},
+		{u8"Индификаторы",ImColor(0xff404040)},
+		{u8"Комментарии (однострочные)",ImColor(0xff205020)},
+		{u8"Комментарии (многострочные)",ImColor(0xff405020)},
+		{u8"Фон",ImColor(0xffffffff)},
+		{u8"Курсор",ImColor(0xff000000)},
+		{u8"Выделение",ImColor(0x80600000)},
+		{u8"Ошибка",ImColor(0xa00010ff)},
+		{u8"Точка останова",ImColor(0x80f08000)},
+		{u8"Номер строки",ImColor(0xff505000)},
+		{u8"Строка (активная)",ImColor(0x40000000)},
+		{u8"Строка (не активная)",ImColor(0x40808080)},
+		{u8"Строка (границы)",ImColor(0x40000000)},
+		{u8"Дерективы компилятора",ImVec4(0.5,0.5,0.5,1.0)}
+	};
+
+
+	return colors;
+}
+std::vector<NamedColor> TextEditor::GetDefaultDarkColors() {
+	std::vector<NamedColor> colors = {
+		{u8"Ничего",ImColor(0xff7f7f7f)},
+		{u8"Ключевые",ImColor(0xffff0c06)},
+		{u8"Числа",ImVec4(0.2,1.0,0.2,1.0)},
+		{u8"Строки (\"\")",ImColor(0xff7070e0)},
+		{u8"Символы (\'\')",ImColor(0xff70a0e0)},
+		{u8"Пунктуация",ImColor(0xffffffff)},
+		{u8"Индификаторы",ImColor(0xffaaaaaa)},
+		{u8"Комментарии (однострочные)",ImColor(0xff206020)},
+		{u8"Комментарии (многострочные)",ImColor(0xff406020)},
+		{u8"Фон",ImVec4(0.15, 0.15, 0.15,1.0)},
+		{u8"Курсор",ImColor(0xffe0e0e0)},
+		{u8"Выделение",ImColor(0x80a06020)},
+		{u8"Ошибка",ImColor(0x800020ff)},
+		{u8"Точка останова",ImVec4(0.8, 0.6, 0.2,1.0)},
+		{u8"Номер строки",ImColor(0xff707000)},
+		{u8"Строка (активная)",ImColor(0x40000000)},
+		{u8"Строка (не активная)",ImColor(0x40808080)},
+		{u8"Строка (границы)",ImColor(0x40a0a0a0)},
+		{u8"Дерективы компилятора",ImVec4(0.5,0.5,0.5,1.0)}
+	};
+
+
+	return colors;
+}
+void TextEditor::LoadColors() {
+
+	static const robin_hood::unordered_flat_map<std::string, PaletteIndex> MapNameAndIndex = {
+		{u8"Ничего",PaletteIndex::Default},
+		{u8"Ключевые",PaletteIndex::Keyword},
+		{u8"Числа",PaletteIndex::Number},
+		{u8"Строки (\"\")",PaletteIndex::String},
+		{u8"Символы (\'\')",PaletteIndex::CharLiteral},
+		{u8"Пунктуация",PaletteIndex::Punctuation},
+		{u8"Индификаторы",PaletteIndex::Identifier},
+		{u8"Комментарии (однострочные)",PaletteIndex::Comment},
+		{u8"Комментарии (многострочные)",PaletteIndex::MultiLineComment},
+		{u8"Фон",PaletteIndex::Background},
+		{u8"Курсор",PaletteIndex::Cursor},
+		{u8"Выделение",PaletteIndex::Selection},
+		{u8"Ошибка",PaletteIndex::ErrorMarker},
+		{u8"Точка останова",PaletteIndex::Breakpoint},
+		{u8"Номер строки",PaletteIndex::LineNumber},
+		{u8"Строка (активная)",PaletteIndex::CurrentLineFill},
+		{u8"Строка (не активная)",PaletteIndex::CurrentLineFillInactive},
+		{u8"Строка (границы)",PaletteIndex::CurrentLineEdge},
+		{u8"Дерективы компилятора",PaletteIndex::Command_Translator},
+	};
+
+	//mPaletteBase
+
+	for (int i = 0; i < object_colors.colors.size(); i++) {
+
+		std::string toSearch = object_colors.colors[i].nameColor;
+
+		auto it = MapNameAndIndex.find(toSearch);
+		bool ColorContains = it != MapNameAndIndex.end();
+
+		if (ColorContains) {
+			int index = static_cast<int>(it->second);
+			mPaletteBase[index] = object_colors.colors[i].color;
+		}
+	}
+}
 
 
 
@@ -1471,14 +1580,10 @@ void TextEditor::Render()
 			ImVec2 bufferOffset;
 
 
-
-
-
-
-
 			for (int i = 0; i < line.size();)
 			{
 				auto& glyph = line[i];
+
 				auto color = GetGlyphColor(glyph);
 
 				if ((color != prevColor || glyph.mChar == '\t' || glyph.mChar == ' ') && !mLineBuffer.empty())
@@ -1535,12 +1640,7 @@ void TextEditor::Render()
 
 
 
-
-
-
-
-			if (!mLineBuffer.empty())
-			{
+			if (!mLineBuffer.empty()) {
 				const ImVec2 newOffset(textScreenPos.x + bufferOffset.x, textScreenPos.y + bufferOffset.y);
 				drawList->AddText(newOffset, prevColor, mLineBuffer.c_str());
 				mLineBuffer.clear();
@@ -1879,7 +1979,7 @@ void TextEditor::EnterCharacter(ImWchar aChar, bool aShift)
 			bool flag_AddTab = true;
 			if (pos2DOT != -1){
 				for (int i = pos2DOT + 1; i < GetCharacterIndex(coord); i++){
-					if (line[i].mChar == ' ')
+					if (line[i].mChar == ' ' || line[i].mChar == '\t')
 						continue;
 					if (line[i].mChar == ';')
 						break;
@@ -2490,19 +2590,29 @@ void TextEditor::Backspace()
 			while (cindex > 0 && IsUTFSequence(line[cindex].mChar))
 				--cindex;
 
+
+
+
 			u.mRemovedStart = u.mRemovedEnd = GetActualCursorCoordinates();
 			--u.mRemovedStart.mColumn;
 			--mState.mCursorPosition.mColumn;
+
+			if (countDeleteTab != 0) {
+
+				pos.mColumn -= countDeleteTab;
+				u.mRemovedEnd = pos;
+				u.mRemovedStart = pos;
+
+				mState.mCursorPosition.mColumn = pos.mColumn;
+				SetCursorPosition(pos);
+			}
 
 			while (cindex < line.size() && cend-- > cindex){
 				u.mRemoved += line[cindex].mChar;
 				line.erase(line.begin() + cindex);
 			}
 
-			if (countDeleteTab != 0){
-				pos.mColumn -= countDeleteTab;
-				SetCursorPosition(pos);
-			}
+
 
 		}
 
@@ -2651,14 +2761,7 @@ const TextEditor::Palette & TextEditor::GetDarkPalette()
 			0x40000000, // Current line fill
 			0x40808080, // Current line fill (inactive)
 			0x40a0a0a0, // Current line edge
-			ImGui::ColorConvertFloat4ToU32(ImVec4(0.0,0.5,1.0,1.0)),   // Command_Arethmetic
-			ImGui::ColorConvertFloat4ToU32(ImVec4(0.1,0.7,0.1,1.0)),   // Command_DataTransfer - Orange
-			ImGui::ColorConvertFloat4ToU32(ImVec4(1.0,0.5,0.0,1.0)),   // Command_Logic - Cyan
-			ImGui::ColorConvertFloat4ToU32(ImVec4(0.6,0.3,0.7,1.0)),   // Command_StackOperation - Purple
-			ImGui::ColorConvertFloat4ToU32(ImVec4(0.93,0.5,0.93,1.0)), // Command_PortManipulation - Pink
-			ImGui::ColorConvertFloat4ToU32(ImVec4(0.7,0.4,0.0,1.0)),   // TODO: Command_Processor 
 			ImGui::ColorConvertFloat4ToU32(ImVec4(0.5,0.5,0.5,1.0)),   // Command_Translator - White
-			ImGui::ColorConvertFloat4ToU32(ImVec4(1.0,0.1,0.1,1.0)),   // Command_PC_changing - Blue
 		} };
 	return p;
 }
@@ -2687,14 +2790,7 @@ const TextEditor::Palette & TextEditor::GetLightPalette()
 			0x40000000, // Current line fill
 			0x40808080, // Current line fill (inactive)
 			0x40000000, // Current line edge
-			ImGui::ColorConvertFloat4ToU32(ImVec4(1.f-0.0,1.f-0.5,1.f-1.0,1.0)),   // Command_Arethmetic
-			ImGui::ColorConvertFloat4ToU32(ImVec4(1.f-0.1,1.f-0.7,1.f-0.1,1.0)),   // Command_DataTransfer - Orange
-			ImGui::ColorConvertFloat4ToU32(ImVec4(1.f-1.0,1.f-0.5,1.f-0.0,1.0)),   // Command_Logic - Cyan
-			ImGui::ColorConvertFloat4ToU32(ImVec4(1.f-0.6,1.f-0.3,1.f-0.7,1.0)),   // Command_StackOperation - Purple
-			ImGui::ColorConvertFloat4ToU32(ImVec4(1.f-0.93,1.f-0.5,1.f-0.93,1.0)), // Command_PortManipulation - Pink
-			ImGui::ColorConvertFloat4ToU32(ImVec4(1.f-0.7,1.f-0.4,1.f-0.0,1.0)),   // TODO: Command_Processor 
 			ImGui::ColorConvertFloat4ToU32(ImVec4(1.f-0.5,1.f-0.5,1.f-0.5,1.0)),   // Command_Translator - White
-			ImGui::ColorConvertFloat4ToU32(ImVec4(1.f-1.0,1.f-0.1,1.f-0.1,1.0)),   // Command_PC_changing - Blue
 		} };
 	return p;
 }
@@ -2723,6 +2819,7 @@ const TextEditor::Palette & TextEditor::GetRetroBluePalette()
 			0x40000000, // Current line fill
 			0x40808080, // Current line fill (inactive)
 			0x40000000, // Current line edge
+			ImGui::ColorConvertFloat4ToU32(ImVec4(1.f - 0.5,1.f - 0.5,1.f - 0.5,1.0)),   // Command_Translator - White
 		} };
 	return p;
 }
@@ -2791,16 +2888,14 @@ void TextEditor::ColorizeRange(int aFromLine, int aToLine)
 	std::string id;
 
 	int endLine = (std::max)(0, (std::min)((int)mLines.size(), aToLine));
-	for (int i = aFromLine; i < endLine; ++i)
-	{
+	for (int i = aFromLine; i < endLine; ++i) {
 		auto& line = mLines[i];
 
 		if (line.empty())
 			continue;
 
 		buffer.resize(line.size());
-		for (size_t j = 0; j < line.size(); ++j)
-		{
+		for (size_t j = 0; j < line.size(); ++j) {
 			auto& col = line[j];
 			buffer[j] = col.mChar;
 			col.mColorIndex = PaletteIndex::Default;
@@ -2821,8 +2916,12 @@ void TextEditor::ColorizeRange(int aFromLine, int aToLine)
 
 			if (mLanguageDefinition.mTokenize != nullptr)
 			{
-				if (mLanguageDefinition.mTokenize(first, last, token_begin, token_end, token_color))
+				if (mLanguageDefinition.mTokenize(first, last, token_begin, token_end, token_color)) {
 					hasTokenizeResult = true;
+
+
+
+				}
 			}
 
 			if (hasTokenizeResult == false)
@@ -2853,7 +2952,16 @@ void TextEditor::ColorizeRange(int aFromLine, int aToLine)
 			{
 				const size_t token_length = token_end - token_begin;
 
-				if (token_color == PaletteIndex::Identifier)
+
+				if (token_color == PaletteIndex::Instruction)
+				{
+					std::string instruction(token_begin, token_end);
+					int colorIndex = Singleton_I8080_HighlighterInstruction::Instance().GetIndexFromName(instruction);
+
+					for (size_t j = 0; j < token_length; ++j)
+						line[(token_begin - bufferBegin) + j].mColorCustomIndex = colorIndex;
+				}
+				else if (token_color == PaletteIndex::Identifier)
 				{
 					id.assign(token_begin, token_end);
 
@@ -3374,8 +3482,7 @@ static bool TokenizeCStylePunctuation(const char * in_begin, const char * in_end
 	return false;
 }
 
-const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::I8080()
-{
+const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::I8080() {
 
 	static bool inited = false;
 	static LanguageDefinition langDef;
@@ -3409,24 +3516,15 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::I8080()
 
 
 		// Add additional command categories
-		langDef.mTokenRegexStrings.push_back({ "\\b(add|adi|adc|aci|sub|sui|sbb|sbi|inr|dcr|inx|dcx|dad)\\b", PaletteIndex::Command_Arethmetic });
-		langDef.mTokenRegexStrings.push_back({ "\\b(ADD|ADI|ADC|ACI|SUB|SUI|SBB|SBI|INR|DCR|INX|DCX|DAD)\\b", PaletteIndex::Command_Arethmetic });
-		langDef.mTokenRegexStrings.push_back({ "\\b(mov|mvi|lda|sta|lhld|shld|lxi|ldax|stax|xchg)\\b", PaletteIndex::Command_DataTransfer });
-		langDef.mTokenRegexStrings.push_back({ "\\b(MOV|MVI|LDA|STA|LHLD|SHLD|LXI|LDAX|STAX|XCHG)\\b", PaletteIndex::Command_DataTransfer });
-		langDef.mTokenRegexStrings.push_back({ "\\b(cmp|cpi|ana|ani|ora|ori|xra|xri|rlc|ral|rrc|rar|stc|cma|cmc|stc|daa)\\b", PaletteIndex::Command_Logic });
-		langDef.mTokenRegexStrings.push_back({ "\\b(CMP|CPI|ANA|ANI|ORA|ORI|XRA|XRI|RLC|RAL|RRC|RAR|STC|CMA|CMC|STC|DAA)\\b", PaletteIndex::Command_Logic });
-		langDef.mTokenRegexStrings.push_back({ "\\b(push|pop|xthl|sphl|pchl)\\b", PaletteIndex::Command_StackOperation });
-		langDef.mTokenRegexStrings.push_back({ "\\b(PUSH|POP|XTHL|SPHL|PCHL)\\b", PaletteIndex::Command_StackOperation });
-		langDef.mTokenRegexStrings.push_back({ "\\b(in|out|ei|di)\\b", PaletteIndex::Command_PortManipulation });
-		langDef.mTokenRegexStrings.push_back({ "\\b(IN|OUT|EI|DI)\\b", PaletteIndex::Command_PortManipulation });
+		langDef.mTokenRegexStrings.push_back({ "\\b(add|adi|adc|aci|sub|sui|sbb|sbi|inr|dcr|inx|dcx|dad)\\b", PaletteIndex::Instruction });
+		langDef.mTokenRegexStrings.push_back({ "\\b(mov|mvi|lda|sta|lhld|shld|lxi|ldax|stax|xchg)\\b", PaletteIndex::Instruction });
+		langDef.mTokenRegexStrings.push_back({ "\\b(cmp|cpi|ana|ani|ora|ori|xra|xri|rlc|ral|rrc|rar|stc|cma|cmc|stc|daa)\\b", PaletteIndex::Instruction });
+		langDef.mTokenRegexStrings.push_back({ "\\b(push|pop|xthl|sphl|pchl)\\b", PaletteIndex::Instruction });
+		langDef.mTokenRegexStrings.push_back({ "\\b(in|out|ei|di)\\b", PaletteIndex::Instruction });
+		langDef.mTokenRegexStrings.push_back({ "\\b(hlt|nop)\\b", PaletteIndex::Instruction });
+		langDef.mTokenRegexStrings.push_back({ "\\b(call|cz|cc|cpe|cm|cnz|cnc|cpo|cp|jmp|jz|jc|jpe|jm|jnz|jnc|jpo|jp|rst|ret|rz|rc|rpe|rm|rnz|rnc|rpo|rp)\\b", PaletteIndex::Instruction });
+
 		langDef.mTokenRegexStrings.push_back({ "\\b(const|set|adr)\\b", PaletteIndex::Command_Translator });
-		langDef.mTokenRegexStrings.push_back({ "\\b(CONST|SET|ADR)\\b", PaletteIndex::Command_Translator });
-		langDef.mTokenRegexStrings.push_back({ "\\b(hlt|nop)\\b", PaletteIndex::Command_Processor });
-		langDef.mTokenRegexStrings.push_back({ "\\b(HLT|NOP)\\b", PaletteIndex::Command_Processor });
-		langDef.mTokenRegexStrings.push_back({ "\\b(call|cz|cc|cpe|cm|cnz|cnc|cpo|cp|jmp|jz|jc|jpe|jm|jnz|jnc|jpo|jp|rst|ret|rz|rc|rpe|rm|rnz|rnc|rpo|rp)\\b", PaletteIndex::Command_PC_changing });
-		langDef.mTokenRegexStrings.push_back({ "\\b(CALL|CZ|CC|CPE|CM|CNZ|CNC|CPO|CP|JMP|JZ|JC|JPE|JM|JNZ|JNC|JPO|JP|RST|RET|RZ|RC|RPE|RM|RNZ|RNC|RPO|RP)\\b", PaletteIndex::Command_PC_changing });
-
-
 
 		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("L?\\\"(\\.|[^\\\"])*\\\"", PaletteIndex::String));
 		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("\\\'[^\\\']*\\\'", PaletteIndex::String));

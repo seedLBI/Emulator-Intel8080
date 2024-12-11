@@ -1,13 +1,38 @@
 #include "I8080.UI.Keyboard.h"
 
-Widget_Keyboard::Widget_Keyboard(TextEditor* editor) : I8080_Widget(u8"Клавиатура") {
+Widget_Keyboard::Widget_Keyboard(TextEditor* editor) : I8080_Widget(u8"Клавиатура"), IThemeLoadable(u8"Клавиатура") {
 	this->editor = editor;
+
+	
+	IThemeLoadable::InitListWord({ u8"Нажат",u8"Не нажат" });
+
 }
 
 Widget_Keyboard::~Widget_Keyboard() {
 
 }
 
+
+void Widget_Keyboard::LoadColors() {
+	for (int i = 0; i < object_colors.colors.size(); i++) {
+		if (object_colors.colors[i].nameColor == u8"Нажат")
+			color_Active = object_colors.colors[i].color;
+		else if (object_colors.colors[i].nameColor == u8"Не нажат")
+			color_deActive = object_colors.colors[i].color;
+	}
+}
+std::vector<NamedColor> Widget_Keyboard::GetDefaultLightColors() {
+	return {
+		{u8"Нажат", ImVec4(1.f-1.f,1.f-0.f,1.f-0.f,1.f)},
+		{u8"Не нажат",  ImVec4(1.f-0.f,1.f-0.f,1.f-0.f,1.f)}
+	};
+}
+std::vector<NamedColor> Widget_Keyboard::GetDefaultDarkColors() {
+	return {
+		{u8"Нажат", ImVec4(1.f,0.f,0.f,1.f)},
+		{u8"Не нажат",  ImVec4(0.f,0.f,0.f,1.f)}
+	};
+}
 
 
 
@@ -37,8 +62,6 @@ void Widget_Keyboard::Draw() {
 			{
 				anim_background[i][j] = anim_background[i][j] * TimesLerping;
 
-
-
 				if (anim_background[i][j] < 0.f)
 					anim_background[i][j] = 0.f;
 
@@ -49,9 +72,17 @@ void Widget_Keyboard::Draw() {
 					ImGui::SameLine();
 
 
-				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(anim_background[i][j], 0., 0., 1));
-				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(anim_background[i][j], 0., 0., 1));
-				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(anim_background[i][j], 0., 0., 1));
+				ImVec4 ResultColor = {
+					color_Active.x * anim_background[i][j] + color_deActive.x * (1.f - anim_background[i][j]),
+					color_Active.y * anim_background[i][j] + color_deActive.y * (1.f - anim_background[i][j]),
+					color_Active.z * anim_background[i][j] + color_deActive.z * (1.f - anim_background[i][j]),
+				1.f };
+
+
+
+				ImGui::PushStyleColor(ImGuiCol_Button, ResultColor);
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ResultColor);
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ResultColor);
 
 				ImVec2 SizeText = ImGui::CalcTextSize(layers_names_array[i][j].c_str());
 				if (ImGui::Button(string(layers_names_array[i][j]).c_str(), ImVec2((SizeText.x * 1.2f) * layers_sizes_array[i][j], SizeText.y * 1.1))) {

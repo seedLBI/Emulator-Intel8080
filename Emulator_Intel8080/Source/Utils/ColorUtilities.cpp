@@ -113,3 +113,4 @@ std::vector<RGB> GetSortedByDeltaColors_CIE76(const std::vector<RGB>& Colors, RG
 std::vector<RGB> GetSortedByDeltaColors_CIE94(const std::vector<RGB>& Colors, RGB Source) {
     return GetSortedByDeltaColors(Colors, Source, deltaE_CIE94);
 }
+

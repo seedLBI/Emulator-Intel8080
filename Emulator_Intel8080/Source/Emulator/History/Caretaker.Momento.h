@@ -29,6 +29,8 @@ protected:
 	RingBuffer<std::shared_ptr<Momento>> momentos;
 	//std::deque< std::shared_ptr<Momento>> momentos;
 	int MaxCount = 100;
+
+	bool changed = true;
 };
 
 #endif // !CARATAKER_MOMENTO_H

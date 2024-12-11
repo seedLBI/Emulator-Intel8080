@@ -4,20 +4,22 @@ I8080_UserInterface::I8080_UserInterface(GLFWwindow* window) {
 	this->window = window;
 
 
-	saveSystemManager = new SaveSystemManager(GetExePath() + "\\SettingData.save");
+	saveSystemManager =			new SaveSystemManager(GetExePath() + "\\SettingData.save");
 
-	notificationManager = new NotificationManager();
-	WorkspaceManager = new I8080_WorkspaceManager(&WidgetManager);
-	lastPathManager = new LastPathManager();
-	keyCombination_handler = new KeyCombinationHandler(notificationManager);
-	font_manager = new FontManager();
-	window_manager = new WindowManager();
-	settings = new Setting();
+	notificationManager =		new NotificationManager();
+	WorkspaceManager =			new I8080_WorkspaceManager(&WidgetManager);
+	lastPathManager =			new LastPathManager();
+	keyCombination_handler =	new KeyCombinationHandler(notificationManager);
+	font_manager =				new FontManager();
+	window_manager =			new WindowManager();
+	themeManager =				new ThemeManager();
+	baseColors =				new BaseColors();
+	settings =					new Setting();
 
-	processor = new I8080();
+	processor =					new I8080();
 	processorCaratakerMomento = new I8080_Caretaker_Momento(processor);
-	Compiler = new CompilerStable();
-	emulationThread = new EmulationThread(processor, processorCaratakerMomento);
+	Compiler =					new CompilerStable();
+	emulationThread =			new EmulationThread(processor, processorCaratakerMomento);
 
 
 	projectManager = new ProjectManager(
@@ -44,7 +46,7 @@ I8080_UserInterface::I8080_UserInterface(GLFWwindow* window) {
 	InitSetting();
 	InitSaveManager();
 	InitKeyCombinationHandler();
-
+	InitThemeManager();
 	
 	projectManager->InitWidgets(
 		widget_MnemocodeViewer,
@@ -57,8 +59,8 @@ I8080_UserInterface::~I8080_UserInterface() {
 #ifdef WITH_DEBUG_OUTPUT
 	std::cout << "I8080_UserInterface::~I8080_UserInterface()\n";
 #endif // !WITH_DEBUG_OUTPUT
-
-	saveSystemManager->Save();
+	if (FullLoaded)
+		saveSystemManager->Save();
 }
 
 void I8080_UserInterface::Draw() {
@@ -111,12 +113,14 @@ void I8080_UserInterface::EndDraw() {
 
 	font_manager->ReloadFont();
 
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	ImVec4* colors = ImGui::GetStyle().Colors;
+	glClearColor(colors[ImGuiCol_DockingEmptyBg].x, colors[ImGuiCol_DockingEmptyBg].y, colors[ImGuiCol_DockingEmptyBg].z, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+	FullLoaded = true;
 }
 
 void I8080_UserInterface::DrawMainMenu() {
@@ -211,6 +215,7 @@ void I8080_UserInterface::DrawMainMenu() {
 			ImGui::PopStyleColor();
 			ImGui::MenuItem((string(ICON_FA_CODE)				+ u8" Редактор кода").c_str(), "", widget_CodeEditor->GetPtrFlagShow());
 			ImGui::MenuItem((string(ICON_FA_FILE_LINES)			+ u8" Просмотр мнемо кода").c_str(), "", widget_MnemocodeViewer->GetPtrFlagShow());
+			ImGui::MenuItem((string(ICON_FA_FILE_LINES)			+ u8" Просмотр мнемо кода (нацеленный)").c_str(), "", widget_MnemocodeViewerTargeted->GetPtrFlagShow());
 			ImGui::MenuItem((string(ICON_FA_CUBE)				+ u8" Hex просмотр").c_str(), "", widget_HexViewer->GetPtrFlagShow());
 			ImGui::MenuItem((string(ICON_FA_FONT_AWESOME)		+ u8" Регистры и флаги").c_str(), "", widget_RegisterFlagsInfo->GetPtrFlagShow());
 
@@ -242,7 +247,7 @@ void I8080_UserInterface::DrawMainMenu() {
 				ImGui::SeparatorText(u8"Помощь");
 			ImGui::PopStyleColor();
 			ImGui::MenuItem((string(ICON_FA_BOOK_BOOKMARK)		+ u8" Руководство к программе").c_str(), "", widget_Help->GetPtrFlagShow());
-			ImGui::MenuItem((string(ICON_FA_TABLE)				+ u8" Таблица инструкций").c_str(), "", false);
+			ImGui::MenuItem((string(ICON_FA_TABLE)				+ u8" Таблица инструкций").c_str(), "", widget_TableInstruction->GetPtrFlagShow());
 			ImGui::MenuItem((string(ICON_FA_LIST)				+ u8" Список инструкций").c_str(), "", widget_ListInstruction->GetPtrFlagShow());
 
 
@@ -324,6 +329,20 @@ void I8080_UserInterface::DrawMainMenu() {
 	}
 }
 
+
+void I8080_UserInterface::InitThemeManager() {
+	themeManager->AddObject(baseColors);
+	themeManager->AddObject(widget_CodeEditor->GetPtrTextEditor());
+	themeManager->AddObject(widget_RegisterFlagsInfo);
+	themeManager->AddObject(widget_Help);
+	themeManager->AddObject(widget_keyboard);
+	themeManager->AddObject(widget_MnemocodeViewer);
+	themeManager->AddObject(widget_MnemocodeViewerTargeted);
+	themeManager->AddObject(widget_HexViewer->GetPtrMemoryEditor());
+	themeManager->AddObject(&Singletone_InfoInstruction::Instance());
+	themeManager->AddObject(&Singleton_I8080_HighlighterInstruction::Instance());
+}
+
 void I8080_UserInterface::InitSetting() {
 	settings->AddSettingObject(font_manager);
 	settings->AddSettingObject(window_manager);
@@ -335,33 +354,38 @@ void I8080_UserInterface::InitSetting() {
 	settings->AddSettingObject(widget_CodeEditor->GetPtrTextEditor());
 	settings->AddSettingObject(lastPathManager);
 	settings->AddSettingObject(widget_MnemocodeViewer);
+	settings->AddSettingObject(themeManager);
 }
+
 void I8080_UserInterface::InitWidgets() {
-	widget_CodeEditor = new Widget_CodeEditor();
-	widget_HistoryInstruction = new Widget_HistoryInstruction(processor, emulationThread, processorCaratakerMomento);
-	widget_ListInstruction = new Widget_ListInstruction();
-	widget_Disassembler = new Widget_Disassembler(processor);
-	widget_ColorPicker = new Widget_ColorPicker(widget_CodeEditor->GetPtrTextEditor());
-	widget_SymbolPicker = new Widget_SymbolPicker(widget_CodeEditor->GetPtrTextEditor());
-	widget_SymbolScreen = new Widget_SymbolScreen(processor);
-	widget_PixelScreen = new Widget_PixelScreen(processor);
-	widget_PixelScreenTwoBuffers = new Widget_PixelScreenTwoBuffers(processor);
-	widget_input0x08 = new Widget_Input0x08(processor);
-	widget_keyboard = new Widget_Keyboard(widget_CodeEditor->GetPtrTextEditor());
-	widget_output0x02 = new Widget_Output0x02(processor);
-	widget_timer = new Widget_Timer(processor);
-	widget_HexViewer = new Widget_HexViewer(processor, projectManager->GetPtrTranslatorOutput());
-	widget_MnemocodeViewer = new Widget_MnemocodeViewer(processor, projectManager->GetPtrTranslatorOutput());
-	widget_RegisterFlagsInfo = new Widget_RegisterFlagsInfo(processor);
-	widget_EmulatorInfo = new Widget_EmulatorInfo(processor);
-	widget_MarkerList = new Widget_MarkerList(processor, projectManager->GetPtrTranslatorOutput(), widget_MnemocodeViewer);
-	widget_VarList = new Widget_VarList(processor, projectManager->GetPtrTranslatorOutput());
-	widget_ConstList = new Widget_ConstList(projectManager->GetPtrTranslatorOutput());
-	widget_Help = new Widget_Help();
+	widget_CodeEditor				= new Widget_CodeEditor();
+	widget_HistoryInstruction		= new Widget_HistoryInstruction(processor, emulationThread, processorCaratakerMomento);
+	widget_ListInstruction			= new Widget_ListInstruction();
+	widget_TableInstruction			= new Widget_TableInstruction();
+	widget_Disassembler				= new Widget_Disassembler(processor);
+	widget_ColorPicker				= new Widget_ColorPicker(widget_CodeEditor->GetPtrTextEditor());
+	widget_SymbolPicker				= new Widget_SymbolPicker(widget_CodeEditor->GetPtrTextEditor());
+	widget_SymbolScreen				= new Widget_SymbolScreen(processor);
+	widget_PixelScreen				= new Widget_PixelScreen(processor);
+	widget_PixelScreenTwoBuffers	= new Widget_PixelScreenTwoBuffers(processor);
+	widget_input0x08				= new Widget_Input0x08(processor);
+	widget_keyboard					= new Widget_Keyboard(widget_CodeEditor->GetPtrTextEditor());
+	widget_output0x02				= new Widget_Output0x02(processor);
+	widget_timer					= new Widget_Timer(processor);
+	widget_MnemocodeViewer			= new Widget_MnemocodeViewer(processor, projectManager->GetPtrTranslatorOutput());
+	widget_MnemocodeViewerTargeted	= new Widget_MnemocodeViewerTargeted(processor, projectManager->GetPtrTranslatorOutput());
+	widget_HexViewer				= new Widget_HexViewer(processor, projectManager->GetPtrTranslatorOutput(), widget_MnemocodeViewer);
+	widget_RegisterFlagsInfo		= new Widget_RegisterFlagsInfo(processor);
+	widget_EmulatorInfo				= new Widget_EmulatorInfo(processor);
+	widget_MarkerList				= new Widget_MarkerList(processor, projectManager->GetPtrTranslatorOutput(), widget_MnemocodeViewer);
+	widget_VarList					= new Widget_VarList(processor, projectManager->GetPtrTranslatorOutput());
+	widget_ConstList				= new Widget_ConstList(projectManager->GetPtrTranslatorOutput());
+	widget_Help						= new Widget_Help();
 
 	WidgetManager.AddWidgetPtr(widget_Help);
 	WidgetManager.AddWidgetPtr(widget_HistoryInstruction);
 	WidgetManager.AddWidgetPtr(widget_ListInstruction);
+	WidgetManager.AddWidgetPtr(widget_TableInstruction);
 	WidgetManager.AddWidgetPtr(widget_Disassembler);
 	WidgetManager.AddWidgetPtr(widget_ColorPicker);
 	WidgetManager.AddWidgetPtr(widget_SymbolPicker);
@@ -375,6 +399,7 @@ void I8080_UserInterface::InitWidgets() {
 	WidgetManager.AddWidgetPtr(widget_CodeEditor);
 	WidgetManager.AddWidgetPtr(widget_HexViewer);
 	WidgetManager.AddWidgetPtr(widget_MnemocodeViewer);
+	WidgetManager.AddWidgetPtr(widget_MnemocodeViewerTargeted);
 	WidgetManager.AddWidgetPtr(widget_RegisterFlagsInfo);
 	WidgetManager.AddWidgetPtr(widget_EmulatorInfo);
 	WidgetManager.AddWidgetPtr(widget_MarkerList);

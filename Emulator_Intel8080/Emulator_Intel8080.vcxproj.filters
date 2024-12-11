@@ -335,6 +335,27 @@
     <ClCompile Include="Source\Utils\Values\Values.Utils.cpp">
       <Filter>Source\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Source\UI\Widgets\UI.TableInstruction.cpp">
+      <Filter>Source\UI\Widgets\TableInstruction</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\Theme\interface\IThemeLoadable.cpp">
+      <Filter>Source\UI\Theme\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\Theme\ThemeManager\ThemeManager.cpp">
+      <Filter>Source\UI\Theme\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\Theme\BaseColors\BaseColors.cpp">
+      <Filter>Source\UI\Theme\BaseColors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\HighlighterInstruction\I8080\I8080.HighlighterInstruction.cpp">
+      <Filter>Source\UI\HighlighterInstruction\Intel8080</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\HighlighterInstruction\Highlighter.cpp">
+      <Filter>Source\UI\HighlighterInstruction</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.MnemoCodeViewerTargeted.cpp">
+      <Filter>Source\UI\Widgets\MnemoCodeViewer%28Targeted%29</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Third-Person\IconFontCppHeaders\IconsFontAwesome6.h">
@@ -359,9 +380,6 @@
       <Filter>Third-Party</Filter>
     </ClInclude>
     <ClInclude Include="Third-Person\imgui_markdown.h">
-      <Filter>Third-Party</Filter>
-    </ClInclude>
-    <ClInclude Include="Third-Person\imgui_memory_editor.h">
       <Filter>Third-Party</Filter>
     </ClInclude>
     <ClInclude Include="Third-Person\imstb_rectpack.h">
@@ -574,9 +592,6 @@
     <ClInclude Include="Source\UI\Setting\Setting.h">
       <Filter>Source\UI\Setting</Filter>
     </ClInclude>
-    <ClInclude Include="Source\UI\Theme\Theme.h">
-      <Filter>Source\UI\Theme</Filter>
-    </ClInclude>
     <ClInclude Include="Source\UI\Widget\I8080.Widget.h">
       <Filter>Source\UI\Widget</Filter>
     </ClInclude>
@@ -744,6 +759,33 @@
     </ClInclude>
     <ClInclude Include="Source\Utils\Values\Values.Utils.h">
       <Filter>Source\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\Widgets\UI.TableInstruction.h">
+      <Filter>Source\UI\Widgets\TableInstruction</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\Theme\Theme.h">
+      <Filter>Source\UI\Theme</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\Theme\interface\IThemeLoadable.h">
+      <Filter>Source\UI\Theme\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\Theme\ThemeManager\ThemeManager.h">
+      <Filter>Source\UI\Theme\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\Theme\BaseColors\BaseColors.h">
+      <Filter>Source\UI\Theme\BaseColors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\HighlighterInstruction\I8080\I8080.HighlighterInstruction.h">
+      <Filter>Source\UI\HighlighterInstruction\Intel8080</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\HighlighterInstruction\Highlighter.h">
+      <Filter>Source\UI\HighlighterInstruction</Filter>
+    </ClInclude>
+    <ClInclude Include="Third-Person\imgui_memory_editor.h">
+      <Filter>Source\UI\Widgets\HexViewer\ThirdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.MnemoCodeViewerTargeted.h">
+      <Filter>Source\UI\Widgets\MnemoCodeViewer%28Targeted%29</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1022,6 +1064,30 @@
     </Filter>
     <Filter Include="Source\Emulator\Processor\Processors\I8080\InfoInstruction">
       <UniqueIdentifier>{9919ecd1-ce9c-49d1-9426-d931b983174f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\UI\Widgets\TableInstruction">
+      <UniqueIdentifier>{8a545d6b-0a46-4f24-9cbf-659ac13ae15f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\UI\Theme\interface">
+      <UniqueIdentifier>{8208901d-cc3f-4578-97c5-d2712e492738}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\UI\Theme\Manager">
+      <UniqueIdentifier>{30c4ca29-a36e-4217-ab07-da3ab14c63f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\UI\Theme\BaseColors">
+      <UniqueIdentifier>{25184115-848a-44e8-95d8-e61939acd3e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\UI\HighlighterInstruction">
+      <UniqueIdentifier>{edda3b12-da47-4fed-bc4b-2a01b3286e3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\UI\HighlighterInstruction\Intel8080">
+      <UniqueIdentifier>{dfc228ce-eb42-412c-a8f7-76604c93c62d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\UI\Widgets\HexViewer\ThirdParty">
+      <UniqueIdentifier>{8d8cb06b-0b1a-4dd7-a475-0943c6d59172}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\UI\Widgets\MnemoCodeViewer%28Targeted%29">
+      <UniqueIdentifier>{77908b6b-3a95-4986-a192-1791e2faf4ba}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

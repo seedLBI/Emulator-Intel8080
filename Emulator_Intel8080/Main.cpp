@@ -13,9 +13,7 @@ using namespace std;
 I8080_UserInterface* i8080_ui = nullptr;
 
 int main(int argc, char* argv[]) {
-	//setlocale(LC_ALL, "russian");
-
-
+	//setlocale(LC_ALL, "russian");	
 
 	OpenglWindow::Init();
 

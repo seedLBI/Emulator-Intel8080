@@ -78,10 +78,12 @@ void I8080_PixelScreenTwoBuffers::Reset() {
 }
 
 
-std::vector<std::vector<uint8_t>> I8080_PixelScreenTwoBuffers::Get_Array_colors() {
+std::vector<std::vector<uint8_t>> I8080_PixelScreenTwoBuffers::Get_Array_colors_FrontBuffer() {
 	return Front;
 }
-
+std::vector<std::vector<uint8_t>> I8080_PixelScreenTwoBuffers::Get_Array_colors_BackBuffer() {
+	return Back;
+}
 
 void I8080_PixelScreenTwoBuffers::Init() {
 	Front.clear();

@@ -2,13 +2,52 @@
 
 
 
-Widget_MnemocodeViewer::Widget_MnemocodeViewer(I8080* processor, TranslatorOutput* translator) :I8080_Widget(u8"Мнемо код"), ISettingObject(u8"Просмотр кода",u8"Общие") {
+Widget_MnemocodeViewer::Widget_MnemocodeViewer(I8080* processor, TranslatorOutput* translator) :
+	I8080_Widget(u8"Мнемо код"),
+	ISettingObject(u8"Просмотр кода",u8"Общие"),
+	IThemeLoadable(u8"Мнемо код")
+{
 	this->processor = processor;
 	this->translator = translator;
+
+	IThemeLoadable::InitListWord({ u8"Посещённая ячейка", u8"Текущая ячейка (PC)", u8"Ячейка останова", u8"Указатель на память (HL)"});
+
 }
 Widget_MnemocodeViewer::~Widget_MnemocodeViewer() {
 
 }
+
+std::vector<NamedColor> Widget_MnemocodeViewer::GetDefaultLightColors() {
+	return {
+		{u8"Посещённая ячейка", ImVec4(1.f - 0.9f,1.f - 0.2f,1.f - 0.9f, 0.25f)},
+		{u8"Текущая ячейка (PC)", ImVec4(1.f - 0.3f,1.f - 0.9f,1.f - 0.3f, 0.25f)},
+		{u8"Ячейка останова", ImVec4(1.f- 0.9f,1.f - 0.9f,1.f - 0.3f, 0.45f)},
+		{u8"Указатель на память (HL)", ImVec4(1.f - 0.1f,1.f - 0.1f,1.f - 1.f,0.3f)}
+	};
+}
+std::vector<NamedColor> Widget_MnemocodeViewer::GetDefaultDarkColors() {
+	return {
+		{u8"Посещённая ячейка", ImVec4(0.9f, 0.2f, 0.9f, 0.25f)},
+		{u8"Текущая ячейка (PC)", ImVec4(0.3f, 0.9f, 0.3f, 0.25f)},
+		{u8"Ячейка останова", ImVec4(0.9f, 0.9f, 0.3f, 0.45f)},
+		{u8"Указатель на память (HL)", ImVec4(0.1f,0.1f,1.f,0.3f)}
+	};
+}
+void Widget_MnemocodeViewer::LoadColors() {
+	for (int i = 0; i < object_colors.colors.size(); i++) {
+
+		if (object_colors.colors[i].nameColor == u8"Посещённая ячейка")
+			color_Visited = object_colors.colors[i].color;
+		else if (object_colors.colors[i].nameColor == u8"Текущая ячейка (PC)")
+			color_PC = object_colors.colors[i].color;
+		else if (object_colors.colors[i].nameColor == u8"Ячейка останова")
+			color_Breakpoint = object_colors.colors[i].color;
+		else if (object_colors.colors[i].nameColor == u8"Указатель на память (HL)")
+			color_HL = object_colors.colors[i].color;
+
+	}
+}
+
 void Widget_MnemocodeViewer::Draw() {
 	if (GetFlagShow() == false)
 		return;
@@ -38,8 +77,7 @@ void Widget_MnemocodeViewer::Draw() {
 
 
 		ImVec2 outer_size = ImVec2(0.0f, 20 * 8);
-		if (ImGui::BeginTable("MnemoCode", 4, flags))
-		{
+		if (ImGui::BeginTable("MnemoCode", 4, flags)) {
 
 			ImGui::TableSetupColumn(u8"Адрес", ImGuiTableColumnFlags_WidthFixed);
 			ImGui::TableSetupColumn(u8"Код", ImGuiTableColumnFlags_WidthFixed);
@@ -78,25 +116,21 @@ void Widget_MnemocodeViewer::Draw() {
 					}
 
 
-					if (processor->GetVisetedMemory()[row]) {
-						ImU32 row_bg_color = ImGui::GetColorU32(ImVec4(0.9f, 0.2f, 0.9f, 0.25f));
-						ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, row_bg_color);
-					}
 
-					if (processor->GetProgrammCounter() == row) {
-						ImU32 row_bg_color = ImGui::GetColorU32(ImVec4(0.3f, 0.9f, 0.3f, 0.25f));
-						ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, row_bg_color);
-					}
+					if (processor->GetVisetedMemory()[row])
+						ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, color_Visited);
 
+					if (processor->GetAdressHL() == row)
+						ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, color_HL);
 
+					if (processor->GetProgrammCounter() == row)
+						ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, color_PC);
 
-
-
-					if (processor->GetBreakpointsInMemory()[row]) {
-						ImU32 row_bg_color = ImGui::GetColorU32(ImVec4(0.9f, 0.9f, 0.3f, 0.45f));
-						ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, row_bg_color);
-					}
+					if (processor->GetBreakpointsInMemory()[row])
+						ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, color_Breakpoint);
 					
+
+
 
 					bool finded = false;
 					ImGui::TableSetColumnIndex(0);
@@ -114,7 +148,12 @@ void Widget_MnemocodeViewer::Draw() {
 							ImGui::TableSetColumnIndex(1);
 							ImGui::Text(int2stringHex(processor->GetMemory()[row]).c_str(), 1, row);
 							ImGui::TableSetColumnIndex(2);
-							ImGui::TextColored(Colors_TypesCommands[GetTypeCommand(translator->Opcodes[i].command)], translator->Opcodes[i].command.c_str(), 2, row);
+							//ImGui::TextColored( Colors_TypesCommands[GetTypeCommand(translator->Opcodes[i].command)], translator->Opcodes[i].command.c_str(), 2, row);
+
+							std::string instruction = translator->Opcodes[i].command.substr(0, translator->Opcodes[i].command.find_first_of(' ') == 0 ? std::string::npos : translator->Opcodes[i].command.find_first_of(' '));
+							ImVec4 col = Singleton_I8080_HighlighterInstruction::Instance().GetColorFromName(instruction);
+							ImGui::TextColored(col, translator->Opcodes[i].command.c_str(), 2, row);
+
 							ImGui::TableSetColumnIndex(3);
 							ImGui::Text(translator->Opcodes[i].marker.c_str(), 3, row);
 							finded = true;

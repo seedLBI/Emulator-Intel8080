@@ -556,7 +556,7 @@ std::string KeyCombinationHandler::ErrorCombination_To_string(const ErrorCombina
 void KeyCombinationHandler::DrawSetting() {
 
 
-	ImGui::BeginTable("CombinationsTable", 2, ImGuiTableFlags_ScrollY | ImGuiTableFlags_Borders | ImGuiTableFlags_HighlightHoveredColumn);
+	ImGui::BeginTable(u8"CombinationsTable", 2, ImGuiTableFlags_ScrollY | ImGuiTableFlags_Borders | ImGuiTableFlags_HighlightHoveredColumn);
 
 	ImGui::TableSetupScrollFreeze(1, 1);
 

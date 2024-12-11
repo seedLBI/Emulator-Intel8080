@@ -1771,7 +1771,9 @@ namespace Intro {
 
 		static bool firstTouch = true;
 
-		if (glfwGetKey(OpenglWindow::Vars::window, GLFW_KEY_Z) == GLFW_PRESS || firstTouch)
+		
+		//if (glfwGetKey(OpenglWindow::Vars::window, GLFW_KEY_Z) == GLFW_PRESS || firstTouch)
+		if (firstTouch)
 		{
 			firstTouch = false;
 			Vars::StartTime2 = 0.f;
@@ -1785,6 +1787,7 @@ namespace Intro {
 			Vars::WordContinue_SetedBlinking = false;
 
 		}
+		
 
 		if (isAnyKeyDown(OpenglWindow::Vars::window) == GLFW_PRESS)
 		{

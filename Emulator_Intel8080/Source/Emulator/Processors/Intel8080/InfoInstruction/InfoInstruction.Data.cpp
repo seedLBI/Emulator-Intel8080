@@ -1,6 +1,5 @@
 #include "InfoInstruction.Data.h"
 
-
 const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_InstructionInfo = {
 	// HLT------------------------------------------
 		{"hlt",{
@@ -10,14 +9,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 			{u8"Стоп"}
 		},
 		{7},
-		ENUM_TicksMean::Always,
+		InstructionTicksMean::Always,
 		FlagsList{
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected},
-		{ENUM_Category::CONTROL}}
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected},
+		{InstructionCategory::CONTROL},
+		{0x76}}
 	},
 
 	// NOP------------------------------------------
@@ -29,274 +29,287 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 			{"[PC]","=","[PC] + 1"}
 		},
 		{4},
-		ENUM_TicksMean::Always,
+		InstructionTicksMean::Always,
 		FlagsList{
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected},
-		{ENUM_Category::CONTROL}}
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected},
+		{InstructionCategory::CONTROL},
+		{0x00,0x08,0x10,0x18,0x20,0x28,0x30,0x38}}
 	},
 
 	// IN------------------------------------------
 		{"in",{
-		{ENUM_Arguments::Value8},
-		{ENUM_Bytes::Value},
+		{InstructionArguments::Value8},
+		{InstructionBytes::Value},
 		u8"Чтение значения в аккумулятор из внешнего порта",
 		{
-			{"[A]",		"=", "Port[", ENUM_Arguments::Value8, "]"},
+			{"[A]",		"=", "Port[", InstructionArguments::Value8, "]"},
 			{"[PC]",	"=", "[PC] + 2"}
 		},
 		{10},
-		ENUM_TicksMean::Always,
+		InstructionTicksMean::Always,
 		FlagsList{
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected},
-		{ENUM_Category::INPUT_OUTPUT}}
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected},
+		{InstructionCategory::INPUT_OUTPUT},
+		{0xDB}}
 	},
 
 	// OUT------------------------------------------
 		{"out",{
-		{ENUM_Arguments::Value8},
-		{ENUM_Bytes::Value},
+		{InstructionArguments::Value8},
+		{InstructionBytes::Value},
 		u8"Отправка значения из аккумулятора во внешний порт",
 		{
-			{"Port[", ENUM_Arguments::Value8,"]",	"=", "[A]"},
+			{"Port[", InstructionArguments::Value8,"]",	"=", "[A]"},
 			{"[PC]",								"=", "[PC] + 2" }
 		},
 		{10},
-		ENUM_TicksMean::Always,
+		InstructionTicksMean::Always,
 		FlagsList{
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected},
-		{ENUM_Category::INPUT_OUTPUT}}
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected},
+		{InstructionCategory::INPUT_OUTPUT},
+		{0xD3}}
 	},
 
 	// MOV------------------------------------------
 		{"mov",{
-		{ENUM_Arguments::Register8,ENUM_Arguments::Register8},
+		{InstructionArguments::Register8,InstructionArguments::Register8},
 		{},
 		u8"Перемешение значений между регистрами или памятью(по адресу HL)",
 		{
-			{ENUM_Arguments::Register8,	"=", ENUM_Arguments::Register8},
+			{InstructionArguments::Register8,	"=", InstructionArguments::Register8},
 			{"[PC]",					"=", "[PC] + 1"}
 		},
 		{7,5},
-		ENUM_TicksMean::M_Used,
+		InstructionTicksMean::M_Used,
 		FlagsList{
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected},
-		{ENUM_Category::MOVE_LOAD_STORE}}
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected},
+		{InstructionCategory::MOVE_LOAD_STORE},
+		{0x40,0x40,0x75,0x77,0x77,0x7F}}
 	},
 
 	// MVI------------------------------------------
 		{"mvi",{
-		{ENUM_Arguments::Register8,ENUM_Arguments::Value8},
-		{ENUM_Bytes::Value},
+		{InstructionArguments::Register8,InstructionArguments::Value8},
+		{InstructionBytes::Value},
 		u8"Запись константы в регистр или память",
 		{
-			{ENUM_Arguments::Register8,	"=",ENUM_Arguments::Value8},
+			{InstructionArguments::Register8,	"=",InstructionArguments::Value8},
 			{"[PC]",					"=", "[PC] + 2"}
 		},
 		{10,7},
-		ENUM_TicksMean::M_Used,
+		InstructionTicksMean::M_Used,
 		FlagsList{
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected},
-		{ENUM_Category::MOVE_LOAD_STORE}}
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected},
+		{InstructionCategory::MOVE_LOAD_STORE},
+		{0x06,0x0E,0x16,0x1E,0x26,0x2E,0x36,0x3E}}
 	},
 
 	// CMP------------------------------------------
 		{"cmp",{
-		{ENUM_Arguments::Register8},
+		{InstructionArguments::Register8},
 		{},
 		u8"Сравнение значений между акуммулятором и регистрами или памятью(по адресу HL)",
 		{
-			{"Temp",    "=", "([A] - ",ENUM_Arguments::Register8,")"},
+			{"Temp",    "=", "([A] - ",InstructionArguments::Register8,")"},
 			{"[Zero]",  "=", "[Temp == 0]"},
-			{"[Carry]", "=", "[A] < ",ENUM_Arguments::Register8},
+			{"[Carry]", "=", "[A] < ",InstructionArguments::Register8},
 			{"[PC]",    "=", "[PC] + 1"}
 		},
 		{7,4},
-		ENUM_TicksMean::M_Used,
+		InstructionTicksMean::M_Used,
 		FlagsList{
-			ENUM_FlagsState::Affected,
-			ENUM_FlagsState::Affected,
-			ENUM_FlagsState::Affected,
-			ENUM_FlagsState::Affected,
-			ENUM_FlagsState::Affected},
-	{ENUM_Category::LOGICAL}}
+			InstructionFlagsState::Affected,
+			InstructionFlagsState::Affected,
+			InstructionFlagsState::Affected,
+			InstructionFlagsState::Affected,
+			InstructionFlagsState::Affected},
+		{InstructionCategory::LOGICAL},
+		{0xB8,0xB8,0xBF}}
 	},
 
 	// CPI------------------------------------------
 	{ "cpi",{
-	{ENUM_Arguments::Value8},
-	{ENUM_Bytes::Value},
+	{InstructionArguments::Value8},
+	{InstructionBytes::Value},
 	u8"Сравнение значения аккумулятора с константой",
 	{
-		{"Temp",   "=", "[A] - ",ENUM_Arguments::Value8},
+		{"Temp",   "=", "[A] - ",InstructionArguments::Value8},
 		{"[Zero]", "=", "[Temp == 0]"},
-		{"[Carry]","=", "[A] < ",ENUM_Arguments::Value8},
+		{"[Carry]","=", "[A] < ",InstructionArguments::Value8},
 		{"[PC]",   "=", "[PC] + 1"}
 	},
 	{7},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected},
-	{ENUM_Category::LOGICAL}}
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected},
+	{InstructionCategory::LOGICAL},
+	{0xFE}}
 	},
 
 	// ANA------------------------------------------
 	{ "ana",{
-	{ENUM_Arguments::Register8},
+	{InstructionArguments::Register8},
 	{},
 	u8"Логическое И значения аккумулятора с регистром или памятью(по адресу HL)",
 	{
-		{"[A]",    "=", "[A] & ",ENUM_Arguments::Register8},
+		{"[A]",    "=", "[A] & ",InstructionArguments::Register8},
 		{"[Zero]", "=", "([A] == 0)"},
 		{"[Carry]","=", "0"},
 		{"[PC]",   "=", "[PC] + 1"}
 	},
 	{7,4},
-	ENUM_TicksMean::M_Used,
+	InstructionTicksMean::M_Used,
 	FlagsList{
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Reset},
-	{ENUM_Category::LOGICAL}}
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Reset},
+	{InstructionCategory::LOGICAL},
+	{0xA0,0xA0,0xA7}}
 	},
 
 
 	// ANI------------------------------------------
 	{ "ani",{
-	{ENUM_Arguments::Value8},
-	{ENUM_Bytes::Value},
+	{InstructionArguments::Value8},
+	{InstructionBytes::Value},
 	u8"Логическое И аккумулятора с константой",
 	{
-		{"[A]",    "=","[A] & ",ENUM_Arguments::Value8},
+		{"[A]",    "=","[A] & ",InstructionArguments::Value8},
 		{"[Zero]", "=","([A] == 0)"},
 		{"[Carry]","=","0"},
 		{"[PC]",   "=","[PC] + 2"}
 	},
 	{7},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 		FlagsList{
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Reset},
-	{ENUM_Category::LOGICAL}}
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Reset},
+	{InstructionCategory::LOGICAL},
+	{0xE6}}
 	},
 
 	// ORA------------------------------------------
 	{ "ora",{
-	{ENUM_Arguments::Register8},
+	{InstructionArguments::Register8},
 	{},
 	u8"Логическое ИЛИ значения аккумулятора с регистром или памятью(по адресу HL)",
 	{
-		{"[A]",    "=","[A] | ",ENUM_Arguments::Register8},
+		{"[A]",    "=","[A] | ",InstructionArguments::Register8},
 		{"[Zero]", "=","([A] == 0)"},
 		{"[Carry]","=","0"},
 		{"[PC]",   "=","[PC] + 1"}
 	},
 	{7,4},
-	ENUM_TicksMean::M_Used,
+	InstructionTicksMean::M_Used,
 		FlagsList{
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Reset,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Reset},
-	{ENUM_Category::LOGICAL}}
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Reset,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Reset},
+	{InstructionCategory::LOGICAL},
+	{0xB0,0xB0,0xB7}}
 	},
 
 	// ORI------------------------------------------
 	{ "ori",{
-	{ENUM_Arguments::Value8},
-	{ENUM_Bytes::Value},
+	{InstructionArguments::Value8},
+	{InstructionBytes::Value},
 	u8"Логическое ИЛИ значения аккумулятора с константой",
 	{
-		{"[A]",				"=","[A] | ", ENUM_Arguments::Value8},
+		{"[A]",				"=","[A] | ", InstructionArguments::Value8},
 		{"[Zero]",			"=","([A] == 0)"},
 		{"[Carry]",			"=","0"},
 		{"[Auxilary C.]",	"=","0"},
 		{"[PC]",			"=","[PC] + 2"}
 	},
 	{7},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Reset,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Reset},
-	{ENUM_Category::LOGICAL}}
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Reset,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Reset},
+	{InstructionCategory::LOGICAL},
+	{0xF6}}
 	},
 
 	// XRA------------------------------------------
 	{ "xra",{
-	{ENUM_Arguments::Register8},
+	{InstructionArguments::Register8},
 	{},
 	u8"Логическое исключающее ИЛИ значение аккумулятора с регистром или памятью(по адресу HL)",
 	{
-		{"[A]",				"=","[A] ^ ",ENUM_Arguments::Register8},
+		{"[A]",				"=","[A] ^ ",InstructionArguments::Register8},
 		{"[Zero]",			"=","([A] == 0)"},
 		{"[Carry]",			"=","0"},
 		{"[Auxilary C.]",	"=","0"},
 		{"[PC]",			"=","[PC] + 1"}
 	},
 	{7,4},
-	ENUM_TicksMean::M_Used,
+	InstructionTicksMean::M_Used,
 	FlagsList{
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Reset,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Reset},
-	{ENUM_Category::LOGICAL}}
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Reset,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Reset},
+	{InstructionCategory::LOGICAL},
+	{0xA8,0xA8,0xAF}}
 	},
 
 	// XRI------------------------------------------
 	{ "xri",{
-	{ENUM_Arguments::Value8},
-	{ENUM_Bytes::Value},
+	{InstructionArguments::Value8},
+	{InstructionBytes::Value},
 	u8"Логичиское исключающее ИЛИ значение аккумулятора с константой",
 	{
-		{"[A]",				"=","[A] ^ ",ENUM_Arguments::Value8},
+		{"[A]",				"=","[A] ^ ",InstructionArguments::Value8},
 		{"[Zero]",			"=","([A] == 0)"},
 		{"[Carry]",			"=","0"},
 		{"[Auxilary C.]",	"=","0"},
 		{"[PC]",			"=","[PC] + 2"}
 	},
 	{7},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Reset,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Reset},
-	{ENUM_Category::LOGICAL}}
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Reset,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Reset},
+	{InstructionCategory::LOGICAL},
+	{0xEE}}
 	},
 
 	// RLC------------------------------------------
@@ -310,14 +323,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		{"[PC]",	"=","[PC] + 1"}
 	},
 	{4},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Affected},
-	{ENUM_Category::ROTATE}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Affected},
+	{InstructionCategory::ROTATE},
+	{0x07}}
 	},
 
 	// RAL------------------------------------------
@@ -332,14 +346,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		{"[PC]",	"=","PC + 1"}
 	},
 	{4},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Affected},
-	{ENUM_Category::ROTATE}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Affected},
+	{InstructionCategory::ROTATE},
+	{0x17}}
 	},
 
 	// RRC------------------------------------------
@@ -353,14 +368,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		{"[PC]",	"=","[PC] + 1"}
 	},
 	{4},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Affected},
-	{ENUM_Category::ROTATE}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Affected},
+	{InstructionCategory::ROTATE},
+	{0x0F}}
 	},
 
 	// RAR------------------------------------------
@@ -375,14 +391,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		{"[PC]",	"=","[PC] + 1"}
 	},
 	{4},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Affected},
-	{ENUM_Category::ROTATE}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Affected},
+	{InstructionCategory::ROTATE},
+	{0x1F}}
 	},
 
 	// STC------------------------------------------
@@ -395,14 +412,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		{"[PC]",	"=","[PC] + 1"}
 	},
 	{4},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Set},
-	{ENUM_Category::SPECIALS}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Set},
+	{InstructionCategory::SPECIALS},
+	{0x37}}
 	},
 
 	// CMA------------------------------------------
@@ -415,14 +433,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		{"[PC]",	"=", "[PC] + 1"}
 	},
 	{4},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-	{ENUM_Category::SPECIALS}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+	{InstructionCategory::SPECIALS},
+	{0x2F}}
 	},
 
 	// CMC------------------------------------------
@@ -435,14 +454,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		{"[PC]",	"=", "[PC] + 1"}
 	},
 	{4},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Affected },
-	{ENUM_Category::SPECIALS}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Affected },
+	{InstructionCategory::SPECIALS},
+	{0x3F}}
 	},
 
 	// RET------------------------------------------
@@ -456,14 +476,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		{"[SP]",		"=","[SP] + 2"},
 	},
 	{10},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::RETURN}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::RETURN},
+		{0xC9,0xD9}}
 	},
 
 	// RZ------------------------------------------
@@ -472,22 +493,23 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	u8"Если флаг Zero = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
 	{
-		{ENUM_Branching::IF},
+		{InstructionBranching::IF},
 			{"[PC].low",	"=","M[SP]"},
 			{"[PC].high",	"=","M[SP + 1]" },
 			{"[SP]",		"=","[SP] + 2"},
-		{ENUM_Branching::ELSE},
+		{InstructionBranching::ELSE},
 			{"[PC]",		"=","[PC] + 1"}
 	},
 	{11,5},
-	ENUM_TicksMean::Condition,
+	InstructionTicksMean::Condition,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::RETURN}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::RETURN},
+		{0xC8}}
 	},
 
 	// RC------------------------------------------
@@ -496,22 +518,23 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	u8"Если флаг Carry = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
 	{
-		{ENUM_Branching::IF},
+		{InstructionBranching::IF},
 			{"[PC].low",	"=","M[SP]"},
 			{"[PC].high",	"=","M[SP + 1]" },
 			{"[SP]",		"=","[SP] + 2"},
-		{ENUM_Branching::ELSE},
+		{InstructionBranching::ELSE},
 			{"[PC]",		"=","[PC] + 1"}
 	},
 	{11,5},
-	ENUM_TicksMean::Condition,
+	InstructionTicksMean::Condition,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::RETURN}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::RETURN},
+		{0xD8}}
 	},
 
 	// RPE------------------------------------------
@@ -520,22 +543,23 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	u8"Если флаг Paruty = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
 	{
-		{ENUM_Branching::IF},
+		{InstructionBranching::IF},
 			{"[PC].low",	"=","M[SP]"},
 			{"[PC].high",	"=","M[SP + 1]" },
 			{"[SP]",		"=","[SP] + 2"},
-		{ENUM_Branching::ELSE},
+		{InstructionBranching::ELSE},
 			{"[PC]",		"=","[PC] + 1"}
 	},
 	{11,5},
-	ENUM_TicksMean::Condition,
+	InstructionTicksMean::Condition,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::RETURN}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::RETURN},
+		{0xE8}}
 	},
 
 	// RM------------------------------------------
@@ -544,22 +568,23 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	u8"Если флаг Sign = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
 	{
-		{ENUM_Branching::IF},
+		{InstructionBranching::IF},
 			{"[PC].low",	"=","M[SP]"},
 			{"[PC].high",	"=","M[SP + 1]" },
 			{"[SP]",		"=","[SP] + 2"},
-		{ENUM_Branching::ELSE},
+		{InstructionBranching::ELSE},
 			{"[PC]",		"=","[PC] + 1"}
 	},
 	{11,5},
-	ENUM_TicksMean::Condition,
+	InstructionTicksMean::Condition,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::RETURN}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::RETURN},
+		{0xF8}}
 	},
 
 	// RNZ------------------------------------------
@@ -568,22 +593,23 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	u8"Если флаг Zero = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
 	{
-		{ENUM_Branching::IF},
+		{InstructionBranching::IF},
 			{"[PC].low",	"=","M[SP]"},
 			{"[PC].high",	"=","M[SP + 1]" },
 			{"[SP]",		"=","[SP] + 2"},
-		{ENUM_Branching::ELSE},
+		{InstructionBranching::ELSE},
 			{"[PC]",		"=","[PC] + 1"}
 	},
 	{11,5},
-	ENUM_TicksMean::Condition,
+	InstructionTicksMean::Condition,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::RETURN}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::RETURN},
+		{0xC0}}
 	},
 
 	// RNC------------------------------------------
@@ -592,22 +618,23 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	u8"Если флаг Carry = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
 	{
-		{ENUM_Branching::IF},
+		{InstructionBranching::IF},
 			{"[PC].low",	"=","M[SP]"},
 			{"[PC].high",	"=","M[SP + 1]" },
 			{"[SP]",		"=","[SP] + 2"},
-		{ENUM_Branching::ELSE},
+		{InstructionBranching::ELSE},
 			{"[PC]",		"=","[PC] + 1"}
 	},
 	{11,5},
-	ENUM_TicksMean::Condition,
+	InstructionTicksMean::Condition,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::RETURN}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::RETURN},
+		{0xD0}}
 	},
 
 	// RPO------------------------------------------
@@ -616,22 +643,23 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	u8"Если флаг Paruty = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
 	{
-		{ENUM_Branching::IF},
+		{InstructionBranching::IF},
 			{"[PC].low",	"=","M[SP]"},
 			{"[PC].high",	"=","M[SP + 1]" },
 			{"[SP]",		"=","[SP] + 2"},
-		{ENUM_Branching::ELSE},
+		{InstructionBranching::ELSE},
 			{"[PC]",		"=","[PC] + 1"}
 	},
 	{11,5},
-	ENUM_TicksMean::Condition,
+	InstructionTicksMean::Condition,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::RETURN}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::RETURN},
+		{0xE0}}
 	},
 	// RP------------------------------------------
 	{ "rp",{
@@ -639,626 +667,654 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{},
 	u8"Если флаг Sign = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
 	{
-		{ENUM_Branching::IF},
+		{InstructionBranching::IF},
 			{"[PC].low",	"=","M[SP]"},
 			{"[PC].high",	"=","M[SP + 1]" },
 			{"[SP]",		"=","[SP] + 2"},
-		{ENUM_Branching::ELSE},
+		{InstructionBranching::ELSE},
 			{"[PC]",		"=","[PC] + 1"}
 	},
 	{11,5},
-	ENUM_TicksMean::Condition,
+	InstructionTicksMean::Condition,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::RETURN}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::RETURN},
+		{0xF0}}
 	},
 
 	// JMP------------------------------------------
 	{ "jmp",{
-	{ENUM_Arguments::Value16},
-	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
+	{InstructionArguments::Value16},
+	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
 	u8"Прыжок PC по адресу заданной константы",
 	{
-		{"[PC]", "=", ENUM_Arguments::Value16}
+		{"[PC]", "=", InstructionArguments::Value16}
 	},
 	{10},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::JUMP}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::JUMP},
+		{0xC3,0xCB}}
 	},
 
 	// JZ------------------------------------------
 	{ "jz",{
-	{ENUM_Arguments::Value16},
-	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
+	{InstructionArguments::Value16},
+	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
 	u8"Если флаг Zero = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
 	{
-		{ENUM_Branching::IF},
-			{"[PC]",	"=", ENUM_Arguments::Value16},
-		{ENUM_Branching::ELSE},
+		{InstructionBranching::IF},
+			{"[PC]",	"=", InstructionArguments::Value16},
+		{InstructionBranching::ELSE},
 			{"[PC]",	"=", "[PC] + 3"}
 	},
 	{10},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::JUMP}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::JUMP},
+		{0xCA}}
 	},
 
 	// JC------------------------------------------
 	{ "jc",{
-	{ENUM_Arguments::Value16},
-	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
+	{InstructionArguments::Value16},
+	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
 	u8"Если флаг Carry = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
 	{
-		{ENUM_Branching::IF},
-			{"[PC]",	"=", ENUM_Arguments::Value16},
-		{ENUM_Branching::ELSE},
+		{InstructionBranching::IF},
+			{"[PC]",	"=", InstructionArguments::Value16},
+		{InstructionBranching::ELSE},
 			{"[PC]",	"=", "[PC] + 3"}
 	},
 	{10},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::JUMP}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::JUMP},
+		{0xDA}}
 	},
 
 	// JPE------------------------------------------
 	{ "jpe",{
-	{ENUM_Arguments::Value16},
-	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
+	{InstructionArguments::Value16},
+	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
 	u8"Если флаг Paruty = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
 	{
-		{ENUM_Branching::IF},
-			{"[PC]",	"=", ENUM_Arguments::Value16},
-		{ENUM_Branching::ELSE},
+		{InstructionBranching::IF},
+			{"[PC]",	"=", InstructionArguments::Value16},
+		{InstructionBranching::ELSE},
 			{"[PC]",	"=", "[PC] + 3"}
 	},
 	{10},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::JUMP}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::JUMP},
+		{0xEA}}
 	},
 
 	// JM------------------------------------------
 	{ "jm",{
-	{ENUM_Arguments::Value16},
-	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
+	{InstructionArguments::Value16},
+	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
 	u8"Если флаг Sign = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
 	{
-		{ENUM_Branching::IF},
-			{"[PC]",	"=", ENUM_Arguments::Value16},
-		{ENUM_Branching::ELSE},
+		{InstructionBranching::IF},
+			{"[PC]",	"=", InstructionArguments::Value16},
+		{InstructionBranching::ELSE},
 			{"[PC]",	"=", "[PC] + 3"}
 	},
 	{10},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::JUMP}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::JUMP},
+		{0xFA}}
 	},
 
 
 	{ "jnz",{
-	{ENUM_Arguments::Value16},
-	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
+	{InstructionArguments::Value16},
+	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
 	u8"Если флаг Zero = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
 	{
-		{ENUM_Branching::IF},
-			{"[PC]",	"=", ENUM_Arguments::Value16},
-		{ENUM_Branching::ELSE},
+		{InstructionBranching::IF},
+			{"[PC]",	"=", InstructionArguments::Value16},
+		{InstructionBranching::ELSE},
 			{"[PC]",	"=", "[PC] + 3"}
 	},
 	{10},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::JUMP}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::JUMP},
+		{0xC2}}
 	},
 
 
 	{ "jnc",{
-	{ENUM_Arguments::Value16},
-	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
+	{InstructionArguments::Value16},
+	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
 	u8"Если флаг Carry = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
 	{
-		{ENUM_Branching::IF},
-			{"[PC]",	"=", ENUM_Arguments::Value16},
-		{ENUM_Branching::ELSE},
+		{InstructionBranching::IF},
+			{"[PC]",	"=", InstructionArguments::Value16},
+		{InstructionBranching::ELSE},
 			{"[PC]",	"=", "[PC] + 3"}
 	},
 	{10},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::JUMP}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::JUMP},
+		{0xD2}}
 	},
 
 
 	{ "jpo",{
-	{ENUM_Arguments::Value16},
-	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
+	{InstructionArguments::Value16},
+	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
 	u8"Если флаг Paruty = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
 	{
-		{ENUM_Branching::IF},
-			{"[PC]",	"=", ENUM_Arguments::Value16},
-		{ENUM_Branching::ELSE},
+		{InstructionBranching::IF},
+			{"[PC]",	"=", InstructionArguments::Value16},
+		{InstructionBranching::ELSE},
 			{"[PC]",	"=", "[PC] + 3"}
 	},
 	{10},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::JUMP}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::JUMP},
+		{0xE2}}
 	},
 
 
 	{ "jp",{
-	{ENUM_Arguments::Value16},
-	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
+	{InstructionArguments::Value16},
+	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
 	u8"Если флаг  Sign = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
 	{
-		{ENUM_Branching::IF},
-			{"[PC]",	"=", ENUM_Arguments::Value16},
-		{ENUM_Branching::ELSE},
+		{InstructionBranching::IF},
+			{"[PC]",	"=", InstructionArguments::Value16},
+		{InstructionBranching::ELSE},
 			{"[PC]",	"=", "[PC] + 3"}
 	},
 	{10},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::JUMP}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::JUMP},
+		{0xF2}}
 	},
 
 
 	{ "call",{
-	{ENUM_Arguments::Value16},
-	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
+	{InstructionArguments::Value16},
+	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
 	u8"Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
 	{
 		{"[SP]",		"=","[SP] - 2"},
 		{"M[SP]",		"=","([PC] + 3).low"},
 		{"M[SP + 1]",	"=","([PC] + 3).high"},
-		{"[PC]",		"=",ENUM_Arguments::Value16}
+		{"[PC]",		"=",InstructionArguments::Value16}
 	},
 	{17},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::CALL}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::CALL},
+		{0xCD,0xDD,0xED,0xFD}}
 	},
 
 
 	{ "cz",{
-	{ENUM_Arguments::Value16},
-	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
+	{InstructionArguments::Value16},
+	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
 	u8"Если флаг Zero = 1, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
 	{
-		{ENUM_Branching::IF},
+		{InstructionBranching::IF},
 			{"[SP]",		"=","[SP] - 2"},
 			{"M[SP]",		"=","(PC + 3).low"},
 			{"M[SP + 1]",	"=","(PC + 3).high"},
-			{"[PC]",		"=",ENUM_Arguments::Value16},
-		{ENUM_Branching::ELSE},
+			{"[PC]",		"=",InstructionArguments::Value16},
+		{InstructionBranching::ELSE},
 			{"[PC]",		"=","[PC] + 3"}
 	},
 	{17,11},
-	ENUM_TicksMean::Condition,
+	InstructionTicksMean::Condition,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::CALL}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::CALL},
+		{0xCC}}
 	},
 
 
 	{ "cc",{
-	{ENUM_Arguments::Value16},
-	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
+	{InstructionArguments::Value16},
+	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
 	u8"Если флаг Carry = 1, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
 	{
-		{ENUM_Branching::IF},
+		{InstructionBranching::IF},
 			{"[SP]",		"=","[SP] - 2"},
 			{"M[SP]",		"=","(PC + 3).low"},
 			{"M[SP + 1]",	"=","(PC + 3).high"},
-			{"[PC]",		"=",ENUM_Arguments::Value16},
-		{ENUM_Branching::ELSE},
+			{"[PC]",		"=",InstructionArguments::Value16},
+		{InstructionBranching::ELSE},
 			{"[PC]",		"=","[PC] + 3"}
 	},
 	{17,11},
-	ENUM_TicksMean::Condition,
+	InstructionTicksMean::Condition,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::CALL}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::CALL},
+		{0xDC}}
 	},
 
 
 	{ "cpe",{
-	{ENUM_Arguments::Value16},
-	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
+	{InstructionArguments::Value16},
+	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
 	u8"Если флаг Paruty = 1, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
 	{
-		{ENUM_Branching::IF},
+		{InstructionBranching::IF},
 			{"[SP]",		"=","[SP] - 2"},
 			{"M[SP]",		"=","(PC + 3).low"},
 			{"M[SP + 1]",	"=","(PC + 3).high"},
-			{"[PC]",		"=",ENUM_Arguments::Value16},
-		{ENUM_Branching::ELSE},
+			{"[PC]",		"=",InstructionArguments::Value16},
+		{InstructionBranching::ELSE},
 			{"[PC]",		"=","[PC] + 3"}
 	},
 	{17,11},
-	ENUM_TicksMean::Condition,
+	InstructionTicksMean::Condition,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::CALL}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::CALL},
+		{0xEC}}
 	},
 
 
 	{ "cm",{
-	{ENUM_Arguments::Value16},
-	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
+	{InstructionArguments::Value16},
+	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
 	u8"Если флаг Sign = 1, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
 	{
-		{ENUM_Branching::IF},
+		{InstructionBranching::IF},
 			{"[SP]",		"=","[SP] - 2"},
 			{"M[SP]",		"=","(PC + 3).low"},
 			{"M[SP + 1]",	"=","(PC + 3).high"},
-			{"[PC]",		"=",ENUM_Arguments::Value16},
-		{ENUM_Branching::ELSE},
+			{"[PC]",		"=",InstructionArguments::Value16},
+		{InstructionBranching::ELSE},
 			{"[PC]",		"=","[PC] + 3"}
 	},
 	{17,11},
-	ENUM_TicksMean::Condition,
+	InstructionTicksMean::Condition,
 	FlagsList{
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected},
-		{ENUM_Category::CALL}}
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected},
+		{InstructionCategory::CALL},
+		{0xFC}}
 	},
 
 
 	{ "cnz",{
-	{ENUM_Arguments::Value16},
-	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
+	{InstructionArguments::Value16},
+	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
 	u8"Если флаг Zero = 0, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
 	{
-		{ENUM_Branching::IF},
+		{InstructionBranching::IF},
 			{"[SP]",		"=","[SP] - 2"},
 			{"M[SP]",		"=","(PC + 3).low"},
 			{"M[SP + 1]",	"=","(PC + 3).high"},
-			{"[PC]",		"=",ENUM_Arguments::Value16},
-		{ENUM_Branching::ELSE},
+			{"[PC]",		"=",InstructionArguments::Value16},
+		{InstructionBranching::ELSE},
 			{"[PC]",		"=","[PC] + 3"}
 	},
 	{17,11},
-	ENUM_TicksMean::Condition,
+	InstructionTicksMean::Condition,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::CALL}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::CALL},
+		{0xC4}}
 	},
 
 
 	{ "cnc",{
-	{ENUM_Arguments::Value16},
-	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
+	{InstructionArguments::Value16},
+	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
 	u8"Если флаг Carry = 0, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
 	{
-		{ENUM_Branching::IF},
+		{InstructionBranching::IF},
 			{"[SP]",		"=","[SP] - 2"},
 			{"M[SP]",		"=","(PC + 3).low"},
 			{"M[SP + 1]",	"=","(PC + 3).high"},
-			{"[PC]",		"=",ENUM_Arguments::Value16},
-		{ENUM_Branching::ELSE},
+			{"[PC]",		"=",InstructionArguments::Value16},
+		{InstructionBranching::ELSE},
 			{"[PC]",		"=","[PC] + 3"}
 	},
 	{17,11},
-	ENUM_TicksMean::Condition,
+	InstructionTicksMean::Condition,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::CALL}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::CALL},
+		{0xD4}}
 	},
 
 
 	{ "cpo",{
-	{ENUM_Arguments::Value16},
-	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
+	{InstructionArguments::Value16},
+	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
 	u8"Если флаг Paruty = 0, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
 	{
-		{ENUM_Branching::IF},
+		{InstructionBranching::IF},
 			{"[SP]",		"=","[SP] - 2"},
 			{"M[SP]",		"=","(PC + 3).low"},
 			{"M[SP + 1]",	"=","(PC + 3).high"},
-			{"[PC]",		"=",ENUM_Arguments::Value16},
-		{ENUM_Branching::ELSE},
+			{"[PC]",		"=",InstructionArguments::Value16},
+		{InstructionBranching::ELSE},
 			{"[PC]",		"=","[PC] + 3"}
 	},
 	{17,11},
-	ENUM_TicksMean::Condition,
+	InstructionTicksMean::Condition,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::CALL}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::CALL},
+		{0xE4}}
 	},
 
 
 	{ "cp",{
-	{ENUM_Arguments::Value16},
-	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
+	{InstructionArguments::Value16},
+	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
 	u8"Если флаг Sign = 0, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
 	{
-		{ENUM_Branching::IF},
+		{InstructionBranching::IF},
 			{"[SP]",		"=","[SP] - 2"},
 			{"M[SP]",		"=","(PC + 3).low"},
 			{"M[SP + 1]",	"=","(PC + 3).high"},
-			{"[PC]",		"=",ENUM_Arguments::Value16},
-		{ENUM_Branching::ELSE},
+			{"[PC]",		"=",InstructionArguments::Value16},
+		{InstructionBranching::ELSE},
 			{"[PC]",		"=","[PC] + 3"}
 	},
 	{17,11},
-	ENUM_TicksMean::Condition,
+	InstructionTicksMean::Condition,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::CALL}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::CALL},
+		{0xF4}}
 	},
 
 
 	{ "push",{
-	{ENUM_Arguments::Register16_WithPSW},
+	{InstructionArguments::Register16_WithPSW},
 	{},
 	u8"Сохранение двухбайтового числа из пары регистров в верхушку стэка",
 	{
 		{"[SP]",			"=","[SP] - 2"},
-		{"M[SP + 1]",		"=",ENUM_Arguments::Register16_WithPSW_high},
-		{"M[SP]",			"=",ENUM_Arguments::Register16_WithPSW_low},
+		{"M[SP + 1]",		"=",InstructionArguments::Register16_WithPSW_high},
+		{"M[SP]",			"=",InstructionArguments::Register16_WithPSW_low},
 		{"[PC]",			"=","[PC] + 1"}
 	},
 	{11},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::STACK_OPS}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::STACK_OPS},
+		{0xC5,0xD5,0xE5,0xF5}}
 	},
 
 
 	{ "pop",{
-	{ENUM_Arguments::Register16_WithPSW},
+	{InstructionArguments::Register16_WithPSW},
 	{},
 	u8"Извлечение из верхушки стэка двухбайтового числа в пару регистров",
 	{
-		{ENUM_Arguments::Register16_WithPSW_low,	"=", "M[SP]"},
-		{ENUM_Arguments::Register16_WithPSW_high,	"=", "M[SP + 1]"},
+		{InstructionArguments::Register16_WithPSW_low,	"=", "M[SP]"},
+		{InstructionArguments::Register16_WithPSW_high,	"=", "M[SP + 1]"},
 		{"[SP]",									"=", "[SP] + 2"},
 		{"[PC]",									"=", "[PC] + 1"}
 },
 	{10},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::STACK_OPS}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::STACK_OPS},
+		{0xC1,0xD1,0xE1,0xF1}}
 	},
 
 
 	{ "shld",{
-	{ENUM_Arguments::Value16},
-	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
+	{InstructionArguments::Value16},
+	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
 	u8"Сохраняет двухбайтовое значение пары регистров HL по адресу памяти заданной константой",
 	{
-		{"M[",ENUM_Arguments::Value16,"]",		"=","[L]"},
-		{"M[",ENUM_Arguments::Value16," + 1]",	"=","[H]"},
+		{"M[",InstructionArguments::Value16,"]",		"=","[L]"},
+		{"M[",InstructionArguments::Value16," + 1]",	"=","[H]"},
 		{"[PC]",								"=","[PC] + 3"}
 	},
 	{16},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-	{ENUM_Category::MOVE_LOAD_STORE}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+	{InstructionCategory::MOVE_LOAD_STORE},
+	{0x22}}
 	},
 
 
 	{ "lhld",{
-	{ENUM_Arguments::Value16},
-	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
+	{InstructionArguments::Value16},
+	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
 	u8"Загружает двухбайтовое значение по адресу памяти заданной константой в пару регистров HL",
 	{
-		{"[L]",		"=","M[",ENUM_Arguments::Value16 ,"]"},
-		{"[H]",		"=","M[",ENUM_Arguments::Value16," + 1]"},
+		{"[L]",		"=","M[",InstructionArguments::Value16 ,"]"},
+		{"[H]",		"=","M[",InstructionArguments::Value16," + 1]"},
 		{"[PC]",	"=","[PC] + 3" }
 	},
 	{16},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-	{ENUM_Category::MOVE_LOAD_STORE}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+	{InstructionCategory::MOVE_LOAD_STORE},
+	{0x2A}}
 	},
 
 
 	{ "stax",{
-	{ENUM_Arguments::Register16_OnlyBD},
+	{InstructionArguments::Register16_OnlyBD},
 	{},
 	u8"Сохраняет значение аккумулятора в память по адресу пары регистров",
 	{
-		{"M[",ENUM_Arguments::Register16_OnlyBD,"]","=","[A]"},
+		{"M[",InstructionArguments::Register16_OnlyBD,"]","=","[A]"},
 		{"[PC]",									"=","[PC] + 1"}
 	},
 	{7},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-	{ENUM_Category::MOVE_LOAD_STORE}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+	{InstructionCategory::MOVE_LOAD_STORE},
+	{0x02,0x12}}
 	},
 
 
 	{ "ldax",{
-	{ENUM_Arguments::Register16_OnlyBD},
+	{InstructionArguments::Register16_OnlyBD},
 	{},
 	u8"Загружает число по адресу пары регистров в аккумулятор",
 	{
-		{"[A]",		"=","M[",ENUM_Arguments::Register16_OnlyBD,"]"},
+		{"[A]",		"=","M[",InstructionArguments::Register16_OnlyBD,"]"},
 		{"[PC]",	"=","[PC] + 1"}
 	},
 	{7},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected},
-	{ENUM_Category::MOVE_LOAD_STORE}}
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected},
+	{InstructionCategory::MOVE_LOAD_STORE},
+	{0x0A,0x1A}}
 	},
 
 
 	{ "sta",{
-	{ENUM_Arguments::Value16},
-	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
+	{InstructionArguments::Value16},
+	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
 	u8"Сохраняет значение из аккумулятор по адресу памяти заданной константой",
 	{
-		{"M[",ENUM_Arguments::Value16,"]",	"=","[A]"},
+		{"M[",InstructionArguments::Value16,"]",	"=","[A]"},
 		{"[PC]",							"=","[PC] + 3"}
 	},
 	{13},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected,
-			ENUM_FlagsState::Unaffected},
-	{ENUM_Category::MOVE_LOAD_STORE}}
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected,
+			InstructionFlagsState::Unaffected},
+	{InstructionCategory::MOVE_LOAD_STORE},
+	{0x32}}
 	},
 
 
 	{ "lda",{
-	{ENUM_Arguments::Value16},
-	{ENUM_Bytes::Adress_low,ENUM_Bytes::Adress_high},
+	{InstructionArguments::Value16},
+	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
 	u8"Загружает значение из памяти по адресу заданной константой в аккумулятор",
 	{
-		{"[A]",		"=","M[",ENUM_Arguments::Value16,"]"},
+		{"[A]",		"=","M[",InstructionArguments::Value16,"]"},
 		{"[PC]",	"=","[PC] + 3"}
 	},
 	{13},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-	{ENUM_Category::MOVE_LOAD_STORE}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+	{InstructionCategory::MOVE_LOAD_STORE},
+	{0x3A}}
 	},
 
 
 	{ "lxi",{
-	{ENUM_Arguments::Register16_WithSP,ENUM_Arguments::Value16},
-	{ENUM_Bytes::Value_low,ENUM_Bytes::Value_high},
+	{InstructionArguments::Register16_WithSP,InstructionArguments::Value16},
+	{InstructionBytes::Value_low,InstructionBytes::Value_high},
 	u8"Записывает двухбайтовую константу в пару регистров",
 	{
-		{ENUM_Arguments::Register16_WithSP_low,	"=",ENUM_Arguments::Value16_low},
-		{ENUM_Arguments::Register16_WithSP_high,"=",ENUM_Arguments::Value16_high},
+		{InstructionArguments::Register16_WithSP_low,	"=",InstructionArguments::Value16_low},
+		{InstructionArguments::Register16_WithSP_high,"=",InstructionArguments::Value16_high},
 		{"[PC]",								"=","[PC] + 3"}
 	},
 	{10},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-	{ENUM_Category::MOVE_LOAD_STORE, ENUM_Category::STACK_OPS}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+	{InstructionCategory::MOVE_LOAD_STORE, InstructionCategory::STACK_OPS},
+	{0x01,0x11,0x21,0x31}}
 	},
 
 
@@ -1271,14 +1327,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		{"[PC] = [PC] + 1"}
 	},
 	{4},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-	{ENUM_Category::MOVE_LOAD_STORE}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+	{InstructionCategory::MOVE_LOAD_STORE},
+	{0xEB}}
 	},
 
 
@@ -1293,14 +1350,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		{"[PC] = [PC] + 1"}
 	},
 	{18},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::STACK_OPS}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::STACK_OPS},
+	{0xE3}}
 	},
 
 
@@ -1312,14 +1370,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		{"[PC] = [HL]"}
 	},
 	{5},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::JUMP}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::JUMP},
+	{0xE9}}
 	},
 
 
@@ -1332,320 +1391,335 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		{"[PC]",	"=","[PC] + 1"}
 	},
 	{5},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-	{ENUM_Category::STACK_OPS}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+	{InstructionCategory::STACK_OPS},
+	{0xF9}}
 	},
 
 
 	{ "dad",{
-	{ENUM_Arguments::Register16_WithSP},
+	{InstructionArguments::Register16_WithSP},
 	{},
 	u8"Прибавляние к числу из пары регистров HL, числа из указанной пары регистров",
 	{
-		{"Temp",		"=","[HL] + ",ENUM_Arguments::Register16_WithSP},
+		{"Temp",		"=","[HL] + ",InstructionArguments::Register16_WithSP},
 		{"[Carry]",		"=","(Temp > 0xffff)"},
 		{"[HL]",		"=","Temp" },
 		{"[PC]",		"=","[PC] + 1"}
 	},
 	{10},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Affected},
-	{ENUM_Category::ADD}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Affected},
+	{InstructionCategory::ADD},
+	{0x09,0x19,0x29,0x39}}
 	},
 
 
 	{ "inx",{
-	{ENUM_Arguments::Register16_WithSP},
+	{InstructionArguments::Register16_WithSP},
 	{},
 	u8"Увелечение на единицу числа записанного в паре регистров",
 	{
-		{ENUM_Arguments::Register16_WithSP,	"=",ENUM_Arguments::Register16_WithSP," + 1"},
+		{InstructionArguments::Register16_WithSP,	"=",InstructionArguments::Register16_WithSP," + 1"},
 		{"[PC]",							"=","[PC] + 1"}
 	},
 	{5},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::INCREMENT,ENUM_Category::STACK_OPS}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::INCREMENT,InstructionCategory::STACK_OPS},
+	{0x03,0x13,0x23,0x33}}
 	},
 
 
 	{ "inr",{
-	{ENUM_Arguments::Register8},
+	{InstructionArguments::Register8},
 	{},
 	u8"Увелечение регистра или памяти на единицу",
 	{
-		{ENUM_Arguments::Register8,	"=",ENUM_Arguments::Register8," + 1"},
-		{"[Zero]",					"=","(",ENUM_Arguments::Register8," == 0)"},
+		{InstructionArguments::Register8,	"=",InstructionArguments::Register8," + 1"},
+		{"[Zero]",					"=","(",InstructionArguments::Register8," == 0)"},
 		{"[PC]",					"=","[PC] + 1"}
 	},
 	{10,5},
-	ENUM_TicksMean::M_Used,
+	InstructionTicksMean::M_Used,
 	FlagsList{
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::INCREMENT}}
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::INCREMENT},
+	{0x04,0x0C,0x14,0x1C,0x24,0x2C,0x34,0x3C}}
 	},
 
 
 	{ "dcx",{
-	{ENUM_Arguments::Register16_WithSP},
+	{InstructionArguments::Register16_WithSP},
 	{},
 	u8"Уменьшение на единицу числа записанного в паре регистров",
 	{
-		{ENUM_Arguments::Register16_WithSP,	"=",ENUM_Arguments::Register16_WithSP," - 1"},
+		{InstructionArguments::Register16_WithSP,	"=",InstructionArguments::Register16_WithSP," - 1"},
 		{"[PC]",							"=","[PC] + 1" }
 	},
 	{5},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ ENUM_Category::DECREMENT, ENUM_Category::STACK_OPS}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{ InstructionCategory::DECREMENT, InstructionCategory::STACK_OPS},
+	{0x0B,0x1B,0x2B,0x3B}}
 	},
 
 
 	{ "dcr",{
-	{ENUM_Arguments::Register8},
+	{InstructionArguments::Register8},
 	{},
 	u8"Уменьшение регистра или памяти на единицу",
 	{
-		{ENUM_Arguments::Register8,	"=",ENUM_Arguments::Register8," - 1"},
-		{"[Zero]",					"=","(",ENUM_Arguments::Register8," == 0)"},
+		{InstructionArguments::Register8,	"=",InstructionArguments::Register8," - 1"},
+		{"[Zero]",					"=","(",InstructionArguments::Register8," == 0)"},
 		{"[PC]",					"=","[PC] + 1"}
 	},
 	{10,5},
-	ENUM_TicksMean::M_Used,
+	InstructionTicksMean::M_Used,
 	FlagsList{
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::DECREMENT}}
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::DECREMENT},
+	{0x05,0x0D,0x15,0x1D,0x25,0x2D,0x35,0x3D}}
 	},
 
 
 	{ "add",{
-	{ENUM_Arguments::Register8},
+	{InstructionArguments::Register8},
 	{},
 	u8"Арифмитическое сложение значения аккумулятора и регистра или памяти(по адресу HL)",
 	{
-		{"Temp",	"=","[A] + ",ENUM_Arguments::Register8},
+		{"Temp",	"=","[A] + ",InstructionArguments::Register8},
 		{"[A]",		"=","Temp"},
 		{"[Carry]",	"=","(Temp > 0xff)"},
 		{"[Zero]",	"=","([A] == 0)" },
 		{"[PC]",	"=","[PC] + 1"}
 	},
 	{7,4},
-	ENUM_TicksMean::M_Used,
+	InstructionTicksMean::M_Used,
 	FlagsList{
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected},
-		{ENUM_Category::ADD}}
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected},
+		{InstructionCategory::ADD},
+	{0x80,0x80,0x87}}
 	},
 
 
 	{ "adc",{
-	{ENUM_Arguments::Register8},
+	{InstructionArguments::Register8},
 	{},
 	u8"Арифмитическое сложение значения аккумулятора и (регистра или памяти(по адресу HL)) с флагом Carry",
 	{
-		{"Temp",	"=","[A] + ",ENUM_Arguments::Register8," + [Carry]"},
+		{"Temp",	"=","[A] + ",InstructionArguments::Register8," + [Carry]"},
 		{"[A]",		"=","Temp"},
 		{"[Carry]",	"=","(Temp > 0xff)"},
 		{"[Zero]",	"=","([A] == 0)"},
 		{"[PC]",	"=","[PC] + 1"}
 	},
 	{7,4},
-	ENUM_TicksMean::M_Used,
+	InstructionTicksMean::M_Used,
 	FlagsList{
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected},
-	{ENUM_Category::ADD}}
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected},
+	{InstructionCategory::ADD},
+	{0x88,0x88,0x8F}}
 	},
 
 
 	{ "adi",{
-	{ENUM_Arguments::Value8},
-	{ENUM_Bytes::Value},
+	{InstructionArguments::Value8},
+	{InstructionBytes::Value},
 	u8"Арифмитическое сложение значения аккумулятора с константой",
 	{
-		{"Temp",	"=","[A] + ",ENUM_Arguments::Value8},
+		{"Temp",	"=","[A] + ",InstructionArguments::Value8},
 		{"[A]",		"=","Temp"},
 		{"[Carry]",	"=","(Temp > 0xff)"},
 		{"[Zero]",	"=","([A] == 0)"},
 		{"[PC]",	"=","[PC] + 2"}
 	},
 	{7},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected},
-	{ENUM_Category::ADD}}
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected},
+	{InstructionCategory::ADD},
+	{0xC6}}
 	},
 
 
 	{ "aci",{
-	{ENUM_Arguments::Value8},
-	{ENUM_Bytes::Value},
+	{InstructionArguments::Value8},
+	{InstructionBytes::Value},
 	u8"Арифмитическое сложение значения аккумулятора с константой и флагом Carry",
 	{
-		{"Temp",	"=","[A] + ",ENUM_Arguments::Value8," + [Carry]"},
+		{"Temp",	"=","[A] + ",InstructionArguments::Value8," + [Carry]"},
 		{"[A]",		"=","Temp"},
 		{"[Carry]",	"=","(Temp > 0xff)"},
 		{"[Zero]",	"=","([A] == 0)"},
 		{"[PC]",	"=","[PC] + 2"}
 	},
 	{7},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected},
-		{ENUM_Category::ADD}}
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected},
+		{InstructionCategory::ADD},
+	{0xCE}}
 	},
 
 
 	{ "sub",{
-	{ENUM_Arguments::Register8},
+	{InstructionArguments::Register8},
 	{},
 	u8"Арифмитическое вычитание из значения аккумулятора значение памяти(по адресу HL) или регистра",
 	{
-		{"[Carry]",	"=","([A] < ",ENUM_Arguments::Register8,")"},
-		{"[A]",		"=","[A] - ",ENUM_Arguments::Register8},
+		{"[Carry]",	"=","([A] < ",InstructionArguments::Register8,")"},
+		{"[A]",		"=","[A] - ",InstructionArguments::Register8},
 		{"[Zero]",	"=","([A] == 0)"},
 		{"[PC]",	"=","[PC] + 1"}
 	},
 	{7,4},
-	ENUM_TicksMean::M_Used,
+	InstructionTicksMean::M_Used,
 	FlagsList{
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected},
-		{ENUM_Category::SUBTRACT}}
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected},
+		{InstructionCategory::SUBTRACT},
+	{0x90,0x90,0x97}}
 	},
 
 
 	{ "sbb",{
-	{ENUM_Arguments::Register8},
+	{InstructionArguments::Register8},
 	{},
 	u8"Арифмитическое вычитание из значения аккумулятора значение (памяти(по адресу HL) или регистра) с флагом Carry",
 	{
-		{"[Carry]",	"=","([A] < ",ENUM_Arguments::Register8," + [Carry])"},
-		{"[A]",		"=","[A] - ",ENUM_Arguments::Register8," - [Carry]"},
+		{"[Carry]",	"=","([A] < ",InstructionArguments::Register8," + [Carry])"},
+		{"[A]",		"=","[A] - ",InstructionArguments::Register8," - [Carry]"},
 		{"[Zero]",	"=","([A] == 0)"},
 		{"[PC]",	"=","[PC] + 1" }
 	},
 	{7,4},
-	ENUM_TicksMean::M_Used,
+	InstructionTicksMean::M_Used,
 	FlagsList{
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected},
-		{ENUM_Category::SUBTRACT}}
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected},
+		{InstructionCategory::SUBTRACT},
+	{0x98,0x98,0x9F}}
 	},
 
 
 	{ "sui",{
-	{ENUM_Arguments::Value8},
-	{ENUM_Bytes::Value},
+	{InstructionArguments::Value8},
+	{InstructionBytes::Value},
 	u8"Арифмитическое вычитание из значения аккумулятора константы",
 	{
-		{"[Carry]",	"=","([A] < ",ENUM_Arguments::Value8,")"},
-		{"[A]",		"=","[A] - ",ENUM_Arguments::Value8},
+		{"[Carry]",	"=","([A] < ",InstructionArguments::Value8,")"},
+		{"[A]",		"=","[A] - ",InstructionArguments::Value8},
 		{"[Zero]",	"=","([A] == 0)"},
 		{"[PC]",	"=","[PC] + 2"}
 	},
 	{7},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected},
-		{ENUM_Category::SUBTRACT}}
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected},
+		{InstructionCategory::SUBTRACT},
+	{0xD6}}
 	},
 
 
 	{ "sbi",{
-	{ENUM_Arguments::Value8},
-	{ENUM_Bytes::Value},
+	{InstructionArguments::Value8},
+	{InstructionBytes::Value},
 	u8"Арифмитическое вычитание из значения аккумулятора константы и флага Carry",
 	{
-		{"[Carry]",	"=","([A] < ",ENUM_Arguments::Value8," + [Carry])"},
-		{"[A]",		"=","([A] - ",ENUM_Arguments::Value8," - [Carry])"},
+		{"[Carry]",	"=","([A] < ",InstructionArguments::Value8," + [Carry])"},
+		{"[A]",		"=","([A] - ",InstructionArguments::Value8," - [Carry])"},
 		{"[Zero]",	"=","([A] == 0)"},
 		{"[PC]",	"=","([PC] + 2)"}
 },
 	{7},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected,
-		ENUM_FlagsState::Affected},
-		{ENUM_Category::SUBTRACT}}
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected,
+		InstructionFlagsState::Affected},
+		{InstructionCategory::SUBTRACT},
+	{0xDE}}
 	},
 
 
 	{ "rst",{
-	{ENUM_Arguments::ValueSpecial},
-	{ENUM_Bytes::Value},
+	{InstructionArguments::ValueSpecial},
+	{InstructionBytes::Value},
 	u8"Call [Число * 8]",
 	{
 		{"[SP]",			"=","[SP] - 2"},
 		{"M[SP]",			"=","([PC] + 3).low"},
 		{"M[SP + 1]",		"=","([PC] + 3).high"},
-		{"[PC]",			"=","(",ENUM_Arguments::ValueSpecial," * 8)"}
+		{"[PC]",			"=","(",InstructionArguments::ValueSpecial," * 8)"}
 	},
 	{11},
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-		{ENUM_Category::RESTART}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+		{InstructionCategory::RESTART},
+	{0xC7,0xCF,0xD7,0xDF,0xE7,0xEF,0xF7,0xFF}}
 	 },
 
 
@@ -1658,14 +1732,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		 {u8"Не знаю как это описать."}
 	 },
 	 {4},
-	 ENUM_TicksMean::Always,
+	 InstructionTicksMean::Always,
 	 FlagsList{
-		 ENUM_FlagsState::Affected,
-		 ENUM_FlagsState::Affected,
-		 ENUM_FlagsState::Affected,
-		 ENUM_FlagsState::Affected,
-		 ENUM_FlagsState::Affected },
-	{ENUM_Category::SPECIALS}}
+		 InstructionFlagsState::Affected,
+		 InstructionFlagsState::Affected,
+		 InstructionFlagsState::Affected,
+		 InstructionFlagsState::Affected,
+		 InstructionFlagsState::Affected },
+	{InstructionCategory::SPECIALS},
+	{0x27}}
 
 	},
 
@@ -1677,14 +1752,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		{u8"Эта инструкция не реализована."}
 	},
 	{ 4 },
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected},
-	{ENUM_Category::CONTROL}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected},
+	{InstructionCategory::CONTROL},
+	{0xFB}}
 	},
 
 
@@ -1696,14 +1772,15 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 		{u8"Эта инструкция не реализована."}
 	},
 	{ 4 },
-	ENUM_TicksMean::Always,
+	InstructionTicksMean::Always,
 	FlagsList{
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected,
-		ENUM_FlagsState::Unaffected },
-	{ENUM_Category::CONTROL}}
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected,
+		InstructionFlagsState::Unaffected },
+	{InstructionCategory::CONTROL},
+	{0xF3}}
 	}
 
 };

@@ -8,7 +8,7 @@ ProjectManager::ProjectManager(
 	LastPathManager* lastPathManager,
 	EmulationThread* emulationThread,
 	CompilerStable* Compiler,
-	Caretaker_Momento* processor_CaretakerMomento) : ISettingObject(u8"Проект",u8"Общие") {
+	Caretaker_Momento* processor_CaretakerMomento) : ISettingObject(u8"Проект",u8"Проект") {
 
 	this->window = window;
 	this->processor = processor;
@@ -355,7 +355,7 @@ void ProjectManager::Compile() {
 }
 
 void ProjectManager::DrawSetting() {
-	ImGui::SeparatorText(u8"Проект");
+	//ImGui::SeparatorText(u8"Проект");
 
 	if (ImGui::RadioButton(u8"Сохранять при компиляции", flag_SaveAfterCompile)) {
 		flag_SaveAfterCompile = !flag_SaveAfterCompile;

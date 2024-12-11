@@ -2,7 +2,9 @@
 
 
 
-void Singletone_InfoInstruction::Display(const std::string& name_instruction, const std::string& text_after) {
+void Singletone_InfoInstruction::Display(const std::string& name_instruction, const std::string& text_after, const bool dublicate) {
+
+
 
 	if (map_InstructionInfo.contains(name_instruction) == false)
 		return;
@@ -24,7 +26,7 @@ void Singletone_InfoInstruction::Display(const std::string& name_instruction, co
 
 
 
-	ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.15, 0.15, 0.15, 1.0));
+	ImGui::PushStyleColor(ImGuiCol_ChildBg, Colors[PaletteIndex::Background]);
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(10.0f, 10.0f));
 
@@ -43,7 +45,7 @@ void Singletone_InfoInstruction::Display(const std::string& name_instruction, co
 	ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical, 4.f);
 	ImGui::SameLine(0.f, 8.f);
 
-	DrawRightBlock();
+	DrawRightBlock(dublicate);
 
 
 	ImGui::EndTooltip();
@@ -64,12 +66,10 @@ void Singletone_InfoInstruction::CalculateLength() {
 		std::string line_text_before_equal = "";
 		bool isCorrectLine = true;
 
-
 		int args_check_number = 0;
 		for (int i = 0; i < info->_PseudoCode[line].size(); i++){
 
 			std::string result_text;
-
 
 			if (info->_PseudoCode[line][i].type() == typeid(const char*)) {
 				auto obj = std::any_cast<const char*>(info->_PseudoCode[line][i]);
@@ -80,8 +80,8 @@ void Singletone_InfoInstruction::CalculateLength() {
 					line_text_before_equal += obj;
 
 			}
-			else if (info->_PseudoCode[line][i].type() == typeid(ENUM_Arguments)) {
-				auto obj = std::any_cast<ENUM_Arguments>(info->_PseudoCode[line][i]);
+			else if (info->_PseudoCode[line][i].type() == typeid(InstructionArguments)) {
+				auto obj = std::any_cast<InstructionArguments>(info->_PseudoCode[line][i]);
 				auto Args = ENUM_Arguments_to_CommandArguments(obj);
 
 				result_text = Args.type_argument;
@@ -98,10 +98,15 @@ void Singletone_InfoInstruction::CalculateLength() {
 						std::vector<std::string>::iterator it;
 						std::vector<std::string> coomandValues = Args.available_values;
 
-						if (obj == ENUM_Arguments::Register16_WithSP_low)
-							coomandValues = ENUM_Arguments_to_CommandArguments(ENUM_Arguments::Register16_WithSP).available_values;
-						else if (obj == ENUM_Arguments::Register16_WithPSW_low)
-							coomandValues = ENUM_Arguments_to_CommandArguments(ENUM_Arguments::Register16_WithPSW).available_values;
+						if (obj == InstructionArguments::Register16_WithSP_low)
+							coomandValues = ENUM_Arguments_to_CommandArguments(InstructionArguments::Register16_WithSP).available_values;
+						else if (obj == InstructionArguments::Register16_WithSP_high)
+							coomandValues = ENUM_Arguments_to_CommandArguments(InstructionArguments::Register16_WithSP).available_values;
+						else if (obj == InstructionArguments::Register16_WithPSW_low)
+							coomandValues = ENUM_Arguments_to_CommandArguments(InstructionArguments::Register16_WithPSW).available_values;
+						else if (obj == InstructionArguments::Register16_WithPSW_high)
+							coomandValues = ENUM_Arguments_to_CommandArguments(InstructionArguments::Register16_WithPSW).available_values;
+
 
 						it = std::find(coomandValues.begin(), coomandValues.end(), splited_textAfter[args_check_number]);
 						bool isIndexFinded = it != coomandValues.end();
@@ -121,13 +126,13 @@ void Singletone_InfoInstruction::CalculateLength() {
 					
 					switch (obj)
 					{
-					case ENUM_Arguments::Register8: {
+					case InstructionArguments::Register8: {
 						result_text = ValueArg;
 						break;
 					}
-					case ENUM_Arguments::Register16_WithSP:
-					case ENUM_Arguments::Register16_WithPSW:
-					case ENUM_Arguments::Register16_OnlyBD: {
+					case InstructionArguments::Register16_WithSP:
+					case InstructionArguments::Register16_WithPSW:
+					case InstructionArguments::Register16_OnlyBD: {
 						result_text = ValueArg;
 
 						if (ValueArg == "B")
@@ -141,8 +146,8 @@ void Singletone_InfoInstruction::CalculateLength() {
 
 						break;
 					}
-					case ENUM_Arguments::Register16_WithSP_high:
-					case ENUM_Arguments::Register16_WithPSW_high: {
+					case InstructionArguments::Register16_WithSP_high:
+					case InstructionArguments::Register16_WithPSW_high: {
 						if (ValueArg == "SP")
 							result_text = u8"SP.Стар";
 						else
@@ -150,8 +155,8 @@ void Singletone_InfoInstruction::CalculateLength() {
 
 						break;
 					}
-					case ENUM_Arguments::Register16_WithSP_low:
-					case ENUM_Arguments::Register16_WithPSW_low: {
+					case InstructionArguments::Register16_WithSP_low:
+					case InstructionArguments::Register16_WithPSW_low: {
 						if (ValueArg == "B")
 							result_text = "C";
 						else if (ValueArg == "D")
@@ -166,7 +171,7 @@ void Singletone_InfoInstruction::CalculateLength() {
 							result_text = ValueArg;
 						break;
 					}
-					case ENUM_Arguments::Value8:
+					case InstructionArguments::Value8:
 						if (IsCorrectValue(splited_textAfter[args_check_number])) {
 
 							uint64_t value = correct_str_toUnsignedValue(splited_textAfter[args_check_number]);
@@ -178,7 +183,7 @@ void Singletone_InfoInstruction::CalculateLength() {
 
 						}
 						break;
-					case ENUM_Arguments::Value16:
+					case InstructionArguments::Value16:
 						if (IsCorrectValue(splited_textAfter[args_check_number])) {
 
 							uint64_t value = correct_str_toUnsignedValue(splited_textAfter[args_check_number]);
@@ -190,7 +195,7 @@ void Singletone_InfoInstruction::CalculateLength() {
 
 						}
 						break;
-					case ENUM_Arguments::Value16_low:
+					case InstructionArguments::Value16_low:
 						if (IsCorrectValue(splited_textAfter[args_check_number])) {
 
 							uint64_t value = correct_str_toUnsignedValue(splited_textAfter[args_check_number]);
@@ -202,7 +207,7 @@ void Singletone_InfoInstruction::CalculateLength() {
 
 						}
 						break;
-					case ENUM_Arguments::Value16_high:
+					case InstructionArguments::Value16_high:
 						if (IsCorrectValue(splited_textAfter[args_check_number])) {
 
 							uint64_t value = correct_str_toUnsignedValue(splited_textAfter[args_check_number]);
@@ -214,7 +219,7 @@ void Singletone_InfoInstruction::CalculateLength() {
 
 						}
 						break;
-					case ENUM_Arguments::ValueSpecial:
+					case InstructionArguments::ValueSpecial:
 						if (IsCorrectValue(splited_textAfter[args_check_number])) {
 
 							uint64_t value = correct_str_toUnsignedValue(splited_textAfter[args_check_number]);
@@ -242,14 +247,14 @@ void Singletone_InfoInstruction::CalculateLength() {
 
 
 				switch (obj) {
-				case ENUM_Arguments::Register8:
-				case ENUM_Arguments::Register16_WithSP:
-				case ENUM_Arguments::Register16_WithSP_low:
-				case ENUM_Arguments::Register16_WithSP_high:
-				case ENUM_Arguments::Register16_WithPSW:
-				case ENUM_Arguments::Register16_WithPSW_low:
-				case ENUM_Arguments::Register16_WithPSW_high:
-				case ENUM_Arguments::Register16_OnlyBD:
+				case InstructionArguments::Register8:
+				case InstructionArguments::Register16_WithSP:
+				case InstructionArguments::Register16_WithSP_low:
+				case InstructionArguments::Register16_WithSP_high:
+				case InstructionArguments::Register16_WithPSW:
+				case InstructionArguments::Register16_WithPSW_low:
+				case InstructionArguments::Register16_WithPSW_high:
+				case InstructionArguments::Register16_OnlyBD:
 					if (line_text_before_equal.back() != '['){
 						result_text.insert(result_text.begin(), '[');
 						result_text.push_back(']');
@@ -267,7 +272,7 @@ void Singletone_InfoInstruction::CalculateLength() {
 					args_check_number++;
 
 			}
-			else if (info->_PseudoCode[line][i].type() == typeid(ENUM_Branching)) {
+			else if (info->_PseudoCode[line][i].type() == typeid(InstructionBranching)) {
 				isCorrectLine = false;
 				break;
 
@@ -315,14 +320,14 @@ inline void Singletone_InfoInstruction::DrawLeftBlock() {
 			ImGui::SameLine(0, 0);
 			ImGui::Text(" ");
 			ImGui::SameLine(0, 0);
-			DrawTextWithBackground(CommandArgs_first.type_argument.c_str(), ImVec4(0.4f, 0.4f, 0.f, 1.f));
+			DrawTextWithBackground(CommandArgs_first.type_argument.c_str(), Colors[PaletteIndex::ArgumentFirst]);
 		}
 		if (info->_Arguments.size() > 1) {
 			CommandArgs_second = ENUM_Arguments_to_CommandArguments(info->_Arguments[1]);
 			ImGui::SameLine(0, 0);
 			ImGui::Text(", ");
 			ImGui::SameLine(0, 0);
-			DrawTextWithBackground(CommandArgs_second.type_argument.c_str(), ImVec4(0.6f, 0.4f, 0.f, 1.f));
+			DrawTextWithBackground(CommandArgs_second.type_argument.c_str(), Colors[PaletteIndex::ArgumentSecond]);
 		}
 
 		if (info->_Arguments.size() > 0) {
@@ -331,7 +336,7 @@ inline void Singletone_InfoInstruction::DrawLeftBlock() {
 			ImGui::Text("");
 			for (int i = 0; i < CommandArgs_first.available_values.size(); i++) {
 				ImGui::SameLine(0, 0);
-				DrawTextWithBackground(CommandArgs_first.available_values[i].c_str(), ImVec4(0.1f, 0.3f, 0.6f, 1.f));
+				DrawTextWithBackground(CommandArgs_first.available_values[i].c_str(), Colors[PaletteIndex::AvailableArgumentsFirst]);
 				ImGui::SameLine(0, 0);
 				ImGui::Text(" ");
 			}
@@ -342,7 +347,7 @@ inline void Singletone_InfoInstruction::DrawLeftBlock() {
 			ImGui::Text("");
 			for (int i = 0; i < CommandArgs_second.available_values.size(); i++) {
 				ImGui::SameLine(0, 0);
-				DrawTextWithBackground(CommandArgs_second.available_values[i].c_str(), ImVec4(0.1f, 0.3f, 0.6f, 1.f));
+				DrawTextWithBackground(CommandArgs_second.available_values[i].c_str(), Colors[PaletteIndex::AvailableArgumentsSecond]);
 				ImGui::SameLine(0, 0);
 				ImGui::Text(" ");
 			}
@@ -352,12 +357,12 @@ inline void Singletone_InfoInstruction::DrawLeftBlock() {
 
 
 		ImGui::SeparatorText(u8"Байты");
-		DrawTextWithBackground(ENUM_Bytes_to_str(ENUM_Bytes::Opcode).c_str(), ImVec4(0.1f, 0.4f, 0.5f, 1.f));
+		DrawTextWithBackground(ENUM_Bytes_to_str(InstructionBytes::Opcode).c_str(), Colors[PaletteIndex::ByteFirst]);
 		ImGui::SameLine();
 		ImGui::Text(" ");
 		for (int i = 0; i < info->_Bytes.size(); i++) {
 			ImGui::SameLine();
-			DrawTextWithBackground(ENUM_Bytes_to_str(info->_Bytes[i]).c_str(), ImVec4(0.6f, 0.3f, 0.1f, 1.f));
+			DrawTextWithBackground(ENUM_Bytes_to_str(info->_Bytes[i]).c_str(), Colors[PaletteIndex::ByteOthers]);
 			ImGui::SameLine();
 			ImGui::Text(" ");
 		}
@@ -368,42 +373,35 @@ inline void Singletone_InfoInstruction::DrawLeftBlock() {
 
 
 
-		static const std::vector<ImVec4> ColorStatusFlag = {
-			ImVec4(1.f,0.3f,0.3f,1.f),
-			ImVec4(0.3f,1.0f,0.3f,1.f),
-			ImVec4(1.f, 1.f, 0.2f, 1.f),
-			ImVec4(1.f, 1.f, 0.2f, 1.f),
-		};
-
 
 		ImGui::SeparatorText(u8"Флаги");
-		ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "Sign       ");
+		ImGui::TextColored(Colors[PaletteIndex::FlagText], "Sign       ");
 		ImGui::SameLine();
-		ImGui::TextColored(ColorStatusFlag[(int)info->_Flags_status.Sign], std::string(ENUM_FlagsState_to_str(info->_Flags_status.Sign)).c_str());
+		ImGui::TextColored(Colors[PaletteIndex::FlagUnaffected + (int)info->_Flags_status.Sign], std::string(ENUM_FlagsState_to_str(info->_Flags_status.Sign)).c_str());
 
 		ImGui::Separator();
 
-		ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "Zero       ");
+		ImGui::TextColored(Colors[PaletteIndex::FlagText], "Zero       ");
 		ImGui::SameLine();
-		ImGui::TextColored(ColorStatusFlag[(int)info->_Flags_status.Zero], std::string(ENUM_FlagsState_to_str(info->_Flags_status.Zero)).c_str());
+		ImGui::TextColored(Colors[PaletteIndex::FlagUnaffected + (int)info->_Flags_status.Zero], std::string(ENUM_FlagsState_to_str(info->_Flags_status.Zero)).c_str());
 
 		ImGui::Separator();
 
-		ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "A. Carry   ");
+		ImGui::TextColored(Colors[PaletteIndex::FlagText], "A. Carry   ");
 		ImGui::SameLine();
-		ImGui::TextColored(ColorStatusFlag[(int)info->_Flags_status.ACarry], std::string(ENUM_FlagsState_to_str(info->_Flags_status.ACarry)).c_str());
+		ImGui::TextColored(Colors[PaletteIndex::FlagUnaffected + (int)info->_Flags_status.ACarry], std::string(ENUM_FlagsState_to_str(info->_Flags_status.ACarry)).c_str());
 
 		ImGui::Separator();
 
-		ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "Parity     ");
+		ImGui::TextColored(Colors[PaletteIndex::FlagText], "Parity     ");
 		ImGui::SameLine();
-		ImGui::TextColored(ColorStatusFlag[(int)info->_Flags_status.Parity], std::string(ENUM_FlagsState_to_str(info->_Flags_status.Parity)).c_str());
+		ImGui::TextColored(Colors[PaletteIndex::FlagUnaffected + (int)info->_Flags_status.Parity], std::string(ENUM_FlagsState_to_str(info->_Flags_status.Parity)).c_str());
 
 		ImGui::Separator();
 
-		ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "Carry      ");
+		ImGui::TextColored(Colors[PaletteIndex::FlagText], "Carry      ");
 		ImGui::SameLine();
-		ImGui::TextColored(ColorStatusFlag[(int)info->_Flags_status.Carry], std::string(ENUM_FlagsState_to_str(info->_Flags_status.Carry)).c_str());
+		ImGui::TextColored(Colors[PaletteIndex::FlagUnaffected + (int)info->_Flags_status.Carry], std::string(ENUM_FlagsState_to_str(info->_Flags_status.Carry)).c_str());
 
 		ImGui::EndChild();
 	}
@@ -411,7 +409,7 @@ inline void Singletone_InfoInstruction::DrawLeftBlock() {
 
 }
 
-inline void Singletone_InfoInstruction::DrawRightBlock() {
+inline void Singletone_InfoInstruction::DrawRightBlock(const bool& dublicate) {
 
 	ImGui::BeginChild("RightBlock_Instruction", ImVec2(0, 0), ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_Border); {
 
@@ -429,11 +427,11 @@ inline void Singletone_InfoInstruction::DrawRightBlock() {
 			LineNumber++;
 
 
-			if (info->_PseudoCode[line][0].type() == typeid(ENUM_Branching)) {
+			if (info->_PseudoCode[line][0].type() == typeid(InstructionBranching)) {
 				LineNumber = 0;
 			}
 			else {
-				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.65, 0.65, 0.65, 1));
+				ImGui::PushStyleColor(ImGuiCol_Text, Colors[PaletteIndex::NumberLinePseudoCode]);
 				ImGui::Text((std::to_string(LineNumber) + ".").c_str());
 				ImGui::SameLine(0, 0);
 				ImGui::PopStyleColor();
@@ -450,13 +448,20 @@ inline void Singletone_InfoInstruction::DrawRightBlock() {
 			ImGui::Text(result_text.c_str());
 		}
 
+		if (dublicate){
+
+			ImGui::PushStyleColor(ImGuiCol_Text, Colors[PaletteIndex::Attention]);
+			ImGui::SeparatorText(u8"Внимание!");
+			ImGui::PopStyleColor();
+			ImGui::TextWrapped(u8"Этот опкод официально не задокументирован, но при работе, оригинальный процессор выполняет именно эту инструкцию.");
+
+		}
 
 
 		ImGui::EndChild();
 	}
 
 }
-
 
 void Singletone_InfoInstruction::ProcessLine(const int& line, const int& i, int& args_check_number, std::string& result_text) {
 
@@ -485,15 +490,15 @@ void Singletone_InfoInstruction::ProcessLine(const int& line, const int& i, int&
 			result_text += obj;
 
 	}
-	else if (info->_PseudoCode[line][i].type() == typeid(ENUM_Arguments)) {
+	else if (info->_PseudoCode[line][i].type() == typeid(InstructionArguments)) {
 
-		auto obj = std::any_cast<ENUM_Arguments>(info->_PseudoCode[line][i]);
+		auto obj = std::any_cast<InstructionArguments>(info->_PseudoCode[line][i]);
 		auto Args = ENUM_Arguments_to_CommandArguments(obj);
 
 		std::string temp = ENUM_Arguments_to_CommandArguments(obj).type_argument;
 
 
-		if (str_TextAfterInstruction.empty() == false) {
+		if (splited_textAfter.empty() == false && str_TextAfterInstruction.empty() == false) {
 			//splited_textAfter
 
 
@@ -508,11 +513,14 @@ void Singletone_InfoInstruction::ProcessLine(const int& line, const int& i, int&
 				std::vector<std::string>::iterator it;
 				std::vector<std::string> coomandValues = Args.available_values;
 
-				if (obj == ENUM_Arguments::Register16_WithSP_low)
-					coomandValues = ENUM_Arguments_to_CommandArguments(ENUM_Arguments::Register16_WithSP).available_values;
-				else if (obj == ENUM_Arguments::Register16_WithPSW_low)
-					coomandValues = ENUM_Arguments_to_CommandArguments(ENUM_Arguments::Register16_WithPSW).available_values;
-
+				if (obj == InstructionArguments::Register16_WithSP_low)
+					coomandValues = ENUM_Arguments_to_CommandArguments(InstructionArguments::Register16_WithSP).available_values;
+				else if (obj == InstructionArguments::Register16_WithSP_high)
+					coomandValues = ENUM_Arguments_to_CommandArguments(InstructionArguments::Register16_WithSP).available_values;
+				else if (obj == InstructionArguments::Register16_WithPSW_low)
+					coomandValues = ENUM_Arguments_to_CommandArguments(InstructionArguments::Register16_WithPSW).available_values;
+				else if (obj == InstructionArguments::Register16_WithPSW_high)
+					coomandValues = ENUM_Arguments_to_CommandArguments(InstructionArguments::Register16_WithPSW).available_values;
 
 				it = std::find(coomandValues.begin(), coomandValues.end(), splited_textAfter[args_check_number]);
 				bool isIndexFinded = it != coomandValues.end();
@@ -530,13 +538,13 @@ void Singletone_InfoInstruction::ProcessLine(const int& line, const int& i, int&
 			{
 				switch (obj)
 				{
-				case ENUM_Arguments::Register8: {
+				case InstructionArguments::Register8: {
 					temp = ValueArg;
 					break;
 				}
-				case ENUM_Arguments::Register16_WithSP:
-				case ENUM_Arguments::Register16_WithPSW:
-				case ENUM_Arguments::Register16_OnlyBD: {
+				case InstructionArguments::Register16_WithSP:
+				case InstructionArguments::Register16_WithPSW:
+				case InstructionArguments::Register16_OnlyBD: {
 					temp = ValueArg;
 
 					if (ValueArg == "B")
@@ -550,10 +558,10 @@ void Singletone_InfoInstruction::ProcessLine(const int& line, const int& i, int&
 
 					break;
 				}
-				case ENUM_Arguments::Register16_WithSP_high:
-				case ENUM_Arguments::Register16_WithPSW_high:
-				case ENUM_Arguments::Register16_WithPSW_low:
-				case ENUM_Arguments::Register16_WithSP_low: {
+				case InstructionArguments::Register16_WithSP_high:
+				case InstructionArguments::Register16_WithPSW_high:
+				case InstructionArguments::Register16_WithPSW_low:
+				case InstructionArguments::Register16_WithSP_low: {
 					temp = ValueArg;
 					break;
 				}
@@ -563,12 +571,12 @@ void Singletone_InfoInstruction::ProcessLine(const int& line, const int& i, int&
 
 			}
 			else {
-				if (splited_textAfter.size() - 1 >= args_check_number)
+				if (splited_textAfter.empty() == false && splited_textAfter.size() - 1 >= args_check_number)
 				{
 
 					switch (obj)
 					{
-					case ENUM_Arguments::Value8:
+					case InstructionArguments::Value8:
 						if (IsCorrectValue(splited_textAfter[args_check_number])) {
 
 							uint64_t value = correct_str_toUnsignedValue(splited_textAfter[args_check_number]);
@@ -580,7 +588,7 @@ void Singletone_InfoInstruction::ProcessLine(const int& line, const int& i, int&
 
 						}
 						break;
-					case ENUM_Arguments::Value16:
+					case InstructionArguments::Value16:
 						if (IsCorrectValue(splited_textAfter[args_check_number])) {
 
 							uint64_t value = correct_str_toUnsignedValue(splited_textAfter[args_check_number]);
@@ -592,7 +600,7 @@ void Singletone_InfoInstruction::ProcessLine(const int& line, const int& i, int&
 
 						}
 						break;
-					case ENUM_Arguments::Value16_low:
+					case InstructionArguments::Value16_low:
 						if (IsCorrectValue(splited_textAfter[args_check_number])) {
 
 							uint64_t value = correct_str_toUnsignedValue(splited_textAfter[args_check_number]);
@@ -604,7 +612,7 @@ void Singletone_InfoInstruction::ProcessLine(const int& line, const int& i, int&
 
 						}
 						break;
-					case ENUM_Arguments::Value16_high:
+					case InstructionArguments::Value16_high:
 						if (IsCorrectValue(splited_textAfter[args_check_number])) {
 
 							uint64_t value = correct_str_toUnsignedValue(splited_textAfter[args_check_number]);
@@ -616,7 +624,7 @@ void Singletone_InfoInstruction::ProcessLine(const int& line, const int& i, int&
 
 						}
 						break;
-					case ENUM_Arguments::ValueSpecial:
+					case InstructionArguments::ValueSpecial:
 						if (IsCorrectValue(splited_textAfter[args_check_number])) {
 
 							uint64_t value = correct_str_toUnsignedValue(splited_textAfter[args_check_number]);
@@ -645,14 +653,14 @@ void Singletone_InfoInstruction::ProcessLine(const int& line, const int& i, int&
 
 		switch (obj)
 		{
-		case ENUM_Arguments::Register8:
-		case ENUM_Arguments::Register16_WithSP:
-		case ENUM_Arguments::Register16_WithSP_low:
-		case ENUM_Arguments::Register16_WithSP_high:
-		case ENUM_Arguments::Register16_WithPSW:
-		case ENUM_Arguments::Register16_WithPSW_low:
-		case ENUM_Arguments::Register16_WithPSW_high:
-		case ENUM_Arguments::Register16_OnlyBD:
+		case InstructionArguments::Register8:
+		case InstructionArguments::Register16_WithSP:
+		case InstructionArguments::Register16_WithSP_low:
+		case InstructionArguments::Register16_WithSP_high:
+		case InstructionArguments::Register16_WithPSW:
+		case InstructionArguments::Register16_WithPSW_low:
+		case InstructionArguments::Register16_WithPSW_high:
+		case InstructionArguments::Register16_OnlyBD:
 			if (result_text.back() != '[') {
 				temp.insert(temp.begin(), '[');
 				temp.push_back(']');
@@ -670,20 +678,118 @@ void Singletone_InfoInstruction::ProcessLine(const int& line, const int& i, int&
 			args_check_number++;
 
 	}
-	else if (info->_PseudoCode[line][i].type() == typeid(ENUM_Branching)) {
-		auto obj = std::any_cast<ENUM_Branching>(info->_PseudoCode[line][i]);
+	else if (info->_PseudoCode[line][i].type() == typeid(InstructionBranching)) {
+		auto obj = std::any_cast<InstructionBranching>(info->_PseudoCode[line][i]);
 
 		result_text += ENUM_Branching_to_str(obj);
 	}
 }
 
+Singletone_InfoInstruction::Singletone_InfoInstruction() : IThemeLoadable(u8"Подсказка к инструкциям") {
+	Colors = {
+		ImVec4(0.15, 0.15, 0.15, 1.0),	// Background
+		ImVec4(0.65, 0.65, 0.65, 1),	// NumberLinePseudoCode
+		ImVec4(0.4f, 0.4f, 0.f, 1.f),	// ArgumentFirst
+		ImVec4(0.6f, 0.4f, 0.f, 1.f),	// ArgumentSecond
+		ImVec4(0.1f, 0.3f, 0.6f, 1.f),	// AvailableArgumentsFirst
+		ImVec4(0.1f, 0.3f, 0.6f, 1.f),	// AvailableArgumentsSecond
+		ImVec4(0.1f, 0.4f, 0.5f, 1.f),	// ByteFirst
+		ImVec4(0.6f, 0.3f, 0.1f, 1.f),	// ByteOthers
+		ImVec4(1.f, 0.81f, 0.05f, 1.f),	// FlagText
+		ImVec4(1.f,0.3f,0.3f,1.f),		// FlagUnaffected
+		ImVec4(0.3f,1.0f,0.3f,1.f),		// FlagAffected
+		ImVec4(1.f, 1.f, 0.2f, 1.f),	// FlagReset
+		ImVec4(1.f, 1.f, 0.2f, 1.f),	// FlagSet
+		ImVec4(1.f, 0, 0, 1.f),			// Attention
+	};
 
-Singletone_InfoInstruction::Singletone_InfoInstruction() {
+	IThemeLoadable::InitListWord({
+		u8"Фон",u8"Номер линии (Псевдокод)",u8"Аргумент (первый)",u8"Аргумент (второй)",
+		u8"Список аргументов (первый)",u8"Список аргументов (второй)",
+		u8"Байт (первый)",u8"Байт (остальные)",u8"Название флага",u8"Флаг (не изменяется)",
+		u8"Флаг (изменяется)",u8"Флаг (Устанавливается 0)",u8"Флаг (Устанавливается 1)",u8"Внимание"
+		});
+
+	MapNameAndIndex = {
+		{u8"Фон",PaletteIndex::Background},
+		{u8"Номер линии (Псевдокод)",PaletteIndex::NumberLinePseudoCode},
+		{u8"Аргумент (первый)",PaletteIndex::ArgumentFirst},
+		{u8"Аргумент (второй)",PaletteIndex::ArgumentSecond},
+		{u8"Список аргументов (первый)",PaletteIndex::AvailableArgumentsFirst},
+		{u8"Список аргументов (второй)",PaletteIndex::AvailableArgumentsSecond},
+		{u8"Байт (первый)",PaletteIndex::ByteFirst},
+		{u8"Байт (остальные)",PaletteIndex::ByteOthers},
+		{u8"Название флага",PaletteIndex::FlagText},
+		{u8"Флаг (не изменяется)",PaletteIndex::FlagUnaffected},
+		{u8"Флаг (изменяется)",PaletteIndex::FlagAffected},
+		{u8"Флаг (Устанавливается 0)",PaletteIndex::FlagReset},
+		{u8"Флаг (Устанавливается 1)",PaletteIndex::FlagSet},
+		{u8"Внимание", PaletteIndex::Attention}
+	};
+
+	
 
 }
 Singletone_InfoInstruction::~Singletone_InfoInstruction() {
 
 }
+
+
+
+std::vector<NamedColor> Singletone_InfoInstruction::GetDefaultLightColors() {
+	return {
+	{u8"Фон",						ImVec4(0.85, 0.85, 0.85, 1.0)},
+	{u8"Номер линии (Псевдокод)",	ImColor(117,117,117,255)},
+	{u8"Аргумент (первый)",			ImColor(229,229,147,255)},
+	{u8"Аргумент (второй)",			ImColor(224,195,138,255)},
+	{u8"Список аргументов (первый)",ImColor(229,229,147,255)},
+	{u8"Список аргументов (второй)",ImColor(224,195,138,255)},
+	{u8"Байт (первый)",				ImColor(156,211,229,255)},
+	{u8"Байт (остальные)",			ImColor(223,181,153,255)},
+	{u8"Название флага",			ImColor(86,69,0,255)},
+	{u8"Флаг (не изменяется)",		ImColor(169,12,12,255)},
+	{u8"Флаг (изменяется)",			ImColor(18,137,18,255)},
+	{u8"Флаг (Устанавливается 0)",	ImColor(135,0,111,255)},
+	{u8"Флаг (Устанавливается 1)",	ImColor(135,0,111,255)},
+	{u8"Внимание",					ImVec4(1.f, 0, 0, 1.f)}
+	};
+}
+std::vector<NamedColor> Singletone_InfoInstruction::GetDefaultDarkColors() {
+	return {
+		{u8"Фон",						ImVec4(0.15, 0.15, 0.15, 1.0)},
+		{u8"Номер линии (Псевдокод)",	ImVec4(0.65, 0.65, 0.65, 1)},
+		{u8"Аргумент (первый)",			ImVec4(0.4f, 0.4f, 0.f, 1.f)},
+		{u8"Аргумент (второй)",			ImVec4(0.6f, 0.4f, 0.f, 1.f)},
+		{u8"Список аргументов (первый)",ImVec4(0.4f, 0.4f, 0.f, 1.f)},
+		{u8"Список аргументов (второй)",ImVec4(0.6f, 0.4f, 0.f, 1.f)},
+		{u8"Байт (первый)",				ImVec4(0.1f, 0.4f, 0.5f, 1.f)},
+		{u8"Байт (остальные)",			ImVec4(0.6f, 0.3f, 0.1f, 1.f)},
+		{u8"Название флага",			ImVec4(1.f, 0.81f, 0.05f, 1.f)},
+		{u8"Флаг (не изменяется)",		ImVec4(1.f,0.3f,0.3f,1.f)},
+		{u8"Флаг (изменяется)",			ImVec4(0.3f,1.0f,0.3f,1.f)},
+		{u8"Флаг (Устанавливается 0)",	ImVec4(1.f, 1.f, 0.2f, 1.f)},
+		{u8"Флаг (Устанавливается 1)",	ImVec4(1.f, 1.f, 0.2f, 1.f)},
+		{u8"Внимание",					ImVec4(1.f, 0, 0, 1.f)}
+	};
+
+
+
+}
+void Singletone_InfoInstruction::LoadColors() {
+	for (int i = 0; i < object_colors.colors.size(); i++) {
+
+		std::string toSearch = object_colors.colors[i].nameColor;
+
+		auto it = MapNameAndIndex.find(toSearch);
+		bool ColorContains = it != MapNameAndIndex.end();
+
+		if (ColorContains) {
+			int index = static_cast<int>(it->second);
+			Colors[index] = object_colors.colors[i].color;
+		}
+	}
+}
+
 
 Singletone_InfoInstruction& Singletone_InfoInstruction::Instance() {
 	static Singletone_InfoInstruction obj;
@@ -842,449 +948,3 @@ std::vector<std::string> Singletone_InfoInstruction::split_line(const std::strin
 
 	return result;
 }
-
-
-
-
-
-
-
-
-/*
-void Draw_InstructionInfo(const std::string& name_instruction,const std::string& after_instruction_line) {
-	if (map_InstructionInfo.contains(name_instruction) == false)
-		return;
-
-	InstructionInfo info = map_InstructionInfo.at(name_instruction);
-
-
-	ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.15, 0.15, 0.15, 1.0));
-	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(10.0f, 10.0f));
-
-
-	ImGui::SetWindowFontScale(1.f);
-	ImVec2 sizeText1 = ImGui::CalcTextSize("                               ");
-	ImVec2 sizeText2 = ImGui::CalcTextSize("                                            ");
-
-
-	ImGui::SetNextWindowSize(ImVec2(sizeText1.x + sizeText2.x, 0));
-
-
-
-	ImGui::BeginTooltip();
-
-	ImGui::BeginChild("LeftBlock_Instruction", ImVec2(sizeText1.x, 0), ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_Border); {
-
-		ImGui::SeparatorText(u8"Аргументы");
-
-		std::string command = name_instruction;
-
-		for (int i = 0; i < command.size(); i++)
-			command[i] = toupper(command[i]);
-
-
-
-		ImGui::Text(command.c_str());
-
-
-
-		CommandArguments CommandArgs_first, CommandArgs_second;
-
-
-		if (info._Arguments.size() > 0) {
-			CommandArgs_first = ENUM_Arguments_to_CommandArguments(info._Arguments[0]);
-			ImGui::SameLine(0, 0);
-			ImGui::Text(" ");
-			ImGui::SameLine(0, 0);
-			DrawTextWithBackground(CommandArgs_first.type_argument.c_str(), ImVec4(0.4f, 0.4f, 0.f, 1.f));
-		}
-		if (info._Arguments.size() > 1) {
-			CommandArgs_second = ENUM_Arguments_to_CommandArguments(info._Arguments[1]);
-			ImGui::SameLine(0, 0);
-			ImGui::Text(", ");
-			ImGui::SameLine(0, 0);
-			DrawTextWithBackground(CommandArgs_second.type_argument.c_str(), ImVec4(0.6f, 0.4f, 0.f, 1.f));
-		}
-
-		if (info._Arguments.size() > 0) {
-			ImGui::SeparatorText(CommandArgs_first.type_argument.c_str());
-
-			ImGui::Text("");
-			for (int i = 0; i < CommandArgs_first.available_values.size(); i++) {
-				ImGui::SameLine(0, 0);
-				DrawTextWithBackground(CommandArgs_first.available_values[i].c_str(), ImVec4(0.1f, 0.3f, 0.6f, 1.f));
-				ImGui::SameLine(0, 0);
-				ImGui::Text(" ");
-			}
-		}
-		if (info._Arguments.size() > 1 && info._Arguments[0] != info._Arguments[1]) {
-			ImGui::SeparatorText(CommandArgs_second.type_argument.c_str());
-
-			ImGui::Text("");
-			for (int i = 0; i < CommandArgs_second.available_values.size(); i++) {
-				ImGui::SameLine(0, 0);
-				DrawTextWithBackground(CommandArgs_second.available_values[i].c_str(), ImVec4(0.1f, 0.3f, 0.6f, 1.f));
-				ImGui::SameLine(0, 0);
-				ImGui::Text(" ");
-			}
-		}
-
-
-
-
-		ImGui::SeparatorText(u8"Байты");
-		DrawTextWithBackground(ENUM_Bytes_to_str(ENUM_Bytes::Opcode).c_str(), ImVec4(0.1f, 0.4f, 0.5f, 1.f));
-		ImGui::SameLine();
-		ImGui::Text(" ");
-		for (int i = 0; i < info._Bytes.size(); i++) {
-			ImGui::SameLine();
-			DrawTextWithBackground(ENUM_Bytes_to_str(info._Bytes[i]).c_str(), ImVec4(0.6f, 0.3f, 0.1f, 1.f));
-			ImGui::SameLine();
-			ImGui::Text(" ");
-		}
-
-
-		ImGui::SeparatorText(u8"Такты");
-		ImGui::TextWrapped(Get_info_ticks_mean(info._Ticks, info._TicksMean).c_str());
-
-
-
-		static const std::vector<ImVec4> ColorStatusFlag = {
-			ImVec4(1.f,0.3f,0.3f,1.f),
-			ImVec4(0.3f,1.0f,0.3f,1.f),
-			ImVec4(1.f, 1.f, 0.2f, 1.f),
-			ImVec4(1.f, 1.f, 0.2f, 1.f),
-		};
-
-
-		ImGui::SeparatorText(u8"Флаги");
-		ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "Sign       ");
-		ImGui::SameLine();
-		ImGui::TextColored(ColorStatusFlag[(int)info._Flags_status.Sign], std::string(ENUM_FlagsState_to_str(info._Flags_status.Sign)).c_str());
-
-		ImGui::Separator();
-
-		ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "Zero       ");
-		ImGui::SameLine();
-		ImGui::TextColored(ColorStatusFlag[(int)info._Flags_status.Zero], std::string(ENUM_FlagsState_to_str(info._Flags_status.Zero)).c_str());
-
-		ImGui::Separator();
-
-		ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "A. Carry   ");
-		ImGui::SameLine();
-		ImGui::TextColored(ColorStatusFlag[(int)info._Flags_status.ACarry], std::string(ENUM_FlagsState_to_str(info._Flags_status.ACarry)).c_str());
-
-		ImGui::Separator();
-
-		ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "Parity     ");
-		ImGui::SameLine();
-		ImGui::TextColored(ColorStatusFlag[(int)info._Flags_status.Parity], std::string(ENUM_FlagsState_to_str(info._Flags_status.Parity)).c_str());
-
-		ImGui::Separator();
-
-		ImGui::TextColored(ImVec4(1.f, 0.81f, 0.05f, 1.f), "Carry      ");
-		ImGui::SameLine();
-		ImGui::TextColored(ColorStatusFlag[(int)info._Flags_status.Carry], std::string(ENUM_FlagsState_to_str(info._Flags_status.Carry)).c_str());
-
-		ImGui::EndChild();
-	}
-
-
-	ImGui::SameLine(0.f, 8.f);
-
-	ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical, 4.f);
-
-	ImGui::SameLine(0.f, 8.f);
-
-
-
-	ImGui::BeginChild("RightBlock_Instruction", ImVec2(0, 0), ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_Border); {
-
-		ImGui::SeparatorText(u8"Описание");
-		ImGui::TextWrapped(info._Declaration.c_str());
-
-		ImGui::SeparatorText(u8"Псевдокод");
-
-		bool tttt = false;
-		auto tokens = split_line_for_instruction_info(after_instruction_line, tttt);
-		for (int i = 0; i < tokens.size(); i++)
-			ToUpperALL(tokens[i]);
-
-		int countArguments = 0;
-		for (int i = 0; i < info._PseudoCode.size(); i++) {
-
-			if (info._PseudoCode[i].type() == typeid(const char*)) {
-				auto obj = std::any_cast<const char*>(info._PseudoCode[i]);
-				ImGui::Text(obj);
-			}
-			else if (info._PseudoCode[i].type() == typeid(ENUM_Arguments)) {
-				countArguments++;
-				auto obj = std::any_cast<ENUM_Arguments>(info._PseudoCode[i]);
-
-				bool AllOK = false;
-
-
-
-
-
-				if (tokens.size() >= countArguments) {
-
-					std::vector<std::string> available, temp1;
-
-					int countSymbolsNeed = ENUM_Arguments_to_CommandArguments(obj).type_argument.size() - 2;
-
-					switch (obj)
-					{
-					case ENUM_Arguments::Value16: {
-
-						if (IsCorrectValue(tokens[countArguments-1])) {
-							if (correct_str_toUnsignedValue(tokens[countArguments - 1]) <= 65535)
-								AllOK = true;
-							else
-								break;
-
-							ToLowerAll(tokens[countArguments - 1]);
-
-							if (tokens[countArguments - 1].size() < countSymbolsNeed - 1)
-							{
-								int delta = countSymbolsNeed - tokens[countArguments - 1].size() - 1;
-								for (int i = 0; i < delta; i++)
-									tokens[countArguments - 1] += " ";
-							}
-
-							ImGui::SameLine();
-							ImGui::Text(tokens[countArguments-1].c_str());
-							ImGui::SameLine();
-						}
-						break;
-					}
-					case ENUM_Arguments::Value8: {
-
-						if (IsCorrectValue(tokens[countArguments-1])) {
-
-							if (correct_str_toUnsignedValue(tokens[countArguments - 1]) <= 255)
-								AllOK = true;
-							else
-								break;
-							
-							ToLowerAll(tokens[countArguments - 1]);
-
-							if (tokens[countArguments - 1].size() < countSymbolsNeed - 1)
-							{
-								int delta = countSymbolsNeed - tokens[countArguments - 1].size() - 1;
-								for (int i = 0; i < delta; i++)
-									tokens[countArguments - 1] += " ";
-							}
-
-							ImGui::SameLine();
-							ImGui::Text(tokens[countArguments-1].c_str());
-							ImGui::SameLine();
-						}
-						break;
-					}
-					case ENUM_Arguments::ValueSpecial: {
-
-						if (IsCorrectValue(tokens[countArguments - 1])) {
-
-							if (correct_str_toUnsignedValue(tokens[countArguments - 1]) <= 8)
-								AllOK = true;
-							else
-								break;
-
-							ToLowerAll(tokens[countArguments - 1]);
-
-							if (tokens[countArguments - 1].size() < countSymbolsNeed - 1)
-							{
-								int delta = countSymbolsNeed - tokens[countArguments - 1].size() - 1;
-								for (int i = 0; i < delta; i++)
-									tokens[countArguments - 1] += " ";
-							}
-
-
-							ImGui::SameLine();
-							ImGui::Text(tokens[countArguments - 1].c_str());
-							ImGui::SameLine();
-						}
-						break;
-					}
-					case ENUM_Arguments::Register16_WithPSW_low: {
-
-						available = ENUM_Arguments_to_CommandArguments(ENUM_Arguments::Register16_WithPSW).available_values;
-						temp1 = ENUM_Arguments_to_CommandArguments(ENUM_Arguments::Register16_WithPSW_low).available_values;
-
-						auto it = std::find(available.begin(), available.end(), tokens[0]);
-
-						if (it != available.end()) {
-							AllOK = true;
-
-							int index = it - available.begin();
-
-							if (available[index].size() < countSymbolsNeed - 1) {
-								int delta = countSymbolsNeed - available[index].size() - 1;
-								for (int i = 0; i < delta; i++)
-									available[index] += " ";
-							}
-
-							ImGui::SameLine();
-							ImGui::Text(temp1[index].c_str());
-							ImGui::SameLine();
-						}
-						break;
-					}
-					case ENUM_Arguments::Register16_WithPSW_high: {
-
-						available = ENUM_Arguments_to_CommandArguments(ENUM_Arguments::Register16_WithPSW).available_values;
-						temp1 = ENUM_Arguments_to_CommandArguments(ENUM_Arguments::Register16_WithPSW_high).available_values;
-
-						auto it = std::find(available.begin(), available.end(), tokens[0]);
-
-						if (it != available.end()) {
-							AllOK = true;
-
-							int index = it - available.begin();
-
-							if (available[index].size() < countSymbolsNeed - 1) {
-								int delta = countSymbolsNeed - available[index].size() - 1;
-								for (int i = 0; i < delta; i++)
-									available[index] += " ";
-							}
-
-							ImGui::SameLine();
-							ImGui::Text(temp1[index].c_str());
-							ImGui::SameLine();
-						}
-						break;
-					}
-					case ENUM_Arguments::Register8: {
-
-						available = ENUM_Arguments_to_CommandArguments(ENUM_Arguments::Register8).available_values;
-
-						auto it = std::find(available.begin(), available.end(), tokens[countArguments - 1]);
-
-						if (it != available.end()) {
-							AllOK = true;
-
-							int index = it - available.begin();
-
-							if (available[index].size() < countSymbolsNeed - 1){
-								int delta = countSymbolsNeed - available[index].size() - 1;
-								for (int i = 0; i < delta; i++)
-									available[index] += " ";
-							}
-
-							ImGui::SameLine();
-							ImGui::Text(available[index].c_str());
-							ImGui::SameLine();
-						}
-
-						break;
-					}
-					case ENUM_Arguments::Register16_OnlyBD: {
-
-						available = ENUM_Arguments_to_CommandArguments(ENUM_Arguments::Register16_OnlyBD).available_values;
-
-						auto it = std::find(available.begin(), available.end(), tokens[countArguments - 1]);
-
-						if (it != available.end()) {
-							AllOK = true;
-
-							int index = it - available.begin();
-
-							if (available[index].size() < countSymbolsNeed - 1) {
-								int delta = countSymbolsNeed - available[index].size() - 1;
-								for (int i = 0; i < delta; i++)
-									available[index] += " ";
-							}
-
-							ImGui::SameLine();
-							ImGui::Text(available[index].c_str());
-							ImGui::SameLine();
-						}
-
-						break;
-					}
-					case ENUM_Arguments::Register16_WithSP: {
-
-						available = ENUM_Arguments_to_CommandArguments(ENUM_Arguments::Register16_WithSP).available_values;
-
-						auto it = std::find(available.begin(), available.end(), tokens[countArguments - 1]);
-
-						if (it != available.end()) {
-							AllOK = true;
-
-							int index = it - available.begin();
-
-							if (available[index].size() < countSymbolsNeed - 1) {
-								int delta = countSymbolsNeed - available[index].size() - 1;
-								for (int i = 0; i < delta; i++)
-									available[index] += " ";
-							}
-
-							ImGui::SameLine();
-							ImGui::Text(available[index].c_str());
-							ImGui::SameLine();
-						}
-
-						break;
-					}
-					case ENUM_Arguments::Register16_WithPSW : {
-
-						available = ENUM_Arguments_to_CommandArguments(ENUM_Arguments::Register16_WithPSW).available_values;
-
-						auto it = std::find(available.begin(), available.end(), tokens[countArguments - 1]);
-
-						if (it != available.end()) {
-							AllOK = true;
-
-							int index = it - available.begin();
-
-							if (available[index].size() < countSymbolsNeed - 1) {
-								int delta = countSymbolsNeed - available[index].size() - 1;
-								for (int i = 0; i < delta; i++)
-									available[index] += " ";
-							}
-
-							ImGui::SameLine();
-							ImGui::Text(available[index].c_str());
-							ImGui::SameLine();
-						}
-
-						break;
-					}
-					default:
-						break;
-					}
-				}
-					
-
-
-
-				if (AllOK == false) {
-					std::string text = ENUM_Arguments_to_CommandArguments(obj).type_argument;
-
-					ImGui::SameLine();
-					ImGui::Text(text.c_str());
-					ImGui::SameLine();
-
-				}
-
-
-			}
-		}
-
-
-
-		ImGui::EndChild();
-	}
-
-
-	ImGui::EndTooltip();
-
-
-	ImGui::PopStyleVar();
-	ImGui::PopStyleVar();
-	ImGui::PopStyleColor();
-}
-*/
-

@@ -1,9 +1,11 @@
 #include "I8080.UI.RegisterFlagsInfo.h"
 
 
-Widget_RegisterFlagsInfo::Widget_RegisterFlagsInfo(I8080* processor) :I8080_Widget(u8"Регистры и флаги") {
+Widget_RegisterFlagsInfo::Widget_RegisterFlagsInfo(I8080* processor) :I8080_Widget(u8"Регистры и флаги"),IThemeLoadable(u8"Просмотр регистров и флагов") {
 	this->processor = processor;
 	processor->InitPointer2State(current_state);
+
+	IThemeLoadable::InitListWord({ u8"Изменение" });
 }
 Widget_RegisterFlagsInfo::~Widget_RegisterFlagsInfo() {
 
@@ -73,7 +75,7 @@ void Widget_RegisterFlagsInfo::Draw() {
 
 				if (values_last[i] != values[i])
 				{
-					ImU32 row_bg_color = ImGui::GetColorU32(ImVec4(1.f, 0.7f, 0.3f, 0.7f)); // Flat or Gradient?
+					ImU32 row_bg_color = ImGui::GetColorU32(color_Changed); // Flat or Gradient?
 					ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, row_bg_color);
 				}
 
@@ -113,7 +115,7 @@ void Widget_RegisterFlagsInfo::Draw() {
 				ImGui::TableNextRow();
 
 				if (values_flag[i] != values_last_flag[i]){
-					ImU32 row_bg_color = ImGui::GetColorU32(ImVec4(1.f, 0.7f, 0.3f, 0.7f)); // Flat or Gradient?
+					ImU32 row_bg_color = ImGui::GetColorU32(color_Changed); // Flat or Gradient?
 					ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, row_bg_color);
 				}
 
@@ -170,4 +172,24 @@ void Widget_RegisterFlagsInfo::Load(const std::string& Data) {
 		else
 			std::cout << "Unknown name argument for widget: " << name_arg << std::endl;
 	}
+}
+
+
+
+void Widget_RegisterFlagsInfo::LoadColors() {
+	for (int i = 0; i < object_colors.colors.size(); i++) {
+		if (object_colors.colors[i].nameColor == u8"Изменение")
+			color_Changed = object_colors.colors[i].color;
+	}
+}
+
+std::vector<NamedColor> Widget_RegisterFlagsInfo::GetDefaultLightColors() {
+	return {
+		{ u8"Изменение",ImVec4(1.f - 1.f,1.f - 0.7f,1.f - 0.3f, 0.7f) }
+	};
+}
+std::vector<NamedColor> Widget_RegisterFlagsInfo::GetDefaultDarkColors() {
+	return { 
+		{ u8"Изменение",ImVec4(1.f, 0.7f, 0.3f, 0.7f) }
+	};
 }

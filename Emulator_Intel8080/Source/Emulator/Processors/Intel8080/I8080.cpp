@@ -85,6 +85,15 @@ std::shared_ptr<Momento> I8080::SaveState() {
 	return ptr_To_Last_Momento;
 }
 
+uint16_t I8080::GetBC() {
+	return B * 255 + C;
+}
+uint16_t I8080::GetDE() {
+	return D * 255 + E;
+}
+uint16_t I8080::GetSP() {
+	return SP;
+}
 
 inline void I8080::SetSP_nextAdress(const uint16_t& next_adress) {
 	Memory[SP]				 = (next_adress & 0x00ff);	  // next.low

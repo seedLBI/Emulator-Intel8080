@@ -2,9 +2,11 @@
 
 
 
-Widget_HexViewer::Widget_HexViewer(I8080* processor, TranslatorOutput* translator) :I8080_Widget(u8"Просмотр памяти") {
+Widget_HexViewer::Widget_HexViewer(I8080* processor, TranslatorOutput* translator, Widget_MnemocodeViewer* widget_MnemocodeViewer) :I8080_Widget(u8"Просмотр памяти") {
 	this->processor = processor;
 	this->translator = translator;
+	this->widget_MnemocodeViewer = widget_MnemocodeViewer;
+
 
 	mem_edit.ReadOnly = true;
 	mem_edit.OptShowOptions = false;
@@ -14,6 +16,11 @@ Widget_HexViewer::Widget_HexViewer(I8080* processor, TranslatorOutput* translato
 Widget_HexViewer::~Widget_HexViewer() {
 
 }
+
+MemoryEditor* Widget_HexViewer::GetPtrMemoryEditor() {
+	return &mem_edit;
+}
+
 void Widget_HexViewer::Draw() {
 	if (GetFlagShow() == false)
 		return;
@@ -23,7 +30,7 @@ void Widget_HexViewer::Draw() {
 		return;
 	}
 
-	mem_edit.DrawWindow(GetName_c_str(), GetPtrFlagShow(), processor, translator->Opcodes, Colors_TypesCommands);
+	mem_edit.DrawWindow(GetName_c_str(), GetPtrFlagShow(), processor, widget_MnemocodeViewer, translator->Opcodes, Colors_TypesCommands);
 
 }
 void Widget_HexViewer::Update() {

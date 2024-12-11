@@ -1,45 +1,45 @@
 #include "InfoInstruction.Structures.h"
 
-CommandArguments ENUM_Arguments_to_CommandArguments(const ENUM_Arguments& object) {
+CommandArguments ENUM_Arguments_to_CommandArguments(const InstructionArguments& object) {
 	switch (object)
 	{
-	case ENUM_Arguments::Register8:
-		return CommandArguments{ u8"Рег.8",{"A","B","C","D","E","H","L","M"} };
+	case InstructionArguments::Register8:
+		return CommandArguments{ u8"Рег.8",{"B","C","D","E","H","L","M","A"} };
 		break;
-	case ENUM_Arguments::Register16_WithSP:
+	case InstructionArguments::Register16_WithSP:
 		return CommandArguments{ u8"Рег.16",{"B","D","H","SP"} };
 		break;
-	case ENUM_Arguments::Register16_WithSP_low:
+	case InstructionArguments::Register16_WithSP_low:
 		return CommandArguments{ u8"Рег.16.Млад",{"C","E","L",u8"SP.Млад"} };
 		break;
-	case ENUM_Arguments::Register16_WithSP_high:
+	case InstructionArguments::Register16_WithSP_high:
 		return CommandArguments{ u8"Рег.16.Стар",{"B","D","H",u8"SP.Стар"} };
 		break;
-	case ENUM_Arguments::Register16_WithPSW:
+	case InstructionArguments::Register16_WithPSW:
 		return CommandArguments{ u8"Рег.16",{"B","D","H","PSW"} };
 		break;
-	case ENUM_Arguments::Register16_WithPSW_low:
+	case InstructionArguments::Register16_WithPSW_low:
 		return CommandArguments{ u8"Рег.16.Млад",{"C","E","L","A"} };
 		break;
-	case ENUM_Arguments::Register16_WithPSW_high:
+	case InstructionArguments::Register16_WithPSW_high:
 		return CommandArguments{ u8"Рег.16.Стар",{"B","D","H","PSW"} };
 		break;
-	case ENUM_Arguments::Register16_OnlyBD:
+	case InstructionArguments::Register16_OnlyBD:
 		return CommandArguments{ u8"Рег.16",{"B","D"} };
 		break;
-	case ENUM_Arguments::Value8:
+	case InstructionArguments::Value8:
 		return CommandArguments{ u8"Число.8",{"0-255","0x00-0xff"} };
 		break;
-	case ENUM_Arguments::Value16:
+	case InstructionArguments::Value16:
 		return CommandArguments{ u8"Число.16",{"0-65535","0x0000-0xffff"} };
 		break;
-	case ENUM_Arguments::Value16_low :
+	case InstructionArguments::Value16_low :
 		return CommandArguments{ u8"Число.16.Млад",{} };
 		break;
-	case ENUM_Arguments::Value16_high:
+	case InstructionArguments::Value16_high:
 		return CommandArguments{ u8"Число.16.Стар",{} };
 		break;
-	case ENUM_Arguments::ValueSpecial:
+	case InstructionArguments::ValueSpecial:
 		return CommandArguments{ u8"Число.Спец",{"0-8","0x00-0x08"} };
 		break;
 	default:
@@ -48,24 +48,24 @@ CommandArguments ENUM_Arguments_to_CommandArguments(const ENUM_Arguments& object
 
 }
 
-std::string ENUM_Bytes_to_str(const ENUM_Bytes& object) {
+std::string ENUM_Bytes_to_str(const InstructionBytes& object) {
 	switch (object) {
-	case ENUM_Bytes::Opcode:
+	case InstructionBytes::Opcode:
 		return u8"Опкод";
 		break;
-	case ENUM_Bytes::Value:
+	case InstructionBytes::Value:
 		return u8"Число";
 		break;
-	case ENUM_Bytes::Value_low:
+	case InstructionBytes::Value_low:
 		return u8"Число.Млад.";
 		break;
-	case ENUM_Bytes::Value_high:
+	case InstructionBytes::Value_high:
 		return u8"Число.Стар.";
 		break;
-	case ENUM_Bytes::Adress_low:
+	case InstructionBytes::Adress_low:
 		return u8"Адрес.Млад.";
 		break;
-	case ENUM_Bytes::Adress_high:
+	case InstructionBytes::Adress_high:
 		return u8"Число.Стар.";
 		break;
 	default:
@@ -74,18 +74,18 @@ std::string ENUM_Bytes_to_str(const ENUM_Bytes& object) {
 	return "";
 }
 
-std::string ENUM_FlagsState_to_str(const ENUM_FlagsState& object) {
+std::string ENUM_FlagsState_to_str(const InstructionFlagsState& object) {
 	switch (object) {
-	case ENUM_FlagsState::Unaffected:
+	case InstructionFlagsState::Unaffected:
 		return u8"Не изменяется";
 		break;
-	case ENUM_FlagsState::Affected:
+	case InstructionFlagsState::Affected:
 		return u8"Изменяется";
 		break;
-	case ENUM_FlagsState::Reset:
+	case InstructionFlagsState::Reset:
 		return u8"Устанавливается 0";
 		break;
-	case ENUM_FlagsState::Set:
+	case InstructionFlagsState::Set:
 		return u8"Устанавливается 1";
 		break;
 	default:
@@ -95,21 +95,21 @@ std::string ENUM_FlagsState_to_str(const ENUM_FlagsState& object) {
 	return "";
 }
 
-std::string Get_info_ticks_mean(std::vector<int> ticks, ENUM_TicksMean mean) {
-	if (mean == ENUM_TicksMean::Condition)
+std::string Get_info_ticks_mean(std::vector<int> ticks, InstructionTicksMean mean) {
+	if (mean == InstructionTicksMean::Condition)
 		return std::to_string(ticks[0]) + u8" - Выполняется условие.\n" + std::to_string(ticks[1]) + u8" - Иначе.";
-	else if (mean == ENUM_TicksMean::M_Used)
+	else if (mean == InstructionTicksMean::M_Used)
 		return std::to_string(ticks[0]) + u8" - Используется регистр M.\n" + std::to_string(ticks[1]) + u8" - Иначе.";
-	else if (mean == ENUM_TicksMean::Always)
+	else if (mean == InstructionTicksMean::Always)
 		return std::to_string(ticks[0]) + u8" - Всегда.";
 }
 
-std::string ENUM_Branching_to_str(const ENUM_Branching& object) {
+std::string ENUM_Branching_to_str(const InstructionBranching& object) {
 	switch (object){
-	case ENUM_Branching::IF:
+	case InstructionBranching::IF:
 		return u8"Если условие выполняется:";
 		break;
-	case ENUM_Branching::ELSE:
+	case InstructionBranching::ELSE:
 		return u8"Иначе:";
 		break;
 	default:

@@ -66,8 +66,11 @@
 #endif
 
 #include "Emulator\Processors\Intel8080\I8080.h"
+#include "UI/Theme/interface/IThemeLoadable.h"
+#include "UI/HighlighterInstruction/I8080/I8080.HighlighterInstruction.h"
+#include "UI/Widgets/I8080.UI.MnemoCodeViewer.h"
 
-struct MemoryEditor
+struct MemoryEditor : public IThemeLoadable
 {
     enum DataFormat
     {
@@ -107,7 +110,13 @@ struct MemoryEditor
     int             PreviewEndianess;
     ImGuiDataType   PreviewDataType;
 
-    MemoryEditor()
+    ImColor color_Breakpoint = ImVec4(0.9f, 0.9f, 0.3f, 0.45f);
+    ImColor color_PC = ImVec4(0.3f, 0.9f, 0.3f, 0.25f);
+    ImColor color_Visited = ImVec4(0.9f, 0.2f, 0.9f, 0.25f);
+    ImColor color_HL = ImVec4(0.1f, 0.1f, 1.f, 0.3f);
+    ImColor color_Empty = ImVec4(0.5f, 0.5f, 0.5f, 1.f);
+
+    MemoryEditor() : IThemeLoadable(u8"Просмотр памяти")
     {
         // Settings
         Open = true;
@@ -137,7 +146,52 @@ struct MemoryEditor
         HighlightMin = HighlightMax = (size_t)-1;
         PreviewEndianess = 0;
         PreviewDataType = ImGuiDataType_S32;
+
+
+
+        InitListWord({u8"Пустые ячейки (текст)", u8"Посещённая ячейка", u8"Текущая ячейка (PC)", u8"Ячейка останова", u8"Указатель на память (HL)" });
+
     }
+
+
+
+    void LoadColors() override {
+        for (int i = 0; i < object_colors.colors.size(); i++) {
+
+            if (object_colors.colors[i].nameColor == u8"Посещённая ячейка")
+                color_Visited = object_colors.colors[i].color;
+            else if (object_colors.colors[i].nameColor == u8"Текущая ячейка (PC)")
+                color_PC = object_colors.colors[i].color;
+            else if (object_colors.colors[i].nameColor == u8"Ячейка останова")
+                color_Breakpoint = object_colors.colors[i].color;
+            else if (object_colors.colors[i].nameColor == u8"Указатель на память (HL)")
+                color_HL = object_colors.colors[i].color;
+            else if (object_colors.colors[i].nameColor == u8"Пустые ячейки (текст)")
+                color_Empty = object_colors.colors[i].color;
+        }
+
+    }
+    std::vector<NamedColor> GetDefaultLightColors() override {
+        return {
+            {u8"Пустые ячейки (текст)", ImVec4(1.f - 0.5f,1.f - 0.5f,1.f - 0.5f,1.f)},
+            {u8"Посещённая ячейка", ImVec4(1.f - 0.9f,1.f - 0.2f,1.f - 0.9f, 0.25f)},
+            {u8"Текущая ячейка (PC)", ImVec4(1.f - 0.3f,1.f - 0.9f,1.f - 0.3f, 0.25f)},
+            {u8"Ячейка останова", ImVec4(1.f - 0.9f,1.f - 0.9f,1.f - 0.3f, 0.45f)},
+            {u8"Указатель на память (HL)", ImVec4(1.f - 0.1f,1.f - 0.1f,1.f - 1.f,0.3f)}
+        };
+    }
+    std::vector<NamedColor> GetDefaultDarkColors() override {
+
+        return {
+            {u8"Пустые ячейки (текст)", ImVec4(0.5f,0.5f,0.5f,1.f)},
+            {u8"Посещённая ячейка", ImVec4(0.9f, 0.2f, 0.9f, 0.25f)},
+            {u8"Текущая ячейка (PC)", ImVec4(0.3f, 0.9f, 0.3f, 0.25f)},
+            {u8"Ячейка останова", ImVec4(0.9f, 0.9f, 0.3f, 0.45f)},
+            {u8"Указатель на память (HL)", ImVec4(0.1f,0.1f,1.f,0.3f)}
+        };
+    }
+
+
 
     void GotoAddrAndHighlight(size_t addr_min, size_t addr_max)
     {
@@ -188,7 +242,7 @@ struct MemoryEditor
 
 
 
-    void DrawWindow(const char* title, bool *Open, I8080* processor,const vector<OpcodeAdressed> &ca, const vector<ImVec4>& colorsCommand) {
+    void DrawWindow(const char* title, bool *Open, I8080* processor, Widget_MnemocodeViewer* widget_MnemocodeViewer,const vector<OpcodeAdressed> &ca, const vector<ImVec4>& colorsCommand) {
         size_t base_display_addr = 0x0000;
         Sizes s;
         CalcSizes(s, SIZE_MEMORY, base_display_addr);
@@ -199,7 +253,7 @@ struct MemoryEditor
         {
             if (ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows) && ImGui::IsMouseReleased(ImGuiMouseButton_Right))
                 ImGui::OpenPopup("context");
-            DrawContents(processor, ca, colorsCommand);
+            DrawContents(processor, widget_MnemocodeViewer, ca, colorsCommand);
             if (ContentsWidthChanged)
             {
                 CalcSizes(s, SIZE_MEMORY, base_display_addr);
@@ -210,7 +264,7 @@ struct MemoryEditor
     }
 
     // Memory Editor contents only
-    void DrawContents(I8080 * processor, const vector<OpcodeAdressed>& ca, const vector<ImVec4>& colorsCommand)
+    void DrawContents(I8080 * processor, Widget_MnemocodeViewer* widget_MnemocodeViewer, const vector<OpcodeAdressed>& ca, const vector<ImVec4>& colorsCommand)
     {
         unsigned int cursor = processor->GetProgrammCounter();
         size_t mem_size = SIZE_MEMORY;
@@ -383,8 +437,7 @@ struct MemoryEditor
                         ImVec2 pos = ImGui::GetCursorScreenPos();
                         float highlight_width = s.GlyphWidth * 2;
                         bool is_next_byte_highlighted = (addr + 1 < mem_size) && ((HighlightMax != (size_t)-1 && addr + 1 < HighlightMax) || (HighlightFn && HighlightFn(mem_data, addr + 1)));
-                        if (is_next_byte_highlighted || (n + 1 == Cols))
-                        {
+                        if (is_next_byte_highlighted || (n + 1 == Cols)) {
                             highlight_width = s.HexCellWidth;
                             if (OptMidColsCount > 0 && n > 0 && (n + 1) < Cols && ((n + 1) % OptMidColsCount) == 0)
                                 highlight_width += s.SpacingBetweenMidCols;
@@ -394,25 +447,25 @@ struct MemoryEditor
 
 
                         if (processor->GetAdressHL() == addr)
-                            draw_list->AddRectFilled(pos, ImVec2(pos.x + highlight_width, pos.y + s.LineHeight), ImGui::GetColorU32(ImVec4(0.7f, 0.1f, 0.1f, 0.8f)));
+                            draw_list->AddRectFilled(pos, ImVec2(pos.x + highlight_width, pos.y + s.LineHeight), color_HL);
 
                         if (processor->GetBreakpointsInMemory()[addr])
-                            draw_list->AddRectFilled(pos, ImVec2(pos.x + highlight_width, pos.y + s.LineHeight), ImGui::GetColorU32(ImVec4(0.7f, 0.6f, 0.3f, 0.8f)));
+                            draw_list->AddRectFilled(pos, ImVec2(pos.x + highlight_width, pos.y + s.LineHeight), color_Breakpoint);
 
                         if (cursor == addr)
-                            draw_list->AddRectFilled(pos, ImVec2(pos.x + highlight_width, pos.y + s.LineHeight), ImGui::GetColorU32(ImVec4(0.2f, 0.6f, 0.2f, 0.6f)));
-                         
+                            draw_list->AddRectFilled(pos, ImVec2(pos.x + highlight_width, pos.y + s.LineHeight), color_PC);
 
-                        
 
 
                         bool finded = false;
                         for (int i = 0; i < ca.size(); i++)
                         {
                             if (addr == ca[i].adress_h*256 + ca[i].adress_l && ca[i].command.size() != 0) {
-                                TypesCommands index = GetTypeCommand(ca[i].command);
-                                //cout << index << endl;
-                                ImGui::TextColored(colorsCommand[(int)index], format_byte_space,b);
+
+                                std::string instruction = ca[i].command.substr(0, ca[i].command.find_first_of(' ') == 0 ? std::string::npos : ca[i].command.find_first_of(' '));
+                                ImVec4 col = Singleton_I8080_HighlighterInstruction::Instance().GetColorFromName(instruction);
+
+                                ImGui::TextColored(col, format_byte_space,b);
                                 finded = true;
                                 break;
                             }
@@ -421,21 +474,22 @@ struct MemoryEditor
                         if (!finded){
                             if (OptShowHexII)
                             {
+                                
                                 if ((b >= 32 && b < 128))
-                                    ImGui::TextColored(ImVec4(1.f, 1.f, 1.f, 1.f), ".%c ", b);
+                                    ImGui::TextColored(ImGui::GetStyle().Colors[ImGuiCol_Text], ".%c ", b);
                                 else if (b == 0xFF && OptGreyOutZeroes)
-                                    ImGui::TextColored(ImVec4(1.f, 1.f, 1.f, 1.f), "## ");
+                                    ImGui::TextColored(ImGui::GetStyle().Colors[ImGuiCol_Text], "## ");
                                 else if (b == 0x00)
-                                    ImGui::TextColored(ImVec4(1.f, 1.f, 1.f, 1.f), "   ");
+                                    ImGui::TextColored(ImGui::GetStyle().Colors[ImGuiCol_Text], "   ");
                                 else
-                                    ImGui::TextColored(ImVec4(1.f, 1.f, 1.f, 1.f), format_byte_space, b);
+                                    ImGui::TextColored(ImGui::GetStyle().Colors[ImGuiCol_Text], format_byte_space, b);
                             }
                             else
                             {
                                 if (b == 0 && OptGreyOutZeroes)
-                                    ImGui::TextColored(ImVec4(1.f, 1.f, 1.f, 0.5f), "00 ");
+                                    ImGui::TextColored(color_Empty, "00 ");
                                 else
-                                    ImGui::TextColored(ImVec4(1.f, 1.f, 1.f, 1.f), format_byte_space, b);
+                                    ImGui::TextColored(ImGui::GetStyle().Colors[ImGuiCol_Text], format_byte_space, b);
                             }
                         }
 
@@ -449,8 +503,10 @@ struct MemoryEditor
                                 processor->SetProgrammCounter(addr);
                             else if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
                                 processor->ToggleBreakPointPosition(addr);
-                            //else if (ImGui::IsMouseClicked(ImGuiMouseButton_Middle))
-                            //    I8080_UserInterface::SetCursorMnemoCode(addr);
+                            else if (ImGui::IsMouseClicked(ImGuiMouseButton_Middle))
+                                widget_MnemocodeViewer->FollowCursor(addr);
+
+
                             //DataEditingTakeFocus = true;
                             //data_editing_addr_next = addr;
                         }

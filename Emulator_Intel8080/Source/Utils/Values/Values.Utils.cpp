@@ -113,6 +113,17 @@ std::string Value2strHex(const uint64_t& value) {
 
     return res;
 }
+
+std::string Value2strHex_without0x(const uint64_t& value) {
+    std::stringstream ss;
+    ss << std::setfill('0') << std::setw(1) << std::hex << (value | 0);
+    std::string res = ss.str();
+    if (res.size() % 2 == 1)
+        res.insert(0, "0");
+    ToUpperALL(res);
+    return res;
+}
+
 std::string Value2strDec(const uint64_t& value) {
     return std::to_string(value);
 }

@@ -3,6 +3,7 @@
 
 #include "Config_Compilier.h"
 #include "Emulator\Processors\Intel8080\I8080.h"
+#include "UI/Theme/interface/IThemeLoadable.h"
 #include "UI\Widget\I8080.Widget.h"
 #include "Utils/File_Utils.h"
 #include "Utils/ImGui.Utils.h"
@@ -17,7 +18,7 @@
 #include <any>
 
 
-class Widget_Help : public I8080_Widget
+class Widget_Help : public I8080_Widget, public IThemeLoadable
 {
 public:
 	Widget_Help();
@@ -30,7 +31,15 @@ public:
 
 	std::string GetCommand() override;
 
+	void LoadColors() override;
+	std::vector<NamedColor> GetDefaultLightColors() override;
+	std::vector<NamedColor> GetDefaultDarkColors() override;
+
 private:
+	ImVec4 color_Category;
+	ImVec4 color_SubCategory;
+	ImVec4 color_Tooltip;
+	ImVec4 color_Attention;
 
 	std::string Button_pressed = "";
 

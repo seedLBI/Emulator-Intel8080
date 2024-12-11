@@ -14,6 +14,7 @@ void Caretaker_Momento::Backup() {
 
 	momentos.push_front(processor->SaveState());
 	
+	changed = true;
 	/*
 	momentos.emplace_front(processor->SaveState());
 	if (momentos.size() == MaxCount)
@@ -32,10 +33,13 @@ void Caretaker_Momento::Undo(const int& count) {
 		processor->DecreaseCountInstruction();
 		momentos.pop_front();
 	}
+
+	changed = true;
 }
 
 void Caretaker_Momento::ClearHistory() {
 	momentos.clear();
+	changed = true;
 }
 
 std::vector<std::pair<std::string, std::string>> Caretaker_Momento::GetHistory() {

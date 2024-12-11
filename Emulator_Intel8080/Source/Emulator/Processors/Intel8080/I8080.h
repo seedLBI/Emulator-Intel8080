@@ -81,6 +81,12 @@ public:
 
     uint8_t  GetRegisterFlags();
 
+    uint16_t GetBC();
+    uint16_t GetDE();
+    uint16_t GetSP();
+
+
+
 	uint16_t GetProgrammCounter();
     void     SetProgrammCounter(const uint16_t& index);
 

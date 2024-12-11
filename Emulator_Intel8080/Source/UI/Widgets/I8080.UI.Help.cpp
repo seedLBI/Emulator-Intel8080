@@ -2,11 +2,20 @@
 
 
 
-Widget_Help::Widget_Help() :I8080_Widget(u8"Руководство") {
+Widget_Help::Widget_Help() :I8080_Widget(u8"Руководство"), IThemeLoadable(u8"Руководство") {
 #ifdef WITH_DEBUG_OUTPUT
 	std::cout << "Reading file for widget help from <" << GetExePath() + "\\Help.data" << ">\n";
 #endif
 	ReadFromFile(GetExePath() + "\\Help.data");
+
+	IThemeLoadable::InitListWord({
+		u8"Заголовки категорий",
+		u8"Заголовки подкатегорий",
+		u8"Выводящий информацию (текст)",
+		u8"Выделяющийся (текст)"
+		});
+
+
 }
 Widget_Help::~Widget_Help() {
 
@@ -19,8 +28,6 @@ void Widget_Help::Draw() {
 	static float VirtualScaleFont = 1.f;
 	ImGuiIO& io = ImGui::GetIO();
 
-	ImU32 colorName = ImGui::GetColorU32(ImVec4(1.f, 0.5f, 0.5f, 1.f));
-
 
 	if (ImGui::Begin(GetName_c_str(), GetPtrFlagShow(),  ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_AlwaysHorizontalScrollbar)) {
 
@@ -32,7 +39,7 @@ void Widget_Help::Draw() {
 			DrawRightMousePopup();
 			for (int i = 0; i < categories.size(); i++) {
 
-				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.f, 0.95f, 0.75f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_Text, color_Category);
 
 				if (ImGui::TreeNode(categories[i].name.c_str())) {
 					ImGui::PopStyleColor();
@@ -40,7 +47,7 @@ void Widget_Help::Draw() {
 					if (categories[i].categories.size() > 1) {
 						for (int k = 0; k < categories[i].categories.size(); k++) {
 
-							ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.65f, 0.65f, 1.f, 1.f));
+							ImGui::PushStyleColor(ImGuiCol_Text, color_SubCategory);
 							if (ImGui::TreeNode(categories[i].categories[k].name.c_str())) {
 								ImGui::PopStyleColor();
 								DrawTextWithAbbrivs(categories[i].categories[k].text_with_index);
@@ -107,6 +114,38 @@ void Widget_Help::Load(const std::string& Data) {
 }
 
 
+void Widget_Help::LoadColors() {
+
+	for (int i = 0; i < object_colors.colors.size(); i++) {
+		if (object_colors.colors[i].nameColor == u8"Заголовки категорий")
+			color_Category = object_colors.colors[i].color;
+		else if (object_colors.colors[i].nameColor == u8"Заголовки подкатегорий")
+			color_SubCategory = object_colors.colors[i].color;
+		else if (object_colors.colors[i].nameColor == u8"Выводящий информацию (текст)")
+			color_Tooltip = object_colors.colors[i].color;
+		else if (object_colors.colors[i].nameColor == u8"Выделяющийся (текст)")
+			color_Attention = object_colors.colors[i].color;
+	}
+}
+std::vector<NamedColor> Widget_Help::GetDefaultLightColors() {
+	return {
+		{u8"Заголовки категорий",ImVec4(1.f - 1.f,1.f- 0.95f,1.f - 0.75f,		1.f)},
+		{u8"Заголовки подкатегорий",ImVec4(1.f - 0.65f,1.f- 0.65f,1.f - 1.f,	1.f)},
+		{u8"Выводящий информацию (текст)", ImVec4(1.f- 1.f, 1.f- 1.f, 1.f-0.f,	1.f)},
+		{u8"Выделяющийся (текст)",ImVec4(1.f- 1.f, 1.f- 0.4f, 1.f- 0.4f,		1.f)}
+	};
+
+}
+std::vector<NamedColor> Widget_Help::GetDefaultDarkColors() {
+	return {
+		{u8"Заголовки категорий",ImVec4(1.f, 0.95f, 0.75f, 1.f)},
+		{u8"Заголовки подкатегорий",ImVec4(0.65f, 0.65f, 1.f, 1.f)},
+		{u8"Выводящий информацию (текст)", ImVec4(1.f, 1.f, 0.f, 1.f)},
+		{u8"Выделяющийся (текст)",ImVec4(1.f, 0.4f, 0.4f, 1.f)}
+	};
+}
+
+
 
 void Widget_Help::DrawRightMousePopup() {
 	ImVec2 avail_size = ImGui::GetContentRegionAvail();
@@ -147,7 +186,7 @@ void Widget_Help::DrawTextWithAbbrivs(const std::vector < std::vector< std::any 
 			if (Text[line][element].type() == typeid(std::string)) {
 				std::string elem_text = std::any_cast<std::string>(Text[line][element]);
 
-				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.f, 1.f, 1.f, 1.f));
+				//ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.f, 1.f, 1.f, 1.f));
 
 				if (EnableWrapedText){
 					if (line == 0 && element == 0)
@@ -159,12 +198,12 @@ void Widget_Help::DrawTextWithAbbrivs(const std::vector < std::vector< std::any 
 					ImGui::Text(elem_text.c_str());
 				}
 
-				ImGui::PopStyleColor();
+				//ImGui::PopStyleColor();
 			}
 			else if (Text[line][element].type() == typeid(int)) {
 				int elem_index = std::any_cast<int>(Text[line][element]);
 
-				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.f, 1.f, 0.f, 1.f));
+				ImGui::PushStyleColor(ImGuiCol_Text, color_Tooltip);
 
 				if (EnableWrapedText) {
 					if (line == 0 && element == 0)
@@ -195,7 +234,7 @@ void Widget_Help::DrawTextWithAbbrivs(const std::vector < std::vector< std::any 
 
 				ColoredText elem_code = std::any_cast<ColoredText>(Text[line][element]);
 
-				ImGui::TextColored(ImVec4(1.f, 0.4f, 0.4f, 1.f), elem_code.text.c_str());
+				ImGui::TextColored(color_Attention, elem_code.text.c_str());
 				if (ImGui::IsItemHovered())
 					Singletone_InfoInstruction::Instance().Display(elem_code.text, "");
 

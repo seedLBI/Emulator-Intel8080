@@ -2,11 +2,12 @@
 #define I8080_UI_KEYBOARD_H
 
 #include "Emulator\Processors\Intel8080\I8080.h"
+#include "UI/Theme/interface/IThemeLoadable.h"
 #include "UI\Widget\I8080.Widget.h"
 #include "TextEditor.h"
 #include <string>
 
-class Widget_Keyboard : public I8080_Widget
+class Widget_Keyboard : public I8080_Widget, public IThemeLoadable
 {
 public:
 	Widget_Keyboard(TextEditor* editor);
@@ -16,7 +17,20 @@ public:
 
 	std::string Save() override;
 	void Load(const std::string& Data) override;
+
+	void LoadColors() override;
+	std::vector<NamedColor> GetDefaultLightColors() override;
+	std::vector<NamedColor> GetDefaultDarkColors() override;
+
+
 private:
+
+	ImVec4 color_deActive = ImVec4(0.f,0.f,0.f,1.f);
+	ImVec4 color_Active = ImVec4(1.f, 0.f, 0.f, 1.f);
+
+
+
+
 	TextEditor* editor = nullptr;
 	const vector<vector<string>> layers_names_array = {
 			{"Esc","1","2","3","4","5","6","7","8","9","0","-","=","BackSp"},

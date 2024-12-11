@@ -6,12 +6,15 @@
 #include <memory>
 #include <unordered_set>
 #include <unordered_map>
+#include "robin_hood.h"
 #include <map>
 #include <regex>
 #include "algorithm"
 
 #include <iostream>
 #include "UI/Setting/ISettingObject.h"
+#include "UI/Theme/interface/IThemeLoadable.h"
+#include "UI/HighlighterInstruction/I8080/I8080.HighlighterInstruction.h"
 #include "SaveSystem/SaveSystem.h"
 #include "OpenglWindow/OpenglWindow.h"
 #include "imgui.h"
@@ -23,11 +26,11 @@
 #include "Utils/UTF8.h"
 
 
-class TextEditor : public ISettingObject
+class TextEditor : public ISettingObject, public IThemeLoadable
 {
 private:
 
-	enum ENUM_Arguments {
+	enum InstructionArguments {
 		Register8,
 		Register16_WithSP,
 		Register16_WithPSW,
@@ -37,7 +40,7 @@ private:
 		ValueSpecial,
 		ArgumentsCount
 	};
-	enum ENUM_Bytes {
+	enum InstructionBytes {
 		Opcode,
 		Value,
 		Value_low,
@@ -46,24 +49,24 @@ private:
 		Adress_high,
 		MAX
 	};
-	enum ENUM_FlagsState {
+	enum InstructionFlagsState {
 		Unaffected,
 		Affected,
 		Reset,
 		Set
 	};
-	enum ENUM_TicksMean {
+	enum InstructionTicksMean {
 		Condition,
 		M_Used,
 		Always
 	};
 
 	struct FlagsList {
-		ENUM_FlagsState Sign;
-		ENUM_FlagsState Zero;
-		ENUM_FlagsState ACarry;
-		ENUM_FlagsState Parity;
-		ENUM_FlagsState Carry;
+		InstructionFlagsState Sign;
+		InstructionFlagsState Zero;
+		InstructionFlagsState ACarry;
+		InstructionFlagsState Parity;
+		InstructionFlagsState Carry;
 
 	};
 
@@ -76,21 +79,21 @@ private:
 	class ArgumentsArray {
 	public:
 		ArgumentsArray() {
-			Arguments.resize(ENUM_Arguments::ArgumentsCount);
+			Arguments.resize(InstructionArguments::ArgumentsCount);
 
-			Arguments[ENUM_Arguments::Register8] = 
+			Arguments[InstructionArguments::Register8] = 
 				CommandArguments{ u8"Рег.8",{"A","B","C","D","E","H","L","M"}};
-			Arguments[ENUM_Arguments::Register16_WithSP] =
+			Arguments[InstructionArguments::Register16_WithSP] =
 				CommandArguments{ u8"Рег.16",{"B","D","H","SP"} };
-			Arguments[ENUM_Arguments::Register16_WithPSW] =
+			Arguments[InstructionArguments::Register16_WithPSW] =
 				CommandArguments{ u8"Рег.16",{"B","D","H","PSW"} };
-			Arguments[ENUM_Arguments::Register16_OnlyBD] =
+			Arguments[InstructionArguments::Register16_OnlyBD] =
 				CommandArguments{ u8"Рег.16",{"B","D"} };
-			Arguments[ENUM_Arguments::Value8] =
+			Arguments[InstructionArguments::Value8] =
 				CommandArguments{ u8"Число.8",{"0-255","0x00-0xff"} };
-			Arguments[ENUM_Arguments::Value16] =
+			Arguments[InstructionArguments::Value16] =
 				CommandArguments{ u8"Число.16",{"0-65535","0x0000-0xffff"} };
-			Arguments[ENUM_Arguments::ValueSpecial] =
+			Arguments[InstructionArguments::ValueSpecial] =
 				CommandArguments{ u8"Число.Спец",{"0-8","0x00-0x08"} };
 		}
 
@@ -104,7 +107,7 @@ private:
 	class OpcodesArray {
 	public:
 		OpcodesArray() {
-			arr.resize(ENUM_Bytes::MAX);
+			arr.resize(InstructionBytes::MAX);
 			arr[Opcode] = u8"Опкод";
 			arr[Value] = u8"Число";
 			arr[Value_low] = u8"Число.Млад.";
@@ -127,12 +130,12 @@ private:
 		u8"Устанавливается 1",
 	};
 
-	std::string Get_info_ticks_mean(std::vector<int> ticks, ENUM_TicksMean mean) {
-		if (mean == ENUM_TicksMean::Condition)
+	std::string Get_info_ticks_mean(std::vector<int> ticks, InstructionTicksMean mean) {
+		if (mean == InstructionTicksMean::Condition)
 			return std::to_string(ticks[0]) + u8" - Выполняется условие.\n" + std::to_string(ticks[1]) + u8" - Иначе.";
-		else if (mean == ENUM_TicksMean::M_Used)
+		else if (mean == InstructionTicksMean::M_Used)
 			return std::to_string(ticks[0]) + u8" - Используется регистр M.\n" + std::to_string(ticks[1]) + u8" - Иначе.";
-		else if (mean == ENUM_TicksMean::Always)
+		else if (mean == InstructionTicksMean::Always)
 			return std::to_string(ticks[0]) + u8" - Всегда.";
 	}
 
@@ -141,8 +144,7 @@ private:
 	OpcodesArray info_opcode;
 
 public:
-	enum class PaletteIndex
-	{
+	enum class PaletteIndex {
 		Default,
 		Keyword,
 		Number,
@@ -164,14 +166,8 @@ public:
 		CurrentLineFill,
 		CurrentLineFillInactive,
 		CurrentLineEdge,
-		Command_Arethmetic,
-		Command_DataTransfer,
-		Command_Logic,
-		Command_StackOperation,
-		Command_PortManipulation,
-		Command_Processor,
 		Command_Translator,
-		Command_PC_changing,
+		Instruction,
 		Max,
 	};
 
@@ -271,6 +267,7 @@ public:
 	{
 		Char mChar;
 		PaletteIndex mColorIndex = PaletteIndex::Default;
+		int mColorCustomIndex = -1;
 		bool mComment : 1;
 		bool mMultiLineComment : 1;
 		bool mPreprocessor : 1;
@@ -406,6 +403,9 @@ public:
 	static const Palette& GetRetroBluePalette();
 
 
+	std::vector<NamedColor> GetDefaultLightColors() override;
+	std::vector<NamedColor> GetDefaultDarkColors() override;
+	void LoadColors() override;
 
 
 	void DrawSetting() override;

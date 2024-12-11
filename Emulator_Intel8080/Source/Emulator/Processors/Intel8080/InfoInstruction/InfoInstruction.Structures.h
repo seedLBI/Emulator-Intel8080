@@ -6,7 +6,7 @@
 #include <any>
 
 
-enum class ENUM_Arguments {
+enum class InstructionArguments {
 	Register8,
 	Register16_WithSP,
 	Register16_WithSP_low,
@@ -22,7 +22,7 @@ enum class ENUM_Arguments {
 	ValueSpecial,
 	ArgumentsCount
 };
-enum class ENUM_Bytes {
+enum class InstructionBytes {
 	Opcode,
 	Value,
 	Value_low,
@@ -31,18 +31,18 @@ enum class ENUM_Bytes {
 	Adress_high,
 	MAX
 };
-enum class ENUM_FlagsState {
+enum class InstructionFlagsState {
 	Unaffected,
 	Affected,
 	Reset,
 	Set
 };
-enum class ENUM_TicksMean {
+enum class InstructionTicksMean {
 	Condition,
 	M_Used,
 	Always
 };
-enum class ENUM_Category {
+enum class InstructionCategory {
 	MOVE_LOAD_STORE,
 	STACK_OPS,
 	JUMP,
@@ -60,24 +60,24 @@ enum class ENUM_Category {
 	CONTROL
 };
 
-enum class ENUM_Branching {
+enum class InstructionBranching {
 	IF,
 	ELSE
 };
 
 
 struct FlagsList {
-	ENUM_FlagsState Sign;
-	ENUM_FlagsState Zero;
-	ENUM_FlagsState ACarry;
-	ENUM_FlagsState Parity;
-	ENUM_FlagsState Carry;
+	InstructionFlagsState Sign;
+	InstructionFlagsState Zero;
+	InstructionFlagsState ACarry;
+	InstructionFlagsState Parity;
+	InstructionFlagsState Carry;
 
-	FlagsList(const ENUM_FlagsState& Sign,
-		const ENUM_FlagsState& Zero,
-		const ENUM_FlagsState& ACarry,
-		const ENUM_FlagsState& Parity,
-		const ENUM_FlagsState& Carry) {
+	FlagsList(const InstructionFlagsState& Sign,
+		const InstructionFlagsState& Zero,
+		const InstructionFlagsState& ACarry,
+		const InstructionFlagsState& Parity,
+		const InstructionFlagsState& Carry) {
 
 		this->Sign = Sign;
 		this->Zero = Zero;
@@ -87,14 +87,15 @@ struct FlagsList {
 	}
 };
 struct InstructionInfo {
-	std::vector<ENUM_Arguments>			_Arguments;
-	std::vector<ENUM_Bytes>				_Bytes;
+	std::vector<InstructionArguments>			_Arguments;
+	std::vector<InstructionBytes>				_Bytes;
 	std::string							_Declaration;
 	std::vector<std::vector<std::any>>	_PseudoCode;
 	std::vector<int>					_Ticks;
-	ENUM_TicksMean						_TicksMean;
+	InstructionTicksMean						_TicksMean;
 	FlagsList							_Flags_status;
-	std::vector<ENUM_Category>			_Categories;
+	std::vector<InstructionCategory>			_Categories;
+	std::vector<uint8_t>				_Opcodes;
 };
 struct CommandArguments {
 	std::string type_argument;
@@ -102,10 +103,10 @@ struct CommandArguments {
 };
 
 
-CommandArguments ENUM_Arguments_to_CommandArguments(const ENUM_Arguments& object);
-std::string ENUM_Bytes_to_str(const ENUM_Bytes& object);
-std::string ENUM_FlagsState_to_str(const ENUM_FlagsState& object);
-std::string Get_info_ticks_mean(std::vector<int> ticks, ENUM_TicksMean mean);
+CommandArguments ENUM_Arguments_to_CommandArguments(const InstructionArguments& object);
+std::string ENUM_Bytes_to_str(const InstructionBytes& object);
+std::string ENUM_FlagsState_to_str(const InstructionFlagsState& object);
+std::string Get_info_ticks_mean(std::vector<int> ticks, InstructionTicksMean mean);
 
-std::string ENUM_Branching_to_str(const ENUM_Branching& object);
+std::string ENUM_Branching_to_str(const InstructionBranching& object);
 #endif // !1
