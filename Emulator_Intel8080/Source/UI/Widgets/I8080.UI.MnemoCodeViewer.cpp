@@ -19,10 +19,10 @@ Widget_MnemocodeViewer::~Widget_MnemocodeViewer() {
 
 std::vector<NamedColor> Widget_MnemocodeViewer::GetDefaultLightColors() {
 	return {
-		{u8"Посещённая ячейка", ImVec4(1.f - 0.9f,1.f - 0.2f,1.f - 0.9f, 0.25f)},
-		{u8"Текущая ячейка (PC)", ImVec4(1.f - 0.3f,1.f - 0.9f,1.f - 0.3f, 0.25f)},
-		{u8"Ячейка останова", ImVec4(1.f- 0.9f,1.f - 0.9f,1.f - 0.3f, 0.45f)},
-		{u8"Указатель на память (HL)", ImVec4(1.f - 0.1f,1.f - 0.1f,1.f - 1.f,0.3f)}
+		{u8"Посещённая ячейка",			ImColor(217,168,217,64)},
+		{u8"Текущая ячейка (PC)",		ImColor(132,208,130,64)},
+		{u8"Ячейка останова",			ImColor(203,161,61,115)},
+		{u8"Указатель на память (HL)",	ImColor(234,220,157,77)}
 	};
 }
 std::vector<NamedColor> Widget_MnemocodeViewer::GetDefaultDarkColors() {

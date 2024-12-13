@@ -19,7 +19,7 @@ Widget_MnemocodeViewerTargeted::~Widget_MnemocodeViewerTargeted() {
 
 std::vector<NamedColor> Widget_MnemocodeViewerTargeted::GetDefaultLightColors() {
 	return {
-		{u8"Цель", ImVec4(0.7f, 0.0f, 0.0f, 0.45f)}
+		{u8"Цель", ImColor(234,112,112,115)}
 	};
 }
 std::vector<NamedColor> Widget_MnemocodeViewerTargeted::GetDefaultDarkColors() {

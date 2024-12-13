@@ -49,6 +49,16 @@ std::string ThemeManager::SaveSetting() {
 
 	std::string data;
 
+
+	Theme theme;
+	theme.nameTheme = "Test";
+
+	for (size_t i = 0; i < objects.size(); i++)
+		theme.objectColors.push_back(ObjectColors{ objects[i]->GetName(), objects[i]->GetDefaultDarkColors() });
+
+	themes.push_back(theme);
+
+
 	for (int i = 0; i < themes.size(); i++) {
 		data += save_MakeItem(u8"NameTheme", themes[i].nameTheme);
 		for (int j = 0; j < themes[i].objectColors.size(); j++){

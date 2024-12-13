@@ -185,7 +185,7 @@ void Widget_RegisterFlagsInfo::LoadColors() {
 
 std::vector<NamedColor> Widget_RegisterFlagsInfo::GetDefaultLightColors() {
 	return {
-		{ u8"Изменение",ImVec4(1.f - 1.f,1.f - 0.7f,1.f - 0.3f, 0.7f) }
+		{ u8"Изменение",ImColor(255,180,69,179) }
 	};
 }
 std::vector<NamedColor> Widget_RegisterFlagsInfo::GetDefaultDarkColors() {

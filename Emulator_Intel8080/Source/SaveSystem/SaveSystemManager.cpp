@@ -57,7 +57,7 @@ int SaveSystemManager::GetIndexSaveObject(const std::string& NameObject) {
 	}
 
 	std::cout << "Save object with name: [" << NameObject << "] not exist\n";
-	exit(101);
+	//exit(101);
 	return -1;
 }
 
@@ -111,7 +111,9 @@ void SaveSystemManager::ReadFromFile(std::ifstream& FileSave) {
 					Data_save_object += line + '\n';
 			}
 
-			objects[index_save_object]->Load(Data_save_object);
+			if (index_save_object != -1)
+				objects[index_save_object]->Load(Data_save_object);
+			
 		}
 	}
 
@@ -158,8 +160,8 @@ void SaveSystemManager::ReadFromMemory(const std::string& Data) {
 				else
 					Data_save_object += line + '\n';
 			}
-
-			objects[index_save_object]->Load(Data_save_object);
+			if (index_save_object != -1)
+				objects[index_save_object]->Load(Data_save_object);
 		}
 	}
 

@@ -1,11 +1,35 @@
 #include "I8080.UI.Input0x08.h"
 
 
-Widget_Input0x08::Widget_Input0x08(I8080* processor) : I8080_Widget(u8"Окно ввода") {
+Widget_Input0x08::Widget_Input0x08(I8080* processor) : I8080_Widget(u8"Окно ввода"), IThemeLoadable(u8"Окно ввода") {
 	this->processor = processor;
+
+	IThemeLoadable::InitListWord({ u8"Фон при активации" });
+	//ImColor color_Active;
 }
 Widget_Input0x08::~Widget_Input0x08() {
 
+}
+
+
+
+void Widget_Input0x08::LoadColors() {
+	for (int i = 0; i < object_colors.colors.size(); i++) {
+		if (object_colors.colors[i].nameColor == u8"Фон при активации")
+			color_Active = object_colors.colors[i].color;
+	}
+}
+
+std::vector<NamedColor> Widget_Input0x08::GetDefaultLightColors() {
+	return {
+		{u8"Фон при активации", ImColor(1.f,0.5f,1.f,1.f)}
+	};
+}
+
+std::vector<NamedColor> Widget_Input0x08::GetDefaultDarkColors() {
+	return {
+		{u8"Фон при активации", ImColor(0.f,0.5f,0.f,1.f)}
+	};
 }
 
 
@@ -70,14 +94,16 @@ void Widget_Input0x08::Draw() {
 
 	ImVec4 ColorBG = ImGui::GetStyleColorVec4(ImGuiCol_WindowBg);
 	float t = 0.f;
-
-	float Lerp = pow(0.01, OpenglWindow::GetDeltaTime());
+	ImVec4 NewColorBG;
 
 	if (processor->IsWaitingPortInput()) {
-		float t = abs( sin(glfwGetTime() * 8.f) * 0.2f + 0.2f);
-		ColorBG.x = 0.f;
-		ColorBG.y = t;
-		ColorBG.z = 0.f;
+		float t = abs( sin(glfwGetTime() * 8.f ) * 0.5f + 0.5f);
+
+
+		NewColorBG.x = color_Active.Value.x * t + ColorBG.x * (1.f - t);
+		NewColorBG.y = color_Active.Value.y * t + ColorBG.y * (1.f - t);
+		NewColorBG.z = color_Active.Value.z * t + ColorBG.z * (1.f - t);
+		NewColorBG.w = 1.f;
 	}
 	else {
 		Focus_ones = true;
@@ -94,7 +120,6 @@ void Widget_Input0x08::Draw() {
 		return;
 
 
-	ImVec4 NewColorBG = ImVec4((ColorBG.x) , (ColorBG.y), ColorBG.z, 1.0f);
 
  	ImGui::PushStyleColor(ImGuiCol_WindowBg, NewColorBG);
 

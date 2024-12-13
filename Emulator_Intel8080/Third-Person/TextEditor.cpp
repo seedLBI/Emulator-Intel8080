@@ -63,7 +63,7 @@ TextEditor::TextEditor()
 		u8"Пунктуация",u8"Индификаторы",u8"Комментарии (однострочные)",
 		u8"Комментарии (многострочные)",u8"Фон",u8"Курсор",u8"Выделение",
 		u8"Ошибка",u8"Точка останова",u8"Номер строки",u8"Строка (активная)",
-		u8"Строка (не активная)",u8"Строка (границы)", u8"Дерективы компилятора",
+		u8"Строка (не активная)",u8"Строка (границы)"
 	});
 
 	SetPalette(GetDarkPalette());
@@ -1266,25 +1266,24 @@ void TextEditor::LoadSetting(const std::string& Data) {
 std::vector<NamedColor> TextEditor::GetDefaultLightColors() {
 
 	std::vector<NamedColor> colors = {
-		{u8"Ничего",ImColor(0xff7f7f7f)},
-		{u8"Ключевые",ImColor(0xffff0c06)},
-		{u8"Числа",ImColor(0xff008000)},
-		{u8"Строки (\"\")",ImColor(0xff2020a0)},
-		{u8"Символы (\'\')",ImColor(0xff304070)},
-		{u8"Пунктуация",ImColor(0xff000000)},
-		{u8"Индификаторы",ImColor(0xff404040)},
-		{u8"Комментарии (однострочные)",ImColor(0xff205020)},
-		{u8"Комментарии (многострочные)",ImColor(0xff405020)},
-		{u8"Фон",ImColor(0xffffffff)},
-		{u8"Курсор",ImColor(0xff000000)},
-		{u8"Выделение",ImColor(0x80600000)},
-		{u8"Ошибка",ImColor(0xa00010ff)},
-		{u8"Точка останова",ImColor(0x80f08000)},
-		{u8"Номер строки",ImColor(0xff505000)},
-		{u8"Строка (активная)",ImColor(0x40000000)},
-		{u8"Строка (не активная)",ImColor(0x40808080)},
-		{u8"Строка (границы)",ImColor(0x40000000)},
-		{u8"Дерективы компилятора",ImVec4(0.5,0.5,0.5,1.0)}
+		{u8"Ничего",						ImColor(125,115,104,255)},
+		{u8"Ключевые",						ImColor(6,12,255,255)},
+		{u8"Числа",							ImColor(80,109,1,255)},
+		{u8"Строки (\"\")",					ImColor(160,32,32,255)},
+		{u8"Символы (\'\')",				ImColor(112,64,48,255)},
+		{u8"Пунктуация",					ImColor(71,41,0,255)},
+		{u8"Индификаторы",					ImColor(71,41,0,255)},
+		{u8"Комментарии (однострочные)",	ImColor(8,84,8,255)},
+		{u8"Комментарии (многострочные)",	ImColor(11,84,60,255)},
+		{u8"Фон",							ImColor(232,222,203,255)},
+		{u8"Курсор",						ImColor(0,0,0,255)},
+		{u8"Выделение",						ImColor(242,158,0,79)},
+		{u8"Ошибка",						ImColor(255,16,0,160)},
+		{u8"Точка останова",				ImColor(240,163,0,128)},
+		{u8"Номер строки",					ImColor(112,0,0,255)},
+		{u8"Строка (активная)",				ImColor(37,19,0,64)},
+		{u8"Строка (не активная)",			ImColor(128,117,97,64)},
+		{u8"Строка (границы)",				ImColor(64,38,0,64)}
 	};
 
 
@@ -1309,8 +1308,7 @@ std::vector<NamedColor> TextEditor::GetDefaultDarkColors() {
 		{u8"Номер строки",ImColor(0xff707000)},
 		{u8"Строка (активная)",ImColor(0x40000000)},
 		{u8"Строка (не активная)",ImColor(0x40808080)},
-		{u8"Строка (границы)",ImColor(0x40a0a0a0)},
-		{u8"Дерективы компилятора",ImVec4(0.5,0.5,0.5,1.0)}
+		{u8"Строка (границы)",ImColor(0x40a0a0a0)}
 	};
 
 
@@ -1336,8 +1334,7 @@ void TextEditor::LoadColors() {
 		{u8"Номер строки",PaletteIndex::LineNumber},
 		{u8"Строка (активная)",PaletteIndex::CurrentLineFill},
 		{u8"Строка (не активная)",PaletteIndex::CurrentLineFillInactive},
-		{u8"Строка (границы)",PaletteIndex::CurrentLineEdge},
-		{u8"Дерективы компилятора",PaletteIndex::Command_Translator},
+		{u8"Строка (границы)",PaletteIndex::CurrentLineEdge}
 	};
 
 	//mPaletteBase
@@ -2956,6 +2953,12 @@ void TextEditor::ColorizeRange(int aFromLine, int aToLine)
 				if (token_color == PaletteIndex::Instruction)
 				{
 					std::string instruction(token_begin, token_end);
+
+					if (instruction == "const" || instruction == "set" || instruction == "adr") {
+						instruction += ":";
+						instruction.insert(0, ".");
+					}
+
 					int colorIndex = Singleton_I8080_HighlighterInstruction::Instance().GetIndexFromName(instruction);
 
 					for (size_t j = 0; j < token_length; ++j)
@@ -3524,7 +3527,7 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::I8080() {
 		langDef.mTokenRegexStrings.push_back({ "\\b(hlt|nop)\\b", PaletteIndex::Instruction });
 		langDef.mTokenRegexStrings.push_back({ "\\b(call|cz|cc|cpe|cm|cnz|cnc|cpo|cp|jmp|jz|jc|jpe|jm|jnz|jnc|jpo|jp|rst|ret|rz|rc|rpe|rm|rnz|rnc|rpo|rp)\\b", PaletteIndex::Instruction });
 
-		langDef.mTokenRegexStrings.push_back({ "\\b(const|set|adr)\\b", PaletteIndex::Command_Translator });
+		langDef.mTokenRegexStrings.push_back({ "\\b(const|set|adr)\\b", PaletteIndex::Instruction });
 
 		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("L?\\\"(\\.|[^\\\"])*\\\"", PaletteIndex::String));
 		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("\\\'[^\\\']*\\\'", PaletteIndex::String));

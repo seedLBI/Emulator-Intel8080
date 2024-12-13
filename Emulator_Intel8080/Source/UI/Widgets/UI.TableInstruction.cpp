@@ -60,9 +60,32 @@ void Widget_TableInstruction::Draw() {
 
 					std::string i1 = instruction[index].first, i2 = instruction[index].second;
 
+					ImColor ColorBG;
+
+					if (i1[0] == '*')
+						ColorBG = Singleton_I8080_HighlighterInstruction::Instance().GetColorFromName(i1.substr(1));
+					else
+						ColorBG = Singleton_I8080_HighlighterInstruction::Instance().GetColorFromName(i1);
 
 
-					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0., 0., 0., 1));
+					ImColor BG_system = ImGui::GetStyleColorVec4(ImGuiCol_WindowBg);
+
+					float mix_coef = 0.5f;
+
+					ColorBG.Value.x = BG_system.Value.x * mix_coef + ColorBG.Value.x * (1.f - mix_coef);
+					ColorBG.Value.y = BG_system.Value.y * mix_coef + ColorBG.Value.y * (1.f - mix_coef);
+					ColorBG.Value.z = BG_system.Value.z * mix_coef + ColorBG.Value.z * (1.f - mix_coef);
+
+
+					if (sqrtf(powf(ColorBG.Value.x,2.f) + powf(ColorBG.Value.y, 2.f) + powf(ColorBG.Value.z, 2.f)) > sqrtf(powf(0.5f, 2.f) + powf(0.5f, 2.f) + powf(0.5f, 2.f)))
+						ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0., 0., 0., 1));
+					else
+						ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1., 1., 1., 1));
+
+
+
+
+
 					if (i2.empty())
 						TextCenteredOnLine((i1).c_str(), col - 1, row - 1, 0.5f, true);
 					else
@@ -84,12 +107,7 @@ void Widget_TableInstruction::Draw() {
 
 					}
 					else {
-						if (i1[0] == '*')
-							ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, Singleton_I8080_HighlighterInstruction::Instance().GetColorFromName(i1.substr(1)));
-						else
-							ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, Singleton_I8080_HighlighterInstruction::Instance().GetColorFromName(i1));
-
-						
+						ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ColorBG);
 					}
 					//ImGui::Text(Name_commands[(row - 1) * 16 + (col - 1)].c_str());
 

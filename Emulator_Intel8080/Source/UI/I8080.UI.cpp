@@ -222,7 +222,7 @@ void I8080_UserInterface::DrawMainMenu() {
 			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0, 0.6, 0.0, 1.0));
 				ImGui::SeparatorText(u8"Вспомогательное");
 			ImGui::PopStyleColor();
-			ImGui::MenuItem((string(ICON_FA_CODE)				+ u8" Дизассемблер").c_str(), "", widget_Disassembler->GetPtrFlagShow());
+			//ImGui::MenuItem((string(ICON_FA_CODE)				+ u8" Дизассемблер").c_str(), "", widget_Disassembler->GetPtrFlagShow());
 			ImGui::MenuItem((string(ICON_FA_GAUGE_HIGH)			+ u8" Быстродействие").c_str(), "", widget_EmulatorInfo->GetPtrFlagShow());
 			ImGui::MenuItem((string(ICON_FA_HIGHLIGHTER)		+ u8" Список маркеров").c_str(), "", widget_MarkerList->GetPtrFlagShow());
 			ImGui::MenuItem((string(ICON_FA_BARS)				+ u8" Список переменных").c_str(), "", widget_VarList->GetPtrFlagShow());
@@ -248,7 +248,7 @@ void I8080_UserInterface::DrawMainMenu() {
 			ImGui::PopStyleColor();
 			ImGui::MenuItem((string(ICON_FA_BOOK_BOOKMARK)		+ u8" Руководство к программе").c_str(), "", widget_Help->GetPtrFlagShow());
 			ImGui::MenuItem((string(ICON_FA_TABLE)				+ u8" Таблица инструкций").c_str(), "", widget_TableInstruction->GetPtrFlagShow());
-			ImGui::MenuItem((string(ICON_FA_LIST)				+ u8" Список инструкций").c_str(), "", widget_ListInstruction->GetPtrFlagShow());
+			//ImGui::MenuItem((string(ICON_FA_LIST)				+ u8" Список инструкций").c_str(), "", widget_ListInstruction->GetPtrFlagShow());
 
 
 			ImGui::EndMenu();
@@ -336,6 +336,7 @@ void I8080_UserInterface::InitThemeManager() {
 	themeManager->AddObject(widget_RegisterFlagsInfo);
 	themeManager->AddObject(widget_Help);
 	themeManager->AddObject(widget_keyboard);
+	themeManager->AddObject(widget_input0x08);
 	themeManager->AddObject(widget_MnemocodeViewer);
 	themeManager->AddObject(widget_MnemocodeViewerTargeted);
 	themeManager->AddObject(widget_HexViewer->GetPtrMemoryEditor());
@@ -360,9 +361,9 @@ void I8080_UserInterface::InitSetting() {
 void I8080_UserInterface::InitWidgets() {
 	widget_CodeEditor				= new Widget_CodeEditor();
 	widget_HistoryInstruction		= new Widget_HistoryInstruction(processor, emulationThread, processorCaratakerMomento);
-	widget_ListInstruction			= new Widget_ListInstruction();
+	//widget_ListInstruction		= new Widget_ListInstruction();
 	widget_TableInstruction			= new Widget_TableInstruction();
-	widget_Disassembler				= new Widget_Disassembler(processor);
+	//widget_Disassembler			= new Widget_Disassembler(processor);
 	widget_ColorPicker				= new Widget_ColorPicker(widget_CodeEditor->GetPtrTextEditor());
 	widget_SymbolPicker				= new Widget_SymbolPicker(widget_CodeEditor->GetPtrTextEditor());
 	widget_SymbolScreen				= new Widget_SymbolScreen(processor);
@@ -384,9 +385,9 @@ void I8080_UserInterface::InitWidgets() {
 
 	WidgetManager.AddWidgetPtr(widget_Help);
 	WidgetManager.AddWidgetPtr(widget_HistoryInstruction);
-	WidgetManager.AddWidgetPtr(widget_ListInstruction);
+	//WidgetManager.AddWidgetPtr(widget_ListInstruction);
 	WidgetManager.AddWidgetPtr(widget_TableInstruction);
-	WidgetManager.AddWidgetPtr(widget_Disassembler);
+	//WidgetManager.AddWidgetPtr(widget_Disassembler);
 	WidgetManager.AddWidgetPtr(widget_ColorPicker);
 	WidgetManager.AddWidgetPtr(widget_SymbolPicker);
 	WidgetManager.AddWidgetPtr(widget_SymbolScreen);

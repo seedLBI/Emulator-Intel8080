@@ -248,14 +248,14 @@ void I8080::InitPointer2State(CurrentState& cs) {
 }
 
 void I8080::NextStep() {
-	CountInstruction++;
 	ALU(Memory[PC]);
+	CountInstruction++;
 }
 void I8080::NextStepWithHistorySaving() {
 	ptr_portMomento = std::shared_ptr<Momento>();
 	changedMemory.clear();
-	CountInstruction++;
 	ALU_WithHistorySaving(Memory[PC]);
+	CountInstruction++;
 }
 
 
@@ -820,6 +820,7 @@ void I8080::_INPUT() {
 	
 	if (Memory[PC + 1] == 0x08) {
 		if (Flag_Waiting_Input) {
+			CountInstruction--;
 			return;
 		}
 
@@ -837,6 +838,7 @@ void I8080::_INPUT() {
 
 
 		Flag_Waiting_Input = true;
+		CountInstruction--;
 		return;
 
 	}

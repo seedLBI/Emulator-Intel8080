@@ -36,7 +36,9 @@ void Widget_Help::Draw() {
 			ImGui::Text(u8"Я не смог обнаружить файл Help.data рядом с исполняемым файлом :(\nТы куда его дел? Возвращай обратно.");
 		}
 		else {
+			
 			DrawRightMousePopup();
+
 			for (int i = 0; i < categories.size(); i++) {
 
 				ImGui::PushStyleColor(ImGuiCol_Text, color_Category);
@@ -71,6 +73,9 @@ void Widget_Help::Draw() {
 				}
 
 			}
+
+
+
 		}
 
 		ImGui::End();
@@ -129,10 +134,10 @@ void Widget_Help::LoadColors() {
 }
 std::vector<NamedColor> Widget_Help::GetDefaultLightColors() {
 	return {
-		{u8"Заголовки категорий",ImVec4(1.f - 1.f,1.f- 0.95f,1.f - 0.75f,		1.f)},
-		{u8"Заголовки подкатегорий",ImVec4(1.f - 0.65f,1.f- 0.65f,1.f - 1.f,	1.f)},
-		{u8"Выводящий информацию (текст)", ImVec4(1.f- 1.f, 1.f- 1.f, 1.f-0.f,	1.f)},
-		{u8"Выделяющийся (текст)",ImVec4(1.f- 1.f, 1.f- 0.4f, 1.f- 0.4f,		1.f)}
+		{u8"Заголовки категорий",			ImColor(106,48,0,255)},
+		{u8"Заголовки подкатегорий",		ImColor(214,76,0,255)},
+		{u8"Выводящий информацию (текст)",	ImColor(84,0,211,255)},
+		{u8"Выделяющийся (текст)",			ImColor(160,0,0,255)}
 	};
 
 }
@@ -148,13 +153,14 @@ std::vector<NamedColor> Widget_Help::GetDefaultDarkColors() {
 
 
 void Widget_Help::DrawRightMousePopup() {
-	ImVec2 avail_size = ImGui::GetContentRegionAvail();
-	ImVec2 pos = ImGui::GetCursorScreenPos();
 
+	ImVec2 window_pos = ImGui::GetWindowPos();
+	ImVec2 window_size = ImGui::GetWindowSize();
+	
 
 	bool MouseInPopup = false;
 
-	if (ImGui::IsMouseHoveringRect(pos, ImVec2(pos.x + avail_size.x, pos.y + avail_size.y))) {
+	if (ImGui::IsMouseHoveringRect(window_pos, ImVec2(window_pos.x + window_size.x, window_pos.y + window_size.y))) {
 		if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
 		{
 			ImGui::OpenPopup("PopupSettingHelp");

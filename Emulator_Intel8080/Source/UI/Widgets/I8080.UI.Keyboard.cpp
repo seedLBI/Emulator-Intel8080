@@ -23,8 +23,8 @@ void Widget_Keyboard::LoadColors() {
 }
 std::vector<NamedColor> Widget_Keyboard::GetDefaultLightColors() {
 	return {
-		{u8"Нажат", ImVec4(1.f-1.f,1.f-0.f,1.f-0.f,1.f)},
-		{u8"Не нажат",  ImVec4(1.f-0.f,1.f-0.f,1.f-0.f,1.f)}
+		{u8"Нажат",		ImColor(142,0,0,255)},
+		{u8"Не нажат",  ImColor(255,241,217,255)}
 	};
 }
 std::vector<NamedColor> Widget_Keyboard::GetDefaultDarkColors() {

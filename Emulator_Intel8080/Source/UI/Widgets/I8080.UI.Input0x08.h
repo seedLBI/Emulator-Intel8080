@@ -3,13 +3,14 @@
 
 #include "Emulator\Processors\Intel8080\I8080.h"
 #include "UI\Widget\I8080.Widget.h"
+#include "UI/Theme/interface/IThemeLoadable.h"
 #include "Utils/ImGui.Utils.h"
 #include <string>
 
 
 
 
-class Widget_Input0x08: public I8080_Widget
+class Widget_Input0x08: public I8080_Widget, public IThemeLoadable
 {
 public:
 	Widget_Input0x08(I8080* processor);
@@ -19,6 +20,11 @@ public:
 
 	std::string Save() override;
 	void Load(const std::string& Data) override;
+
+	void LoadColors() override;
+	std::vector<NamedColor> GetDefaultLightColors() override;
+	std::vector<NamedColor> GetDefaultDarkColors() override;
+
 private:
 	I8080* processor = nullptr;
 	const char* info{ 
@@ -29,6 +35,7 @@ private:
 		u8"2. Получить вводимое значение в регистре А" };
 
 
+	ImColor color_Active;
 
 	bool Focus_ones = true;
 	void SendValue_to_Port(const std::string& str_value);

@@ -149,7 +149,13 @@ struct MemoryEditor : public IThemeLoadable
 
 
 
-        InitListWord({u8"ѕустые €чейки (текст)", u8"ѕосещЄнна€ €чейка", u8"“екуща€ €чейка (PC)", u8"ячейка останова", u8"”казатель на пам€ть (HL)" });
+        InitListWord({
+            u8"ѕустые €чейки (текст)",
+            u8"ѕосещЄнна€ €чейка",
+            u8"“екуща€ €чейка (PC)",
+            u8"ячейка останова",
+            u8"”казатель на пам€ть (HL)"
+            });
 
     }
 
@@ -173,11 +179,11 @@ struct MemoryEditor : public IThemeLoadable
     }
     std::vector<NamedColor> GetDefaultLightColors() override {
         return {
-            {u8"ѕустые €чейки (текст)", ImVec4(1.f - 0.5f,1.f - 0.5f,1.f - 0.5f,1.f)},
-            {u8"ѕосещЄнна€ €чейка", ImVec4(1.f - 0.9f,1.f - 0.2f,1.f - 0.9f, 0.25f)},
-            {u8"“екуща€ €чейка (PC)", ImVec4(1.f - 0.3f,1.f - 0.9f,1.f - 0.3f, 0.25f)},
-            {u8"ячейка останова", ImVec4(1.f - 0.9f,1.f - 0.9f,1.f - 0.3f, 0.45f)},
-            {u8"”казатель на пам€ть (HL)", ImVec4(1.f - 0.1f,1.f - 0.1f,1.f - 1.f,0.3f)}
+            {u8"ѕустые €чейки (текст)",     ImColor(118,97,76,255)},
+            {u8"ѕосещЄнна€ €чейка",         ImColor(217,168,217,64)},
+            {u8"“екуща€ €чейка (PC)",       ImColor(132,208,130,64)},
+            {u8"ячейка останова",           ImColor(203,161,61,115)},
+            {u8"”казатель на пам€ть (HL)",  ImColor(234,220,157,77)}
         };
     }
     std::vector<NamedColor> GetDefaultDarkColors() override {
@@ -448,6 +454,11 @@ struct MemoryEditor : public IThemeLoadable
 
                         if (processor->GetAdressHL() == addr)
                             draw_list->AddRectFilled(pos, ImVec2(pos.x + highlight_width, pos.y + s.LineHeight), color_HL);
+
+
+                        if (processor->GetVisetedMemory()[addr])
+                            draw_list->AddRectFilled(pos, ImVec2(pos.x + highlight_width, pos.y + s.LineHeight), color_Visited);
+
 
                         if (processor->GetBreakpointsInMemory()[addr])
                             draw_list->AddRectFilled(pos, ImVec2(pos.x + highlight_width, pos.y + s.LineHeight), color_Breakpoint);

@@ -93,7 +93,8 @@ int I8080_WidgetManager::GetIndexSaveObject(const std::string& NameObject) {
 			return i;
 	}
 	std::cout << "Don't have widget object with Name: " << NameObject << std::endl;
-	exit(545);
+	//exit(545);
+	return -1;
 }
 
 void I8080_WidgetManager::Load(const std::string& Data) {
@@ -139,7 +140,10 @@ void I8080_WidgetManager::Load(const std::string& Data) {
 				else
 					data += Lines[index] + "\n";
 			}
-			ptr_widgets[index_object_widget]->Load(data);
+
+			if (index_object_widget != -1)
+				ptr_widgets[index_object_widget]->Load(data);
+			
 		}
 
 

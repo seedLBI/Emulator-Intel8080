@@ -106,7 +106,8 @@ void Widget_HistoryInstruction::Draw() {
 			if (processor->isHistoryModeEnabled() == false){
 				TextDisableInput =
 					u8"     Выключен режим истории.\n"
-				      "(это можно изменить в настройках)";
+				      "(это можно изменить в настройках)\n"
+					  "               или";
 			}
 			else{
 				TextDisableInput =
@@ -121,7 +122,21 @@ void Widget_HistoryInstruction::Draw() {
 
 			ImGui::SetCursorScreenPos({ Center.x - SizeText.x / 2.f ,Center.y - SizeText.y / 2.f });
 
-			ImGui::TextColored(ImColor(1.f, 0.2f, 0.2f, 1.f), TextDisableInput);
+			ImGui::TextColored(ImColor(0.7f, 0.1f, 0.1f, 1.f), TextDisableInput);
+
+			if (processor->isHistoryModeEnabled() == false) {
+
+				ImVec2 SizeText1 = ImGui::CalcTextSize(u8"Включить режим истории тут");
+
+				ImGui::SetCursorScreenPos({ Center.x - SizeText1.x / 2.f ,Center.y + SizeText.y / 2.f + 5.f });
+
+
+				if (ImGui::Button(u8"Включить режим истории тут")) {
+					processor->ToggleHistoryMode();
+				}
+
+			}
+
 		}
 		ImGui::End();
 	}
