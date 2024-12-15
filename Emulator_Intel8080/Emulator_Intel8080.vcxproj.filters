@@ -195,7 +195,7 @@
       <Filter>Source\UI\Widgets\ConstList</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\Widgets\I8080.UI.Disassembler.cpp">
-      <Filter>Source\UI\Widgets\Disassembler</Filter>
+      <Filter>Source\UI\Widgets\Заброшено\Disassembler %28Забросил%29</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\Widgets\I8080.UI.EmulatorInfo.cpp">
       <Filter>Source\UI\Widgets\EmulatorInfo</Filter>
@@ -216,7 +216,7 @@
       <Filter>Source\UI\Widgets\MarkerList</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\Widgets\I8080.UI.MemoryMonoPixelScreen.cpp">
-      <Filter>Source\UI\Widgets\MemoryMonoPixelScreen</Filter>
+      <Filter>Source\UI\Widgets\Заброшено\MemoryMonoPixelScreen %28Забросил%29</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\Widgets\I8080.UI.MnemoCodeViewer.cpp">
       <Filter>Source\UI\Widgets\MnemoCodeViewer</Filter>
@@ -330,7 +330,7 @@
       <Filter>Source\Emulator\Processor\Processors\I8080\InfoInstruction</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\Widgets\UI.ListInstruction.cpp">
-      <Filter>Source\UI\Widgets\ListInstruction</Filter>
+      <Filter>Source\UI\Widgets\Заброшено\ListInstruction %28Забросил%29</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utils\Values\Values.Utils.cpp">
       <Filter>Source\Utils</Filter>
@@ -620,7 +620,7 @@
       <Filter>Source\UI\Widgets\ConstList</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI\Widgets\I8080.UI.Disassembler.h">
-      <Filter>Source\UI\Widgets\Disassembler</Filter>
+      <Filter>Source\UI\Widgets\Заброшено\Disassembler %28Забросил%29</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI\Widgets\I8080.UI.EmulatorInfo.h">
       <Filter>Source\UI\Widgets\EmulatorInfo</Filter>
@@ -641,7 +641,7 @@
       <Filter>Source\UI\Widgets\MarkerList</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI\Widgets\I8080.UI.MemoryMonoPixelScreen.h">
-      <Filter>Source\UI\Widgets\MemoryMonoPixelScreen</Filter>
+      <Filter>Source\UI\Widgets\Заброшено\MemoryMonoPixelScreen %28Забросил%29</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI\Widgets\I8080.UI.MnemoCodeViewer.h">
       <Filter>Source\UI\Widgets\MnemoCodeViewer</Filter>
@@ -755,7 +755,7 @@
       <Filter>Source\Emulator\Processor\Processors\I8080\InfoInstruction</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI\Widgets\UI.ListInstruction.h">
-      <Filter>Source\UI\Widgets\ListInstruction</Filter>
+      <Filter>Source\UI\Widgets\Заброшено\ListInstruction %28Забросил%29</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utils\Values\Values.Utils.h">
       <Filter>Source\Utils</Filter>
@@ -945,12 +945,6 @@
     <Filter Include="Source\UI\Widgets\VarList">
       <UniqueIdentifier>{1fb0e06c-2a67-4da3-89cb-df9eecc69944}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\UI\Widgets\Disassembler">
-      <UniqueIdentifier>{3821c53e-42c9-497d-ad43-8b0dd106b288}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\UI\Widgets\MemoryMonoPixelScreen">
-      <UniqueIdentifier>{c1096c14-603d-445b-b5b3-f7866b9a2e50}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\UI\Workspaces">
       <UniqueIdentifier>{e7667e5d-9db7-4abc-903e-c47742461f58}</UniqueIdentifier>
     </Filter>
@@ -1059,9 +1053,6 @@
     <Filter Include="Source\Emulator\Port\Timer\Momento">
       <UniqueIdentifier>{79c47ad0-8d27-4055-ada1-14af884919e0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\UI\Widgets\ListInstruction">
-      <UniqueIdentifier>{396d0ca3-6c28-4e56-8b4a-114513411423}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Emulator\Processor\Processors\I8080\InfoInstruction">
       <UniqueIdentifier>{9919ecd1-ce9c-49d1-9426-d931b983174f}</UniqueIdentifier>
     </Filter>
@@ -1088,6 +1079,18 @@
     </Filter>
     <Filter Include="Source\UI\Widgets\MnemoCodeViewer%28Targeted%29">
       <UniqueIdentifier>{77908b6b-3a95-4986-a192-1791e2faf4ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\UI\Widgets\Заброшено">
+      <UniqueIdentifier>{d146f56d-970c-43f1-8b83-02becf65df52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\UI\Widgets\Заброшено\MemoryMonoPixelScreen %28Забросил%29">
+      <UniqueIdentifier>{c1096c14-603d-445b-b5b3-f7866b9a2e50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\UI\Widgets\Заброшено\ListInstruction %28Забросил%29">
+      <UniqueIdentifier>{396d0ca3-6c28-4e56-8b4a-114513411423}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\UI\Widgets\Заброшено\Disassembler %28Забросил%29">
+      <UniqueIdentifier>{3821c53e-42c9-497d-ad43-8b0dd106b288}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

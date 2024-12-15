@@ -42,7 +42,8 @@ void Setting::Draw() {
 		ImGuiWindowFlags_NoMove |
 		ImGuiWindowFlags_NoResize |
 		ImGuiWindowFlags_NoCollapse |
-		ImGuiWindowFlags_NoScrollbar;
+		ImGuiWindowFlags_NoScrollbar | 
+		ImGuiWindowFlags_NoScrollWithMouse;
 
 	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 

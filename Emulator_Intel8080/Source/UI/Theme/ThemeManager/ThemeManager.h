@@ -7,6 +7,7 @@
 #include "UI/Setting/ISettingObject.h"
 #include "Utils/Values/Values.Utils.h"
 #include "Utils/TextUtils.h"
+#include "Utils/ImGui.Utils.h"
 
 
 class ThemeManager : public ISettingObject {
@@ -25,15 +26,26 @@ public:
 
 	void DrawSetting() override;
 
+
+
 private:
 	std::vector<IThemeLoadable*> objects;
 
 	std::vector<Theme> themes;
 	int indexChoosed = 0;
 
+	int countObjects = 0;
+
+	void CalculateCountObjects();
+
 	void SetDarkTheme();
 	void SetLightTheme();
 
+	void CreateThemeFromCurrentColors(const std::string& name);
+
+
+	bool PopupCreation_isOpen = false;
+	void DrawPopupCreation();
 
 
 	std::string ImColor2Hex(const ImColor& color);

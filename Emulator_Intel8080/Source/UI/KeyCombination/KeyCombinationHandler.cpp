@@ -556,54 +556,56 @@ std::string KeyCombinationHandler::ErrorCombination_To_string(const ErrorCombina
 void KeyCombinationHandler::DrawSetting() {
 
 
-	ImGui::BeginTable(u8"CombinationsTable", 2, ImGuiTableFlags_ScrollY | ImGuiTableFlags_Borders | ImGuiTableFlags_HighlightHoveredColumn);
+	if (ImGui::BeginTable(u8"CombinationsTable", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_HighlightHoveredColumn | ImGuiTableFlags_ScrollY, ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - 10.f) )) {
 
-	ImGui::TableSetupScrollFreeze(1, 1);
-
-	ImGui::TableSetupColumn(u8"Название команды", ImGuiTableColumnFlags_WidthStretch);
-	ImGui::TableSetupColumn(u8"Комбинация клавиш");
-	ImGui::TableHeadersRow();
+		ImGui::TableSetupColumn(u8"Название команды", ImGuiTableColumnFlags_WidthStretch);
+		ImGui::TableSetupColumn(u8"Комбинация клавиш", ImGuiTableColumnFlags_WidthStretch);
 
 
-	static int selected = -1;
-
-	for (int i = 0; i < combinations.size(); i++) {
-		ImGui::TableNextRow(0, 2.f * ImGui::GetTextLineHeight());
-
-		ImGui::TableSetColumnIndex(0);
-		TextCenteredOnLine(combinations[i].first.c_str(), 0, i, 0.5f, true);
+		ImGui::TableSetupScrollFreeze(1, 1);
 
 
-
-		ImGui::TableSetColumnIndex(1);
-
-		bool s = selected == i;
+		ImGui::TableHeadersRow();
 
 
-		std::string key_name = combinations[i].second.GetKeysHumanStr();
+		static int selected = -1;
 
-		if (key_name.empty()) {
-			for (int j = 0; j < i; j++)
-				key_name += " ";
+		for (int i = 0; i < combinations.size(); i++) {
+			ImGui::TableNextRow(0, 2.f * ImGui::GetTextLineHeight());
+			ImGui::TableNextColumn();
+
+			TextCenteredOnLine(combinations[i].first.c_str(), 0, i, 0.5f, true);
+
+			ImGui::TableNextColumn();
+
+			bool s = selected == i;
+
+
+			std::string key_name = combinations[i].second.GetKeysHumanStr();
+
+			if (key_name.empty()) {
+				for (int j = 0; j < i; j++)
+					key_name += " ";
+			}
+
+			if (ImGui::Selectable(key_name.c_str(), &s, ImGuiSelectableFlags_Centered, ImVec2(0, 2.f * ImGui::GetTextLineHeight()))) {
+				selected = i;
+				SelectedCombination_For_setting = i;
+				PopupSetKeyIsOpen = true;
+
+			}
+
+
+			if (PopupSetKeyIsOpen == false) {
+				selected = -1;
+				SelectedCombination_For_setting = -1;
+			}
+
+
 		}
 
-		if (ImGui::Selectable(key_name.c_str(), &s, ImGuiSelectableFlags_Centered, ImVec2(0, 2.f * ImGui::GetTextLineHeight()))) {
-			selected = i;
-			SelectedCombination_For_setting = i;
-			PopupSetKeyIsOpen = true;
-
-		}
-
-
-		if (PopupSetKeyIsOpen == false) {
-			selected = -1;
-			SelectedCombination_For_setting = -1;
-		}
-
-
+		ImGui::EndTable();
 	}
-
-	ImGui::EndTable();
 
 	DrawPopupSetKey();
 }

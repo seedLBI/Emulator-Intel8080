@@ -3,7 +3,6 @@
 I8080_UserInterface::I8080_UserInterface(GLFWwindow* window) {
 	this->window = window;
 
-
 	saveSystemManager =			new SaveSystemManager(GetExePath() + "\\SettingData.save");
 
 	notificationManager =		new NotificationManager();
@@ -201,12 +200,10 @@ void I8080_UserInterface::DrawMainMenu() {
 				window_manager->ToggleFullscreen();
 			}
 			
-			if (ImGui::MenuItem(std::string(string(ICON_FA_WINDOW_RESTORE) + u8" Открыть\\Закрыть все окна").c_str())) {
-				if (WidgetManager.GetFlag_AllOpened())
-					WidgetManager.CloseAll();
-				else
-					WidgetManager.OpenAll();
-			}
+			if (ImGui::MenuItem(std::string(string(ICON_FA_WINDOW_RESTORE) + u8" Закрыть все окна").c_str()))
+				WidgetManager.CloseAll();
+			if (ImGui::MenuItem(std::string(string(ICON_FA_WINDOW_RESTORE) + u8" Открыть все окна").c_str()))
+				WidgetManager.OpenAll();
 
 			ImGui::Separator();
 

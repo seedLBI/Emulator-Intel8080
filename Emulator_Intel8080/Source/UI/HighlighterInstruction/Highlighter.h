@@ -34,4 +34,7 @@ protected:
 	std::vector<ColoredObject> categories;
 };
 
+
+
+
 #endif // !HIGHLIGHTER_H

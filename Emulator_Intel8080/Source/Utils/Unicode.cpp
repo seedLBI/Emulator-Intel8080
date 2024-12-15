@@ -563,11 +563,13 @@ uint64_t LowerCase_Unicode(const uint64_t& UnicodeSymbol) {
     UNICODE_BLOCK_NAMES Block = Get_UNICODE_BLOCK_NAMES_from_UnicodeSymbol(UnicodeSymbol);
 
     switch (Block) {
-    case UNICODE_BLOCK_NAMES::Basic_Latin:
+    case UNICODE_BLOCK_NAMES::Basic_Latin: {
         if (UnicodeSymbol >= 0x0041 && UnicodeSymbol <= 0x005A)
             return UnicodeSymbol + 0x0020;
         break;
-    case UNICODE_BLOCK_NAMES::Cyrillic:
+    }
+    case UNICODE_BLOCK_NAMES::Cyrillic: {
+
         if (UnicodeSymbol >= 0x0400 && UnicodeSymbol <= 0x040F)
             return UnicodeSymbol + 0x0050;
         if (UnicodeSymbol >= 0x0410 && UnicodeSymbol <= 0x042F)
@@ -576,6 +578,7 @@ uint64_t LowerCase_Unicode(const uint64_t& UnicodeSymbol) {
             return UnicodeSymbol + 1;
 
         break;
+    }
     default:
         break;
     }
@@ -586,11 +589,13 @@ uint64_t UpperCase_Unicode(const uint64_t& UnicodeSymbol) {
     UNICODE_BLOCK_NAMES Block = Get_UNICODE_BLOCK_NAMES_from_UnicodeSymbol(UnicodeSymbol);
 
     switch (Block) {
-    case UNICODE_BLOCK_NAMES::Basic_Latin:
+    case UNICODE_BLOCK_NAMES::Basic_Latin: {
         if (UnicodeSymbol >= 0x0061 && UnicodeSymbol <= 0x007A)
             return UnicodeSymbol - 0x0020;
         break;
-    case UNICODE_BLOCK_NAMES::Cyrillic:
+    }
+    case UNICODE_BLOCK_NAMES::Cyrillic: {
+
         if (UnicodeSymbol >= 0x0450 && UnicodeSymbol <= 0x045F)
             return UnicodeSymbol - 0x0050;
         if (UnicodeSymbol >= 0x0430 && UnicodeSymbol <= 0x044F)
@@ -600,6 +605,7 @@ uint64_t UpperCase_Unicode(const uint64_t& UnicodeSymbol) {
             return UnicodeSymbol - 1;
 
         break;
+    }
     default:
         break;
     }
