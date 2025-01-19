@@ -1,7 +1,6 @@
 #include "I8080.UI.MnemoCodeViewerTargeted.h"
 
 
-
 Widget_MnemocodeViewerTargeted::Widget_MnemocodeViewerTargeted(I8080* processor, TranslatorOutput* translator) :
 	I8080_Widget(u8"Мнемо код (нацеленный)"),
 	IThemeLoadable(u8"Мнемо код (нацеленный)")

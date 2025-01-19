@@ -18,6 +18,8 @@ void ThemeManager::CalculateCountObjects() {
 void ThemeManager::AddObject(IThemeLoadable* new_object) {
 	objects.push_back(new_object);
 	CalculateCountObjects();
+	SetDarkTheme();
+	LoadForced();
 }
 
 

@@ -1,4 +1,4 @@
-﻿#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+﻿//#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
 #include "Config_Compilier.h"
 #include "UI/I8080.UI.h"
@@ -6,11 +6,10 @@
 
 #include "Emulator/Processors/Intel8080/InfoInstruction/InfoInstruction.Data.h"
 
-
 using namespace std;
 
-
 I8080_UserInterface* i8080_ui = nullptr;
+
 
 int main(int argc, char* argv[]) {
 	//setlocale(LC_ALL, "russian");	

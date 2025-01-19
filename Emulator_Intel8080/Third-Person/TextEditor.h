@@ -381,6 +381,10 @@ public:
 	void MoveHome(bool aSelect = false);
 	void MoveEnd(bool aSelect = false);
 
+	void MoveLineUp(bool aSelect = false);
+	void MoveLineDown(bool aSelect = false);
+
+
 	void SetSelectionStart(const Coordinates& aPosition);
 	void SetSelectionEnd(const Coordinates& aPosition);
 	void SetSelection(const Coordinates& aStart, const Coordinates& aEnd, SelectionMode aMode = SelectionMode::Normal);
@@ -504,7 +508,7 @@ private:
 	bool SetAgain_Step2 = false;
 	float SetAgain_LineNo = 0;
 
-
+	bool mCopyingWithoutSelection = false;
 
 
 	void Render();

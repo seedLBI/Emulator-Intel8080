@@ -1068,6 +1068,13 @@ void TextEditor::HandleKeyboardInputs()
 			mErrorMarkers.clear();
 			EnterCharacter('\t', shift);
 		}
+		else if (!IsReadOnly() && alt && !ctrl && !shift && !mWindowFind && ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_UpArrow))) {
+			MoveLineUp(false);
+		}
+		else if (!IsReadOnly() && alt && !ctrl && !shift && !mWindowFind && ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_DownArrow))) {
+			MoveLineDown(false);
+		}
+
 
 		if (!IsReadOnly() && !io.InputQueueCharacters.empty() && !mWindowFind)
 		{
@@ -1091,6 +1098,8 @@ void TextEditor::HandleMouseInputs_Step1() {
 	auto shift = io.KeyShift;
 	auto ctrl = io.ConfigMacOSXBehaviors ? io.KeySuper : io.KeyCtrl;
 	auto alt = io.ConfigMacOSXBehaviors ? io.KeyCtrl : io.KeyAlt;
+
+	static bool IsDragSelection = false;
 
 	if (ImGui::IsWindowHovered())
 	{
@@ -1156,10 +1165,139 @@ void TextEditor::HandleMouseInputs_Step1() {
 				io.WantCaptureMouse = true;
 				mState.mCursorPosition = mInteractiveEnd = ScreenPosToCoordinates(ImGui::GetMousePos());
 				SetSelection(mInteractiveStart, mInteractiveEnd, mSelectionMode);
+				IsDragSelection = true;
+			}
+			else {
+				IsDragSelection = false;
 			}
 		}
 	}
+	else {
 
+
+
+		if (ImGui::IsMouseDragging(0) && ImGui::IsMouseDown(0) && IsDragSelection)
+		{
+
+
+			auto posMouse = ImGui::GetMousePos();
+			auto posWindow = ImGui::GetWindowPos();
+			auto sizeWindow = ImGui::GetWindowSize();
+
+
+			float pos_UpEdge = posWindow.y;
+			float pos_DownEdge = posWindow.y + sizeWindow.y;
+			float pos_LeftEdge = posWindow.x;
+			float pos_RightEdge = posWindow.x + sizeWindow.x;
+
+			float Delta_Vertical_Up = pos_UpEdge - posMouse.y;
+			float Delta_Vertical_Down = posMouse.y - pos_DownEdge;
+
+			float Delta_Horizontal_Left = pos_LeftEdge - posMouse.x;
+			float Delta_Horizontal_Right = posMouse.x - pos_RightEdge;
+
+
+			io.WantCaptureMouse = true;
+			mState.mCursorPosition = mInteractiveEnd = ScreenPosToCoordinates(ImGui::GetMousePos());
+			SetSelection(mInteractiveStart, mInteractiveEnd, mSelectionMode);
+
+
+
+			float scrollX = ImGui::GetScrollX();
+			float scrollY = ImGui::GetScrollY();
+
+			auto height = ImGui::GetWindowHeight();
+			auto width = ImGui::GetWindowWidth();
+
+			auto top = 1 + (int)ceil(scrollY / mCharAdvance.y);
+			auto bottom = (int)ceil((scrollY + height) / mCharAdvance.y);
+
+			auto left = (int)ceil(scrollX / mCharAdvance.x);
+			auto right = (int)ceil((scrollX + width) / mCharAdvance.x);
+
+			auto pos = GetActualCursorCoordinates();
+			auto len = TextDistanceToLineStart(pos);
+
+			float ConcreateDelta = 0.f;
+
+
+			if (Delta_Vertical_Down > 0) {
+
+				float count_symbols = 0.7f * exp(Delta_Vertical_Down / mCharAdvance.y);
+
+				static float NeedChangeSymbol = 0.0f;
+
+				NeedChangeSymbol += count_symbols * ImGui::GetIO().DeltaTime;
+
+				if (NeedChangeSymbol >= 0.2f) {
+					int countAdd = NeedChangeSymbol / 0.2f;
+					if (countAdd > 3)
+						countAdd = 3;
+					ImGui::SetScrollY((std::max)(0.0f, (bottom + countAdd) * mCharAdvance.y - height));
+					NeedChangeSymbol = 0.f;
+				}
+
+
+			}
+			else if (Delta_Vertical_Up > 0) {
+
+				float count_symbols = 0.7f*exp(Delta_Vertical_Up / mCharAdvance.y);
+
+				static float NeedChangeSymbol = 0.0f;
+
+				NeedChangeSymbol += count_symbols * ImGui::GetIO().DeltaTime;
+
+				if (NeedChangeSymbol >= 0.2f) {
+					int countSub = NeedChangeSymbol / 0.2f;
+					if (countSub > 3)
+						countSub = 3;
+
+					ImGui::SetScrollY((std::max)(0.0f, (top - 1 - countSub) * mCharAdvance.y));
+					NeedChangeSymbol = 0.f;
+				}
+
+
+			}
+
+			/*
+			if (Delta_Horizontal_Right > 0) {
+
+				float count_symbols = Delta_Horizontal_Right / mCharAdvance.x;
+
+				static float NeedChangeSymbol = 0.0f;
+
+				NeedChangeSymbol += count_symbols * ImGui::GetIO().DeltaTime;
+
+				if (NeedChangeSymbol >= 0.2f) {
+					ImGui::SetScrollX((std::max)(0.0f, len + mTextStart + 1 - width));
+					NeedChangeSymbol = 0.f;
+				}
+
+
+			}
+			else if (Delta_Horizontal_Left > 0) {
+
+				float count_symbols = Delta_Horizontal_Left / mCharAdvance.x;
+
+				static float NeedChangeSymbol = 0.0f;
+
+				NeedChangeSymbol += count_symbols * ImGui::GetIO().DeltaTime;
+
+				if (NeedChangeSymbol >= 0.2f) {
+					ImGui::SetScrollX((std::max)(0.0f, len + mTextStart - 1));
+					NeedChangeSymbol = 0.f;
+				}
+
+
+			}
+			*/
+		}
+
+
+
+
+
+	}
 }
 void TextEditor::HandleMouseInputs_Step2() {
 	ImGuiIO& io = ImGui::GetIO();
@@ -2244,6 +2382,133 @@ void TextEditor::MoveDown(int aAmount, bool aSelect)
 	}
 }
 
+
+void TextEditor::MoveLineUp(bool aSelect) {
+
+	auto pos = GetActualCursorCoordinates();
+
+	if (mState.mSelectionStart.mLine != 0) {
+
+
+		int CountLines = mState.mSelectionEnd.mLine - mState.mSelectionStart.mLine + 1;
+
+		std::string SelectedText = "";
+		std::string UpperText = "";
+
+
+		Coordinates Selection_start, Upper_start;
+		Coordinates Selection_end, Upper_end;
+
+		Selection_start = Coordinates(mState.mSelectionStart.mLine, 0);
+		Selection_end = Coordinates(mState.mSelectionEnd.mLine, GetLineMaxColumn(mState.mSelectionEnd.mLine));
+
+		SelectedText = GetText(Selection_start, Selection_end);
+
+		Upper_start = Coordinates(mState.mSelectionStart.mLine - 1, 0);
+		Upper_end = Coordinates(mState.mSelectionStart.mLine - 1, GetLineMaxColumn(mState.mSelectionStart.mLine - 1));
+
+		UpperText = GetText(Upper_start, Upper_end);
+
+
+
+
+		UndoRecord UndoData;
+
+		UndoData.mRemoved = UpperText + "\n" + SelectedText;
+		UndoData.mAdded = SelectedText + "\n" + UpperText;
+
+
+		UndoData.mRemovedStart = Upper_start;
+		UndoData.mRemovedEnd = Selection_end;
+
+		UndoData.mAddedEnd = UndoData.mRemovedEnd;
+		UndoData.mAddedStart = UndoData.mRemovedStart;
+
+
+
+		UndoData.mBefore = mState;
+
+		mState.mCursorPosition.mLine--;
+		mState.mSelectionStart.mLine--;
+		mState.mSelectionEnd.mLine--;
+
+		UndoData.mAfter = mState;
+
+
+		for (int i = 0; i < CountLines; i++) {
+			std::swap(mLines[pos.mLine + i], mLines[pos.mLine - 1 + i]);
+		}
+
+
+		AddUndo(UndoData);
+
+	}
+
+}
+
+void TextEditor::MoveLineDown(bool aSelect) {
+	auto pos = GetActualCursorCoordinates();
+
+	if (mState.mSelectionEnd.mLine != mLines.size() - 1) {
+
+
+		int CountLines = mState.mSelectionEnd.mLine - mState.mSelectionStart.mLine + 1;
+
+		std::string SelectedText = "";
+		std::string LowerText = "";
+
+
+		Coordinates Selection_start, Lower_start;
+		Coordinates Selection_end, Lower_end;
+
+		Selection_start = Coordinates(mState.mSelectionStart.mLine, 0);
+		Selection_end = Coordinates(mState.mSelectionEnd.mLine, GetLineMaxColumn(mState.mSelectionEnd.mLine));
+
+		SelectedText = GetText(Selection_start, Selection_end);
+
+		Lower_start = Coordinates(mState.mSelectionEnd.mLine + 1, 0);
+		Lower_end = Coordinates(mState.mSelectionEnd.mLine + 1, GetLineMaxColumn(mState.mSelectionEnd.mLine + 1));
+
+		LowerText = GetText(Lower_start, Lower_end);
+
+
+
+
+		UndoRecord UndoData;
+
+		UndoData.mRemoved = SelectedText + "\n" + LowerText;
+		UndoData.mAdded = LowerText + "\n" + SelectedText;
+
+
+		UndoData.mRemovedStart = Selection_start;
+		UndoData.mRemovedEnd = Lower_end;
+
+		UndoData.mAddedEnd = UndoData.mRemovedEnd;
+		UndoData.mAddedStart = UndoData.mRemovedStart;
+
+
+
+		UndoData.mBefore = mState;
+
+		mState.mCursorPosition.mLine++;
+		mState.mSelectionStart.mLine++;
+		mState.mSelectionEnd.mLine++;
+
+		UndoData.mAfter = mState;
+
+
+		for (int i = CountLines- 1; i >= 0; i--) {
+			std::swap(mLines[pos.mLine + i], mLines[pos.mLine + 1 + i]);
+		}
+
+
+		AddUndo(UndoData);
+
+	}
+
+}
+
+
 static bool IsUTFSequence(char c)
 {
 	return (c & 0xC0) == 0x80;
@@ -2644,6 +2909,7 @@ void TextEditor::Copy()
 	if (HasSelection())
 	{
 		ImGui::SetClipboardText(GetSelectedText().c_str());
+		mCopyingWithoutSelection = false;
 	}
 	else
 	{
@@ -2654,6 +2920,7 @@ void TextEditor::Copy()
 			for (auto& g : line)
 				str.push_back(g.mChar);
 			ImGui::SetClipboardText(str.c_str());
+			mCopyingWithoutSelection = true;
 		}
 	}
 }
@@ -2688,25 +2955,38 @@ void TextEditor::Paste()
 	if (IsReadOnly())
 		return;
 
+
+
 	auto clipText = ImGui::GetClipboardText();
-	if (clipText != nullptr && strlen(clipText) > 0)
-	{
+	bool _hasSelection = HasSelection();
+
+	if (clipText != nullptr) {
+
 		UndoRecord u;
 		u.mBefore = mState;
 
-		if (HasSelection()){
+		
+		if (_hasSelection){
 			u.mRemoved = GetSelectedText();
 			u.mRemovedStart = mState.mSelectionStart;
 			u.mRemovedEnd = mState.mSelectionEnd;
 			DeleteSelection();
 		}
+		
 
 		u.mAdded = clipText;
+
+		if (_hasSelection == false && GetCurrentLineText() == clipText && mCopyingWithoutSelection) {
+			u.mAdded.insert(u.mAdded.begin(), '\n');
+		}
+
+
 		u.mAddedStart = GetActualCursorCoordinates();
 
-		InsertText(clipText);
+		InsertText(u.mAdded.c_str());
 
 		u.mAddedEnd = GetActualCursorCoordinates();
+
 		u.mAfter = mState;
 		AddUndo(u);
 	}

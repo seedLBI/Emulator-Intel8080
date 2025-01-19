@@ -429,6 +429,8 @@ void I8080_UserInterface::InitKeyCombinationHandler() {
 	keyCombination_handler->AddCombination(u8"Открыть файл", KeyCombination({}, std::bind(&ProjectManager::OpenFile, projectManager)));
 
 	keyCombination_handler->AddCombination(u8"Настройки", KeyCombination({}, std::bind(&Setting::Toggle, settings)));
+	keyCombination_handler->AddCombination(u8"Режим сохранения истории (вкл\\выкл)", KeyCombination({}, std::bind(&Processor::ToggleHistoryMode, processor)));
+
 
 	keyCombination_handler->AddCombination(u8"Полноэкранный\\Оконный", KeyCombination({ GLFW_KEY_F11 }, std::bind(&WindowManager::ToggleFullscreen, window_manager)));
 

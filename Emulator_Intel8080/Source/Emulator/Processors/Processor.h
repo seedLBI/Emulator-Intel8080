@@ -44,7 +44,7 @@ protected:
 
 	bool FlagStop = false;
 
-	bool Flag_HistoryModeEnabled = true;
+	bool Flag_HistoryModeEnabled = false;
 };
 
 

@@ -1238,7 +1238,7 @@ namespace Intro {
 			Vars::Word_Processora = utf8_to_utf16(u8"Процессора");
 			Vars::Word_Intel_8080 = utf8_to_utf16(u8"Intel 8080");
 
-			Vars::Word_Version = utf8_to_utf16(u8"Версия от 08.11.2024");
+			Vars::Word_Version = utf8_to_utf16(u8"Версия от 15.12.2024");
 
 
 			Vars::Word_Avtor_Korzhunov_a_c = utf8_to_utf16(u8"Автор:  Коржунов А. С.");
@@ -1249,12 +1249,13 @@ namespace Intro {
 			Vars::Word_Update = utf8_to_utf16(u8"Обновления");
 			Vars::Word_Added = utf8_to_utf16(u8"Добавлено:");
 			Vars::ListWord_added = {
-				{utf8_to_utf16(u8"  * Поиск в редакторе кода")},
-				{utf8_to_utf16(u8"  * Многострочные комментарии")},
-				{utf8_to_utf16(u8"  * Полная поддержка кирилицы")},
-				{utf8_to_utf16(u8"  * Настройки горячих клавиш")},
-				{utf8_to_utf16(u8"  * Улучшены возможности .set:")},
-				{utf8_to_utf16(u8"  * Автосохранение")},
+				{utf8_to_utf16(u8"  * Цветовые темы")},
+				{utf8_to_utf16(u8"  * История выполнения")},
+				{utf8_to_utf16(u8"  * Таблица инструкций")},
+				{utf8_to_utf16(u8"  * Ограничения эмуляции")},
+				{utf8_to_utf16(u8"  * Нацеленный мнемокод")},
+				{utf8_to_utf16(u8"  * Чтение COM и BIN файлов")},
+				{utf8_to_utf16(u8" ")},
 			};
 			Vars::Word_Optimazed = utf8_to_utf16(u8"Исправлено:");
 			Vars::ListWord_optimazed = {
