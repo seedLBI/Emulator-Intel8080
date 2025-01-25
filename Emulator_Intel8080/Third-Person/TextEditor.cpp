@@ -2976,16 +2976,36 @@ void TextEditor::Paste()
 
 		u.mAdded = clipText;
 
-		if (_hasSelection == false && GetCurrentLineText() == clipText && mCopyingWithoutSelection) {
+
+		bool PastedWithNewLine = false;
+		int Last_mColumn = 0;
+
+		if (GetCurrentLineText() == clipText && mCopyingWithoutSelection) {
 			u.mAdded.insert(u.mAdded.begin(), '\n');
+			u.mAddedStart = GetActualCursorCoordinates();
+
+			PastedWithNewLine = true;
+			Last_mColumn = mState.mCursorPosition.mColumn;
+
+			u.mAddedStart.mColumn = GetLineMaxColumn(u.mAddedStart.mLine);
+
+			mState.mCursorPosition.mColumn = u.mAddedStart.mColumn;
+
+		}
+		else {
+			u.mAddedStart = GetActualCursorCoordinates();
 		}
 
 
-		u.mAddedStart = GetActualCursorCoordinates();
+
 
 		InsertText(u.mAdded.c_str());
-
 		u.mAddedEnd = GetActualCursorCoordinates();
+
+		if (PastedWithNewLine){
+			mState.mCursorPosition.mColumn = Last_mColumn;
+		}
+
 
 		u.mAfter = mState;
 		AddUndo(u);

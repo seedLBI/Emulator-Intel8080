@@ -140,6 +140,15 @@ private:
 	bool Viseted_Memory[SIZE_MEMORY] = { 0, };
     bool BreakPoints[SIZE_MEMORY] = { 0, };
 
+
+    bool parityTable[256];
+    bool signTable[256];
+    bool zeroTable[256];
+    void InitParityTable();
+    void InitSignTable();
+    void InitZeroTable();
+
+
     inline void ALU(const uint8_t& opcode);
     inline void ALU_WithHistorySaving(const uint8_t& opcode);
 

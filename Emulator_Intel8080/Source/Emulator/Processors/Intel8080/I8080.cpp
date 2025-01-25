@@ -4,6 +4,32 @@ I8080::I8080() : Processor(u8"Intel 8080") {
 	Init_External_Peripherals();
 	InitInstructions();
 	InitInstructionsWithHistory();
+	InitParityTable();
+	InitSignTable();
+	InitZeroTable();
+}
+
+
+void I8080::InitParityTable() {
+	for (int value = 0; value < 256; value++) {
+		int count = 0;
+		for (uint8_t i = 0; i < 8; ++i) {
+			count += (((value) & (1 << i)) == (1 << i));
+		}
+		parityTable[value] = (count % 2 == 0);
+	}
+}
+
+void I8080::InitSignTable() {
+	for (int value = 0; value < 256; value++) {
+		signTable[value] = value & 128;
+	}
+}
+
+void I8080::InitZeroTable() {
+	for (int value = 0; value < 256; value++) {
+		zeroTable[value] = (value == 0);
+	}
 }
 
 void I8080::Init_External_Peripherals() {
@@ -84,6 +110,31 @@ std::shared_ptr<Momento> I8080::SaveState() {
 
 	return ptr_To_Last_Momento;
 }
+
+
+inline void I8080::_SetFlagSign(const uint8_t& value) {
+	Sign = signTable[value];
+}
+inline void I8080::_SetFlagParuty(const uint8_t& value) {
+	Paruty = parityTable[value];
+}
+inline void I8080::_SetFlagZero(const uint8_t& value) {
+	Zero = zeroTable[value];
+}
+
+uint8_t I8080::GetRegisterFlags() {
+	uint8_t FlagRegister = 0;
+	FlagRegister |= Sign << 7;
+	FlagRegister |= Zero << 6;
+	FlagRegister |= AuxiliaryCarry << 4;
+	FlagRegister |= Paruty << 2;
+	FlagRegister |= 1 << 1;
+	FlagRegister |= Carry << 0;
+
+	return FlagRegister;
+}
+
+
 
 uint16_t I8080::GetBC() {
 	return B * 255 + C;
@@ -1345,10 +1396,17 @@ void I8080::_JM() {
 
 inline void I8080::_INX(uint8_t& pair_element1, uint8_t& pair_element2) {
 	CountTicks += 5;
-	unsigned short first = pair_element1 * 256 + pair_element2;
-	first++;
-	pair_element1 = first / 256;
-	pair_element2 = first % 256;
+
+	++pair_element2;
+	if (pair_element2 == 0)
+		++pair_element1;
+
+	//unsigned short first = pair_element1 * 256 + pair_element2;
+	//first++;
+	//pair_element1 = first / 256;
+	//pair_element2 = first % 256;
+
+
 	IncrementPC();
 }
 inline void I8080::_INCREMENT(uint8_t& value) {
@@ -1420,11 +1478,13 @@ inline void I8080::_DECREMENT(uint8_t& value) {
 }
 
 inline void I8080::_DCX(uint8_t& pair_element1, uint8_t& pair_element2) {
+
 	CountTicks += 5;
-	uint32_t first = pair_element1 * 256 + pair_element2;
-	first--;
-	pair_element1 = first / 256;
-	pair_element2 = first % 256;
+
+	--pair_element2;
+	if (pair_element2 == 255)
+		--pair_element1;
+
 	IncrementPC();
 }
 
@@ -1762,31 +1822,6 @@ void I8080::_ACI_imm8() {
 	_ADC(Memory[PC]);
 }
 
-inline void I8080::_SetFlagSign(const uint8_t& value) {
-	Sign = value & 128;
-}
-inline void I8080::_SetFlagParuty(const uint8_t& value) {
-	int count = 0;
-	for (uint8_t i = 0; i < 8; ++i) {
-		count += (((value) & (1 << i)) == (1 << i));
-	}
-	Paruty = (count % 2 == 0);
-}
-inline void I8080::_SetFlagZero(const uint8_t& value) {
-	Zero = (value == 0);
-}
-
-uint8_t I8080::GetRegisterFlags() {
-	uint8_t FlagRegister = 0;
-	FlagRegister |= Sign << 7;
-	FlagRegister |= Zero << 6;
-	FlagRegister |= AuxiliaryCarry << 4;
-	FlagRegister |= Paruty << 2;
-	FlagRegister |= 1 << 1;
-	FlagRegister |= Carry << 0;
-
-	return FlagRegister;
-}
 
 
 inline void I8080::HiSetSP_nextAdress(const uint16_t& next_adress) {
