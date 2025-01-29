@@ -8,7 +8,7 @@ I8080_Timer::I8080_Timer() : I8080_Port(0x16) {
 	clock_start = std::chrono::system_clock::now();
 }
 
-void I8080_Timer::SetInput(uint8_t value) {
+void I8080_Timer::SetInput(const uint8_t& value) {
 	countPartSec = value;
 	clock_start = std::chrono::system_clock::now();
 }

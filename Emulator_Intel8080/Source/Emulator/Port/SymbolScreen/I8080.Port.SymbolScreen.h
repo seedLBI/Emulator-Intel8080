@@ -13,9 +13,9 @@
 class I8080_SymbolScreen : public I8080_Port {
 public:
 	I8080_SymbolScreen();
-	void virtual SetInput(uint8_t value) override;
-	uint8_t virtual GetOutput() override;
-	void virtual Reset() override;
+	void SetInput(const uint8_t& value) override;
+	uint8_t GetOutput() override;
+	void Reset() override;
 	uint8_t GetPort();
 
 	std::vector<std::vector<uint8_t>> Get_Array_symbols();

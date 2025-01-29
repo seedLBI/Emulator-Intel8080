@@ -12,9 +12,9 @@
 class I8080_PixelScreenTwoBuffers : public I8080_Port {
 public:
 	I8080_PixelScreenTwoBuffers();
-	void virtual SetInput(uint8_t value) override;
-	uint8_t virtual GetOutput() override;
-	void virtual Reset() override;
+	void SetInput(const uint8_t& value) override;
+	uint8_t GetOutput() override;
+	void Reset() override;
 	uint8_t GetPort();
 
 	std::vector<std::vector<uint8_t>> Get_Array_colors_FrontBuffer();

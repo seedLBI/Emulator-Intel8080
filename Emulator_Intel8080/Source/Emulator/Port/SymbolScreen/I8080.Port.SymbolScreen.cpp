@@ -9,31 +9,31 @@ I8080_SymbolScreen::I8080_SymbolScreen() :I8080_Port(0x07) {
 	Init();
 }
 
-void I8080_SymbolScreen::SetInput(uint8_t value) {
+void I8080_SymbolScreen::SetInput(const uint8_t& value) {
 	//cout << "inputted: " << int2stringBin(value) << endl;
 	switch (count_input)
 	{
 	case 0:
 		if (value > 19)
-			value = 19;
-		index_raw = value;
+			index_raw = 19;
+		else
+			index_raw = value;
 
 		break;
 	case 1:
 		if (value > 19)
-			value = 19;
-		index_col = value;
+			index_col = 19;
+		else
+			index_col = value;
 		break;
 	case 2:
-		mode_read_or_write = (unsigned int(value) == 0 ? 0 : 1);
+		mode_read_or_write = (value == 0 ? 0 : 1);
 		break;
 	case 3:
-		if ((unsigned int)value > 63) {
+		if (value > 63)
 			color = 63;
-		}
-		else {
+		else
 			color = value;
-		}
 
 		break;
 	case 4:

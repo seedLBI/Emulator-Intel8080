@@ -12,7 +12,7 @@
 class I8080_Timer : public I8080_Port {
 public:
 	I8080_Timer();
-	void SetInput(uint8_t value) override;
+	void SetInput(const uint8_t& value) override;
 	uint8_t GetOutput() override;
 	void Reset() override;
 	uint8_t GetPort();

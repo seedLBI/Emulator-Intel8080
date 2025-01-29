@@ -50,7 +50,7 @@ void Processor::ActiveFlagStop() {
 void Processor::ResetFlagStop() {
 	FlagStop = false;
 }
-void Processor::SetFlagStop(bool flag) {
+void Processor::SetFlagStop(const bool& flag) {
 	FlagStop = flag;
 }
 bool Processor::GetFlagStop() {

@@ -8,7 +8,7 @@ I8080_PixelScreenTwoBuffers::I8080_PixelScreenTwoBuffers() :I8080_Port(0x06) {
 	Init();
 }
 
-void I8080_PixelScreenTwoBuffers::SetInput(uint8_t value) {
+void I8080_PixelScreenTwoBuffers::SetInput(const uint8_t& value) {
 	switch (count_input)
 	{
 	case 0:

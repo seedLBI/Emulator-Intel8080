@@ -12,9 +12,9 @@
 class I8080_GeneratorRandomValues : public I8080_Port {
 public:
 	I8080_GeneratorRandomValues();
-	void virtual SetInput(uint8_t value) override;
-	uint8_t virtual GetOutput() override;
-	void virtual Reset() override;
+	void SetInput(const uint8_t& value) override;
+	uint8_t GetOutput() override;
+	void Reset() override;
 	uint8_t GetPort();
 
 	std::shared_ptr<Momento> SaveState() override;

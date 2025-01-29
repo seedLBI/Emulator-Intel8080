@@ -8,7 +8,7 @@ I8080_GeneratorRandomValues::I8080_GeneratorRandomValues() :I8080_Port(0x09) {
 	Init();
 }
 
-void I8080_GeneratorRandomValues::SetInput(uint8_t value) {
+void I8080_GeneratorRandomValues::SetInput(const uint8_t& value) {
 	switch (count_input)
 	{
 	case 0:

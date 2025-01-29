@@ -8,7 +8,7 @@ I8080_PixelScreen::I8080_PixelScreen() :I8080_Port(0x05) {
 	Init();
 }
 
-void I8080_PixelScreen::SetInput(uint8_t value) {
+void I8080_PixelScreen::SetInput(const uint8_t& value) {
 	switch (count_input) {
 	case 0:
 		index_raw = value;

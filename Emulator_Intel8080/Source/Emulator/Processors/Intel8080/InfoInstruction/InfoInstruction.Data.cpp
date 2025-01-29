@@ -491,7 +491,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "rz",{
 	{},
 	{},
-	u8"Если флаг Zero = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
+	u8"Если флаг Zero = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды.\nRZ - Return if Zero",
 	{
 		{InstructionBranching::IF},
 			{"[PC].low",	"=","M[SP]"},
@@ -516,7 +516,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "rc",{
 	{},
 	{},
-	u8"Если флаг Carry = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
+	u8"Если флаг Carry = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды.\nRC - Return if Carry",
 	{
 		{InstructionBranching::IF},
 			{"[PC].low",	"=","M[SP]"},
@@ -541,7 +541,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "rpe",{
 	{},
 	{},
-	u8"Если флаг Paruty = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
+	u8"Если флаг Paruty = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды.\nRPE - Return if Paritu Even",
 	{
 		{InstructionBranching::IF},
 			{"[PC].low",	"=","M[SP]"},
@@ -566,7 +566,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "rm",{
 	{},
 	{},
-	u8"Если флаг Sign = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
+	u8"Если флаг Sign = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды.\nRM - Return if Minus.",
 	{
 		{InstructionBranching::IF},
 			{"[PC].low",	"=","M[SP]"},
@@ -591,7 +591,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "rnz",{
 	{},
 	{},
-	u8"Если флаг Zero = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
+	u8"Если флаг Zero = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды.\nRNZ - Return if Not Zero",
 	{
 		{InstructionBranching::IF},
 			{"[PC].low",	"=","M[SP]"},
@@ -616,7 +616,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "rnc",{
 	{},
 	{},
-	u8"Если флаг Carry = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
+	u8"Если флаг Carry = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды.\nRNC - Return if Not Carry",
 	{
 		{InstructionBranching::IF},
 			{"[PC].low",	"=","M[SP]"},
@@ -641,7 +641,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "rpo",{
 	{},
 	{},
-	u8"Если флаг Paruty = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
+	u8"Если флаг Paruty = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды.\nRPO - Return if Parity Odd",
 	{
 		{InstructionBranching::IF},
 			{"[PC].low",	"=","M[SP]"},
@@ -665,7 +665,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "rp",{
 	{},
 	{},
-	u8"Если флаг Sign = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды",
+	u8"Если флаг Sign = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды.\nRP - Return if Positive",
 	{
 		{InstructionBranching::IF},
 			{"[PC].low",	"=","M[SP]"},
@@ -710,7 +710,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "jz",{
 	{InstructionArguments::Value16},
 	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
-	u8"Если флаг Zero = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
+	u8"Если флаг Zero = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды.\nJZ - Jump if Zero",
 	{
 		{InstructionBranching::IF},
 			{"[PC]",	"=", InstructionArguments::Value16},
@@ -733,7 +733,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "jc",{
 	{InstructionArguments::Value16},
 	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
-	u8"Если флаг Carry = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
+	u8"Если флаг Carry = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды.\nJC - Jump if Carry",
 	{
 		{InstructionBranching::IF},
 			{"[PC]",	"=", InstructionArguments::Value16},
@@ -756,7 +756,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "jpe",{
 	{InstructionArguments::Value16},
 	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
-	u8"Если флаг Paruty = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
+	u8"Если флаг Paruty = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды.\nJPE - Jump if Parity Even",
 	{
 		{InstructionBranching::IF},
 			{"[PC]",	"=", InstructionArguments::Value16},
@@ -779,7 +779,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "jm",{
 	{InstructionArguments::Value16},
 	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
-	u8"Если флаг Sign = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
+	u8"Если флаг Sign = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды.\nJM - Jump if Minus.",
 	{
 		{InstructionBranching::IF},
 			{"[PC]",	"=", InstructionArguments::Value16},
@@ -802,7 +802,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "jnz",{
 	{InstructionArguments::Value16},
 	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
-	u8"Если флаг Zero = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
+	u8"Если флаг Zero = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды.\nJNZ - Jump if Not Zero",
 	{
 		{InstructionBranching::IF},
 			{"[PC]",	"=", InstructionArguments::Value16},
@@ -825,7 +825,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "jnc",{
 	{InstructionArguments::Value16},
 	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
-	u8"Если флаг Carry = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
+	u8"Если флаг Carry = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды.\nJNC - Jump if Not Carry",
 	{
 		{InstructionBranching::IF},
 			{"[PC]",	"=", InstructionArguments::Value16},
@@ -848,7 +848,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "jpo",{
 	{InstructionArguments::Value16},
 	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
-	u8"Если флаг Paruty = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
+	u8"Если флаг Paruty = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды.\nJPO - Jump if Parity Odd",
 	{
 		{InstructionBranching::IF},
 			{"[PC]",	"=", InstructionArguments::Value16},
@@ -871,7 +871,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "jp",{
 	{InstructionArguments::Value16},
 	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
-	u8"Если флаг  Sign = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды",
+	u8"Если флаг  Sign = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды.\nJP - Jump if Positive",
 	{
 		{InstructionBranching::IF},
 			{"[PC]",	"=", InstructionArguments::Value16},
@@ -917,7 +917,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "cz",{
 	{InstructionArguments::Value16},
 	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
-	u8"Если флаг Zero = 1, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
+	u8"Если флаг Zero = 1, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой.\nCZ - Call if Zero",
 	{
 		{InstructionBranching::IF},
 			{"[SP]",		"=","[SP] - 2"},
@@ -943,7 +943,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "cc",{
 	{InstructionArguments::Value16},
 	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
-	u8"Если флаг Carry = 1, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
+	u8"Если флаг Carry = 1, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой.\nCC - Call if Carry",
 	{
 		{InstructionBranching::IF},
 			{"[SP]",		"=","[SP] - 2"},
@@ -969,7 +969,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "cpe",{
 	{InstructionArguments::Value16},
 	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
-	u8"Если флаг Paruty = 1, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
+	u8"Если флаг Paruty = 1, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой.\nCPE - Call if Parity Even",
 	{
 		{InstructionBranching::IF},
 			{"[SP]",		"=","[SP] - 2"},
@@ -995,7 +995,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "cm",{
 	{InstructionArguments::Value16},
 	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
-	u8"Если флаг Sign = 1, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
+	u8"Если флаг Sign = 1, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой.\nCM - Call if Minus",
 	{
 		{InstructionBranching::IF},
 			{"[SP]",		"=","[SP] - 2"},
@@ -1021,7 +1021,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "cnz",{
 	{InstructionArguments::Value16},
 	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
-	u8"Если флаг Zero = 0, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
+	u8"Если флаг Zero = 0, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой.\nCNZ - Call if Not Zero",
 	{
 		{InstructionBranching::IF},
 			{"[SP]",		"=","[SP] - 2"},
@@ -1047,7 +1047,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "cnc",{
 	{InstructionArguments::Value16},
 	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
-	u8"Если флаг Carry = 0, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
+	u8"Если флаг Carry = 0, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой.\nCNC - Call if Not Carry",
 	{
 		{InstructionBranching::IF},
 			{"[SP]",		"=","[SP] - 2"},
@@ -1073,7 +1073,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "cpo",{
 	{InstructionArguments::Value16},
 	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
-	u8"Если флаг Paruty = 0, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
+	u8"Если флаг Paruty = 0, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой.\nCPO - Call if Parity Odd",
 	{
 		{InstructionBranching::IF},
 			{"[SP]",		"=","[SP] - 2"},
@@ -1099,7 +1099,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "cp",{
 	{InstructionArguments::Value16},
 	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
-	u8"Если флаг Sign = 0, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой",
+	u8"Если флаг Sign = 0, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой.\nCP - Call if Positive",
 	{
 		{InstructionBranching::IF},
 			{"[SP]",		"=","[SP] - 2"},

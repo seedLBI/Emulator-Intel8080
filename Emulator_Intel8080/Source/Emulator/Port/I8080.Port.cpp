@@ -5,7 +5,7 @@ I8080_Port::I8080_Port(uint8_t port)
 	this->port = port;
 }
 
-void I8080_Port::SetInput(uint8_t value)
+void I8080_Port::SetInput(const uint8_t& value)
 {
 
 }

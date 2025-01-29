@@ -7,7 +7,7 @@ I8080_AsyncKeyboard::I8080_AsyncKeyboard() : I8080_Port(0x10) {
 #endif
 }
 
-void I8080_AsyncKeyboard::SetInput(uint8_t value) {
+void I8080_AsyncKeyboard::SetInput(const uint8_t& value) {
 	switch (count_input)
 	{
 	case 0:

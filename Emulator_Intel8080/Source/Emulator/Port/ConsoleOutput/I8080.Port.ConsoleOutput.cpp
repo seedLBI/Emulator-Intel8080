@@ -7,7 +7,7 @@ I8080_ConsoleOutput::I8080_ConsoleOutput() : I8080_Port(0x02) {
 #endif
 }
 
-void I8080_ConsoleOutput::SetInput(uint8_t value) {
+void I8080_ConsoleOutput::SetInput(const uint8_t& value) {
 	LastActionIsInput = true;
 
 	if (Memory.size() >= maxSize)

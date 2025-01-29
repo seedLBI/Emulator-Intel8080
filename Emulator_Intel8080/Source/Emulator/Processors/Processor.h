@@ -28,7 +28,7 @@ public:
 
 	void ActiveFlagStop();
 	void ResetFlagStop();
-	void SetFlagStop(bool flag);
+	void SetFlagStop(const bool& flag);
 	bool GetFlagStop();
 	bool* IsStop();
 

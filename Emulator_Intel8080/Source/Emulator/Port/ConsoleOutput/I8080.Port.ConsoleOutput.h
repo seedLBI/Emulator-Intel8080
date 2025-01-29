@@ -16,7 +16,7 @@
 class I8080_ConsoleOutput : public I8080_Port {
 public:
 	I8080_ConsoleOutput();
-	void SetInput(uint8_t value) override;
+	void SetInput(const uint8_t& value) override;
 	uint8_t GetOutput() override;
 	void Reset() override;
 

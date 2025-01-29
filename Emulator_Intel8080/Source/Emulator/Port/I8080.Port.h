@@ -7,7 +7,7 @@
 class I8080_Port : public Originator_Momento {
 public:
 	I8080_Port(uint8_t port);
-	void virtual SetInput(uint8_t value);
+	void virtual SetInput(const uint8_t& value);
 	uint8_t virtual GetOutput();
 	uint8_t GetPort();
 	void virtual Reset();

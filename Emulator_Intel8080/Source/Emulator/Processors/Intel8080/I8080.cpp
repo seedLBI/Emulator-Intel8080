@@ -162,17 +162,26 @@ inline void I8080::SetVisitedMemoryFromPC(const int& count) {
 	}
 }
 
+inline void I8080::SetVisitedMemoryFromPC() {
+	Viseted_Memory[PC] = true;
+}
+
 inline void I8080::IncrementPC(const uint8_t& count) {
 	for (int i = PC; i < (PC + count); ++i)
 		Viseted_Memory[i] = true;
 	PC += count;
 }
 
+inline void I8080::IncrementPC() {
+	Viseted_Memory[PC] = true;
+	++PC;
+}
+
 inline int I8080::GetAdressHL() { return (H << 8) | L; }
 
 
 void I8080::EraseMemory() {
-	for (unsigned int i = 0; i < SIZE_MEMORY; i++) {
+	for (unsigned int i = 0; i < SIZE_MEMORY; ++i) {
 		Memory[i] = 0x00;
 		Viseted_Memory[i] = false;
 	}
@@ -184,7 +193,7 @@ void I8080::LoadMemory(const std::vector<OpcodeAdressed>& array) {
 
 	project_DATA.clear();
 
-	for (unsigned int i = 0; i < array.size(); i++)
+	for (unsigned int i = 0; i < array.size(); ++i)
 		Memory[array[i].adress_h * 256 + array[i].adress_l] = array[i].opcode;
 
 	SetModeProject(ModeProject::USER);
@@ -194,7 +203,7 @@ void I8080::LoadMemoryFromBinary(const std::vector<uint8_t>& array) {
 
 	project_DATA = array;
 
-	for (unsigned int i = 0; i < array.size(); i++)
+	for (unsigned int i = 0; i < array.size(); ++i)
 		Memory[i] = array[i];
 
 	PC = 0x0000;
@@ -208,7 +217,7 @@ void I8080::LoadMemoryFromCOM(const std::vector<uint8_t>& array) {
 	project_DATA = array;
 
 
-	for (unsigned int i = 0; i < array.size(); i++) {
+	for (unsigned int i = 0; i < array.size(); ++i) {
 		if (i + 0x0100 > 0xffff)
 			break;
 		Memory[i + 0x0100] = array[i];
@@ -232,7 +241,7 @@ void I8080::ReloadProjectData() {
 	if (_ModeProject == ModeProject::COM){
 		EraseMemory();
 
-		for (unsigned int i = 0; i < project_DATA.size(); i++) {
+		for (unsigned int i = 0; i < project_DATA.size(); ++i) {
 			if (i + 0x0100 > 0xffff)
 				break;
 			Memory[i + 0x0100] = project_DATA[i];
@@ -300,13 +309,13 @@ void I8080::InitPointer2State(CurrentState& cs) {
 
 void I8080::NextStep() {
 	ALU(Memory[PC]);
-	CountInstruction++;
+	++CountInstruction;
 }
 void I8080::NextStepWithHistorySaving() {
 	ptr_portMomento = std::shared_ptr<Momento>();
 	changedMemory.clear();
 	ALU_WithHistorySaving(Memory[PC]);
-	CountInstruction++;
+	++CountInstruction;
 }
 
 
@@ -343,7 +352,7 @@ void I8080::Reset() {
 
 	changedMemory.clear();
 
-	for (int i = 0; i < External_Peripherals.size(); i++)
+	for (int i = 0; i < External_Peripherals.size(); ++i)
 		External_Peripherals[i]->Reset();
 
 }
@@ -369,7 +378,7 @@ void I8080::SetBreakPointPosition(const uint16_t& Position, const bool& state) {
 	BreakPoints[Position] = state;
 }
 void I8080::RemoveAllBreakPoints() {
-	for (int i = 0; i < SIZE_MEMORY; i++)
+	for (int i = 0; i < SIZE_MEMORY; ++i)
 		BreakPoints[i] = false;
 }
 bool I8080::OnBreakPoint() {
@@ -535,8 +544,9 @@ void I8080::_SUI_imm8() {
 
 void I8080::_RLC() {
 	CountTicks += 4;
-	Carry = A >> 7;
-	A = ((A << 1) + (A >> 7));
+	uint8_t carry = A >> 7;
+	A = (A << 1) | carry;
+	Carry = carry;
 	IncrementPC();
 }
 void I8080::_RAL() {
@@ -548,15 +558,15 @@ void I8080::_RAL() {
 }
 void I8080::_RRC() {
 	CountTicks += 4;
-	unsigned char b = (A << 7);
-	Carry = (b >> 7);
-	A = (A >> 1) + b;
+	uint8_t carry = A & 1;
+	A = (A >> 1) | (carry << 7);
+	Carry = carry;
 	IncrementPC();
 }
 void I8080::_RAR() {
-	unsigned char last_carry = Carry;
-	unsigned char b = (A << 7);
-	Carry = (b >> 7);
+	CountTicks += 4;
+	uint8_t last_carry = Carry;
+	Carry = A&1;
 	A = (A >> 1) + (last_carry << 7);
 	IncrementPC();
 }
@@ -647,7 +657,7 @@ inline void I8080::_RST(const uint8_t& N) {
 	SP = SP - 2;
 
 	SetSP_nextAdress(PC + 1);
-	SetVisitedMemoryFromPC(1);
+	SetVisitedMemoryFromPC();
 
 	SetPC(uint16_t(N) * 8);
 
@@ -683,7 +693,7 @@ void I8080::_RST_7() {
 void I8080::_RET() {
 	CountTicks += 10;
 
-	SetVisitedMemoryFromPC(1);
+	SetVisitedMemoryFromPC();
 	SetPC(Memory[SP + 1] * 256 + Memory[SP]);
 	SP += 2;
 }
@@ -773,25 +783,25 @@ void I8080::_RM() {
 
 void I8080::_PUSH_B() {
 	CountTicks += 11;
-	SP--;
+	--SP;
 	Memory[SP] = B;
-	SP--;
+	--SP;
 	Memory[SP] = C;
 	IncrementPC();
 }
 void I8080::_PUSH_D() {
 	CountTicks += 11;
-	SP--;
+	--SP;
 	Memory[SP] = D;
-	SP--;
+	--SP;
 	Memory[SP] = E;
 	IncrementPC();
 }
 void I8080::_PUSH_H() {
 	CountTicks += 11;
-	SP--;
+	--SP;
 	Memory[SP] = H;
-	SP--;
+	--SP;
 	Memory[SP] = L;
 	IncrementPC();
 }
@@ -799,9 +809,9 @@ void I8080::_PUSH_PSW() {
 	CountTicks += 11;
 
 	uint8_t Flags = GetRegisterFlags();
-	SP--;
+	--SP;
 	Memory[SP] = A;
-	SP--;
+	--SP;
 	Memory[SP] = Flags;
 
 
@@ -813,25 +823,25 @@ void I8080::_POP_B() {
 	CountTicks += 10;
 
 	C = Memory[SP];
-	SP++;
+	++SP;
 	B = Memory[SP];
-	SP++;
+	++SP;
 	IncrementPC();
 }
 void I8080::_POP_D() {
 	CountTicks += 10;
 	E = Memory[SP];
-	SP++;
+	++SP;
 	D = Memory[SP];
-	SP++;
+	++SP;
 	IncrementPC();
 }
 void I8080::_POP_H() {
 	CountTicks += 10;
 	L = Memory[SP];
-	SP++;
+	++SP;
 	H = Memory[SP];
-	SP++;
+	++SP;
 	IncrementPC();
 }
 void I8080::_POP_PSW() {
@@ -845,9 +855,9 @@ void I8080::_POP_PSW() {
 	Paruty = (Flags >> 2) & 1;
 	Carry = (Flags >> 0) & 1;
 
-	SP++;
+	++SP;
 	A = Memory[SP];
-	SP++;
+	++SP;
 	IncrementPC();
 }
 
@@ -1401,18 +1411,12 @@ inline void I8080::_INX(uint8_t& pair_element1, uint8_t& pair_element2) {
 	if (pair_element2 == 0)
 		++pair_element1;
 
-	//unsigned short first = pair_element1 * 256 + pair_element2;
-	//first++;
-	//pair_element1 = first / 256;
-	//pair_element2 = first % 256;
-
-
 	IncrementPC();
 }
 inline void I8080::_INCREMENT(uint8_t& value) {
 	CountTicks += 5;
 
-	value++;
+	++value;
 	_SetFlagSign(value);
 	_SetFlagParuty(value);
 	_SetFlagZero(value);
@@ -1467,7 +1471,7 @@ void I8080::_INX_SP() {
 inline void I8080::_DECREMENT(uint8_t& value) {
 	CountTicks += 5;
 
-	value--;
+	--value;
 	_SetFlagSign(value);
 	_SetFlagParuty(value);
 	_SetFlagZero(value);
@@ -1533,15 +1537,15 @@ void I8080::_DCX_SP() {
 inline void I8080::_DAD(const uint8_t& pair_element1, const uint8_t& pair_element2) {
 	CountTicks += 10;
 
-	uint32_t value = (uint16_t)pair_element1 * 256 + (uint16_t)pair_element2;
-	uint32_t HL =(uint16_t)H * 256 + (uint16_t)L;
-
-	Carry = ((HL + value) >> 16) & 1;
+	const uint32_t value = (static_cast<uint16_t>(pair_element1) << 8) | pair_element2;
+	uint32_t HL = (static_cast<uint16_t>(H) << 8) | L;
 
 	HL += value;
 
-	H = HL / 256;
-	L = HL % 256;
+	Carry = (HL > 0xFFFF) ? 1 : 0;  // Альтернативно: (HL >> 16) & 1
+
+	H = static_cast<uint8_t>(HL >> 8);
+	L = static_cast<uint8_t>(HL);
 
 	IncrementPC();
 }
@@ -1564,10 +1568,10 @@ inline void I8080::_COMPARE(const uint8_t& value) {
 	
 	AuxiliaryCarry = ((A & 0b00001111) - (value & 0b00001111)) >= 0;
 	Carry = A < value;
-
-	_SetFlagSign(A - value);
-	_SetFlagParuty(A - value);
-	_SetFlagZero(A - value);
+	uint8_t temp = A - value;
+	_SetFlagSign(temp);
+	_SetFlagParuty(temp);
+	_SetFlagZero(temp);
 
 	IncrementPC();
 }
@@ -1827,7 +1831,7 @@ void I8080::_ACI_imm8() {
 inline void I8080::HiSetSP_nextAdress(const uint16_t& next_adress) {
 	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {SP,Memory[SP]},{uint16_t(SP + 1),Memory[uint16_t(SP + 1)]} });
 
-	Memory[SP] = (next_adress & 0x00ff);	  // next.low
+	Memory[SP]               = (next_adress & 0x00ff);	    // next.low
 	Memory[uint16_t(SP + 1)] = (next_adress & 0xff00) >> 8; // next.high
 }
 
@@ -1951,7 +1955,7 @@ inline void I8080::Hi_RST(const uint8_t& N) {
 	SP = SP - 2;
 
 	HiSetSP_nextAdress(PC + 1);
-	SetVisitedMemoryFromPC(1);
+	SetVisitedMemoryFromPC();
 
 	SetPC(uint16_t(N) * 8);
 
@@ -2102,6 +2106,7 @@ void I8080::Hi_INPUT() {
 
 	if (Memory[PC + 1] == 0x08) {
 		if (Flag_Waiting_Input) {
+			CountInstruction--;
 			return;
 		}
 
@@ -2117,7 +2122,7 @@ void I8080::Hi_INPUT() {
 			return;
 		}
 
-
+		CountInstruction--;
 		Flag_Waiting_Input = true;
 		return;
 

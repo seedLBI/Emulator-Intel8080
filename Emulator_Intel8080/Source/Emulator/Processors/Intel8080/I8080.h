@@ -154,9 +154,11 @@ private:
 
     inline void SetSP_nextAdress(const uint16_t& next_adress);
     inline void SetPC(const uint16_t& adress);
-    inline void IncrementPC(const uint8_t& count = 1);
+    inline void IncrementPC(const uint8_t& count);
+    inline void IncrementPC();
 
     inline void SetVisitedMemoryFromPC(const int& count);
+    inline void SetVisitedMemoryFromPC();
 
 
     inline void _SetFlagSign(const uint8_t& value);
@@ -248,7 +250,6 @@ private:
 	using InstructionHandler = void(I8080::*)();
 	std::array <InstructionHandler, 256>  instructions;
     std::array <InstructionHandler, 256>  instructionsWithHistory;
-    //std::array <InstructionHandler, 256>  instructionsOptimized;
 
     void InitInstructionsWithHistory();
 	void InitInstructions();
