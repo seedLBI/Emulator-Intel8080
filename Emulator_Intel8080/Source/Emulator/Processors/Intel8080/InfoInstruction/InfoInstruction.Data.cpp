@@ -541,7 +541,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "rpe",{
 	{},
 	{},
-	u8"Если флаг Paruty = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды.\nRPE - Return if Paritu Even",
+	u8"Если флаг Parity = 1, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды.\nRPE - Return if Paritu Even",
 	{
 		{InstructionBranching::IF},
 			{"[PC].low",	"=","M[SP]"},
@@ -641,7 +641,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "rpo",{
 	{},
 	{},
-	u8"Если флаг Paruty = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды.\nRPO - Return if Parity Odd",
+	u8"Если флаг Parity = 0, то Прыжок на адрес записанный в верхушке стэка и уменьшение стэка на два, иначе пропуск команды.\nRPO - Return if Parity Odd",
 	{
 		{InstructionBranching::IF},
 			{"[PC].low",	"=","M[SP]"},
@@ -756,7 +756,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "jpe",{
 	{InstructionArguments::Value16},
 	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
-	u8"Если флаг Paruty = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды.\nJPE - Jump if Parity Even",
+	u8"Если флаг Parity = 1, то Прыжок PC по адресу заданной константы, иначе пропуск команды.\nJPE - Jump if Parity Even",
 	{
 		{InstructionBranching::IF},
 			{"[PC]",	"=", InstructionArguments::Value16},
@@ -848,7 +848,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "jpo",{
 	{InstructionArguments::Value16},
 	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
-	u8"Если флаг Paruty = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды.\nJPO - Jump if Parity Odd",
+	u8"Если флаг Parity = 0, то Прыжок PC по адресу заданной константы, иначе пропуск команды.\nJPO - Jump if Parity Odd",
 	{
 		{InstructionBranching::IF},
 			{"[PC]",	"=", InstructionArguments::Value16},
@@ -969,7 +969,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "cpe",{
 	{InstructionArguments::Value16},
 	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
-	u8"Если флаг Paruty = 1, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой.\nCPE - Call if Parity Even",
+	u8"Если флаг Parity = 1, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой.\nCPE - Call if Parity Even",
 	{
 		{InstructionBranching::IF},
 			{"[SP]",		"=","[SP] - 2"},
@@ -1073,7 +1073,7 @@ const robin_hood::unordered_flat_map<std::string, InstructionInfo> map_Instructi
 	{ "cpo",{
 	{InstructionArguments::Value16},
 	{InstructionBytes::Adress_low,InstructionBytes::Adress_high},
-	u8"Если флаг Paruty = 0, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой.\nCPO - Call if Parity Odd",
+	u8"Если флаг Parity = 0, то Сохранение следующего адреса команды в стек и прыжок PC на адрес указанный константой.\nCPO - Call if Parity Odd",
 	{
 		{InstructionBranching::IF},
 			{"[SP]",		"=","[SP] - 2"},

@@ -10,7 +10,7 @@
 #include "SaveSystem/SaveSystem.h"
 #include "Emulator\Processors\Intel8080\I8080.h"
 #include "Emulator/EmulationThread/EmulationThread.h"
-#include "Emulator/Compilier/Stable/Compiler.Stable.h"
+#include "Emulator/Compiler/Compiler.h"
 
 #include "DataStructures/TranslatorOutput.h"
 #include "TextEditor.h"
@@ -49,7 +49,7 @@ enum class AutoSaveTiming {
 class ProjectManager : public ISettingObject
 {
 public:
-	ProjectManager(GLFWwindow* window,I8080* processor,NotificationManager* notificationManager,LastPathManager* LastPathManager,EmulationThread* emulationThread,CompilerStable* Compiler, Caretaker_Momento* processor_CaretakerMomento);
+	ProjectManager(GLFWwindow* window,I8080* processor,NotificationManager* notificationManager,LastPathManager* LastPathManager,EmulationThread* emulationThread,Compiler* ñompiler, Caretaker_Momento* processor_CaretakerMomento);
 
 	~ProjectManager();
 
@@ -84,7 +84,7 @@ private:
 	NotificationManager* notificationManager = nullptr;
 	LastPathManager* lastPathManager = nullptr;
 	EmulationThread* emulationThread = nullptr;
-	CompilerStable* Compiler = nullptr;
+	Compiler* ñompiler = nullptr;
 	Caretaker_Momento* processor_CaretakerMomento;
 
 	Widget_RegisterFlagsInfo* widget_RegisterFlagsInfo = nullptr;

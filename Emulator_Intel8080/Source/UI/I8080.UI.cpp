@@ -17,7 +17,7 @@ I8080_UserInterface::I8080_UserInterface(GLFWwindow* window) {
 
 	processor =					new I8080();
 	processorCaratakerMomento = new I8080_Caretaker_Momento(processor);
-	Compiler =					new CompilerStable();
+	Compiler =					new I8080_Compiler();
 	emulationThread =			new EmulationThread(processor, processorCaratakerMomento);
 
 

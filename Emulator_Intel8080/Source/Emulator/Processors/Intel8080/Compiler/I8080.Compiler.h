@@ -2,18 +2,18 @@
 #define COMPILER_STABLE_H
 
 #include "Config_Compilier.h"
-#include "Emulator/Compilier/Compiler.h"
+#include "Emulator/Compiler/Compiler.h"
 #include "robin_hood.h"
 #include <vector>
 #include <string>
 #include <iostream>
 
 
-class CompilerStable : public Compiler
+class I8080_Compiler : public Compiler
 {
 public:
-	CompilerStable();
-	~CompilerStable();
+	I8080_Compiler();
+	~I8080_Compiler();
 
 	TranslatorOutput Compile(const std::vector<std::string>& Code) override;
 	void Clear() override;

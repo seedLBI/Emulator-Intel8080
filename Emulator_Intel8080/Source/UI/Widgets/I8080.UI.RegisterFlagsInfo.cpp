@@ -30,18 +30,18 @@ void Widget_RegisterFlagsInfo::Draw() {
 			ImGui::TableHeadersRow();
 
 
-			const string name_flags[5] = { "Zero","Carry","Sign","Paruty","Aux. Carry"};
+			const string name_flags[5] = { "Zero","Carry","Sign","Parity","Aux. Carry"};
 			unsigned int values_flag[5] = {
 				*current_state.Zero,
 				*current_state.Carry,
 				*current_state.Sign,
-				*current_state.Paruty,
+				*current_state.Parity,
 				*current_state.AuxiliaryCarry };
 			unsigned int values_last_flag[5] = {
 				prev_state.Zero,
 				prev_state.Carry,
 				prev_state.Sign,
-				prev_state.Paruty,
+				prev_state.Parity,
 				prev_state.AuxiliaryCarry};
 
 			const string name_registers[9] = { "A","B","C","D","E","H","L","M","F" };
@@ -54,7 +54,7 @@ void Widget_RegisterFlagsInfo::Draw() {
 				*current_state.H,
 				*current_state.L,
 				processor->GetMemory()[*current_state.H * 256 + *current_state.L],
-				(0x02 + *current_state.Carry + *current_state.Paruty * 4 + *current_state.AuxiliaryCarry * 16 + *current_state.Zero * 64 + *current_state.Sign * 128)
+				(0x02 + *current_state.Carry + *current_state.Parity * 4 + *current_state.AuxiliaryCarry * 16 + *current_state.Zero * 64 + *current_state.Sign * 128)
 			};
 			unsigned int values_last[9] = {
 				prev_state.A,
@@ -65,7 +65,7 @@ void Widget_RegisterFlagsInfo::Draw() {
 				prev_state.H,
 				prev_state.L,
 				processor->GetMemory()[prev_state.H * 256 + prev_state.L],
-				(0x02 + prev_state.Carry + prev_state.Paruty * 4 + prev_state.AuxiliaryCarry * 16 + prev_state.Zero * 64 + prev_state.Sign * 128)
+				(0x02 + prev_state.Carry + prev_state.Parity * 4 + prev_state.AuxiliaryCarry * 16 + prev_state.Zero * 64 + prev_state.Sign * 128)
 			};
 
 

@@ -7,7 +7,7 @@ ProjectManager::ProjectManager(
 	NotificationManager* notificationManager,
 	LastPathManager* lastPathManager,
 	EmulationThread* emulationThread,
-	CompilerStable* Compiler,
+	Compiler* ñompiler,
 	Caretaker_Momento* processor_CaretakerMomento) : ISettingObject(u8"Ïðîåêò",u8"Ïðîåêò") {
 
 	this->window = window;
@@ -15,7 +15,7 @@ ProjectManager::ProjectManager(
 	this->notificationManager = notificationManager;
 	this->lastPathManager = lastPathManager;
 	this->emulationThread = emulationThread;
-	this->Compiler = Compiler;
+	this->ñompiler = ñompiler;
 	this->processor_CaretakerMomento = processor_CaretakerMomento;
 }
 
@@ -497,7 +497,7 @@ void ProjectManager::TryTranslateCode() {
 	widget_CodeEditor->SetFlagWindow(0);
 	LinesCode = widget_CodeEditor->GetPtrTextEditor()->GetTextLines();
 
-	translatorOutput = Compiler->Compile(LinesCode);
+	translatorOutput = ñompiler->Compile(LinesCode);
 
 
 	processor->ActiveFlagStop();

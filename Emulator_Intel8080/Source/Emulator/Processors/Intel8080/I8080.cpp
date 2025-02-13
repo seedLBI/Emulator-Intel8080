@@ -68,7 +68,7 @@ void I8080::RestoreState(const std::shared_ptr<Momento>& momento) {
 	SP				   = i8080_momento->Get_SP();
 	Sign			   = i8080_momento->Get_Sign();
 	Zero			   = i8080_momento->Get_Zero();
-	Paruty			   = i8080_momento->Get_Parity();
+	Parity			   = i8080_momento->Get_Parity();
 	Carry			   = i8080_momento->Get_Carry();
 	AuxiliaryCarry	   = i8080_momento->Get_AuxiliaryCarry();
 	InterruptEnabled   = i8080_momento->Get_InterruptEnabled();
@@ -104,7 +104,7 @@ std::shared_ptr<Momento> I8080::SaveState() {
 		Memory[uint16_t(PC + 1)], Memory[uint16_t(PC + 2)],
 		A, B, C, D, E, H, L,
 		PC, SP,
-		Sign, Zero, Paruty, Carry, AuxiliaryCarry, InterruptEnabled,
+		Sign, Zero, Parity, Carry, AuxiliaryCarry, InterruptEnabled,
 		GetFlagStop(), Flag_Waiting_Input, Flag_GetAnswer, Input,
 		CountTicks, {}, {}));
 
@@ -116,7 +116,7 @@ inline void I8080::_SetFlagSign(const uint8_t& value) {
 	Sign = signTable[value];
 }
 inline void I8080::_SetFlagParuty(const uint8_t& value) {
-	Paruty = parityTable[value];
+	Parity = parityTable[value];
 }
 inline void I8080::_SetFlagZero(const uint8_t& value) {
 	Zero = zeroTable[value];
@@ -127,7 +127,7 @@ uint8_t I8080::GetRegisterFlags() {
 	FlagRegister |= Sign << 7;
 	FlagRegister |= Zero << 6;
 	FlagRegister |= AuxiliaryCarry << 4;
-	FlagRegister |= Paruty << 2;
+	FlagRegister |= Parity << 2;
 	FlagRegister |= 1 << 1;
 	FlagRegister |= Carry << 0;
 
@@ -301,7 +301,7 @@ void I8080::InitPointer2State(CurrentState& cs) {
 	cs.PC = &PC;
 	cs.SP = &SP;
 	cs.Carry = &Carry;
-	cs.Paruty = &Paruty;
+	cs.Parity = &Parity;
 	cs.Zero = &Zero;
 	cs.Sign = &Sign;
 	cs.AuxiliaryCarry = &AuxiliaryCarry;
@@ -338,7 +338,7 @@ void I8080::Reset() {
 	L = 0;
 	Carry = false;
 	Sign = false;
-	Paruty = false;
+	Parity = false;
 	Zero = false;
 	AuxiliaryCarry = false;
 	InterruptEnabled = false;
@@ -721,7 +721,7 @@ void I8080::_RNC() {
 	}
 }
 void I8080::_RPO() {
-	if (Paruty == 0) {
+	if (Parity == 0) {
 		CountTicks += 1;
 		_RET();
 	}
@@ -761,7 +761,7 @@ void I8080::_RC() {
 	}
 }
 void I8080::_RPE() {
-	if (Paruty == 1) {
+	if (Parity == 1) {
 		CountTicks += 1;
 		_RET();
 	}
@@ -852,7 +852,7 @@ void I8080::_POP_PSW() {
 	Sign = (Flags >> 7) & 1;
 	Zero = (Flags >> 6) & 1;
 	AuxiliaryCarry = (Flags >> 4) & 1;
-	Paruty = (Flags >> 2) & 1;
+	Parity = (Flags >> 2) & 1;
 	Carry = (Flags >> 0) & 1;
 
 	++SP;
@@ -1356,7 +1356,7 @@ void I8080::_JNC() {
 	}
 }
 void I8080::_JPO() {
-	if (Paruty == 0)
+	if (Parity == 0)
 		_JMP();
 	else {
 		CountTicks += 10;
@@ -1388,7 +1388,7 @@ void I8080::_JC() {
 	}
 }
 void I8080::_JPE() {
-	if (Paruty == 1)
+	if (Parity == 1)
 		_JMP();
 	else {
 		CountTicks += 10;
@@ -1636,7 +1636,7 @@ void I8080::_CNC() {
 	}
 }
 void I8080::_CPO() {
-	if (Paruty == 0)
+	if (Parity == 0)
 		_CALL();
 	else {
 		CountTicks += 11;
@@ -1668,7 +1668,7 @@ void I8080::_CC() {
 	}
 }
 void I8080::_CPE() {
-	if (Paruty == 1)
+	if (Parity == 1)
 		_CALL();
 	else {
 		CountTicks += 11;
@@ -1900,7 +1900,7 @@ void I8080::Hi_CNC() {
 	}
 }
 void I8080::Hi_CPO() {
-	if (Paruty == 0)
+	if (Parity == 0)
 		Hi_CALL();
 	else {
 		CountTicks += 11;
@@ -1932,7 +1932,7 @@ void I8080::Hi_CC() {
 	}
 }
 void I8080::Hi_CPE() {
-	if (Paruty == 1)
+	if (Parity == 1)
 		Hi_CALL();
 	else {
 		CountTicks += 11;

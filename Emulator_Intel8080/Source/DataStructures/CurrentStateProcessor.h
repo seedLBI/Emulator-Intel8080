@@ -19,7 +19,7 @@ struct CurrentState {
 
 	bool* Sign = nullptr, // flags
 		* Zero = nullptr,
-		* Paruty = nullptr,
+		* Parity = nullptr,
 		* Carry = nullptr,
 		* AuxiliaryCarry = nullptr;
 
@@ -38,7 +38,7 @@ struct CurrentStateNotPointer {
 		L = 0;
 	bool Sign = false, // flags
 		Zero = false,
-		Paruty = false,
+		Parity = false,
 		Carry = false,
 		AuxiliaryCarry = false;
 
@@ -62,7 +62,7 @@ struct CurrentStateNotPointer {
 			L = *cs.L;
 			Sign = *cs.Sign;
 			Carry = *cs.Carry;
-			Paruty = *cs.Paruty;
+			Parity = *cs.Parity;
 			Zero = *cs.Zero;
 			AuxiliaryCarry = *cs.AuxiliaryCarry;
 		}
@@ -76,7 +76,7 @@ struct CurrentStateNotPointer {
 			L = 0;
 			Sign = 0;
 			Carry = 0;
-			Paruty = 0;
+			Parity = 0;
 			Zero = 0;
 			AuxiliaryCarry = 0;
 		}

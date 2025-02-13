@@ -38,12 +38,6 @@
     <ClCompile Include="Source\Emulator\EmulationThread\EmulationThread.cpp">
       <Filter>Source\Emulator\EmulationThread</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Emulator\Compilier\Compiler.cpp">
-      <Filter>Source\Emulator\Compiler</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Emulator\Compilier\Stable\Compiler.Stable.cpp">
-      <Filter>Source\Emulator\Compiler\Stable</Filter>
-    </ClCompile>
     <ClCompile Include="Source\DataStructures\ModeProject.cpp">
       <Filter>Source\DataStructures</Filter>
     </ClCompile>
@@ -356,6 +350,12 @@
     <ClCompile Include="Source\UI\Widgets\I8080.UI.MnemoCodeViewerTargeted.cpp">
       <Filter>Source\UI\Widgets\MnemoCodeViewer%28Targeted%29</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Emulator\Compiler\Compiler.cpp">
+      <Filter>Source\Emulator\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Emulator\Processors\Intel8080\Compiler\I8080.Compiler.cpp">
+      <Filter>Source\Emulator\Processor\Processors\I8080\Compiler</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Third-Person\IconFontCppHeaders\IconsFontAwesome6.h">
@@ -411,12 +411,6 @@
     </ClInclude>
     <ClInclude Include="Source\Emulator\EmulationThread\EmulationThread.h">
       <Filter>Source\Emulator\EmulationThread</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Emulator\Compilier\Compiler.h">
-      <Filter>Source\Emulator\Compiler</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Emulator\Compilier\Stable\Compiler.Stable.h">
-      <Filter>Source\Emulator\Compiler\Stable</Filter>
     </ClInclude>
     <ClInclude Include="Source\DataStructures\CurrentStateProcessor.h">
       <Filter>Source\DataStructures</Filter>
@@ -787,6 +781,12 @@
     <ClInclude Include="Source\UI\Widgets\I8080.UI.MnemoCodeViewerTargeted.h">
       <Filter>Source\UI\Widgets\MnemoCodeViewer%28Targeted%29</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Emulator\Compiler\Compiler.h">
+      <Filter>Source\Emulator\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Emulator\Processors\Intel8080\Compiler\I8080.Compiler.h">
+      <Filter>Source\Emulator\Processor\Processors\I8080\Compiler</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Third-Party">
@@ -830,9 +830,6 @@
     </Filter>
     <Filter Include="Source\Emulator\Compiler">
       <UniqueIdentifier>{fc10c58b-1509-4822-929a-e266c9974857}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Emulator\Compiler\Stable">
-      <UniqueIdentifier>{3868dba9-bd02-4248-be97-5311ff4e1eb4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\ImagesData">
       <UniqueIdentifier>{46d13e7f-6f49-4336-b777-da8ba4af7495}</UniqueIdentifier>
@@ -1091,6 +1088,9 @@
     </Filter>
     <Filter Include="Source\UI\Widgets\Заброшено\Disassembler %28Забросил%29">
       <UniqueIdentifier>{3821c53e-42c9-497d-ad43-8b0dd106b288}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Emulator\Processor\Processors\I8080\Compiler">
+      <UniqueIdentifier>{f4a52967-a168-457f-a69e-63380c132fb7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

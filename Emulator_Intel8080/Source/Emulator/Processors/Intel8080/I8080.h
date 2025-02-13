@@ -1,7 +1,7 @@
 #define SIZE_MEMORY 65536
 
 #include "Config_Compilier.h"
-#include "Utils\TextUtils.h"
+#include "Utils/TextUtils.h"
 
 #ifndef I8080_H
 #define I8080_H
@@ -16,11 +16,11 @@
 #include "Emulator/Port/AsyncKeyboard/I8080.Port.AsyncKeyboard.h"
 
 
-#include "DataStructures\TypeTranslatorError.h"
-#include "DataStructures\OpcodeAdressed.h"
-#include "DataStructures\VarsDebug.h"
-#include "DataStructures\TranslatorOutput.h"
-#include "DataStructures\CurrentStateProcessor.h"
+#include "DataStructures/TypeTranslatorError.h"
+#include "DataStructures/OpcodeAdressed.h"
+#include "DataStructures/VarsDebug.h"
+#include "DataStructures/TranslatorOutput.h"
+#include "DataStructures/CurrentStateProcessor.h"
 #include "DataStructures/ModeProject.h"
 
 #include "Emulator/Processors/Processor.h"
@@ -119,7 +119,7 @@ private:
 
     bool Sign = false, // flags
          Zero = false,
-         Paruty = false,
+         Parity = false,
          Carry = false,
          AuxiliaryCarry = false;
 

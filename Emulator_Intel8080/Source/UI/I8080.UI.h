@@ -18,59 +18,59 @@
 #include "TextEditor.h"
 
 
-#include "Emulator\Processors\Intel8080\I8080.h"
-#include "Emulator/Compilier/Stable/Compiler.Stable.h"
+#include "Emulator/Processors/Intel8080/I8080.h"
+#include "Emulator/Processors/Intel8080/Compiler/I8080.Compiler.h"
 #include "Emulator/EmulationThread/EmulationThread.h"
 
 
-#include "Utils\ColorUtilities.h"
+#include "Utils/ColorUtilities.h"
 
 #include "Shellapi.h"
 #include "PBO.h"
-#include "DataStructures\TypesCommand.h"
+#include "DataStructures/TypesCommand.h"
 
-#include "Utils\ImGui.Utils.h"
+#include "Utils/ImGui.Utils.h"
 
 
 
-#include "UI\Widgets\I8080.UI.ColorPicker.h"
-#include "UI\Widgets\I8080.UI.SymbolPicker.h"
-#include "UI\Widgets\I8080.UI.MarkerList.h"
-#include "UI\Widgets\I8080.UI.VarList.h"
-#include "UI\Widgets\I8080.UI.ConstList.h"
-#include "UI\Widgets\I8080.UI.CodeEditor.h"
-#include "UI\Widgets\I8080.UI.HexViewer.h"
-#include "UI\Widgets\I8080.UI.Keyboard.h"
-#include "UI\Widgets\I8080.UI.Input0x08.h"
-#include "UI\Widgets\I8080.UI.Output0x02.h"
-#include "UI\Widgets\I8080.UI.Timer.h"
-#include "UI\Widgets\I8080.UI.MnemoCodeViewer.h"
-#include "UI\Widgets\I8080.UI.MnemoCodeViewerTargeted.h"
-#include "UI\Widgets\I8080.UI.RegisterFlagsInfo.h"
-#include "UI\Widgets\I8080.UI.EmulatorInfo.h"
-#include "UI\Widgets\I8080.UI.SymbolScreen.h"
-#include "UI\Widgets\I8080.UI.PixelScreen.h"
-#include "UI\Widgets\I8080.UI.PixelScreenTwoBuffers.h"
-#include "UI\Widgets\I8080.UI.Help.h"
-#include "UI\Widgets\I8080.UI.Disassembler.h"
-#include "UI\Widgets\UI.HistoryInstruction.h"
-#include "UI\Widgets\UI.ListInstruction.h"
-#include "UI\Widgets\UI.TableInstruction.h"
+#include "UI/Widgets/I8080.UI.ColorPicker.h"
+#include "UI/Widgets/I8080.UI.SymbolPicker.h"
+#include "UI/Widgets/I8080.UI.MarkerList.h"
+#include "UI/Widgets/I8080.UI.VarList.h"
+#include "UI/Widgets/I8080.UI.ConstList.h"
+#include "UI/Widgets/I8080.UI.CodeEditor.h"
+#include "UI/Widgets/I8080.UI.HexViewer.h"
+#include "UI/Widgets/I8080.UI.Keyboard.h"
+#include "UI/Widgets/I8080.UI.Input0x08.h"
+#include "UI/Widgets/I8080.UI.Output0x02.h"
+#include "UI/Widgets/I8080.UI.Timer.h"
+#include "UI/Widgets/I8080.UI.MnemoCodeViewer.h"
+#include "UI/Widgets/I8080.UI.MnemoCodeViewerTargeted.h"
+#include "UI/Widgets/I8080.UI.RegisterFlagsInfo.h"
+#include "UI/Widgets/I8080.UI.EmulatorInfo.h"
+#include "UI/Widgets/I8080.UI.SymbolScreen.h"
+#include "UI/Widgets/I8080.UI.PixelScreen.h"
+#include "UI/Widgets/I8080.UI.PixelScreenTwoBuffers.h"
+#include "UI/Widgets/I8080.UI.Help.h"
+#include "UI/Widgets/I8080.UI.Disassembler.h"
+#include "UI/Widgets/UI.HistoryInstruction.h"
+#include "UI/Widgets/UI.ListInstruction.h"
+#include "UI/Widgets/UI.TableInstruction.h"
 
-#include "UI\Widget\I8080.WidgetManager.h"
-#include "UI\Workspaces\I8080.WorkspaceManager.h"
-#include "UI\LastPathManager\LastPathManager.h"
+#include "UI/Widget/I8080.WidgetManager.h"
+#include "UI/Workspaces/I8080.WorkspaceManager.h"
+#include "UI/LastPathManager/LastPathManager.h"
 
-#include "SaveSystem\SaveSystemManager.h"
+#include "SaveSystem/SaveSystemManager.h"
 
-#include "UI\FontManager\FontManager.h"
-#include "UI\WindowManager\WindowManager.h"
-#include "UI\KeyCombination\KeyCombinationHandler.h"
-#include "UI\ProjectManager\ProjectManager.h"
-#include "UI\Setting\Setting.h"
+#include "UI/FontManager/FontManager.h"
+#include "UI/WindowManager/WindowManager.h"
+#include "UI/KeyCombination/KeyCombinationHandler.h"
+#include "UI/ProjectManager/ProjectManager.h"
+#include "UI/Setting/Setting.h"
 
-#include "UI\Theme\ThemeManager\ThemeManager.h"
-#include "UI\Theme\BaseColors\BaseColors.h"
+#include "UI/Theme/ThemeManager/ThemeManager.h"
+#include "UI/Theme/BaseColors/BaseColors.h"
 #include "UI/HighlighterInstruction/I8080/I8080.HighlighterInstruction.h"
 
 #include "Notification/NotificationManager.h"
@@ -119,7 +119,7 @@ private:
 	GLFWwindow*					  window = nullptr;
 	I8080*						  processor = nullptr;
 	I8080_Caretaker_Momento*	  processorCaratakerMomento = nullptr;
-	CompilerStable*				  Compiler = nullptr;
+	I8080_Compiler*				  Compiler = nullptr;
 	EmulationThread*			  emulationThread = nullptr;
 	EmulationControls*			  emulationControls = nullptr;
 

@@ -687,8 +687,8 @@ public:
 
 
 				vertices.insert(vertices.end(), {
-					x,	   y,	  u,      v,
-					x + w, y,     uW, v,
+					x,	   y,     u,   v,
+					x + w, y,     uW,  v,
 					x + w, y + h, uW,  vH,
 					x,     y + h, u,   vH
 					});

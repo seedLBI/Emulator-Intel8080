@@ -1,14 +1,14 @@
-#include "Emulator/Compilier/Stable/Compiler.Stable.h"
+#include "Emulator/Processors/Intel8080/Compiler/I8080.Compiler.h"
 
-CompilerStable::CompilerStable(){
-
-}
-
-CompilerStable::~CompilerStable(){
+I8080_Compiler::I8080_Compiler(){
 
 }
 
-TranslatorOutput CompilerStable::Compile(const std::vector<std::string>& Code) {
+I8080_Compiler::~I8080_Compiler(){
+
+}
+
+TranslatorOutput I8080_Compiler::Compile(const std::vector<std::string>& Code) {
 	Clear();
 
 	adressed_code.resize(Code.size(), 0);
@@ -43,7 +43,7 @@ TranslatorOutput CompilerStable::Compile(const std::vector<std::string>& Code) {
 
 	return Compiler::CompilerOutput;
 }
-void CompilerStable::Clear() {
+void I8080_Compiler::Clear() {
 	Compiler::CompilerOutput.Clear();
 	splited_code.clear();
 	splited_code_raw.clear();
@@ -57,13 +57,13 @@ void CompilerStable::Clear() {
 }
 
 
-void CompilerStable::MakeError(const TypeTranslatorError& typeError, const int& Line) {
+void I8080_Compiler::MakeError(const TypeTranslatorError& typeError, const int& Line) {
 	Compiler::CompilerOutput.Error = typeError;
 	Compiler::CompilerOutput.LineError = Line;
 }
 
 
-bool CompilerStable::Step1_MarkingAdresses() {
+bool I8080_Compiler::Step1_MarkingAdresses() {
 	int CurrentAdress = 0;
 	int countCommandsAfterLastMarker = 0;
 
@@ -210,7 +210,7 @@ bool CompilerStable::Step1_MarkingAdresses() {
 					}
 
 
-					i_element++;
+					++i_element;
 
 
 					while (splited_code[Line].size() > i_element) {
@@ -222,7 +222,7 @@ bool CompilerStable::Step1_MarkingAdresses() {
 
 							if (NeedCheckThatLineIndex[CounterForNeedCheck - 1] != Line) {
 								NeedCheckThatLineIndex[CounterForNeedCheck] = Line;
-								CounterForNeedCheck++;
+								++CounterForNeedCheck;
 							}
 
 						}
@@ -231,8 +231,8 @@ bool CompilerStable::Step1_MarkingAdresses() {
 							return false;
 						}
 
-						i_element++;
-						CurrentAdress++;
+						++i_element;
+						++CurrentAdress;
 
 
 						if (CurrentAdress > MAX16BIT) {
@@ -314,7 +314,7 @@ bool CompilerStable::Step1_MarkingAdresses() {
 
 
 					NeedCheckThatLineIndex[CounterForNeedCheck] = Line;
-					CounterForNeedCheck++;
+					++CounterForNeedCheck;
 
 					if (Consts.contains(marker)) {
 						MakeError(ERROR_COLLISION_BETWEEN_NAMES_MARKER_AND_CONST, Line);
@@ -338,7 +338,7 @@ bool CompilerStable::Step1_MarkingAdresses() {
 				}
 
 				NeedCheckThatLineIndex[CounterForNeedCheck] = Line;
-				CounterForNeedCheck++;
+				++CounterForNeedCheck;
 
 				Compiler::CompilerOutput.Line_and_Adress[Line] = CurrentAdress;
 				adressed_code[Line] = CurrentAdress;
@@ -389,14 +389,14 @@ bool CompilerStable::Step1_MarkingAdresses() {
 
 				if (params > 0){
 					NeedCheckThatLineIndex[CounterForNeedCheck] = Line;
-					CounterForNeedCheck++;
+					++CounterForNeedCheck;
 				}
 
 
 			}
 
 
-			countCommandsAfterLastMarker++;
+			++countCommandsAfterLastMarker;
 
 			break;
 
@@ -410,7 +410,7 @@ bool CompilerStable::Step1_MarkingAdresses() {
 	return true;
 }
 
-bool CompilerStable::Step2_ReplaceWithDirectValues() {
+bool I8080_Compiler::Step2_ReplaceWithDirectValues() {
 	splited_code_raw = splited_code;
 
 	int Size_NeedCheckThatLineIndex = CounterForNeedCheck;
@@ -421,7 +421,8 @@ bool CompilerStable::Step2_ReplaceWithDirectValues() {
 	for (int index = 0; index < Size_NeedCheckThatLineIndex; ++index) {
 		int Line = NeedCheckThatLineIndex[index];
 		const PosDotInfo pdi = PosDotForNeedLine[Line];
-		for (int element = 0; element < splited_code[Line].size(); element++) {
+		for (int element = 0; element < splited_code[Line].size(); ++element) {
+
 			std::string Element = splited_code[Line][element];
 
 
@@ -432,7 +433,7 @@ bool CompilerStable::Step2_ReplaceWithDirectValues() {
 				ToLowerAll(command);
 
 				if (command == "set") {
-					element++;
+					++element;
 
 					while (splited_code[Line].size() > element) {
 						auto value = FromString2Int(splited_code[Line][element]);
@@ -617,10 +618,10 @@ bool CompilerStable::Step2_ReplaceWithDirectValues() {
 
 }
 
-bool CompilerStable::Step3_MakeByteArray() {
+bool I8080_Compiler::Step3_MakeByteArray() {
 
 	auto FindIndexMarkerByAdress = [](const robin_hood::unordered_flat_map<std::string, uint16_t>& arr, const uint16_t& Adress) {
-		for (auto& n : arr) {
+		for (const auto& n : arr) {
 			if (n.second == Adress)
 				return n.first;
 		}
@@ -649,7 +650,7 @@ bool CompilerStable::Step3_MakeByteArray() {
 					break;
 				}
 				else if (command == "set") {
-					i_element++;
+					++i_element;
 					while (splited_code[Line].size() > i_element) {
 						auto value = FromString2Int(splited_code[Line][i_element]);
 
@@ -671,8 +672,8 @@ bool CompilerStable::Step3_MakeByteArray() {
 
 						CompilerOutput.Opcodes.emplace_back(ca);
 
-						i_element++;
-						adressed_code[Line]++;
+						++i_element;
+						++adressed_code[Line];
 					}
 					continue;
 				}

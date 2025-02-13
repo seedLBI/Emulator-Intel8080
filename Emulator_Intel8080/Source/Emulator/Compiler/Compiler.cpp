@@ -1,4 +1,4 @@
-#include "Emulator/Compilier/Compiler.h"
+#include "Emulator/Compiler/Compiler.h"
 
 
 Compiler::Compiler() = default;
@@ -30,7 +30,7 @@ std::vector<std::string> Compiler::split_line(const std::string& line, bool& sta
 
 	
     std::string temp = "";
-    for (int i = 0; i < splitted_line.size(); i++) {
+    for (int i = 0; i < splitted_line.size(); ++i) {
 
         const std::string symbol = splitted_line[i];
 
@@ -40,7 +40,7 @@ std::vector<std::string> Compiler::split_line(const std::string& line, bool& sta
 
 			if (two_symbol == Begin_MultiComment && state_MultiLineComment == false){
 				state_MultiLineComment = true;
-				i++;
+				++i;
 				continue;
 			}
 			else if (two_symbol == End_MultiComment) {
@@ -49,7 +49,7 @@ std::vector<std::string> Compiler::split_line(const std::string& line, bool& sta
 					return result;
 				}
 				state_MultiLineComment = false;
-				i++;
+				++i;
 				continue;
 			}
 
@@ -65,7 +65,7 @@ std::vector<std::string> Compiler::split_line(const std::string& line, bool& sta
 
         if (symbol == DoubleQuote) {
             InQuote = true;
-            i++;
+            ++i;
 
             bool LastWasSlash = false;
 
@@ -81,7 +81,7 @@ std::vector<std::string> Compiler::split_line(const std::string& line, bool& sta
                             CompilerOutput.Error = ERROR_UNSUPPORTED_SYMBOL;
                             return result;
                         }
-                        i++;
+                        ++i;
                         continue;
                     }
                     else {
@@ -101,7 +101,7 @@ std::vector<std::string> Compiler::split_line(const std::string& line, bool& sta
                             return result;
                         }
                         result.push_back(std::to_string(t.first));
-                        i++;
+                        ++i;
                         continue;
                     }
                 }
@@ -117,7 +117,7 @@ std::vector<std::string> Compiler::split_line(const std::string& line, bool& sta
                 LastWasSlash = false;
 
 
-                i++;
+                ++i;
             }
 
             if (InQuote){
@@ -298,19 +298,22 @@ int Compiler::GetCountBytes(const std::string& cmd) {
 int Compiler::GetCountParams(const std::string& cmd) {
 
     static const robin_hood::unordered_flat_map<std::string, int> cmdParams = {
+		{"nop",0},{"cma",0},{"cmc",0},{"daa",0},{"di",0},{"ei",0},{"sphl",0},
+		{"hlt",0},{"ret",0},{"rlc",0},{"rm",0},{"rnc",0},{"rnz",0},
+		{"rp",0},{"rpe",0},{"rpo",0},{"rrc",0},{"rz",0},{"ral",0},
+		{"rar",0},{"rc",0},{"pchl",0},{"stc",0},{"xchg",0},{"xthl",0},
+
         {"aci",1},{"adc",1},{"add",1},{"adi",1},{"ana",1},{"ani",1},
-        {"call",1},{"cc",1},{"cm",1},{"cma",0},{"cmc",0},{"cmp",1},
-        {"cnc",1},{"cnz",1},{"cp",1},{"cpe",1},{"cpi",1},{"cpo",1},
-        {"cz",1},{"daa",0},{"dad",1},{"dcr",1},{"dcx",1},{"di",0},
-        {"ei",0},{"hlt",0},{"in",1},{"inr",1},{"inx",1},{"jc",1},
+        {"call",1},{"cc",1},{"cm",1},{"cmp",1},{"cnc",1},{"cnz",1},
+		{"cp",1},{"cpe",1},{"cpi",1},{"cpo",1},{"cz",1},{"dad",1},
+		{"dcr",1},{"dcx",1},{"in",1},{"inr",1},{"inx",1},{"jc",1},
         {"jm",1},{"jmp",1},{"jnc",1},{"jnz",1},{"jp",1},{"jpe",1},
-        {"jpo",1},{"jz",1},{"lda",1},{"ldax",1},{"lhld",1},{"lxi",2},
-        {"mov",2},{"mvi",2},{"nop",0},{"ora",1},{"ori",1},{"out",1},
-        {"pchl",0},{"pop",1},{"push",1},{"ral",0},{"rar",0},{"rc",0},
-        {"ret",0},{"rlc",0},{"rm",0},{"rnc",0},{"rnz",0},{"rp",0},
-        {"rpe",0},{"rpo",0},{"rrc",0},{"rst",1},{"rz",0},{"sbb",1},
-        {"sbi",1},{"shld",1},{"sphl",0},{"sta",1},{"stax",1},{"stc",0},
-        {"sub",1},{"sui",1},{"xchg",0},{"xra",1},{"xri",1},{"xthl",0}
+        {"jpo",1},{"jz",1},{"lda",1},{"ldax",1},{"lhld",1},{"ora",1},
+		{"ori",1},{"out",1},{"pop",1},{"push",1},{"rst",1},{"sbb",1},
+        {"sbi",1},{"shld",1},{"sta",1},{"stax",1},{"sub",1},{"sui",1},
+		{"xra",1},{"xri",1},
+
+		{"lxi",2},{"mvi",2},{"mov",2},
     };
 
     auto it = cmdParams.find(cmd);

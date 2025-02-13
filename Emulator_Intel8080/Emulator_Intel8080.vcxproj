@@ -149,8 +149,7 @@
     <ClCompile Include="Source\DataStructures\RingBuffer.cpp" />
     <ClCompile Include="Source\DataStructures\TypesCommand.cpp" />
     <ClCompile Include="Source\DataStructures\TypeTranslatorError.cpp" />
-    <ClCompile Include="Source\Emulator\Compilier\Compiler.cpp" />
-    <ClCompile Include="Source\Emulator\Compilier\Stable\Compiler.Stable.cpp" />
+    <ClCompile Include="Source\Emulator\Compiler\Compiler.cpp" />
     <ClCompile Include="Source\Emulator\EmulationControls\EmulationControls.cpp" />
     <ClCompile Include="Source\Emulator\EmulationThread\EmulationThread.cpp" />
     <ClCompile Include="Source\Emulator\History\Caretaker.Momento.cpp" />
@@ -171,6 +170,7 @@
     <ClCompile Include="Source\Emulator\Port\SymbolScreen\Momento\SymbolScreen.Momento.cpp" />
     <ClCompile Include="Source\Emulator\Port\Timer\I8080.Port.Timer.cpp" />
     <ClCompile Include="Source\Emulator\Port\Timer\Momento\Timer.Momento.cpp" />
+    <ClCompile Include="Source\Emulator\Processors\Intel8080\Compiler\I8080.Compiler.cpp" />
     <ClCompile Include="Source\Emulator\Processors\Intel8080\Disassembler\I8080.Disassembler.cpp" />
     <ClCompile Include="Source\Emulator\Processors\Intel8080\History\Caretaker\I8080.Caretaker.Momento.cpp" />
     <ClCompile Include="Source\Emulator\Processors\Intel8080\History\Momento\I8080.Momento.cpp" />
@@ -275,8 +275,7 @@
     <ClInclude Include="Source\DataStructures\TypesCommand.h" />
     <ClInclude Include="Source\DataStructures\TypeTranslatorError.h" />
     <ClInclude Include="Source\DataStructures\VarsDebug.h" />
-    <ClInclude Include="Source\Emulator\Compilier\Compiler.h" />
-    <ClInclude Include="Source\Emulator\Compilier\Stable\Compiler.Stable.h" />
+    <ClInclude Include="Source\Emulator\Compiler\Compiler.h" />
     <ClInclude Include="Source\Emulator\EmulationControls\EmulationControls.h" />
     <ClInclude Include="Source\Emulator\EmulationThread\EmulationThread.h" />
     <ClInclude Include="Source\Emulator\History\Caretaker.Momento.h" />
@@ -297,6 +296,7 @@
     <ClInclude Include="Source\Emulator\Port\SymbolScreen\Momento\SymbolScreen.Momento.h" />
     <ClInclude Include="Source\Emulator\Port\Timer\I8080.Port.Timer.h" />
     <ClInclude Include="Source\Emulator\Port\Timer\Momento\Timer.Momento.h" />
+    <ClInclude Include="Source\Emulator\Processors\Intel8080\Compiler\I8080.Compiler.h" />
     <ClInclude Include="Source\Emulator\Processors\Intel8080\Disassembler\I8080.Disassembler.h" />
     <ClInclude Include="Source\Emulator\Processors\Intel8080\History\Caretaker\I8080.Caretaker.Momento.h" />
     <ClInclude Include="Source\Emulator\Processors\Intel8080\History\Momento\I8080.Momento.h" />
