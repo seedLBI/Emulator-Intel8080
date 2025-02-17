@@ -368,7 +368,7 @@ void I8080_UserInterface::InitWidgets() {
 	widget_PixelScreenTwoBuffers	= new Widget_PixelScreenTwoBuffers(processor);
 	widget_input0x08				= new Widget_Input0x08(processor);
 	widget_keyboard					= new Widget_Keyboard(widget_CodeEditor->GetPtrTextEditor());
-	widget_output0x02				= new Widget_Output0x02(processor);
+	widget_output0x02				= new Widget_Output0x02(processor, notificationManager);
 	widget_timer					= new Widget_Timer(processor);
 	widget_MnemocodeViewer			= new Widget_MnemocodeViewer(processor, projectManager->GetPtrTranslatorOutput());
 	widget_MnemocodeViewerTargeted	= new Widget_MnemocodeViewerTargeted(processor, projectManager->GetPtrTranslatorOutput());

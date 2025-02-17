@@ -168,6 +168,7 @@ public:
 		CurrentLineEdge,
 		Command_Translator,
 		Instruction,
+		Finder_NotFind,
 		Max,
 	};
 

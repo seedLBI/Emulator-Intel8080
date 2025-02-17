@@ -69,13 +69,39 @@ void Widget_Output0x02::Draw() {
 					text += " ";
 			}
 		}
-		//if (Char_enable == false)
-		//	ImGui::TextWrapped(text.c_str());
-		//else
-		//	RenderTextWrapped(text.c_str(), false);
+
+		auto prev_pos = ImGui::GetCursorScreenPos();
 
 		RenderTextWrapped(text.c_str(), false);
 
+		auto next_pos = ImGui::GetCursorScreenPos();
+
+		auto Max_Width = prev_pos.x + ImGui::GetWindowWidth();
+
+
+		if (ImGui::IsMouseHoveringRect(ImVec2(prev_pos.x, prev_pos.y), ImVec2(Max_Width, next_pos.y)) && text.empty() == false) {
+
+			if (ImGui::BeginTooltip()) {
+				ImGui::Text(u8"Нажми ЛКМ, чтобы скопировать\nтекст в буфер обмена.");
+				ImGui::EndTooltip();
+			}
+
+			if (ImGui::IsMouseClicked(ImGuiMouseButton_Left,false)) {
+				ImGui::SetClipboardText(text.c_str());
+
+				static const ImVec4 color_GREEN{ 0.2f,0.45f,0.2f,1.0f };
+				static const ImVec4 color_WHITE{ 1.f,1.f,1.f,1.f };
+
+				string success = u8"Скопировано в буфер обмена.";
+
+				notificationManager->AddNottification(Notification(color_GREEN, 1.f, std::vector<N_Element*>{
+					new N_Message(color_WHITE, success),
+				},
+					nullptr));
+
+			}
+
+		}
 
 		ImGui::End();
 	}
@@ -84,13 +110,13 @@ void Widget_Output0x02::Update() {
 	UpdateActive();
 }
 
-Widget_Output0x02::Widget_Output0x02(I8080* processor) : I8080_Widget(u8"Окно вывода")
-{
+Widget_Output0x02::Widget_Output0x02(I8080* processor, NotificationManager* notificationManager) : I8080_Widget(u8"Окно вывода") {
 	this->processor = processor;
+	this->notificationManager = notificationManager;
+
 }
 
-Widget_Output0x02::~Widget_Output0x02()
-{
+Widget_Output0x02::~Widget_Output0x02() {
 
 }
 

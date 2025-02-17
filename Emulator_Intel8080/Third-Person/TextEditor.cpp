@@ -63,7 +63,7 @@ TextEditor::TextEditor()
 		u8"Пунктуация",u8"Индификаторы",u8"Комментарии (однострочные)",
 		u8"Комментарии (многострочные)",u8"Фон",u8"Курсор",u8"Выделение",
 		u8"Ошибка",u8"Точка останова",u8"Номер строки",u8"Строка (активная)",
-		u8"Строка (не активная)",u8"Строка (границы)"
+		u8"Строка (не активная)",u8"Строка (границы)",u8"Поиск кнопки (слово не нашёл)"
 	});
 
 	SetPalette(GetDarkPalette());
@@ -887,9 +887,9 @@ void TextEditor::Draw_FindWindow() {
 
 	if (_DataFinder.FindedWords.empty()) {
 
-		ImGui::PushStyleColor(ImGuiCol_Button, ImColor(0.2f, 0.2f, 0.2f).Value);
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImColor(0.2f, 0.2f, 0.2f).Value);
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImColor(0.2f, 0.2f, 0.2f).Value);
+		ImGui::PushStyleColor(ImGuiCol_Button, mPalette[(int)PaletteIndex::Finder_NotFind] );
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, mPalette[(int)PaletteIndex::Finder_NotFind]);
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, mPalette[(int)PaletteIndex::Finder_NotFind]);
 
 	}
 
@@ -1421,7 +1421,8 @@ std::vector<NamedColor> TextEditor::GetDefaultLightColors() {
 		{u8"Номер строки",					ImColor(112,0,0,255)},
 		{u8"Строка (активная)",				ImColor(37,19,0,64)},
 		{u8"Строка (не активная)",			ImColor(128,117,97,64)},
-		{u8"Строка (границы)",				ImColor(64,38,0,64)}
+		{u8"Строка (границы)",				ImColor(64,38,0,64)},
+		{u8"Поиск кнопки (слово не нашёл)",ImColor(201,178,133,255) }
 	};
 
 
@@ -1446,7 +1447,8 @@ std::vector<NamedColor> TextEditor::GetDefaultDarkColors() {
 		{u8"Номер строки",ImColor(0xff707000)},
 		{u8"Строка (активная)",ImColor(0x40000000)},
 		{u8"Строка (не активная)",ImColor(0x40808080)},
-		{u8"Строка (границы)",ImColor(0x40a0a0a0)}
+		{u8"Строка (границы)",ImColor(0x40a0a0a0)},
+		{u8"Поиск кнопки (слово не нашёл)", ImColor(0.2f, 0.2f, 0.2f)}
 	};
 
 
@@ -1472,7 +1474,8 @@ void TextEditor::LoadColors() {
 		{u8"Номер строки",PaletteIndex::LineNumber},
 		{u8"Строка (активная)",PaletteIndex::CurrentLineFill},
 		{u8"Строка (не активная)",PaletteIndex::CurrentLineFillInactive},
-		{u8"Строка (границы)",PaletteIndex::CurrentLineEdge}
+		{u8"Строка (границы)",PaletteIndex::CurrentLineEdge},
+		{u8"Поиск кнопки (слово не нашёл)", PaletteIndex::Finder_NotFind }
 	};
 
 	//mPaletteBase
