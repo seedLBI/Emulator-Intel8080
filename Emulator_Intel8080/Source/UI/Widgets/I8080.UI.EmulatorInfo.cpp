@@ -10,7 +10,7 @@ Widget_EmulatorInfo::~Widget_EmulatorInfo() {
 }
 
 
-std::string Widget_EmulatorInfo::ConvertToSI(uint64_t value) {
+std::string Widget_EmulatorInfo::ConvertToSI(const uint64_t& value, const char* unit) {
 	int Kilo = value / (uint64_t)1'000;
 	int Mega = value / (uint64_t)1'000'000;
 	int Giga = value / (uint64_t)1'000'000'000;
@@ -24,34 +24,34 @@ std::string Widget_EmulatorInfo::ConvertToSI(uint64_t value) {
 		AfterDot = std::to_string(value).substr(output.size());
 		if (AfterDot.size() > 3)
 			AfterDot.erase(AfterDot.begin() + 3, AfterDot.end());
-		return output + "," + AfterDot + u8" ТГц";
+		return output + "," + AfterDot + u8" Т" + unit;
 	}
 	if (Giga > 0) {
 		output = std::to_string(Giga);
 		AfterDot = std::to_string(value).substr(output.size());
 		if (AfterDot.size() > 3)
 			AfterDot.erase(AfterDot.begin() + 3, AfterDot.end());
-		return output + "," + AfterDot + u8" ГГц";
+		return output + "," + AfterDot + u8" Г" + unit;
 	}
 	if (Mega > 0) {
 		output = std::to_string(Mega);
 		AfterDot = std::to_string(value).substr(output.size());
 		if (AfterDot.size() > 3)
 			AfterDot.erase(AfterDot.begin() + 3, AfterDot.end());
-		return output + "," + AfterDot + u8" МГц";
+		return output + "," + AfterDot + u8" М" + unit;
 	}
 	if (Kilo > 0) {
 		output = std::to_string(Kilo);
 		AfterDot = std::to_string(value).substr(output.size());
 		if (AfterDot.size() > 3)
 			AfterDot.erase(AfterDot.begin() + 3, AfterDot.end());
-		return output + "," + AfterDot + u8" КГц";
+		return output + "," + AfterDot + u8" К" + unit;
 	}
 
 
 
 
-	return std::to_string(value) + u8" Гц";
+	return std::to_string(value) + u8" " + unit;
 
 }
 
@@ -94,13 +94,19 @@ void Widget_EmulatorInfo::Draw() {
 			static uint64_t LastCountTicksInSeconds = 0;
 			static uint64_t LastCountTicksInSeconds_temp = 0;
 
+			static uint64_t LastCountInstructionInSeconds = 0;
+			static uint64_t LastCountInstructionInSeconds_temp = 0;
+
 
 			if (glfwGetTime() - LastTimeOneSecond > 1.f) {
 
 				LastTimeOneSecond = glfwGetTime();
 
-				LastCountTicksInSeconds = *current_state.CountTicks - LastCountTicksInSeconds_temp;
 
+				LastCountInstructionInSeconds = *current_state.CountInstruction - LastCountInstructionInSeconds_temp;
+				LastCountInstructionInSeconds_temp = *current_state.CountInstruction;
+
+				LastCountTicksInSeconds = *current_state.CountTicks - LastCountTicksInSeconds_temp;
 				LastCountTicksInSeconds_temp = *current_state.CountTicks;
 			}
 
@@ -108,9 +114,18 @@ void Widget_EmulatorInfo::Draw() {
 
 
 			ImGui::TableSetColumnIndex(0);
-			ImGui::Text(string(u8"Скорость").c_str(), 0, 2);
+			ImGui::Text(string(u8"Скорость\nтактов").c_str(), 0, 2);
 			ImGui::TableSetColumnIndex(1);
-			TextCenteredOnLine(ConvertToSI(LastCountTicksInSeconds).c_str(), 1, 2,0.5f,false);
+			TextCenteredOnLine(ConvertToSI(LastCountTicksInSeconds,u8"Гц").c_str(), 1, 2, 0.5f, false);
+
+			ImGui::TableNextRow();
+
+			ImGui::TableSetColumnIndex(0);
+			ImGui::Text(string(u8"Скорость\nинструкций").c_str(), 0, 2);
+			ImGui::TableSetColumnIndex(1);
+			TextCenteredOnLine((std::to_string(LastCountInstructionInSeconds)).c_str(), 1, 2, 0.5f, false);
+
+
 
 			ImGui::EndTable();
 		}

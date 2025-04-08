@@ -20,7 +20,7 @@ public:
 private:
 	I8080* processor;
 	CurrentState current_state;
-	std::string ConvertToSI(uint64_t value);
+	std::string ConvertToSI(const uint64_t& value, const char* unit);
 };
 
 

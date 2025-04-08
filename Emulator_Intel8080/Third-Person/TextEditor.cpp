@@ -1570,8 +1570,7 @@ void TextEditor::Render()
 			if (mState.mSelectionEnd.mLine > lineNo)
 				ssend += mCharAdvance.x;
 
-			if (sstart != -1 && ssend != -1 && sstart < ssend)
-			{
+			if (sstart != -1 && ssend != -1 && sstart < ssend) {
 				ImVec2 vstart(lineStartScreenPos.x + mTextStart + sstart, lineStartScreenPos.y);
 				ImVec2 vend(lineStartScreenPos.x + mTextStart + ssend, lineStartScreenPos.y + mCharAdvance.y);
 				drawList->AddRectFilled(vstart, vend, mPalette[(int)PaletteIndex::Selection]);
@@ -1611,7 +1610,8 @@ void TextEditor::Render()
 			const float posBreak_x = start.x + mCharAdvance.x;
 			const float posBreak_y = start.y + mCharAdvance.y / 2.f;
 
-			bool MouseCollision = ImGui::GetMousePos().x >= start.x && ImGui::GetMousePos().x <= mTextStart - mCharAdvance.x &&
+
+			bool MouseCollision = ImGui::GetMousePos().x >= start.x && ImGui::GetMousePos().x <= start.x + mTextStart - mCharAdvance.x &&
 				ImGui::GetMousePos().y >= start.y && ImGui::GetMousePos().y <= start.y + mCharAdvance.y;
 
 
