@@ -27,6 +27,7 @@ public:
 	void Load(const std::string& Data) override;
 
 	void ToggleFlagAlwaysFocus();
+	bool GetFlagAlwaysFocus();
 
 	void DrawMainMenu();
 	void DrawSetting() override;

@@ -2,10 +2,11 @@
 
 
 
-Widget_MarkerList::Widget_MarkerList(I8080* processor, TranslatorOutput* translator, Widget_MnemocodeViewer* MnemocodeViewer) :I8080_Widget(u8"Маркеры") {
+Widget_MarkerList::Widget_MarkerList(I8080* processor, TranslatorOutput* translator, Widget_MnemocodeViewer* MnemocodeViewer, NotificationManager* notificationManager) : I8080_Widget(u8"Маркеры") {
 	this->processor = processor;
 	this->translator = translator;
 	this->MnemocodeViewer = MnemocodeViewer;
+	this->notificationManager = notificationManager;
 }
 
 Widget_MarkerList::~Widget_MarkerList() {
@@ -113,7 +114,20 @@ void Widget_MarkerList::Draw() {
 					}
 
 					if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(ImGuiMouseButton_Middle)) {
-						MnemocodeViewer->FollowCursor(translator->Opcodes[i].adress_h * 256 + translator->Opcodes[i].adress_l);
+						if (MnemocodeViewer->GetFlagAlwaysFocus() == true) {
+							static const ImVec4 color_GRAY{ 0.6f,0.1f,0.1f,1.0f };
+							static const ImVec4 color_WHITE{ 1.f,1.f,1.f,1.f };
+
+							string text = u8"ВЫКЛЮЧИ режим постоянного\nслежения за PC в окне мнемокода";
+
+							notificationManager->AddNottification(Notification(color_GRAY, 2.f, std::vector<N_Element*>{
+								new N_Message(color_WHITE, text)
+							},
+								nullptr));
+						}
+						else {
+							MnemocodeViewer->FollowCursor(translator->Opcodes[i].adress_h * 256 + translator->Opcodes[i].adress_l);
+						}
 					}
 
 					if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(ImGuiMouseButton_Right)) {

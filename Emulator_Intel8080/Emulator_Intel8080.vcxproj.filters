@@ -356,6 +356,9 @@
     <ClCompile Include="Source\Emulator\Processors\Intel8080\Compiler\I8080.Compiler.cpp">
       <Filter>Source\Emulator\Processor\Processors\I8080\Compiler</Filter>
     </ClCompile>
+    <ClCompile Include="Source\UI\IntroManager\IntroManager.cpp">
+      <Filter>Source\UI\IntroManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Third-Person\IconFontCppHeaders\IconsFontAwesome6.h">
@@ -787,6 +790,9 @@
     <ClInclude Include="Source\Emulator\Processors\Intel8080\Compiler\I8080.Compiler.h">
       <Filter>Source\Emulator\Processor\Processors\I8080\Compiler</Filter>
     </ClInclude>
+    <ClInclude Include="Source\UI\IntroManager\IntroManager.h">
+      <Filter>Source\UI\IntroManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Third-Party">
@@ -1091,6 +1097,9 @@
     </Filter>
     <Filter Include="Source\Emulator\Processor\Processors\I8080\Compiler">
       <UniqueIdentifier>{f4a52967-a168-457f-a69e-63380c132fb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\UI\IntroManager">
+      <UniqueIdentifier>{f5b644a4-fb47-4fa5-8b6d-4ae810fa0ace}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

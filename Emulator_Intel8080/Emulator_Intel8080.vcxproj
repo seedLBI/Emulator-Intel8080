@@ -205,6 +205,7 @@
     <ClCompile Include="Source\UI\HighlighterInstruction\Highlighter.cpp" />
     <ClCompile Include="Source\UI\HighlighterInstruction\I8080\I8080.HighlighterInstruction.cpp" />
     <ClCompile Include="Source\UI\I8080.UI.cpp" />
+    <ClCompile Include="Source\UI\IntroManager\IntroManager.cpp" />
     <ClCompile Include="Source\UI\KeyCombination\KeyCombinationHandler.cpp" />
     <ClCompile Include="Source\UI\LastPathManager\LastPathManager.cpp" />
     <ClCompile Include="Source\UI\ProjectManager\ProjectManager.cpp" />
@@ -342,6 +343,7 @@
     <ClInclude Include="Source\UI\HighlighterInstruction\Highlighter.h" />
     <ClInclude Include="Source\UI\HighlighterInstruction\I8080\I8080.HighlighterInstruction.h" />
     <ClInclude Include="Source\UI\I8080.UI.h" />
+    <ClInclude Include="Source\UI\IntroManager\IntroManager.h" />
     <ClInclude Include="Source\UI\KeyCombination\KeyCombination.h" />
     <ClInclude Include="Source\UI\KeyCombination\KeyCombinationHandler.h" />
     <ClInclude Include="Source\UI\LastPathManager\LastPathManager.h" />

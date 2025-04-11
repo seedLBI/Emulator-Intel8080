@@ -20,6 +20,8 @@ I8080_UserInterface::I8080_UserInterface(GLFWwindow* window) {
 	Compiler =					new I8080_Compiler();
 	emulationThread =			new EmulationThread(processor, processorCaratakerMomento);
 
+	introManager =				new IntroManager();
+
 
 	projectManager = new ProjectManager(
 		window,
@@ -60,6 +62,10 @@ I8080_UserInterface::~I8080_UserInterface() {
 #endif // !WITH_DEBUG_OUTPUT
 	if (FullLoaded)
 		saveSystemManager->Save();
+}
+
+bool I8080_UserInterface::isNeedDrawIntro() {
+	return introManager->IsNeedDraw();
 }
 
 void I8080_UserInterface::Draw() {
@@ -353,6 +359,7 @@ void I8080_UserInterface::InitSetting() {
 	settings->AddSettingObject(lastPathManager);
 	settings->AddSettingObject(widget_MnemocodeViewer);
 	settings->AddSettingObject(themeManager);
+	settings->AddSettingObject(introManager);
 }
 
 void I8080_UserInterface::InitWidgets() {
@@ -375,7 +382,7 @@ void I8080_UserInterface::InitWidgets() {
 	widget_HexViewer				= new Widget_HexViewer(processor, projectManager->GetPtrTranslatorOutput(), widget_MnemocodeViewer);
 	widget_RegisterFlagsInfo		= new Widget_RegisterFlagsInfo(processor);
 	widget_EmulatorInfo				= new Widget_EmulatorInfo(processor);
-	widget_MarkerList				= new Widget_MarkerList(processor, projectManager->GetPtrTranslatorOutput(), widget_MnemocodeViewer);
+	widget_MarkerList				= new Widget_MarkerList(processor, projectManager->GetPtrTranslatorOutput(), widget_MnemocodeViewer, notificationManager);
 	widget_VarList					= new Widget_VarList(processor, projectManager->GetPtrTranslatorOutput());
 	widget_ConstList				= new Widget_ConstList(projectManager->GetPtrTranslatorOutput());
 	widget_Help						= new Widget_Help();

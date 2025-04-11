@@ -27,10 +27,10 @@ std::vector<NamedColor> Widget_MnemocodeViewer::GetDefaultLightColors() {
 }
 std::vector<NamedColor> Widget_MnemocodeViewer::GetDefaultDarkColors() {
 	return {
-		{u8"Посещённая ячейка", ImVec4(0.9f, 0.2f, 0.9f, 0.25f)},
-		{u8"Текущая ячейка (PC)", ImVec4(0.3f, 0.9f, 0.3f, 0.25f)},
-		{u8"Ячейка останова", ImVec4(0.9f, 0.9f, 0.3f, 0.45f)},
-		{u8"Указатель на память (HL)", ImVec4(0.1f,0.1f,1.f,0.3f)}
+		{u8"Посещённая ячейка",			ImVec4(0.9f, 0.2f, 0.9f, 0.25f)},
+		{u8"Текущая ячейка (PC)",		ImVec4(0.3f, 0.9f, 0.3f, 0.25f)},
+		{u8"Ячейка останова",			ImVec4(0.9f, 0.9f, 0.3f, 0.45f)},
+		{u8"Указатель на память (HL)",	ImVec4(0.1f, 0.1f, 1.0f, 0.3f)}
 	};
 }
 void Widget_MnemocodeViewer::LoadColors() {
@@ -220,6 +220,9 @@ void Widget_MnemocodeViewer::Load(const std::string& Data) {
 
 void Widget_MnemocodeViewer::ToggleFlagAlwaysFocus() {
 	flag_EnableAlwaysFocus = !flag_EnableAlwaysFocus;
+}
+bool Widget_MnemocodeViewer::GetFlagAlwaysFocus() {
+	return flag_EnableAlwaysFocus;
 }
 
 void Widget_MnemocodeViewer::DrawMainMenu() {

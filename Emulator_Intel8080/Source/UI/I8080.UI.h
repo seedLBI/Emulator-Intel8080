@@ -80,7 +80,7 @@
 #include "Emulator/Processors/Intel8080/History/Caretaker/I8080.Caretaker.Momento.h"
 #include "Emulator/EmulationControls/EmulationControls.h"
 
-
+#include "UI/IntroManager/IntroManager.h"
 
 
 #ifndef I8080_UI_H
@@ -92,14 +92,19 @@ class I8080_UserInterface
 public:
 	bool ExitButton = false;
 
+
+
 	I8080_UserInterface(GLFWwindow* window);
 	~I8080_UserInterface();
+
+	bool isNeedDrawIntro();
 
 	void Draw();
 	void Update();
 
 	bool OpenFileFromPath(string path);
 private:
+	bool NeedDrawIntro = true;
 
 	void BeginDraw();
 	void EndDraw();
@@ -125,7 +130,7 @@ private:
 
 
 
-
+	IntroManager*				  introManager = nullptr;
 	SaveSystemManager*			  saveSystemManager = nullptr;
 	NotificationManager*		  notificationManager = nullptr;
 	FontManager*				  font_manager = nullptr;

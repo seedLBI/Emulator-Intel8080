@@ -22,27 +22,32 @@ int main(int argc, char* argv[]) {
 	if (arguments.size() != 0)
 		i8080_ui->OpenFileFromPath(arguments[0]);
 
-	Intro::Init();
+
+	if (i8080_ui->isNeedDrawIntro()) {
+		Intro::Init();
+
 #ifdef WITH_DEBUG_OUTPUT
-	cout << "Run time: " << glfwGetTime() << endl;
+		cout << "Run time: " << glfwGetTime() << endl;
 #endif
 
-	while (!glfwWindowShouldClose(OpenglWindow::Vars::window) && Intro::IsEnd() == false) {
+		while (!glfwWindowShouldClose(OpenglWindow::Vars::window) && Intro::IsEnd() == false) {
 
-		OpenglWindow::BeginDraw();
+			OpenglWindow::BeginDraw();
 
-		if (Intro::FirstMoveAchivied()) {
-			i8080_ui->Update();
-			i8080_ui->Draw();
+			if (Intro::FirstMoveAchivied()) {
+				i8080_ui->Update();
+				i8080_ui->Draw();
 
+			}
+
+			Intro::Update();
+			Intro::Draw();
+			OpenglWindow::EndDraw();
 		}
 
-		Intro::Update();
-		Intro::Draw();
-		OpenglWindow::EndDraw();
-	}
 
-	Intro::Destructor();
+		Intro::Destructor();
+	}
 
 	while (!glfwWindowShouldClose(OpenglWindow::Vars::window) && i8080_ui->ExitButton == false) {
 		i8080_ui->Update();
