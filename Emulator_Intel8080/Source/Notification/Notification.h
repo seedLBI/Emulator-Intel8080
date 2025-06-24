@@ -19,7 +19,6 @@ private:
 
 	std::vector<N_Element*> elements;
 
-
 	ImU32 BackgroundColor;
 	ImVec4 Raw_BackgroundColor;
 

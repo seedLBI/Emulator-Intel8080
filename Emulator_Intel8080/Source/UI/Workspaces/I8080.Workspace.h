@@ -9,7 +9,7 @@
 #include <vector>
 #include <string>
 
-class I8080_Workspace:SaveSystem
+class I8080_Workspace : SaveSystem
 {
 public:
 	I8080_Workspace(const std::string& Name, const bool& LoadStyle, I8080_WidgetManager* WidgetManager);

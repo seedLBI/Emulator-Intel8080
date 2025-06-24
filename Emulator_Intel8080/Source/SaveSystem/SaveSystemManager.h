@@ -12,8 +12,7 @@
 #include <iostream>
 
 
-class SaveSystemManager
-{
+class SaveSystemManager {
 public:
 	SaveSystemManager(const std::string& SavingPath);
 	~SaveSystemManager();

@@ -7,8 +7,7 @@
 #include <vector>
 #include <iostream>
 
-class SaveSystem
-{
+class SaveSystem {
 public:
 	SaveSystem(const std::string& NameObject);
 	~SaveSystem();

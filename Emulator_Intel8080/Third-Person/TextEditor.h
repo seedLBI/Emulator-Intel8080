@@ -168,6 +168,8 @@ public:
 		CurrentLineEdge,
 		Command_Translator,
 		Instruction,
+		Label,
+		AnonymousLabel,
 		Finder_NotFind,
 		Max,
 	};

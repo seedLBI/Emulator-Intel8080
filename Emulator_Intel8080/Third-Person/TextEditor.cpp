@@ -62,7 +62,7 @@ TextEditor::TextEditor()
 		u8"Ничего",u8"Ключевые",u8"Числа",u8"Строки (\"\")",u8"Символы (\'\')",
 		u8"Пунктуация",u8"Индификаторы",u8"Комментарии (однострочные)",
 		u8"Комментарии (многострочные)",u8"Фон",u8"Курсор",u8"Выделение",
-		u8"Ошибка",u8"Точка останова",u8"Номер строки",u8"Строка (активная)",
+		u8"Ошибка",u8"Точка останова",u8"Номер строки",u8"Строка (активная)",u8"Метки", u8"Анонимные Метки",
 		u8"Строка (не активная)",u8"Строка (границы)",u8"Поиск кнопки (слово не нашёл)"
 	});
 
@@ -1404,6 +1404,8 @@ void TextEditor::LoadSetting(const std::string& Data) {
 std::vector<NamedColor> TextEditor::GetDefaultLightColors() {
 
 	std::vector<NamedColor> colors = {
+		{u8"Анонимные Метки", ImColor(40,40,255,255)},
+		{u8"Метки", ImColor(0,0,255,255)},
 		{u8"Ничего",						ImColor(125,115,104,255)},
 		{u8"Ключевые",						ImColor(6,12,255,255)},
 		{u8"Числа",							ImColor(80,109,1,255)},
@@ -1430,6 +1432,8 @@ std::vector<NamedColor> TextEditor::GetDefaultLightColors() {
 }
 std::vector<NamedColor> TextEditor::GetDefaultDarkColors() {
 	std::vector<NamedColor> colors = {
+		{u8"Анонимные Метки", ImColor(200,200,0,255)},
+		{u8"Метки", ImColor(255,255,0,255)},
 		{u8"Ничего",ImColor(0xff7f7f7f)},
 		{u8"Ключевые",ImColor(0xffff0c06)},
 		{u8"Числа",ImVec4(0.2,1.0,0.2,1.0)},
@@ -1457,6 +1461,8 @@ std::vector<NamedColor> TextEditor::GetDefaultDarkColors() {
 void TextEditor::LoadColors() {
 
 	static const robin_hood::unordered_flat_map<std::string, PaletteIndex> MapNameAndIndex = {
+		{u8"Анонимные Метки", PaletteIndex::AnonymousLabel},
+		{u8"Метки",PaletteIndex::Label},
 		{u8"Ничего",PaletteIndex::Default},
 		{u8"Ключевые",PaletteIndex::Keyword},
 		{u8"Числа",PaletteIndex::Number},
@@ -3291,8 +3297,12 @@ void TextEditor::ColorizeRange(int aFromLine, int aToLine)
 					}
 				}
 
-				for (size_t j = 0; j < token_length; ++j)
+				for (size_t j = 0; j < token_length; ++j) {
 					line[(token_begin - bufferBegin) + j].mColorIndex = token_color;
+					if (line[(token_begin - bufferBegin) + j].mColorIndex == PaletteIndex::AnonymousLabel)
+						line[(token_begin - bufferBegin) + j].mColorCustomIndex = -1;
+
+				}
 
 				first = token_end;
 			}
@@ -3819,8 +3829,10 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::I8080() {
 			langDef.mIdentifiers.insert(std::make_pair(info, id));
 		}
 	
-
-
+		
+		langDef.mTokenRegexStrings.push_back({ "^\\s*(?!\\s*(?:const|set|adr)\\s*:)([A-Za-z_][A-Za-z0-9_]*)\\s*:", PaletteIndex::Label });
+		langDef.mTokenRegexStrings.push_back({ "\\.(?!(?:const|set|adr)\\b)([A-Za-z0-9_]+(?:\\.[A-Za-z0-9_]+)*)\\s*:", PaletteIndex::AnonymousLabel });
+		
 		// Add additional command categories
 		langDef.mTokenRegexStrings.push_back({ "\\b(add|adi|adc|aci|sub|sui|sbb|sbi|inr|dcr|inx|dcx|dad)\\b", PaletteIndex::Instruction });
 		langDef.mTokenRegexStrings.push_back({ "\\b(mov|mvi|lda|sta|lhld|shld|lxi|ldax|stax|xchg)\\b", PaletteIndex::Instruction });
@@ -3829,7 +3841,6 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::I8080() {
 		langDef.mTokenRegexStrings.push_back({ "\\b(in|out|ei|di)\\b", PaletteIndex::Instruction });
 		langDef.mTokenRegexStrings.push_back({ "\\b(hlt|nop)\\b", PaletteIndex::Instruction });
 		langDef.mTokenRegexStrings.push_back({ "\\b(call|cz|cc|cpe|cm|cnz|cnc|cpo|cp|jmp|jz|jc|jpe|jm|jnz|jnc|jpo|jp|rst|ret|rz|rc|rpe|rm|rnz|rnc|rpo|rp)\\b", PaletteIndex::Instruction });
-
 		langDef.mTokenRegexStrings.push_back({ "\\b(const|set|adr)\\b", PaletteIndex::Instruction });
 
 		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("L?\\\"(\\.|[^\\\"])*\\\"", PaletteIndex::String));

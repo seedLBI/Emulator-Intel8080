@@ -49,7 +49,14 @@ enum class AutoSaveTiming {
 class ProjectManager : public ISettingObject
 {
 public:
-	ProjectManager(GLFWwindow* window,I8080* processor,NotificationManager* notificationManager,LastPathManager* LastPathManager,EmulationThread* emulationThread,Compiler* ñompiler, Caretaker_Momento* processor_CaretakerMomento);
+	ProjectManager(
+		GLFWwindow* window,
+		I8080* processor,
+		NotificationManager* notificationManager,
+		LastPathManager* LastPathManager,
+		EmulationThread* emulationThread,
+		Compiler* ñompiler, 
+		Caretaker_Momento* processor_CaretakerMomento);
 
 	~ProjectManager();
 

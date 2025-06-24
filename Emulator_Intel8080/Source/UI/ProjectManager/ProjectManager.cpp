@@ -400,6 +400,7 @@ void ProjectManager::DrawSetting() {
 
 
 }
+
 void ProjectManager::Update() {
 	wasFirstUpdate = true;
 

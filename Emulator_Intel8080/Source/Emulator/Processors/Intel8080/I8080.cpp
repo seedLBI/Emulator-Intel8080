@@ -19,18 +19,28 @@ void I8080::InitParityTable() {
 		parityTable[value] = (count % 2 == 0);
 	}
 }
-
 void I8080::InitSignTable() {
 	for (int value = 0; value < 256; value++) {
 		signTable[value] = value & 128;
 	}
 }
-
 void I8080::InitZeroTable() {
 	for (int value = 0; value < 256; value++) {
 		zeroTable[value] = (value == 0);
 	}
 }
+
+inline void I8080::_SetFlagSign(const uint8_t& value) {
+	Sign = signTable[value];
+}
+inline void I8080::_SetFlagParuty(const uint8_t& value) {
+	Parity = parityTable[value];
+}
+inline void I8080::_SetFlagZero(const uint8_t& value) {
+	Zero = zeroTable[value];
+}
+
+
 
 void I8080::Init_External_Peripherals() {
 #ifdef WITH_DEBUG_OUTPUT
@@ -112,15 +122,7 @@ std::shared_ptr<Momento> I8080::SaveState() {
 }
 
 
-inline void I8080::_SetFlagSign(const uint8_t& value) {
-	Sign = signTable[value];
-}
-inline void I8080::_SetFlagParuty(const uint8_t& value) {
-	Parity = parityTable[value];
-}
-inline void I8080::_SetFlagZero(const uint8_t& value) {
-	Zero = zeroTable[value];
-}
+
 
 uint8_t I8080::GetRegisterFlags() {
 	uint8_t FlagRegister = 0;
