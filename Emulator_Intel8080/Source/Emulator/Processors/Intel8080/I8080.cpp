@@ -7,6 +7,7 @@ I8080::I8080() : Processor(u8"Intel 8080") {
 	InitParityTable();
 	InitSignTable();
 	InitZeroTable();
+	InitAuxiliaryCarryTables();
 }
 
 
@@ -29,6 +30,23 @@ void I8080::InitZeroTable() {
 		zeroTable[value] = (value == 0);
 	}
 }
+void I8080::InitAuxiliaryCarryTables() {
+	for (int a = 0; a < 256; a++) {
+		for (int b = 0; b < 256; b++) {
+			for (int c = 0; c < 2; c++) {
+				int lower_a = a & 0x0F;
+				int lower_b = b & 0x0F;
+				int sum = lower_a + lower_b + c;
+				auxAddTable[a][b][c] = (sum > 0x0F);
+
+				int diff = lower_a - lower_b - c;
+				auxSubTable[a][b][c] = (diff >= 0);
+			}
+		}
+	}
+}
+
+
 
 inline void I8080::_SetFlagSign(const uint8_t& value) {
 	Sign = signTable[value];
@@ -39,7 +57,11 @@ inline void I8080::_SetFlagParuty(const uint8_t& value) {
 inline void I8080::_SetFlagZero(const uint8_t& value) {
 	Zero = zeroTable[value];
 }
-
+inline void I8080::_SetFlagSignParutyZero(const uint8_t& value) {
+	Sign = signTable[value];
+	Parity = parityTable[value];
+	Zero = zeroTable[value];
+}
 
 
 void I8080::Init_External_Peripherals() {
@@ -168,9 +190,18 @@ inline void I8080::SetVisitedMemoryFromPC() {
 	Viseted_Memory[PC] = true;
 }
 
+/*
 inline void I8080::IncrementPC(const uint8_t& count) {
 	for (int i = PC; i < (PC + count); ++i)
 		Viseted_Memory[i] = true;
+	PC += count;
+}
+*/
+
+inline void I8080::IncrementPC(const uint8_t& count) {
+	if (count >= 1) Viseted_Memory[PC] = true;
+	if (count >= 2) Viseted_Memory[PC + 1] = true;
+	if (count >= 3) Viseted_Memory[PC + 2] = true;
 	PC += count;
 }
 
@@ -434,9 +465,7 @@ void I8080::_DAA() {
 
 	A += adjustment;
 
-	_SetFlagSign(A);
-	_SetFlagParuty(A);
-	_SetFlagZero(A);
+	_SetFlagSignParutyZero(A);
 
 	Carry = c;
 
@@ -461,9 +490,7 @@ void I8080::_XRA(const uint8_t& value) {
 
 	AuxiliaryCarry = 0;
 	Carry = 0;
-	_SetFlagSign(A);
-	_SetFlagParuty(A);
-	_SetFlagZero(A);
+	_SetFlagSignParutyZero(A);
 
 	IncrementPC();
 }
@@ -502,13 +529,12 @@ void I8080::_XRI_imm8() {
 void I8080::_SUB(const uint8_t& value) {
 	CountTicks += 4;
 
-	AuxiliaryCarry = (int16_t(A & 0b00001111) - int16_t(value & 0b00001111)) >= 0;
+	
+	AuxiliaryCarry = auxSubTable[A][value][0];
 	Carry = (A < value);
 
 	A -= value;
-	_SetFlagSign(A);
-	_SetFlagParuty(A);
-	_SetFlagZero(A);
+	_SetFlagSignParutyZero(A);
 	IncrementPC();
 }
 
@@ -577,16 +603,13 @@ void I8080::_SBB(const uint8_t& value) {
 	CountTicks += 4;
 
 	bool C_old = Carry;
-
-	AuxiliaryCarry = (int16_t(A&0b00001111) - int16_t(value&0b00001111) - Carry) >= 0;
+	AuxiliaryCarry = auxSubTable[A][value][Carry];
 	Carry = (uint16_t(A) < uint16_t(value) + uint16_t(Carry));
 
 	A -= value;
 	A -= C_old;
 
-	_SetFlagSign(A);
-	_SetFlagParuty(A);
-	_SetFlagZero(A);
+	_SetFlagSignParutyZero(A);
 	IncrementPC();
 }
 
@@ -986,9 +1009,7 @@ inline void I8080::_ORA(const uint8_t& value) {
 
 	AuxiliaryCarry = 0;
 	Carry = 0;
-	_SetFlagSign(A);
-	_SetFlagParuty(A);
-	_SetFlagZero(A);
+	_SetFlagSignParutyZero(A);
 
 	IncrementPC();
 }
@@ -1418,12 +1439,12 @@ inline void I8080::_INX(uint8_t& pair_element1, uint8_t& pair_element2) {
 inline void I8080::_INCREMENT(uint8_t& value) {
 	CountTicks += 5;
 
+	AuxiliaryCarry = auxAddTable[value][1][0];
 	++value;
-	_SetFlagSign(value);
-	_SetFlagParuty(value);
-	_SetFlagZero(value);
+	_SetFlagSignParutyZero(value);
 
-	AuxiliaryCarry = ((value & 0b00001111) == 0);
+
+	//AuxiliaryCarry = ((value & 0b00001111) == 0);
 
 
 	IncrementPC();
@@ -1473,12 +1494,10 @@ void I8080::_INX_SP() {
 inline void I8080::_DECREMENT(uint8_t& value) {
 	CountTicks += 5;
 
-	--value;
-	_SetFlagSign(value);
-	_SetFlagParuty(value);
-	_SetFlagZero(value);
 
-	AuxiliaryCarry = ((value & 0b00001111) != 0b00001111);
+	AuxiliaryCarry = auxSubTable[value][1][0];
+	--value;
+	_SetFlagSignParutyZero(value);
 
 	IncrementPC();
 }
@@ -1567,13 +1586,12 @@ void I8080::_DAD_SP() {
 }
 inline void I8080::_COMPARE(const uint8_t& value) {
 	CountTicks += 4;
-	
-	AuxiliaryCarry = ((A & 0b00001111) - (value & 0b00001111)) >= 0;
+
+	AuxiliaryCarry = auxSubTable[A][value][0];
 	Carry = A < value;
-	uint8_t temp = A - value;
-	_SetFlagSign(temp);
-	_SetFlagParuty(temp);
-	_SetFlagZero(temp);
+
+	const uint8_t temp = A - value;
+	_SetFlagSignParutyZero(temp);
 
 	IncrementPC();
 }
@@ -1694,9 +1712,7 @@ inline void I8080::_ANA(const uint8_t& value) {
 
 	A = A & value;
 
-	_SetFlagSign(A);
-	_SetFlagParuty(A);
-	_SetFlagZero(A);
+	_SetFlagSignParutyZero(A);
 
 	IncrementPC();
 }
@@ -1735,13 +1751,13 @@ void I8080::_ANI_imm8() {
 inline void I8080::_ADD(const uint8_t& value) {
 	CountTicks += 4;
 
-	AuxiliaryCarry = (A&0b00001111) + (value&0b00001111) > 0b00001111;
+	AuxiliaryCarry = auxAddTable[A][value][0];
+
+	//AuxiliaryCarry = (A&0b00001111) + (value&0b00001111) > 0b00001111;
 	Carry = (uint16_t(A) + uint16_t(value) > 0x00ff);
 
 	A += value;
-	_SetFlagSign(A);
-	_SetFlagParuty(A);
-	_SetFlagZero(A);
+	_SetFlagSignParutyZero(A);
 
 	IncrementPC();
 }
@@ -1783,15 +1799,13 @@ void I8080::_ADC(const uint8_t& value) {
 	CountTicks += 4;
 
 	bool C_old = Carry;
-	AuxiliaryCarry = ((A & 0b00001111) + (value & 0b00001111) + Carry) > 0b00001111;
+	AuxiliaryCarry = auxAddTable[A][value][Carry];
 	Carry = uint16_t(A) + uint16_t(value) + Carry > 0x00FF;
 
 	A += value;
 	A += C_old;
 
-	_SetFlagSign(A);
-	_SetFlagParuty(A);
-	_SetFlagZero(A);
+	_SetFlagSignParutyZero(A);
 
 	IncrementPC();
 }

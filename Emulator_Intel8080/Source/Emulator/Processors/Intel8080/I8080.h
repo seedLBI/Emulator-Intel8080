@@ -144,10 +144,12 @@ private:
     bool parityTable[256];
     bool signTable[256];
     bool zeroTable[256];
+    bool auxAddTable[256][256][2];
+    bool auxSubTable[256][256][2];
     void InitParityTable();
     void InitSignTable();
     void InitZeroTable();
-
+    void InitAuxiliaryCarryTables();
 
     inline void ALU(const uint8_t& opcode);
     inline void ALU_WithHistorySaving(const uint8_t& opcode);
@@ -164,6 +166,8 @@ private:
     inline void _SetFlagSign(const uint8_t& value);
     inline void _SetFlagParuty(const uint8_t& value);
     inline void _SetFlagZero(const uint8_t& value);
+
+    inline void _SetFlagSignParutyZero(const uint8_t& value);
 
     void _INPUT();
     void _OUTPUT();
