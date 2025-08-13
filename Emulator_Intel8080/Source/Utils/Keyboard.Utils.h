@@ -1,7 +1,7 @@
 #ifndef KEYBOARD_UTILS_H
 #define KEYBOARD_UTILS_H
 
-#include "glfw3.h"
+#include "ThirdParty/OpenGL/include/glfw3.h"
 #include "robin_hood.h"
 #include <string>
 #include <vector>

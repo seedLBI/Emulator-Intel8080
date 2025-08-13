@@ -1,7 +1,9 @@
 #pragma once
-#include "imgui.h"
-#include "imgui_internal.h"
-#include "IconFontCppHeaders/IconsFontAwesome6.h"
+
+#include "ThirdParty/ImGui/imgui.h"
+#include "ThirdParty/ImGui/imgui_internal.h"
+#include "ThirdParty/IconFontCppHeaders/IconsFontAwesome6.h"
+
 #include <string>
 
 

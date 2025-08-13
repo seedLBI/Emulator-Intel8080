@@ -1,17 +1,25 @@
-﻿#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+﻿/*
+#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
 #include "Config_Compilier.h"
 #include "UI/I8080.UI.h"
 #include "Scene_Intro/I8080.Scene.Intro.h"
-
-#include "Emulator/Processors/Intel8080/InfoInstruction/InfoInstruction.Data.h"
-
-using namespace std;
+#include "Core/Emulator/Processors/Intel8080/InfoInstruction/InfoInstruction.Data.h"
 
 I8080_UserInterface* i8080_ui = nullptr;
 
+*/
+
+#include "Application/Application.h"
+
 
 int main(int argc, char* argv[]) {
+
+	Application app;
+	app.Run();
+	return 0;
+
+	/*
 	//setlocale(LC_ALL, "russian");	
 
 	OpenglWindow::Init();
@@ -70,6 +78,6 @@ int main(int argc, char* argv[]) {
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 	glfwTerminate();
-
+	*/
 }
 
