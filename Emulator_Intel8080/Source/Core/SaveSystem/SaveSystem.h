@@ -5,8 +5,11 @@
 
 #include <string>
 #include <vector>
-#include <iostream>
 #include <nlohmann/json.hpp>
+
+#ifdef _DEBUG
+#include <iostream>
+#endif
 
 class SaveSystem
 {

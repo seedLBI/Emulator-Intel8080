@@ -5,8 +5,10 @@
 #include "ThirdParty/ImGui/imgui_internal.h"
 
 #include "Core/SaveSystem/SaveSystem.h"
-#include "Utils/UTF8.h"
+
+#include "Utils/Text/Encoding/UTF8/UTF8.h"
 #include "Utils/Timer/Timer.Framerate.h"
+
 #include <string>
 
 class I8080_Widget : public SaveSystem
@@ -49,6 +51,10 @@ public:
 protected:
 	float TimerFocus = 0.f;
 	bool flag_FocusSeted = false;
+
+	nlohmann::json SaveDefaultParameters();
+	void ReadDefaultParameters(const nlohmann::json& Data);
+
 private:
 	std::string Name;
 	const char* Name_c_str;

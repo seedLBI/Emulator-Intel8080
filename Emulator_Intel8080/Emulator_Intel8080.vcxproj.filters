@@ -29,7 +29,7 @@
     <ClCompile Include="Source\Utils\OpenGL\Window\Window.cpp">
       <Filter>Source\Utils\OpenGL\Window</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Utils\OpenGL\Window\Manager\WindowManager.cpp">
+    <ClCompile Include="Source\Utils\OpenGL\Window\Manager\OpenGL.WindowManager.cpp">
       <Filter>Source\Utils\OpenGL\Window</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utils\OpenGL\Renderbuffer\Renderbuffer.cpp">
@@ -158,6 +158,234 @@
     <ClCompile Include="Source\Core\Widget\I8080.WidgetManager.cpp">
       <Filter>Source\Core\Widget</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Compiler\Compiler.cpp">
+      <Filter>Source\Core\Emulator\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Notification\Notification.cpp">
+      <Filter>Source\GUI\Notification</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Notification\Notification.Message.cpp">
+      <Filter>Source\GUI\Notification</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Notification\Notification.Progress.cpp">
+      <Filter>Source\GUI\Notification</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Notification\NotificationManager.cpp">
+      <Filter>Source\GUI\Notification</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Notification\interface\Notification.Element.cpp">
+      <Filter>Source\GUI\Notification\interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\AuthorPopup\AuthorPopup.cpp">
+      <Filter>Source\GUI\AuthorPopup</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\HighlighterInstruction\Highlighter.cpp">
+      <Filter>Source\GUI\HighlighterInstruction</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\HighlighterInstruction\I8080\I8080.HighlighterInstruction.cpp">
+      <Filter>Source\GUI\HighlighterInstruction\I8080</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\CodeEditor\TextEditor.cpp">
+      <Filter>Source\GUI\Widgets\CodeEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\CodeEditor\Widget.CodeEditor.cpp">
+      <Filter>Source\GUI\Widgets\CodeEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DataStructures\ModeProject.cpp">
+      <Filter>Source\DataStructures</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DataStructures\RingBuffer.cpp">
+      <Filter>Source\DataStructures</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DataStructures\TypesCommand.cpp">
+      <Filter>Source\DataStructures</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DataStructures\TypeTranslatorError.cpp">
+      <Filter>Source\DataStructures</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\EmulationThread\EmulationThread.cpp">
+      <Filter>Source\Core\Emulator\EmulationThread</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\History\Caretaker.Momento.cpp">
+      <Filter>Source\Core\Emulator\History</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\History\Momento.cpp">
+      <Filter>Source\Core\Emulator\History</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\History\Originator.Momento.cpp">
+      <Filter>Source\Core\Emulator\History</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Processor\Processor.cpp">
+      <Filter>Source\Core\Emulator\Processor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Processors\Intel8080\I8080.cpp">
+      <Filter>Source\Core\Emulator\Processors\Intel8080</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Data.cpp">
+      <Filter>Source\Core\Emulator\Processors\Intel8080\InfoInstruction</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Display.cpp">
+      <Filter>Source\Core\Emulator\Processors\Intel8080\InfoInstruction</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Structures.cpp">
+      <Filter>Source\Core\Emulator\Processors\Intel8080\InfoInstruction</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Port\AsyncKeyboard\Momento\AsyncKeyboard.Momento.cpp">
+      <Filter>Source\Core\Emulator\Port\AsyncKeyboard\Momento</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Port\ConsoleOutput\Momento\ConsoleOutput.Momento.cpp">
+      <Filter>Source\Core\Emulator\Port\ConsoleOutput\Momento</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Port\GeneratorRandomValues\Momento\GeneratorRandomValues.Momento.cpp">
+      <Filter>Source\Core\Emulator\Port\GeneratorRandomValues\Momento</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Port\PixelScreen\Momento\PixelScreen.Momento.cpp">
+      <Filter>Source\Core\Emulator\Port\PixelScreen\Momento</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Port\PixelScreenTwoBuffers\Momento\PixelScreenTwoBuffers.Momento.cpp">
+      <Filter>Source\Core\Emulator\Port\PixelScreenTwoBuffers\Momento</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Port\SymbolScreen\Momento\SymbolScreen.Momento.cpp">
+      <Filter>Source\Core\Emulator\Port\SymbolScreen\Momento</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Port\Timer\Momento\Timer.Momento.cpp">
+      <Filter>Source\Core\Emulator\Port\Timer\Momento</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Processors\Intel8080\Compiler\I8080.Compiler.cpp">
+      <Filter>Source\Core\Emulator\Processors\Intel8080\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Processors\Intel8080\Disassembler\I8080.Disassembler.cpp">
+      <Filter>Source\Core\Emulator\Processors\Intel8080\Disassembler</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Processors\Intel8080\History\Caretaker\I8080.Caretaker.Momento.cpp">
+      <Filter>Source\Core\Emulator\Processors\Intel8080\History\Caretaker</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Processors\Intel8080\History\Momento\I8080.Momento.cpp">
+      <Filter>Source\Core\Emulator\Processors\Intel8080\History\Momento</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Port\Port.cpp">
+      <Filter>Source\Core\Emulator\Port</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Port\AsyncKeyboard\AsyncKeyboard.Port.cpp">
+      <Filter>Source\Core\Emulator\Port\AsyncKeyboard</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Port\ConsoleOutput\ConsoleOutput.Port.cpp">
+      <Filter>Source\Core\Emulator\Port\ConsoleOutput</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Port\GeneratorRandomValues\GeneratorRandomValues.Port.cpp">
+      <Filter>Source\Core\Emulator\Port\GeneratorRandomValues</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Port\PixelScreen\PixelScreen.Port.cpp">
+      <Filter>Source\Core\Emulator\Port\PixelScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Port\PixelScreenTwoBuffers\PixelScreenTwoBuffers.Port.cpp">
+      <Filter>Source\Core\Emulator\Port\PixelScreenTwoBuffers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Port\SymbolScreen\SymbolScreen.Port.cpp">
+      <Filter>Source\Core\Emulator\Port\SymbolScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\Port\Timer\Timer.Port.cpp">
+      <Filter>Source\Core\Emulator\Port\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\ColorPicker\Widget.ColorPicker.cpp">
+      <Filter>Source\GUI\Widgets\ColorPicker</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils\ColorUtilities.cpp">
+      <Filter>Source\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Emulator\EmulationControls\EmulationControls.cpp">
+      <Filter>Source\Core\Emulator\EmulationControls</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\ConstList\Widget.ListConst.cpp">
+      <Filter>Source\GUI\Widgets\Lists\ListConst</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\Disassembler\Widget.Disassembler.cpp">
+      <Filter>Source\GUI\Widgets\Disassembler</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\EmulatorInfo\Widget.EmulatorInfo.cpp">
+      <Filter>Source\GUI\Widgets\EmulatorInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\Help\Widget.Help.cpp">
+      <Filter>Source\GUI\Widgets\Help</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\HexViewer\Widget.HexViewer.cpp">
+      <Filter>Source\GUI\Widgets\HexViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\Help\Help.Data.cpp">
+      <Filter>Source\GUI\Widgets\Help</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\HistoryInstruction\Widget.HistoryInstruction.cpp">
+      <Filter>Source\GUI\Widgets\HistoryInstruction</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\Input0x08\Widget.Input0x08.cpp">
+      <Filter>Source\GUI\Widgets\Input0x08</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\Keyboard\Widget.Keyboard.cpp">
+      <Filter>Source\GUI\Widgets\Keyboard</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\ListInstruction\Widget.ListInstruction.cpp">
+      <Filter>Source\GUI\Widgets\ListInstruction</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\MarkerList\Widget.ListMarker.cpp">
+      <Filter>Source\GUI\Widgets\Lists\ListMarker</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\MnemoCodeViewer\Widget.MnemoCodeViewer.cpp">
+      <Filter>Source\GUI\Widgets\MnemoCodeViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\MnemoCodeViewerTargeted\Widget.MnemoCodeViewerTargeted.cpp">
+      <Filter>Source\GUI\Widgets\MnemoCodeViewerTargeted</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\VarList\Widget.ListVar.cpp">
+      <Filter>Source\GUI\Widgets\Lists\ListVar</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\Output0x02\Widget.Output0x02.cpp">
+      <Filter>Source\GUI\Widgets\Output0x02</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\PixelScreen\Widget.PixelScreen.cpp">
+      <Filter>Source\GUI\Widgets\PixelScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\PixelScreenTwoBuffers\Widget.PixelScreenTwoBuffers.cpp">
+      <Filter>Source\GUI\Widgets\PixelScreenTwoBuffers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\RegisterFlagsInfo\Widget.RegisterFlagsInfo.cpp">
+      <Filter>Source\GUI\Widgets\RegisterFlagsInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\SymbolPicker\Widget.SymbolPicker.cpp">
+      <Filter>Source\GUI\Widgets\SymbolPicker</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\SymbolScreen\Widget.SymbolScreen.cpp">
+      <Filter>Source\GUI\Widgets\SymbolScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\TableInstruction\Widget.TableInstruction.cpp">
+      <Filter>Source\GUI\Widgets\TableInstruction</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Widgets\Timer\Widget.Timer.cpp">
+      <Filter>Source\GUI\Widgets\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\ProjectManager\ProjectManager.cpp">
+      <Filter>Source\Core\ProjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\LastPathManager\LastPathManager.cpp">
+      <Filter>Source\Core\LastPathManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\KeyCombination\KeyCombinationHandler.cpp">
+      <Filter>Source\Core\KeyCombination</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\WindowManager\WindowManager.cpp">
+      <Filter>Source\Core\WindowManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Workspaces\I8080.Workspace.cpp">
+      <Filter>Source\Core\Workspace</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Workspaces\I8080.WorkspaceManager.cpp">
+      <Filter>Source\Core\Workspace</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\IntroManager\IntroManager.cpp">
+      <Filter>Source\Core\IntroManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\MainMenuBar\logo_transparent.cpp">
+      <Filter>Source\GUI\MainMenuBar</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -246,12 +474,6 @@
     </Filter>
     <Filter Include="Source\Core\Emulator\Port\GeneratorRandomValues\Momento">
       <UniqueIdentifier>{f31a2e62-9287-4745-b944-8cbaa0556298}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Core\Emulator\Port\PixelScreen">
-      <UniqueIdentifier>{dd5c3ee9-0905-485d-92e2-99c28b95520b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Core\Emulator\Port\PixelScreen\Momento">
-      <UniqueIdentifier>{3af708a3-2774-4dc8-9c0a-8a2a1741b4ea}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Core\Emulator\Port\PixelScreenTwoBuffers">
       <UniqueIdentifier>{a401fed7-58fa-4c14-a2c5-dc47a723ed41}</UniqueIdentifier>
@@ -382,6 +604,27 @@
     <Filter Include="Source\Utils\Values">
       <UniqueIdentifier>{f53c1c62-f07d-45a2-a0ec-cabc26ccd4f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\GUI\Notification">
+      <UniqueIdentifier>{4797d360-5176-4bb9-b4cd-a8a29e65e750}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Notification\interface">
+      <UniqueIdentifier>{69ddb37b-8d00-4600-9515-87059109176d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\AuthorPopup">
+      <UniqueIdentifier>{eb74f3c9-1dcf-49a1-9ef2-e409e0e8cf4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\HighlighterInstruction">
+      <UniqueIdentifier>{1d74dd8e-aa19-407e-b8ff-308913389d44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\HighlighterInstruction\I8080">
+      <UniqueIdentifier>{e440e415-bfbb-45c5-b7d8-089c7f0e1eb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets">
+      <UniqueIdentifier>{bd5cf2c3-8e6c-4ad4-80ac-644542641c49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\CodeEditor">
+      <UniqueIdentifier>{0617cd89-d4a3-4b12-b3c4-f4f1a02aca08}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source\ThirdParty">
       <UniqueIdentifier>{65b2abcb-77b0-48e5-b108-49e66a9ea992}</UniqueIdentifier>
     </Filter>
@@ -393,6 +636,81 @@
     </Filter>
     <Filter Include="Source\ThirdParty\LodePNG">
       <UniqueIdentifier>{e3e5fb47-c91b-4a5d-8ba5-8692166b948d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Core\Emulator\Port\PixelScreen">
+      <UniqueIdentifier>{dd5c3ee9-0905-485d-92e2-99c28b95520b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Core\Emulator\Port\PixelScreen\Momento">
+      <UniqueIdentifier>{3af708a3-2774-4dc8-9c0a-8a2a1741b4ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\ColorPicker">
+      <UniqueIdentifier>{70bcb28a-66e6-4cb9-8674-0c6b0676a5f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\Disassembler">
+      <UniqueIdentifier>{40bbe813-e7bf-48cc-9356-cf325e9c1da8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\EmulatorInfo">
+      <UniqueIdentifier>{91043dc4-2166-4af8-a110-2a9e26eddfe4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\Help">
+      <UniqueIdentifier>{81d40dfa-15a8-40c5-8a6c-28fcb039428e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\HexViewer">
+      <UniqueIdentifier>{e0d32df2-4bb0-433e-8954-8272344e892a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\HistoryInstruction">
+      <UniqueIdentifier>{7fac0e05-bf2c-47cc-b9cf-00a9f7e0abf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\Input0x08">
+      <UniqueIdentifier>{c9e44f6d-ad14-4e5f-abd8-84a9f5364505}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\Keyboard">
+      <UniqueIdentifier>{61f47bb1-a965-4a44-b452-a9bddf8a11d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\ListInstruction">
+      <UniqueIdentifier>{07f30dc9-b7b7-41c4-8451-51d796716be5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\MnemoCodeViewer">
+      <UniqueIdentifier>{4672637b-75d6-49bd-9aae-bfd4e08b387f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\MnemoCodeViewerTargeted">
+      <UniqueIdentifier>{9878927f-0d81-411a-9fd7-6f47f1de2d3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\Lists">
+      <UniqueIdentifier>{2b20296d-a7f5-404f-843f-d5c8d36a79c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\Lists\ListConst">
+      <UniqueIdentifier>{1fd7710d-0339-46ec-97aa-b96286f76d8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\Lists\ListMarker">
+      <UniqueIdentifier>{da869a94-4fe7-446b-b14f-3eceb08c58bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\Lists\ListVar">
+      <UniqueIdentifier>{e3fd3000-9171-437d-b9fb-dec145c1e595}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\Output0x02">
+      <UniqueIdentifier>{329e24f9-ce9a-43ae-b1ff-a6770509d0ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\PixelScreen">
+      <UniqueIdentifier>{d3bb358d-31bc-42a6-bcaf-231ee51f3cba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\PixelScreenTwoBuffers">
+      <UniqueIdentifier>{aa27addd-bea1-4e28-a3bb-f03fe056efd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\RegisterFlagsInfo">
+      <UniqueIdentifier>{89af9c61-8d18-4c4e-8ff0-c745a01eb7dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\SymbolPicker">
+      <UniqueIdentifier>{7e858d38-0b95-4b7b-ba96-c98880456629}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\SymbolScreen">
+      <UniqueIdentifier>{cce11d38-7483-411e-9dae-177642279080}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\TableInstruction">
+      <UniqueIdentifier>{b1278e84-52ea-4f3f-bc6b-b0dbd09755c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Widgets\Timer">
+      <UniqueIdentifier>{4f56c718-4418-4e22-a001-e6e0b6065f05}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -423,7 +741,7 @@
     <ClInclude Include="Source\Utils\OpenGL\Window\Window.h">
       <Filter>Source\Utils\OpenGL\Window</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Utils\OpenGL\Window\Manager\WindowManager.h">
+    <ClInclude Include="Source\Utils\OpenGL\Window\Manager\OpenGL.WindowManager.h">
       <Filter>Source\Utils\OpenGL\Window</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utils\OpenGL\Renderbuffer\Renderbuffer.h">
@@ -576,6 +894,249 @@
     </ClInclude>
     <ClInclude Include="Source\Core\Widget\I8080.WidgetManager.h">
       <Filter>Source\Core\Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Compiler\Compiler.h">
+      <Filter>Source\Core\Emulator\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Notification\Notification.h">
+      <Filter>Source\GUI\Notification</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Notification\Notification.Message.h">
+      <Filter>Source\GUI\Notification</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Notification\Notification.Progress.h">
+      <Filter>Source\GUI\Notification</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Notification\NotificationManager.h">
+      <Filter>Source\GUI\Notification</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Notification\interface\Notification.Element.h">
+      <Filter>Source\GUI\Notification\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\AuthorPopup\AuthorPopup.h">
+      <Filter>Source\GUI\AuthorPopup</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\HighlighterInstruction\Highlighter.h">
+      <Filter>Source\GUI\HighlighterInstruction</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\HighlighterInstruction\I8080\I8080.HighlighterInstruction.h">
+      <Filter>Source\GUI\HighlighterInstruction\I8080</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\CodeEditor\TextEditor.h">
+      <Filter>Source\GUI\Widgets\CodeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\CodeEditor\Widget.CodeEditor.h">
+      <Filter>Source\GUI\Widgets\CodeEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataStructures\CurrentStateProcessor.h">
+      <Filter>Source\DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataStructures\ModeProject.h">
+      <Filter>Source\DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataStructures\OpcodeAdressed.h">
+      <Filter>Source\DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataStructures\RingBuffer.h">
+      <Filter>Source\DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataStructures\TranslatorOutput.h">
+      <Filter>Source\DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataStructures\TypesCommand.h">
+      <Filter>Source\DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataStructures\TypeTranslatorError.h">
+      <Filter>Source\DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DataStructures\VarsDebug.h">
+      <Filter>Source\DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\EmulationThread\EmulationThread.h">
+      <Filter>Source\Core\Emulator\EmulationThread</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\History\Caretaker.Momento.h">
+      <Filter>Source\Core\Emulator\History</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\History\Momento.h">
+      <Filter>Source\Core\Emulator\History</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\History\Originator.Momento.h">
+      <Filter>Source\Core\Emulator\History</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Processor\Processor.h">
+      <Filter>Source\Core\Emulator\Processor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Processors\Intel8080\I8080.h">
+      <Filter>Source\Core\Emulator\Processors\Intel8080</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Data.h">
+      <Filter>Source\Core\Emulator\Processors\Intel8080\InfoInstruction</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Display.h">
+      <Filter>Source\Core\Emulator\Processors\Intel8080\InfoInstruction</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Structures.h">
+      <Filter>Source\Core\Emulator\Processors\Intel8080\InfoInstruction</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Port\AsyncKeyboard\Momento\AsyncKeyboard.Momento.h">
+      <Filter>Source\Core\Emulator\Port\AsyncKeyboard\Momento</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Port\ConsoleOutput\Momento\ConsoleOutput.Momento.h">
+      <Filter>Source\Core\Emulator\Port\ConsoleOutput\Momento</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Port\GeneratorRandomValues\Momento\GeneratorRandomValues.Momento.h">
+      <Filter>Source\Core\Emulator\Port\GeneratorRandomValues\Momento</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Port\PixelScreen\Momento\PixelScreen.Momento.h">
+      <Filter>Source\Core\Emulator\Port\PixelScreen\Momento</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Port\PixelScreenTwoBuffers\Momento\PixelScreenTwoBuffers.Momento.h">
+      <Filter>Source\Core\Emulator\Port\PixelScreenTwoBuffers\Momento</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Port\SymbolScreen\Momento\SymbolScreen.Momento.h">
+      <Filter>Source\Core\Emulator\Port\SymbolScreen\Momento</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Port\Timer\Momento\Timer.Momento.h">
+      <Filter>Source\Core\Emulator\Port\Timer\Momento</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Processors\Intel8080\Compiler\I8080.Compiler.h">
+      <Filter>Source\Core\Emulator\Processors\Intel8080\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Processors\Intel8080\Disassembler\I8080.Disassembler.h">
+      <Filter>Source\Core\Emulator\Processors\Intel8080\Disassembler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Processors\Intel8080\History\Caretaker\I8080.Caretaker.Momento.h">
+      <Filter>Source\Core\Emulator\Processors\Intel8080\History\Caretaker</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Processors\Intel8080\History\Momento\I8080.Momento.h">
+      <Filter>Source\Core\Emulator\Processors\Intel8080\History\Momento</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Port\Port.h">
+      <Filter>Source\Core\Emulator\Port</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Port\AsyncKeyboard\AsyncKeyboard.Port.h">
+      <Filter>Source\Core\Emulator\Port\AsyncKeyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Port\ConsoleOutput\ConsoleOutput.Port.h">
+      <Filter>Source\Core\Emulator\Port\ConsoleOutput</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Port\GeneratorRandomValues\GeneratorRandomValues.Port.h">
+      <Filter>Source\Core\Emulator\Port\GeneratorRandomValues</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Port\PixelScreen\PixelScreen.Port.h">
+      <Filter>Source\Core\Emulator\Port\PixelScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Port\PixelScreenTwoBuffers\PixelScreenTwoBuffers.Port.h">
+      <Filter>Source\Core\Emulator\Port\PixelScreenTwoBuffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Port\SymbolScreen\SymbolScreen.Port.h">
+      <Filter>Source\Core\Emulator\Port\SymbolScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\Port\Timer\Timer.Port.h">
+      <Filter>Source\Core\Emulator\Port\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\ColorPicker\Widget.ColorPicker.h">
+      <Filter>Source\GUI\Widgets\ColorPicker</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\ColorUtilities.h">
+      <Filter>Source\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Emulator\EmulationControls\EmulationControls.h">
+      <Filter>Source\Core\Emulator\EmulationControls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\ConstList\Widget.ListConst.h">
+      <Filter>Source\GUI\Widgets\Lists\ListConst</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\Disassembler\Widget.Disassembler.h">
+      <Filter>Source\GUI\Widgets\Disassembler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\EmulatorInfo\Widget.EmulatorInfo.h">
+      <Filter>Source\GUI\Widgets\EmulatorInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\Help\Widget.Help.h">
+      <Filter>Source\GUI\Widgets\Help</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\HexViewer\Widget.HexViewer.h">
+      <Filter>Source\GUI\Widgets\HexViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\Help\Help.Data.h">
+      <Filter>Source\GUI\Widgets\Help</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\HistoryInstruction\Widget.HistoryInstruction.h">
+      <Filter>Source\GUI\Widgets\HistoryInstruction</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\Input0x08\Widget.Input0x08.h">
+      <Filter>Source\GUI\Widgets\Input0x08</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\Keyboard\Widget.Keyboard.h">
+      <Filter>Source\GUI\Widgets\Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\ListInstruction\Widget.ListInstruction.h">
+      <Filter>Source\GUI\Widgets\ListInstruction</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\MarkerList\Widget.ListMarker.h">
+      <Filter>Source\GUI\Widgets\Lists\ListMarker</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\MnemoCodeViewer\Widget.MnemoCodeViewer.h">
+      <Filter>Source\GUI\Widgets\MnemoCodeViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\MnemoCodeViewerTargeted\Widget.MnemoCodeViewerTargeted.h">
+      <Filter>Source\GUI\Widgets\MnemoCodeViewerTargeted</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\VarList\Widget.ListVar.h">
+      <Filter>Source\GUI\Widgets\Lists\ListVar</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\Output0x02\Widget.Output0x02.h">
+      <Filter>Source\GUI\Widgets\Output0x02</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\PixelScreen\Widget.PixelScreen.h">
+      <Filter>Source\GUI\Widgets\PixelScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\PixelScreenTwoBuffers\Widget.PixelScreenTwoBuffers.h">
+      <Filter>Source\GUI\Widgets\PixelScreenTwoBuffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\RegisterFlagsInfo\Widget.RegisterFlagsInfo.h">
+      <Filter>Source\GUI\Widgets\RegisterFlagsInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\SymbolPicker\Widget.SymbolPicker.h">
+      <Filter>Source\GUI\Widgets\SymbolPicker</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\SymbolScreen\Widget.SymbolScreen.h">
+      <Filter>Source\GUI\Widgets\SymbolScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\TableInstruction\Widget.TableInstruction.h">
+      <Filter>Source\GUI\Widgets\TableInstruction</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\Widgets\Timer\Widget.Timer.h">
+      <Filter>Source\GUI\Widgets\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\ProjectManager\ProjectManager.h">
+      <Filter>Source\Core\ProjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\LastPathManager\LastPathManager.h">
+      <Filter>Source\Core\LastPathManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\KeyCombination\KeyCombination.h">
+      <Filter>Source\Core\KeyCombination</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\KeyCombination\KeyCombinationHandler.h">
+      <Filter>Source\Core\KeyCombination</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\WindowManager\WindowManager.h">
+      <Filter>Source\Core\WindowManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Workspaces\I8080.Workspace.h">
+      <Filter>Source\Core\Workspace</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Workspaces\I8080.WorkspaceManager.h">
+      <Filter>Source\Core\Workspace</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\IntroManager\IntroManager.h">
+      <Filter>Source\Core\IntroManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GUI\MainMenuBar\logo_transparent.h">
+      <Filter>Source\GUI\MainMenuBar</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

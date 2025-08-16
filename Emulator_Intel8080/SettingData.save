@@ -1,0 +1,97 @@
+{
+    "LastPaths": null,
+    "Setting": {
+        "Видео": {
+            "Изображение": {
+                "fps": 60,
+                "is_fullscreen": false,
+                "is_maximazed": 0,
+                "position.x": 137,
+                "position.y": 321,
+                "size.x": 1280,
+                "size.y": 720,
+                "vsync": false
+            },
+            "Шрифт": {
+                "paths": [
+                    ""
+                ],
+                "scale": 21,
+                "selected": "JetBrainsMonoNL"
+            }
+        },
+        "Общие": {
+            "Интро": {
+                "flag_NeedDraw": true
+            },
+            "Последние проекты": {
+                "flag_ShowAllPath": true
+            },
+            "Просмотр кода": {
+                "flag_EnableAlwaysFocus": false
+            },
+            "Рабочие пространства": {
+                "SaveCurrentWorkspaceBeforeClosingApp": true
+            },
+            "Редактор кода": {
+                "flag_AnalyzeLineForInstruction": true,
+                "flag_EnableAutoTab": true
+            },
+            "Уведомления": {
+                "flag_Enabled": true
+            }
+        },
+        "Проект": {
+            "Проект": {
+                "flag_CompileAfterOpen": true,
+                "flag_OpenLastFileWithOpenProgramm": false,
+                "flag_SaveAfterCompile": true,
+                "setedAutoTiming": "5 минут"
+            }
+        },
+        "Управление": {
+            "KeyCombination": {
+                "Cледующая скорость процессора": "",
+                "Запуск": "F5",
+                "Компилировать": "F2",
+                "Настройки": "",
+                "Новый файл": "",
+                "Открыть файл": "",
+                "Пауза": "F12",
+                "Полноэкранный\\Оконный": "F11",
+                "Постоянный фокус в просмотре памяти": "",
+                "Предыдущая скорость процессора": "",
+                "Предыдущее рабочее пространство": "LCtrl + LBracket",
+                "Режим сохранения истории (вкл\\выкл)": "",
+                "Сбросить состояние": "",
+                "Следующее рабочее пространство": "LCtrl + RBracket",
+                "Сохранить": "LCtrl + S",
+                "Сохранить в бинарный файл": "",
+                "Сохранить как": "",
+                "Стоп": "Esc",
+                "Увеличить шрифт на 1": "LCtrl + Equal",
+                "Удалить точки останова": "",
+                "Уменьшить шрифт на 1": "LCtrl + Minus",
+                "Шаг вперёд": "F9",
+                "Шаг назад": ""
+            }
+        },
+        "Цветовая тема": {
+            "Themes": {
+                "indexChoosed": 0
+            }
+        },
+        "Эмуляция": {
+            "Эмуляция": {
+                "IndexChoosedCustomSpeedMode": -1,
+                "MaxCountHistoryElements": 100,
+                "SpeedMode": "Infinity",
+                "flag_HistoryModeEnabled": true,
+                "flag_ReturnStateAfterChangeSpeed": false
+            }
+        }
+    },
+    "Workspaces": {
+        "index_choosed": 0
+    }
+}

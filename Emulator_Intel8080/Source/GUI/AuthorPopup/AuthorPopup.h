@@ -1,14 +1,14 @@
 #ifndef AUTHORPOPUP_H
 #define AUTHORPOPUP_H
 
-#include "OpenglTexture.h"
+#include <Windows.h>
+#include <shellapi.h>
+
+#include "Utils/OpenGL/Texture/Texture.h"
 
 #include "ThirdParty/ImGui/imgui.h"
 
-#include <windows.h>
-#include <shellapi.h>
-
-#include "Utils/ImGui.Utils.h"
+#include "Utils/ImGui/Utils.ImGui.h"
 
 #include "Data/Images/AuthorPicture/Image.Author.Backend.h"
 #include "Data/Images/AuthorPicture/Image.Author.Close.h"
@@ -18,13 +18,9 @@
 #include "Data/Images/AuthorPicture/Image.Author.RightEye.h"
 
 
-
-
-
-class AuthorPopup
-{
+class AuthorPopup {
 public:
-	AuthorPopup();
+	AuthorPopup(GLFWwindow* window);
 	~AuthorPopup();
 
 	void Draw();
@@ -32,28 +28,20 @@ public:
 	void Open();
 
 private:
-
+	GLFWwindow* window = nullptr;
 	bool isOpen = false;
 
 	ImVec2 SizePicture{ 460, 458 };
 
 
-
-
-	OpenglTexturee Backend;
-	OpenglTexturee Close;
-	OpenglTexturee EyeTransparent;
-	OpenglTexturee Front;
-	OpenglTexturee LeftEye;
-	OpenglTexturee RightEye;
-
-
-
-
+	Texture Backend;
+	Texture Close;
+	Texture EyeTransparent;
+	Texture Front;
+	Texture LeftEye;
+	Texture RightEye;
 
 	void DrawEyes(ImVec2 PosDraw,const ImVec2& SizeImage, const float& aspect);
-
-
 };
 
 

@@ -2,9 +2,11 @@
 #define INFO_INSTRUCTION_DISPLAY_H
 
 
+#ifdef _DEBUG
+#include <iostream>
+#endif
 
 #include <robin_hood.h>
-#include <iostream>
 #include <memory>
 #include <deque>
 #include <array>
@@ -17,10 +19,10 @@
 #include "ThirdParty/ImGui/imgui_internal.h"
 #include "ThirdParty/IconFontCppHeaders/IconsFontAwesome6.h"
 
-#include "Utils/ImGui.Utils.h"
+#include "Utils/ImGui/Utils.ImGui.h"
 #include "Utils/Values/Values.h"
-#include "Utils/TextUtils.h"
-#include "Utils/UTF8.h"
+#include "Utils/Text/Text.h"
+#include "Utils/Text/Encoding/UTF8/UTF8.h"
 
 
 

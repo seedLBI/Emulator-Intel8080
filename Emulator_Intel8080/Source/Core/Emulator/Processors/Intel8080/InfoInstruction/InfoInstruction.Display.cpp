@@ -112,7 +112,7 @@ void Singletone_InfoInstruction::CalculateLength() {
 						bool isIndexFinded = it != coomandValues.end();
 
 						if (isIndexFinded) {
-							IndexArg = it - coomandValues.begin();
+							IndexArg = int(it - coomandValues.begin());
 							ValueArg = Args.available_values[IndexArg];
 						}
 
@@ -477,7 +477,7 @@ void Singletone_InfoInstruction::ProcessLine(const int& line, const int& i, int&
 			if (count_symbols < MaxLengthForRightBlock) {
 
 
-				int delta = MaxLengthForRightBlock - count_symbols;
+				int delta = int(MaxLengthForRightBlock - count_symbols);
 
 				for (int k = 0; k < delta; k++)
 					result_text.push_back(' ');
@@ -526,7 +526,7 @@ void Singletone_InfoInstruction::ProcessLine(const int& line, const int& i, int&
 				bool isIndexFinded = it != coomandValues.end();
 
 				if (isIndexFinded) {
-					IndexArg = it - coomandValues.begin();
+					IndexArg = int(it - coomandValues.begin());
 					ValueArg = Args.available_values[IndexArg];
 				}
 

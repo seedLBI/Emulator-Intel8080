@@ -2,14 +2,12 @@
 #define INTRO_MANAGER_H
 
 
-#include "OpenglWindow/OpenglWindow.h"
-
 #include "ThirdParty/IconFontCppHeaders/IconsFontAwesome6.h"
 
 #include "Core/Setting/interfaces/ISettingObject.h"
 #include "Core/SaveSystem/SaveSystem.h"
 
-#include "Utils/ImGui.Utils.h"
+#include "Utils/ImGui/Utils.ImGui.h"
 
 
 

@@ -1,7 +1,8 @@
 #include "MainMenuBar.h"
 
-MainMenuBar::MainMenuBar(WindowManager* windowManager) {
+MainMenuBar::MainMenuBar(OpenGL_WindowManager* windowManager, I8080_WidgetManager* widgetManager) {
 	this->windowManager = windowManager;
+	this->widgetManager = widgetManager;
 	window = windowManager->GetMainWindow()->GetHandle();
 	LoadIcon();
 }
@@ -43,6 +44,8 @@ void MainMenuBar::Draw_MainMenu() {
 
 		
 		if (ImGui::BeginMenu(u8" Файл ")) {
+			
+
 
 			ImGui::EndMenu();
 		}
@@ -56,6 +59,11 @@ void MainMenuBar::Draw_MainMenu() {
 		PushSizeButtonIntoList();
 
 		if (ImGui::BeginMenu( u8" Окна ")) {
+
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_WINDOW_RESTORE) + u8" Закрыть все окна").c_str()))
+				widgetManager->CloseAll();
+			if (ImGui::MenuItem(std::string(std::string(ICON_FA_WINDOW_RESTORE) + u8" Открыть все окна").c_str()))
+				widgetManager->OpenAll();
 
 			ImGui::EndMenu();
 		}
@@ -203,19 +211,14 @@ bool MainMenuBar::IsPointOverTitleButton(const POINT& pt) const {
 }
 
 void MainMenuBar::LoadIcon() {
-	if (isFileExist(Path2IconLogo)) {
-		TextureSetting settingFlags;
-		settingFlags.Min = TextureFilter::LINEAR_MIPMAP_LINEAR;
-		settingFlags.Max = TextureFilter::LINEAR_MIPMAP_LINEAR;
-		settingFlags.WrapX = TextureWrap::CLAMP_TO_EDGE;
-		settingFlags.WrapY = TextureWrap::CLAMP_TO_EDGE;
-		icon_logo.SetSetting(settingFlags);
-		icon_logo.LoadTexture(Path2IconLogo);
-		icon_logo.Init();
-	}
-	else {
-		std::wstring text = L"А где иконки? " + stringUTF8_to_wstring(Path2IconLogo);
-		MessageBoxW(0, text.c_str(), L"Ошибка загрузки иконки", MB_ICONERROR | MB_OK);
-		exit(0);
-	}
+
+	TextureSetting settingFlags;
+	settingFlags.Min = TextureFilter::LINEAR_MIPMAP_LINEAR;
+	settingFlags.Max = TextureFilter::LINEAR_MIPMAP_LINEAR;
+	settingFlags.WrapX = TextureWrap::CLAMP_TO_EDGE;
+	settingFlags.WrapY = TextureWrap::CLAMP_TO_EDGE;
+	icon_logo.SetSetting(settingFlags);
+	icon_logo.LoadTexture(logo_transparent_data.data(), logo_transparent_data.size());
+	icon_logo.Init();
+
 }

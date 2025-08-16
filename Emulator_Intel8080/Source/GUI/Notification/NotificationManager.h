@@ -1,16 +1,21 @@
 #ifndef NOTIFICATION_MANAGER_H
 #define NOTIFICATION_MANAGER_H
 
-#include "ThirdParty/OpenGL/include/GLFW/glfw3.h"
+#include <GLFW/glfw3.h>
 #include "ThirdParty/ImGui/imgui.h"
 
 #include "Core/Setting/interfaces/ISettingObject.h"
 #include "Core/SaveSystem/SaveSystem.h"
 
+#include "Utils/Timer/Timer.Framerate.h"
+
 #include "Notification.h"
 #include "Config_Compilier.h"
 
-#include <iostream>	
+#ifdef _DEBUG
+#include <iostream>
+#endif
+
 #include <vector>
 
 
@@ -24,7 +29,7 @@ enum class NotificationType {
 class NotificationManager : public ISettingObject
 {
 public:
-	NotificationManager();
+	NotificationManager(FPS_Timer* fps_timer, GLFWwindow* window);
 	~NotificationManager();
 
 
@@ -44,6 +49,8 @@ public:
 	void LoadSetting(const nlohmann::json& Data) override;
 
 private:
+	GLFWwindow* window = nullptr;
+	FPS_Timer* fps_timer = nullptr;
 	std::vector<Notification> notifs;
 
 	bool isEnabled = true;

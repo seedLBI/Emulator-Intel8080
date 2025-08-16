@@ -1,19 +1,19 @@
 #define SIZE_MEMORY 65536
 
-#include "Config_Compilier.h"
-#include "Utils/TextUtils.h"
 
 #ifndef I8080_H
 #define I8080_H
 
+#include "Config_Compilier.h"
+#include "Utils/Text/Text.h"
 
-#include "Core/Emulator/Port/ConsoleOutput/ConsoleOutput.h"
-#include "Core/Emulator/Port/SymbolScreen/SymbolScreen.h"
-#include "Core/Emulator/Port/GeneratorRandomValues/GeneratorRandomValues.h"
-#include "Core/Emulator/Port/Timer/Timer.h"
-#include "Core/Emulator/Port/PixelScreen/PixelScreen.h"
-#include "Core/Emulator/Port/PixelScreenTwoBuffers/PixelScreenTwoBuffers.h"
-#include "Core/Emulator/Port/AsyncKeyboard/AsyncKeyboard.h"
+#include "Core/Emulator/Port/ConsoleOutput/ConsoleOutput.Port.h"
+#include "Core/Emulator/Port/SymbolScreen/SymbolScreen.Port.h"
+#include "Core/Emulator/Port/GeneratorRandomValues/GeneratorRandomValues.Port.h"
+#include "Core/Emulator/Port/Timer/Timer.Port.h"
+#include "Core/Emulator/Port/PixelScreen/PixelScreen.Port.h"
+#include "Core/Emulator/Port/PixelScreenTwoBuffers/PixelScreenTwoBuffers.Port.h"
+#include "Core/Emulator/Port/AsyncKeyboard/AsyncKeyboard.Port.h"
 
 
 #include "DataStructures/TypeTranslatorError.h"
@@ -25,11 +25,14 @@
 
 #include "Core/Emulator/Processor/Processor.h"
 #include "Core/Emulator/History/Originator.Momento.h"
-#include "Core/Emulator/Processors/Intel8080/Disassembler/Disassembler.h"
-#include "Core/Emulator/Processors/Intel8080/History/Momento/Momento.h"
+#include "Core/Emulator/Processors/Intel8080/Disassembler/I8080.Disassembler.h"
+#include "Core/Emulator/Processors/Intel8080/History/Momento/I8080.Momento.h"
 
 
+#ifdef _DEBUG
 #include <iostream>
+#endif
+
 #include <fstream>
 #include <string>
 #include <cstdlib>
@@ -40,10 +43,10 @@
 #include <deque>
 #include <chrono>
 #include <list>
-#include "robin_hood.h"
+#include <robin_hood.h>
 #include <unordered_map>
 #include <unordered_set>
-using namespace std;
+
 
 
 class I8080 : public Processor

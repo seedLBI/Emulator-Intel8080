@@ -4,7 +4,8 @@
 #include "I8080.Widget.h"
 #include "Core/SaveSystem/SaveSystem.h"
 #include "Utils/Timer/Timer.Framerate.h"
-#include "Utils/TextUtils.h"
+#include "Utils/File/File.h"
+#include "Utils/Text/Text.h"
 #include <vector>
 
 

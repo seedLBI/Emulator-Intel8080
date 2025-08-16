@@ -8,15 +8,66 @@ Application::Application() {
 	Init_BorderWindow();
 	Init_ImGui();
 
-	mainMenuBar = new MainMenuBar(windowManager);
-
-	fontManager = new FontManager;
-	fontManager->ReloadFont();
-
 	fps_limiter = new FPS_Timer;
 	fps_limiter->SetTargetFPS(60);
 
+	saveSystemManager = new SaveSystemManager(GetPathDirectory() + L"\\SettingData.save");
 
+	WidgetManager = new I8080_WidgetManager(fps_limiter);
+
+	notificationManager = new NotificationManager(fps_limiter, windowManager->GetMainWindow()->GetHandle());
+	WorkspaceManager = new I8080_WorkspaceManager(WidgetManager);
+	lastPathManager = new LastPathManager();
+	keyCombination_handler = new KeyCombinationHandler(fps_limiter, windowManager->GetMainWindow()->GetHandle(),notificationManager);
+	fontManager = new FontManager;
+	window_manager = new WindowManager(windowManager->GetMainWindow()->GetHandle(),fps_limiter);
+	themeManager = new ThemeManager();
+	baseColors = new BaseColors();
+	settings = new Setting();
+
+	processor = new I8080();
+	processorCaratakerMomento = new I8080_Caretaker_Momento(processor);
+	Compiler = new I8080_Compiler();
+	emulationThread = new EmulationThread(processor, processorCaratakerMomento);
+
+	introManager = new IntroManager();
+
+
+	projectManager = new ProjectManager(
+		windowManager->GetMainWindow()->GetHandle(),
+		processor,
+		notificationManager,
+		lastPathManager,
+		emulationThread,
+		Compiler,
+		processorCaratakerMomento);
+
+	Init_Widgets();
+
+	emulationControls = new EmulationControls(
+		processor,
+		processorCaratakerMomento,
+		emulationThread,
+		projectManager,
+		widget_RegisterFlagsInfo,
+		widget_MnemocodeViewer,
+		widget_CodeEditor);
+
+	mainMenuBar = new MainMenuBar(windowManager, WidgetManager);
+
+	Init_Setting();
+	Init_SaveManager();
+	Init_KeyCombinationHandler();
+	Init_ThemeManager();
+
+	projectManager->InitWidgets(
+		widget_MnemocodeViewer,
+		widget_RegisterFlagsInfo,
+		widget_CodeEditor);
+
+	saveSystemManager->Load();
+
+	authorPopup = new AuthorPopup(windowManager->GetMainWindow()->GetHandle());
 }
 
 
@@ -28,7 +79,7 @@ void Application::Init_OpenGL() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	windowManager = new WindowManager(Title, 1280, 720, 100, 100);
+	windowManager = new OpenGL_WindowManager(Title, 1280, 720, 100, 100);
 
 }
 
@@ -64,7 +115,6 @@ void Application::Init_BorderWindow() {
 	glfwSetWindowUserPointer(win, this);
 }
 
-
 void Application::Init_ImGui() {
 	ImGui::CreateContext();
 
@@ -86,8 +136,125 @@ void Application::Init_ImGui() {
 	ImGui::GetIO().LogFilename = NULL;
 }
 
-Application::~Application() {
+void Application::Init_Setting() {
+	settings->AddSettingObject(fontManager);
+	settings->AddSettingObject(window_manager);
+	settings->AddSettingObject(WorkspaceManager);
+	settings->AddSettingObject(notificationManager);
+	settings->AddSettingObject(emulationThread);
+	settings->AddSettingObject(keyCombination_handler);
+	settings->AddSettingObject(projectManager);
+	settings->AddSettingObject(widget_CodeEditor->GetPtrTextEditor());
+	settings->AddSettingObject(lastPathManager);
+	settings->AddSettingObject(widget_MnemocodeViewer);
+	settings->AddSettingObject(themeManager);
+	settings->AddSettingObject(introManager);
+}
+void Application::Init_ThemeManager() {
+	themeManager->AddObject(baseColors);
+	themeManager->AddObject(widget_CodeEditor->GetPtrTextEditor());
+	themeManager->AddObject(widget_RegisterFlagsInfo);
+	themeManager->AddObject(widget_Help);
+	themeManager->AddObject(widget_keyboard);
+	themeManager->AddObject(widget_input0x08);
+	themeManager->AddObject(widget_MnemocodeViewer);
+	themeManager->AddObject(widget_MnemocodeViewerTargeted);
+	themeManager->AddObject(widget_HexViewer->GetPtrMemoryEditor());
+	themeManager->AddObject(&Singletone_InfoInstruction::Instance());
+	themeManager->AddObject(&Singleton_I8080_HighlighterInstruction::Instance());
+}
+void Application::Init_Widgets() {
+	widget_CodeEditor = new Widget_CodeEditor(fps_limiter);
+	widget_HistoryInstruction = new Widget_HistoryInstruction(processor, emulationThread, processorCaratakerMomento);
+	//widget_ListInstruction		= new Widget_ListInstruction();
+	widget_TableInstruction = new Widget_TableInstruction();
+	//widget_Disassembler			= new Widget_Disassembler(processor);
+	widget_ColorPicker = new Widget_ColorPicker(widget_CodeEditor->GetPtrTextEditor());
+	widget_SymbolPicker = new Widget_SymbolPicker(widget_CodeEditor->GetPtrTextEditor());
+	widget_SymbolScreen = new Widget_SymbolScreen(processor);
+	widget_PixelScreen = new Widget_PixelScreen(windowManager->GetMainWindow()->GetHandle(), processor);
+	widget_PixelScreenTwoBuffers = new Widget_PixelScreenTwoBuffers(windowManager->GetMainWindow()->GetHandle(), processor);
+	widget_input0x08 = new Widget_Input0x08(processor);
+	widget_keyboard = new Widget_Keyboard(fps_limiter,widget_CodeEditor->GetPtrTextEditor());
+	widget_output0x02 = new Widget_Output0x02(processor, notificationManager);
+	widget_timer = new Widget_Timer(processor);
+	widget_MnemocodeViewer = new Widget_MnemocodeViewer(processor, projectManager->GetPtrTranslatorOutput());
+	widget_MnemocodeViewerTargeted = new Widget_MnemocodeViewerTargeted(processor, projectManager->GetPtrTranslatorOutput());
+	widget_HexViewer = new Widget_HexViewer(processor, projectManager->GetPtrTranslatorOutput(), widget_MnemocodeViewer);
+	widget_RegisterFlagsInfo = new Widget_RegisterFlagsInfo(processor);
+	widget_EmulatorInfo = new Widget_EmulatorInfo(processor);
+	widget_ListMarker = new Widget_ListMarker(processor, projectManager->GetPtrTranslatorOutput(), widget_MnemocodeViewer, notificationManager);
+	widget_ListVar = new Widget_ListVar(processor, projectManager->GetPtrTranslatorOutput());
+	widget_ListConst = new Widget_ListConst(projectManager->GetPtrTranslatorOutput());
+	widget_Help = new Widget_Help();
 
+	WidgetManager->AddWidgetPtr(widget_Help);
+	WidgetManager->AddWidgetPtr(widget_HistoryInstruction);
+	//WidgetManager->AddWidgetPtr(widget_ListInstruction);
+	WidgetManager->AddWidgetPtr(widget_TableInstruction);
+	//WidgetManager->AddWidgetPtr(widget_Disassembler);
+	WidgetManager->AddWidgetPtr(widget_ColorPicker);
+	WidgetManager->AddWidgetPtr(widget_SymbolPicker);
+	WidgetManager->AddWidgetPtr(widget_SymbolScreen);
+	WidgetManager->AddWidgetPtr(widget_PixelScreen);
+	WidgetManager->AddWidgetPtr(widget_PixelScreenTwoBuffers);
+	WidgetManager->AddWidgetPtr(widget_input0x08);
+	WidgetManager->AddWidgetPtr(widget_keyboard);
+	WidgetManager->AddWidgetPtr(widget_output0x02);
+	WidgetManager->AddWidgetPtr(widget_timer);
+	WidgetManager->AddWidgetPtr(widget_CodeEditor);
+	WidgetManager->AddWidgetPtr(widget_HexViewer);
+	WidgetManager->AddWidgetPtr(widget_MnemocodeViewer);
+	WidgetManager->AddWidgetPtr(widget_MnemocodeViewerTargeted);
+	WidgetManager->AddWidgetPtr(widget_RegisterFlagsInfo);
+	WidgetManager->AddWidgetPtr(widget_EmulatorInfo);
+	WidgetManager->AddWidgetPtr(widget_ListMarker);
+	WidgetManager->AddWidgetPtr(widget_ListVar);
+	WidgetManager->AddWidgetPtr(widget_ListConst);
+}
+void Application::Init_SaveManager() {
+	saveSystemManager->AddObjectPtr((SaveSystem*)settings);
+	saveSystemManager->AddObjectPtr((SaveSystem*)lastPathManager);
+	saveSystemManager->AddObjectPtr((SaveSystem*)WorkspaceManager);
+}
+void Application::Init_KeyCombinationHandler() {
+	keyCombination_handler->AddCombination(u8"Компилировать", KeyCombination({ GLFW_KEY_F2 }, std::bind(&ProjectManager::Compile, projectManager)));
+	keyCombination_handler->AddCombination(u8"Запуск", KeyCombination({ GLFW_KEY_F5 }, std::bind(&EmulationControls::Play, emulationControls)));
+	keyCombination_handler->AddCombination(u8"Пауза", KeyCombination({ GLFW_KEY_F12 }, std::bind(&EmulationControls::Pause, emulationControls)));
+	keyCombination_handler->AddCombination(u8"Стоп", KeyCombination({ GLFW_KEY_ESCAPE }, std::bind(&EmulationControls::Stop, emulationControls)));
+	keyCombination_handler->AddCombination(u8"Шаг вперёд", KeyCombination({ GLFW_KEY_F9 }, std::bind(&EmulationControls::Next_step, emulationControls)));
+	keyCombination_handler->AddCombination(u8"Шаг назад", KeyCombination({}, std::bind(&EmulationControls::Undo_step, emulationControls)));
+	keyCombination_handler->AddCombination(u8"Сбросить состояние", KeyCombination({  }, std::bind(&EmulationControls::FullReset, emulationControls)));
+	keyCombination_handler->AddCombination(u8"Удалить точки останова", KeyCombination({  }, std::bind(&I8080::RemoveAllBreakPoints, processor)));
+
+	keyCombination_handler->AddCombination(u8"Сохранить", KeyCombination({ GLFW_KEY_LEFT_CONTROL, GLFW_KEY_S }, std::bind(&ProjectManager::SaveFile, projectManager)));
+	keyCombination_handler->AddCombination(u8"Сохранить как", KeyCombination({}, std::bind(&ProjectManager::SaveFileAs, projectManager)));
+	keyCombination_handler->AddCombination(u8"Сохранить в бинарный файл", KeyCombination({}, std::bind(&ProjectManager::SaveFileIntoBinary, projectManager)));
+
+	keyCombination_handler->AddCombination(u8"Новый файл", KeyCombination({}, std::bind(&ProjectManager::NewFile, projectManager)));
+	keyCombination_handler->AddCombination(u8"Открыть файл", KeyCombination({}, std::bind(&ProjectManager::OpenFile, projectManager)));
+
+	keyCombination_handler->AddCombination(u8"Настройки", KeyCombination({}, std::bind(&Setting::Toggle, settings)));
+	keyCombination_handler->AddCombination(u8"Режим сохранения истории (вкл\\выкл)", KeyCombination({}, std::bind(&Processor::ToggleHistoryMode, processor)));
+
+
+	keyCombination_handler->AddCombination(u8"Полноэкранный\\Оконный", KeyCombination({ GLFW_KEY_F11 }, std::bind(&WindowManager::ToggleFullscreen, window_manager)));
+
+	keyCombination_handler->AddCombination(u8"Постоянный фокус в просмотре памяти", KeyCombination({}, std::bind(&Widget_MnemocodeViewer::ToggleFlagAlwaysFocus, widget_MnemocodeViewer)));
+
+	keyCombination_handler->AddCombination(u8"Cледующая скорость процессора", KeyCombination({}, std::bind(&EmulationThread::LoadNextSpeed, emulationThread)));
+	keyCombination_handler->AddCombination(u8"Предыдущая скорость процессора", KeyCombination({}, std::bind(&EmulationThread::LoadPreviousSpeed, emulationThread)));
+
+	keyCombination_handler->AddCombination(u8"Следующее рабочее пространство", KeyCombination({ GLFW_KEY_LEFT_CONTROL, GLFW_KEY_RIGHT_BRACKET }, std::bind(&I8080_WorkspaceManager::LoadNext, WorkspaceManager)));
+	keyCombination_handler->AddCombination(u8"Предыдущее рабочее пространство", KeyCombination({ GLFW_KEY_LEFT_CONTROL, GLFW_KEY_LEFT_BRACKET }, std::bind(&I8080_WorkspaceManager::LoadPrevious, WorkspaceManager)));
+
+	keyCombination_handler->AddCombination(u8"Увеличить шрифт на 1", KeyCombination({ GLFW_KEY_LEFT_CONTROL, GLFW_KEY_EQUAL }, std::bind(&FontManager::SetOneStepBigger, fontManager)));
+	keyCombination_handler->AddCombination(u8"Уменьшить шрифт на 1", KeyCombination({ GLFW_KEY_LEFT_CONTROL, GLFW_KEY_MINUS }, std::bind(&FontManager::SetOneStepSmaller, fontManager)));
+}
+
+Application::~Application() {
+	if (FullLoaded)
+		saveSystemManager->Save();
 }
 
 void Application::Run() {
@@ -104,9 +271,20 @@ void Application::Run() {
 
 void Application::Draw() {
 	mainMenuBar->Draw();
+
+	WidgetManager->Draw();
+	notificationManager->Draw();
+	settings->Draw();
+
+	authorPopup->Draw();
+
 }
 void Application::Update() {
-
+	projectManager->Update();
+	keyCombination_handler->Update();
+	WidgetManager->Update();
+	WorkspaceManager->Update();
+	notificationManager->Update();
 }
 
 void Application::BeginDraw() {
@@ -115,7 +293,6 @@ void Application::BeginDraw() {
 	glClearColor(0.2f, 0.2f, 0.2f, 1.f);
 	glClear(BufferBit::COLOR_BUFFER_BIT | BufferBit::DEPTH_BUFFER_BIT);
 
-	fontManager->ReloadFont();
 
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
@@ -126,18 +303,25 @@ void Application::BeginDraw() {
 void Application::EndDraw() {
 
 	ImGui::EndFrame();
+	
+	fontManager->ReloadFont();
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	glfwSwapBuffers(windowManager->GetMainWindow()->GetHandle());
 
+
 	fps_limiter->wait();
+	FullLoaded = true;
 }
 
 
 MainMenuBar* Application::GetPTR_MainMenuBar() {
 	return mainMenuBar;
 }
+
+
+
 
 
 LRESULT CALLBACK custom_wndproc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {

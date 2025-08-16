@@ -3,8 +3,9 @@
 
 
 
-NotificationManager::NotificationManager() : ISettingObject(u8"Уведомления",u8"Общие") {
-
+NotificationManager::NotificationManager(FPS_Timer* fps_timer, GLFWwindow* window) : ISettingObject(u8"Уведомления",u8"Общие") {
+	this->fps_timer = fps_timer;
+	this->window = window;
 }
 
 NotificationManager::~NotificationManager(){
@@ -60,7 +61,7 @@ void NotificationManager::Update() {
 		return;
 
 	int size_x = 0, size_y = 0;
-	glfwGetWindowSize(OpenglWindow::Vars::window, &size_x, &size_y);
+	glfwGetWindowSize(window, &size_x, &size_y);
 
 	ImVec2 Pos = { 0.f,0.f };
 	for (int i = 0; i < notifs.size(); i++) {
@@ -72,7 +73,7 @@ void NotificationManager::Update() {
 		Pos.y += notifs[i].GetSize().y + distance_between;
 
 
-		notifs[i].Update();
+		notifs[i].Update((float)fps_timer->GetDeltaTime());
 
 		if (notifs[i].isEnd()) {
 

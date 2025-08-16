@@ -3,7 +3,7 @@
 
 #include "ThirdParty/ImGui/imgui.h"
 #include "interface/Notification.Element.h"
-#include "Utils/TextUtils.h"
+#include "Utils/Text/Text.h"
 #include <string>
 
 

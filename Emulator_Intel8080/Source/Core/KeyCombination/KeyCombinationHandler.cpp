@@ -1,7 +1,9 @@
 #include "KeyCombinationHandler.h"
 
 
-KeyCombinationHandler::KeyCombinationHandler(NotificationManager* notificationManager) : ISettingObject(u8"KeyCombination",u8"”правление") {
+KeyCombinationHandler::KeyCombinationHandler(FPS_Timer* fps_timer, GLFWwindow* window, NotificationManager* notificationManager) : ISettingObject(u8"KeyCombination",u8"”правление") {
+	this->fps_timer = fps_timer;
+	this->window = window;
 	this->notificationManager = notificationManager;
 }
 
@@ -153,7 +155,7 @@ void KeyCombinationHandler::ProcessAllUniqueKeys() {
 	{
 		KeysToCheck[i].isDownLastState = KeysToCheck[i].isDown;
 
-		if (glfwGetKey(OpenglWindow::Vars::window, KeysToCheck[i].number) == GLFW_PRESS)
+		if (glfwGetKey(window, KeysToCheck[i].number) == GLFW_PRESS)
 			KeysToCheck[i].isDown = true;
 		else
 			KeysToCheck[i].isDown = false;
@@ -254,7 +256,7 @@ void KeyCombinationHandler::DrawPopupSetKey() {
 
 
 
-			std::vector<int> kkk = GetNumberPressedKeys(OpenglWindow::Vars::window);
+			std::vector<int> kkk = GetNumberPressedKeys(window);
 			std::sort(kkk.begin(), kkk.end(), std::greater<int>());
 
 			ErrorCombination error = GetErrorOfThisCombination(kkk);
@@ -268,7 +270,7 @@ void KeyCombinationHandler::DrawPopupSetKey() {
 				TimePressed = 0.f;
 			}
 			else {
-				TimePressed += OpenglWindow::GetDeltaTime();
+				TimePressed += (float)fps_timer->GetDeltaTime();
 			}
 			LastPressedKeys = kkk;
 

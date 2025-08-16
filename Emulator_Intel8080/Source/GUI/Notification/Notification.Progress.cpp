@@ -53,7 +53,7 @@ void N_Progress::Draw(ImDrawList* draw_list, const ImVec2& rectMin, const ImVec2
 
 ImVec2 N_Progress::GetSize() {
 
-	std::string TempFullUnit = cutFloat(std::to_string(MaxValue),2) + "\\" + cutFloat(std::to_string(MaxValue),2.f) + UnitName;
+	std::string TempFullUnit = cutFloat(std::to_string(MaxValue),2) + "\\" + cutFloat(std::to_string(MaxValue),2) + UnitName;
 
 	size_UnitName = ImGui::CalcTextSize(TempFullUnit.c_str(), 0);
 	size_ProgressName = ImGui::CalcTextSize(NameProgress, 0);

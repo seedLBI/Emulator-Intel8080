@@ -150,7 +150,7 @@ EmulationThread::EmulationThread(Processor* processor, Caretaker_Momento* proces
 
 	this->processor = processor;
 	this->processor_CaretakerMomento = processor_CaretakerMomento;
-	threadObject = new thread(&EmulationThread::ThreadLoop, this);
+	threadObject = new std::thread(&EmulationThread::ThreadLoop, this);
 }
 
 EmulationThread::~EmulationThread() {
@@ -208,7 +208,7 @@ void EmulationThread::ThreadLoop() {
 					while (1) {
 						uint64_t						   CurrentTicks = processor->GetCountTicks() - startTicks;
 						std::chrono::duration<long double> CurrentTime = std::chrono::high_resolution_clock::now() - startTime;
-						uint64_t						   CountTicksNeed = CurrentTime.count() / TimeTickPerSecond;
+						uint64_t						   CountTicksNeed = uint64_t(CurrentTime.count() / TimeTickPerSecond);
 
 
 						if (CurrentTicks <= CountTicksNeed) {
@@ -227,7 +227,7 @@ void EmulationThread::ThreadLoop() {
 					while (1) {
 						uint64_t						   CurrentTicks = processor->GetCountTicks() - startTicks;
 						std::chrono::duration<long double> CurrentTime = std::chrono::high_resolution_clock::now() - startTime;
-						uint64_t						   CountTicksNeed = CurrentTime.count() / TimeTickPerSecond;
+						uint64_t						   CountTicksNeed = uint64_t(CurrentTime.count() / TimeTickPerSecond);
 
 
 						if (CurrentTicks <= CountTicksNeed) {
@@ -248,7 +248,7 @@ void EmulationThread::ThreadLoop() {
 		}
 
 
-		this_thread::sleep_for(chrono::milliseconds(100));
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 }
 
@@ -297,7 +297,7 @@ void EmulationThread::LoadPreviousSpeed() {
 		if (UserSpeeds.empty())
 			SetSpeedMode(SpeedMode::Intel8085);
 		else {
-			IndexChoosedCustomSpeedMode = UserSpeeds.size() - 1;
+			IndexChoosedCustomSpeedMode = (int)(UserSpeeds.size() - 1);
 			SetSpeedMode(SpeedMode::Custom);
 		}
 	}
@@ -372,10 +372,10 @@ void EmulationThread::DrawSetting() {
 		processor_CaretakerMomento->ClearHistory();
 	}
 	ImGui::SameLine();
-	HelpMarker(u8"Позволяет делать шаг назад при отладке.\nНо значительно снижает производительность эмуляции.");
+	MyHelpMarker(u8"Позволяет делать шаг назад при отладке.\nНо значительно снижает производительность эмуляции.");
 
 
-	static int CountMaxHistory = processor_CaretakerMomento->GetMaxCount();
+	static int CountMaxHistory = (int)processor_CaretakerMomento->GetMaxCount();
 
 	
 	ImGui::Text(u8"Максимальное кол-во записей историй:");
@@ -395,7 +395,7 @@ void EmulationThread::DrawSetting() {
 
 	ImGui::SeparatorText(u8"Скорость выполнения");
 
-	string Selected = "";
+	std::string Selected = "";
 
 
 	const std::string str_Infinity  = u8"Неограниченная";
@@ -579,7 +579,7 @@ void EmulationThread::DrawPopup() {
 
 				UserSpeeds.emplace_back(tempSpeed);
 
-				IndexChoosedCustomSpeedMode = UserSpeeds.size() - 1;
+				IndexChoosedCustomSpeedMode = (int)(UserSpeeds.size() - 1);
 				SetSpeedMode(SpeedMode::Custom);
 			}
 			else
@@ -603,47 +603,47 @@ std::string EmulationThread::TicksToString(const uint64_t& ticks) {
 	uint64_t Tera = ticks / 1'000'000'000'000;
 
 	if (Tera != 0){
-		Output += to_string(Tera);
+		Output += std::to_string(Tera);
 
 		uint64_t ost = ticks - Tera * 1'000'000'000'000;
 
 		if (ost > 0)
-			Output += "." + to_string(ost).substr(0,2);
+			Output += "." + std::to_string(ost).substr(0,2);
 
 		Output += u8" ТГц";
 	}
 	else if (Giga != 0){
-		Output += to_string(Giga);
+		Output += std::to_string(Giga);
 
 		uint64_t ost = ticks - Giga* 1'000'000'000;
 
 		if (ost > 0)
-			Output += "." + to_string(ost).substr(0, 2);
+			Output += "." + std::to_string(ost).substr(0, 2);
 
 		Output += u8" ГГц";
 	}
 	else if (Mega != 0) {
-		Output += to_string(Mega);
+		Output += std::to_string(Mega);
 
 		uint64_t ost = ticks - Mega* 1'000'000;
 
 		if (ost > 0)
-			Output += "." + to_string(ost).substr(0, 2);
+			Output += "." + std::to_string(ost).substr(0, 2);
 
 		Output += u8" МГц";
 	}
 	else if (Kilo != 0) {
-		Output += to_string(Kilo);
+		Output += std::to_string(Kilo);
 
 		uint64_t ost = ticks - Kilo* 1'000;
 
 		if (ost > 0)
-			Output += "." + to_string(ost).substr(0, 2);
+			Output += "." + std::to_string(ost).substr(0, 2);
 
 		Output += u8" кГц";
 	}
 	else {
-		Output += to_string(ticks);
+		Output += std::to_string(ticks);
 		Output += u8" Гц";
 	}
 

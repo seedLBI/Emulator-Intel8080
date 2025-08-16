@@ -1,8 +1,7 @@
 #ifndef LAST_PATH_MANAGER_H
 #define LAST_PATH_MANAGER_H
 
-#include "OpenglWindow/OpenglWindow.h"
-#include "Utils/File_Utils.h"
+#include "Utils/File/File.h"
 #include "Core/Setting/interfaces/ISettingObject.h"
 #include "Core/SaveSystem/SaveSystem.h"
 #include <string>

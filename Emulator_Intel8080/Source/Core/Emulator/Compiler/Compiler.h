@@ -5,9 +5,10 @@
 #include <string>
 #include "DataStructures/TranslatorOutput.h"
 #include "Utils/Values/Values.h"
-#include "Utils/TextUtils.h"
-#include "Utils/UTF8.h"
-#include "robin_hood.h"
+#include "Utils/File/File.h"
+#include "Utils/Text/Text.h"
+#include "Utils/Text/Encoding/UTF8/UTF8.h"
+#include <robin_hood.h>
 
 #define MAX16BIT 65535
 #define MAX8BIT 255

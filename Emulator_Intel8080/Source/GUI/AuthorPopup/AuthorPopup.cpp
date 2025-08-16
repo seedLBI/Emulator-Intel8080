@@ -1,18 +1,23 @@
 #include "AuthorPopup.h"
 
 
-AuthorPopup::AuthorPopup() {
-	Backend.ReadFromMemoryWithAlpha(Author_Backend);
-	Close.ReadFromMemoryWithAlpha(Author_Close);
-	EyeTransparent.ReadFromMemoryWithAlpha(Author_EyeTransparent);
-	Front.ReadFromMemoryWithAlpha(Author_Front);
-	LeftEye.ReadFromMemoryWithAlpha(Author_LeftEye);
-	RightEye.ReadFromMemoryWithAlpha(Author_RightEye);
+AuthorPopup::AuthorPopup(GLFWwindow* window) {
+	this->window = window;
+
+
+	Backend.LoadTexture(Author_Backend.data(), (int)Author_Backend.size());
+	Close.LoadTexture(Author_Close.data(), (int)Author_Close.size());
+	EyeTransparent.LoadTexture(Author_EyeTransparent.data(), (int)Author_EyeTransparent.size());
+	Front.LoadTexture(Author_Front.data(), (int)Author_Front.size());
+	LeftEye.LoadTexture(Author_LeftEye.data(), (int)Author_LeftEye.size());
+	RightEye.LoadTexture(Author_RightEye.data(), (int)Author_RightEye.size());
+
+
 }
 
 AuthorPopup::~AuthorPopup()
 {
-#ifdef WITH_DEBUG_OUTPUT
+#ifdef _DEBUG
 	std::cout << "AuthorPopup::~AuthorPopup()\n";
 #endif // !WITH_DEBUG_OUTPUT
 }
@@ -64,20 +69,20 @@ void AuthorPopup::Draw() {
 		ImGui::SetCursorPos({ aa.x + 20, aa.y + 20 });
 		aa = ImGui::GetCursorPos();
 
-		ImGui::Image((ImTextureID)(intptr_t)Backend.GetTextureID(), SizeImage_asp);
+		ImGui::Image((ImTextureID)(intptr_t)Backend.GetID(), SizeImage_asp);
 		ImGui::SetCursorPos(aa);
-		ImGui::Image((ImTextureID)(intptr_t)EyeTransparent.GetTextureID(), SizeImage_asp);
+		ImGui::Image((ImTextureID)(intptr_t)EyeTransparent.GetID(), SizeImage_asp);
 
 		ImGui::SetCursorPos(aa);
 		DrawEyes(ImGui::GetCursorScreenPos(), SizeImage_asp,asp);
 
 
 		ImGui::SetCursorPos(aa);
-		ImGui::Image((ImTextureID)(intptr_t)Front.GetTextureID(), SizeImage_asp);
-
-		if (glfwGetMouseButton(OpenglWindow::Vars::window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+		ImGui::Image((ImTextureID)(intptr_t)Front.GetID(), SizeImage_asp);
+		
+		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
 			ImGui::SetCursorPos(aa);
-			ImGui::Image((ImTextureID)(intptr_t)Close.GetTextureID(), SizeImage_asp);
+			ImGui::Image((ImTextureID)(intptr_t)Close.GetID(), SizeImage_asp);
 		}
 
 		ImGui::EndChild();
@@ -173,10 +178,10 @@ void AuthorPopup::DrawEyes(ImVec2 PosDraww, const ImVec2& SizeImage, const float
 	ImVec2 NewRight = { PosDraww.x + RightEyeCenter.x - 1.6f * RightDeltaCenterNormal.x * (15 - 10) - RightEyeOffset.x,PosDraww.y + RightEyeCenter.y - RightDeltaCenterNormal.y * (15 - 10) - RightEyeOffset.y };
 
 	ImGui::SetCursorScreenPos({ NewLeft.x,NewLeft.y });
-	ImGui::Image((ImTextureID)(intptr_t)LeftEye.GetTextureID(), SizeImage);
+	ImGui::Image((ImTextureID)(intptr_t)LeftEye.GetID(), SizeImage);
 
 	ImGui::SetCursorScreenPos({ NewRight.x,NewRight.y });
-	ImGui::Image((ImTextureID)(intptr_t)RightEye.GetTextureID(), SizeImage);
+	ImGui::Image((ImTextureID)(intptr_t)RightEye.GetID(), SizeImage);
 
 
 	// DEBUG

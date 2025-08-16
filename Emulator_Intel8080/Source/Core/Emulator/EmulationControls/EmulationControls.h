@@ -1,12 +1,12 @@
 #ifndef EMULATION_CONTROLS_H
 #define EMULATION_CONTROLS_H
 
-
+#define _HAS_STD_BYTE 0
 #include "Config_Compilier.h"
 
-#include "GUI/Widgets/I8080.UI.RegisterFlagsInfo.h"
-#include "GUI/Widgets/I8080.UI.MnemoCodeViewer.h"
-#include "GUI/Widgets/I8080.UI.CodeEditor.h"
+#include "GUI/Widgets/RegisterFlagsInfo/Widget.RegisterFlagsInfo.h"
+#include "GUI/Widgets/MnemoCodeViewer/Widget.MnemoCodeViewer.h"
+#include "GUI/Widgets/CodeEditor/Widget.CodeEditor.h"
 
 #include "Core/ProjectManager/ProjectManager.h"
 #include "Core/Emulator/EmulationThread/EmulationThread.h"

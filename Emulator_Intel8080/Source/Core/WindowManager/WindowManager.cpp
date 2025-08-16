@@ -1,7 +1,8 @@
 #include "WindowManager.h"
 
-WindowManager::WindowManager() : ISettingObject(u8"Изображение",u8"Видео") {
-
+WindowManager::WindowManager(GLFWwindow* window, FPS_Timer* fps_timer) : ISettingObject(u8"Изображение",u8"Видео") {
+	this->window = window;
+	this->fps_timer = fps_timer;
 }
 
 WindowManager::~WindowManager(){
@@ -24,13 +25,13 @@ void WindowManager::DrawSetting() {
 		SetFullscreen();
 
 	ImGui::SameLine();
-	HelpMarker(u8"Переключает режим размера окна.");
+	MyHelpMarker(u8"Переключает режим размера окна.");
 
 	if (ImGui::RadioButton(u8"VSync", VSync_state))
 		ToggleVSync();
 
 	ImGui::SameLine();
-	HelpMarker(u8"Вертикальная синхронизация.");
+	MyHelpMarker(u8"Вертикальная синхронизация.");
 
 
 	ImGuiContext& g = *GImGui;
@@ -40,8 +41,11 @@ void WindowManager::DrawSetting() {
 
 	static std::vector<std::string> items = { "30","45","60","75","90","120","144","165", u8"Неограниченно" };
 
-	std::string preview_value = std::to_string((int)OpenglWindow::Vars::FPS_target);
-	if ((int)OpenglWindow::Vars::FPS_target == 32000){
+	
+
+	std::string preview_value = std::to_string((int)fps_timer->GetTargetFPS());
+
+	if ((int)fps_timer->GetTargetFPS() == 0){
 		preview_value = u8"Неограниченно";
 	}
 
@@ -51,17 +55,17 @@ void WindowManager::DrawSetting() {
 		for (int i = 0; i < items.size(); i++)
 		{
 			bool selected = items[i] == preview_value;
-			if (preview_value == "32000")
+			if (preview_value == "0")
 				selected = true;
 
 
 			if (ImGui::Selectable(items[i].c_str(), &selected)) {
 				if (items[i] == u8"Неограниченно")
 				{
-					OpenglWindow::Vars::FPS_target = 32000;
+					fps_timer->SetTargetFPS(0);
 				}
 				else {
-					OpenglWindow::Vars::FPS_target = stoi(items[i]);
+					fps_timer->SetTargetFPS(stoi(items[i]));
 				}
 			}
 
@@ -72,7 +76,7 @@ void WindowManager::DrawSetting() {
 		ImGui::EndCombo();
 	}
 	ImGui::SameLine();
-	HelpMarker(u8"Кол-во кадров в секунду\nНикак не влияет на производительность эмуляции,\nно влияет на отзывчивость кнопок и вывода изображения");
+	MyHelpMarker(u8"Кол-во кадров в секунду\nНикак не влияет на производительность эмуляции,\nно влияет на отзывчивость кнопок и вывода изображения");
 }
 
 
@@ -81,13 +85,13 @@ bool WindowManager::SetFullscreen() {
 		IsWindowed = false;
 
 
-		glfwGetWindowPos(OpenglWindow::Vars::window, &LastPos_x, &LastPos_y);
-		glfwGetWindowSize(OpenglWindow::Vars::window, &LastSize_x, &LastSize_y);
+		glfwGetWindowPos(window, &LastPos_x, &LastPos_y);
+		glfwGetWindowSize(window, &LastSize_x, &LastSize_y);
 
 		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
 		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
-		glfwSetWindowMonitor(OpenglWindow::Vars::window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+		glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
 
 		return true;
 	}
@@ -98,7 +102,7 @@ bool WindowManager::SetWindowed() {
 	if (!IsWindowed) {
 		IsWindowed = true;
 
-		glfwSetWindowMonitor(OpenglWindow::Vars::window, NULL, LastPos_x, LastPos_y, LastSize_x, LastSize_y, 0);
+		glfwSetWindowMonitor(window, NULL, LastPos_x, LastPos_y, LastSize_x, LastSize_y, 0);
 
 		return true;
 	}
@@ -116,14 +120,14 @@ bool WindowManager::GetStateFullscreen() {
 
 
 void WindowManager::SetMaximaze() {
-	glfwMaximizeWindow(OpenglWindow::Vars::window);
+	glfwMaximizeWindow(window);
 }
 
 void WindowManager::SetPosition(const int& posX,const int& posY) {
-	glfwSetWindowPos(OpenglWindow::Vars::window, posX, posY);
+	glfwSetWindowPos(window, posX, posY);
 }
 void WindowManager::SetSize(const int& width, const int& height) {
-	glfwSetWindowSize(OpenglWindow::Vars::window, width, height);
+	glfwSetWindowSize(window, width, height);
 }
 
 
@@ -161,16 +165,16 @@ nlohmann::json WindowManager::SaveSetting() {
 
 	int pos_x = 0, pos_y = 0;
 	int size_x = 0, size_y = 0;
-	glfwGetWindowPos(OpenglWindow::Vars::window, &pos_x, &pos_y);
-	glfwGetWindowSize(OpenglWindow::Vars::window, &size_x, &size_y);
+	glfwGetWindowPos(window, &pos_x, &pos_y);
+	glfwGetWindowSize(window, &size_x, &size_y);
 
 	result["position.x"] = pos_x;
 	result["position.y"] = pos_y;
 	result["size.x"] = size_x;
 	result["size.y"] = size_y;
-	result["is_maximazed"] = glfwGetWindowAttrib(OpenglWindow::Vars::window, GLFW_MAXIMIZED);
+	result["is_maximazed"] = glfwGetWindowAttrib(window, GLFW_MAXIMIZED);
 	result["is_fullscreen"] = IsWindowed == false;
-	result["fps"] = (int)OpenglWindow::Vars::FPS_target;
+	result["fps"] = (int)fps_timer->GetTargetFPS();
 	result["vsync"] = VSync_state;
 
 
@@ -204,10 +208,10 @@ void WindowManager::LoadSetting(const nlohmann::json& Data) {
 	}
 
 	if (Data.contains("fps"))
-		OpenglWindow::Vars::FPS_target = Data["fps"].get<int>();
+		fps_timer->SetTargetFPS(Data["fps"].get<int>());
 
 	if (Data.contains("vsync"))
-		SetVSync(Data["fps"].get<bool>());
+		SetVSync(Data["vsync"].get<bool>());
 
 
 	CheckPosition(Position_X, Position_Y);

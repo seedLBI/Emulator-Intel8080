@@ -4,15 +4,14 @@
 #include "Config_Compilier.h"
 #include "KeyCombination.h"
 
-#include "OpenglWindow/OpenglWindow.h"
-
 #include "GUI/Notification/NotificationManager.h"
 
 #include "Core/SaveSystem/SaveSystem.h"
 #include "Core/Setting/interfaces/ISettingObject.h"
 
-#include "Utils/Keyboard.Utils.h"
-#include "Utils/ImGui.Utils.h"
+#include "Utils/Keyboard/Keyboard.h"
+#include "Utils/ImGui/Utils.ImGui.h"
+#include "Utils/Timer/Timer.Framerate.h"
 
 #include <functional>
 
@@ -23,7 +22,7 @@ class KeyCombinationHandler : public ISettingObject
 {
 public:
 
-	KeyCombinationHandler(NotificationManager* notificationManager);
+	KeyCombinationHandler(FPS_Timer* fps_timer, GLFWwindow* window, NotificationManager* notificationManager);
 	~KeyCombinationHandler();
 	
 	
@@ -45,7 +44,8 @@ public:
 
 
 private:
-
+	FPS_Timer* fps_timer;
+	GLFWwindow* window;
 	NotificationManager* notificationManager = nullptr;
 
 	std::vector<std::pair<std::string, KeyCombination>> combinations;

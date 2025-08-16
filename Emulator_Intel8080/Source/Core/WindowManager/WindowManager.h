@@ -1,16 +1,23 @@
 #ifndef WINDOW_MANAGER_H
 #define WINDOW_MANAGER_H
 
+#define GLEW_STATIC
+#include <GL/glew.h>
 
-#include "OpenglWindow/OpenglWindow.h"
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
+
 #include "Core/Setting/interfaces/ISettingObject.h"
 #include "Core/SaveSystem/SaveSystem.h"
-#include "Utils/ImGui.Utils.h"
+#include "Utils/ImGui/Utils.ImGui.h"
+#include "Utils/Timer/Timer.Framerate.h"
+
 
 class WindowManager : public ISettingObject
 {
 public:
-	WindowManager();
+	WindowManager(GLFWwindow* window, FPS_Timer* fps_timer);
 	~WindowManager();
 
 
@@ -38,6 +45,9 @@ public:
 
 
 private:
+	GLFWwindow* window;
+	FPS_Timer* fps_timer;
+
 	bool IsWindowed = true;
 	int LastPos_x = 0, LastPos_y = 0, LastSize_x = 0, LastSize_y = 0;
 

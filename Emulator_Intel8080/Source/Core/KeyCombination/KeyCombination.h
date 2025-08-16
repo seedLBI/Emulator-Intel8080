@@ -2,8 +2,9 @@
 #define KEY_COMBINATION_H
 
 #include "Config_Compilier.h"
-#include "Utils/Keyboard.Utils.h"
-#include "Utils/TextUtils.h"
+#include "Utils/Keyboard/Keyboard.h"
+#include "Utils/Text/Text.h"
+#include "Utils/File/File.h"
 
 #include <algorithm>
 #include <functional>
@@ -40,7 +41,7 @@ struct KeyCombination {
 #ifdef WITH_DEBUG_OUTPUT
 		std::cout << "Input [" << new_keysStr << "]\n";
 #endif
-		auto data = split(new_keysStr, " + ");
+		auto data = Split(new_keysStr, " + ");
 
 
 		std::vector<int> new_keys_data;

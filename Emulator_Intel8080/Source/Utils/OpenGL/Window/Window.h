@@ -1,3 +1,6 @@
+#ifndef WINDOW_H
+#define WINDOW_H
+
 
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -7,12 +10,12 @@
 #include <GLFW/glfw3native.h>
 
 #include <glm/glm.hpp>
+
+#ifdef _DEBUG
 #include <iostream>
+#endif
 
-
-#ifndef WINDOW_H
-#define WINDOW_H
-
+#include <string>
 
 
 class Window

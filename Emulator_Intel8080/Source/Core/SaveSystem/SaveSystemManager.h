@@ -11,7 +11,10 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+
+#ifdef _DEBUG
 #include <iostream>
+#endif
 
 
 class SaveSystemManager

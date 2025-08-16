@@ -50,7 +50,8 @@ nlohmann::json I8080_WorkspaceManager::Save() {
 
 	nlohmann::json result;
 
-	if (IndexChoosed >= 0 && IndexChoosed <= workspaces.size() - 1 && SaveCurrentWorkspaceBeforeClosingApp) {
+
+	if (workspaces.size() > 0 && IndexChoosed >= 0 && IndexChoosed <= workspaces.size() - 1 && SaveCurrentWorkspaceBeforeClosingApp) {
 		workspaces[IndexChoosed].Rewrite();
 	}
 

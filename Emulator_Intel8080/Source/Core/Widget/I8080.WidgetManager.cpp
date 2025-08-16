@@ -69,7 +69,7 @@ void I8080_WidgetManager::AddWidgetPtr(I8080_Widget* ptr_widget) {
 	ptr_widget->Init_FPS_Timer(fps_timer);
 
 	if (ptr_widget->GetName() == u8"Руководство")
-		indexHelp = ptr_widgets.size() - 1;
+		indexHelp = (int)ptr_widgets.size() - 1;
 }
 
 void I8080_WidgetManager::LoadVisibilitySettings(std::vector<std::pair<std::string, bool>> settingData) {
@@ -93,7 +93,9 @@ int I8080_WidgetManager::GetIndexSaveObject(const std::string& NameObject) {
 		if (ptr_widgets[i]->GetName() == NameObject)
 			return i;
 	}
+#ifdef _DEBUG
 	std::cout << "Don't have widget object with Name: " << NameObject << std::endl;
+#endif
 	//exit(545);
 	return -1;
 }

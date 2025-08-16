@@ -131,29 +131,29 @@ void Notification::Draw() {
 	}
 }
 
-void Notification::Update() {
+void Notification::Update(const float& deltaTime) {
 
 	if (ptr_time_infinity != nullptr) {
 		if (Time >= LifeTime) {
-			Time += OpenglWindow::GetDeltaTime();
+			Time += deltaTime;
 		}
 		else {
-			Time += OpenglWindow::GetDeltaTime() * (*ptr_time_infinity);
+			Time += deltaTime * (*ptr_time_infinity);
 		}
 	}
 	else {
-		Time += OpenglWindow::GetDeltaTime();
+		Time += deltaTime;
 	}
 
 	
 
 	if (Time < LifeTime)
-		Lerp(AnimAlpha, 1.f, 20.f*force_Lerp);
+		Lerp(AnimAlpha, 1.f, 20.f*force_Lerp, deltaTime);
 	else {
-		Lerp(AnimAlpha, 1.f - (Time - LifeTime)/DieTime, 20.f*force_Lerp);
+		Lerp(AnimAlpha, 1.f - (Time - LifeTime)/DieTime, 20.f*force_Lerp, deltaTime);
 	}
 
-	Lerp(AnimPos, Pos, force_Lerp*60.f);
+	Lerp(AnimPos, Pos, force_Lerp*60.f, deltaTime);
 
 
 	for (int i = 0; i < elements.size(); i++) {

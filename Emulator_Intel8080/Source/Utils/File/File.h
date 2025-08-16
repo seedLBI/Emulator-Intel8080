@@ -1,11 +1,14 @@
 #ifndef UTILS_FILE_H
 #define UTILS_FILE_H
 
+
+#include <Windows.h>
 #include <vector>
+#ifdef _DEBUG
 #include <iostream>
+#endif
 #include <string>
 #include <fstream>
-#include <Windows.h>
 #include <shobjidl.h>
 #include <filesystem>
 #include <algorithm>

@@ -13,7 +13,9 @@
 #include <string>
 #include <stdexcept>
 
+#ifdef _DEBUG
 #include <iostream>
+#endif
 
 #include "Utils/File/File.h"
 
@@ -131,7 +133,8 @@ public:
 	~Texture();
 
 	void SetSetting(const TextureSetting& setting);
-	void LoadTexture(const std::string& Path2Image,const int& desiredCount_channels = 0);
+	void LoadTexture(const std::string& Path2Image, const int& desiredCount_channels = 0);
+	void LoadTexture(const uint8_t* data, const int& len);
 
 	void Init();
 

@@ -8,15 +8,13 @@
 #include "ThirdParty/ImGui/imgui.h"
 #include "ThirdParty/ImGui/imgui_internal.h"
 
-#include "OpenglWindow/OpenglWindow.h"
-
 #include "Core/Setting/interfaces/ISettingObject.h"
 #include "Core/SaveSystem/SaveSystem.h"
 #include "Core/Emulator/Processor/Processor.h"
 #include "Core/Emulator/History/Caretaker.Momento.h"
 #include "Core/Emulator/Processors/Intel8080/I8080.h"
 
-#include "Utils/ImGui.Utils.h"
+#include "Utils/ImGui/Utils.ImGui.h"
 
 #include <thread>
 
@@ -82,7 +80,7 @@ private:
 	Caretaker_Momento* processor_CaretakerMomento = nullptr;
 
 	uint64_t targetTicksPerSecond = 0;
-	thread* threadObject = nullptr;
+	std::thread* threadObject = nullptr;
 	void ThreadLoop();
 
 

@@ -1,10 +1,14 @@
 #ifndef PROJECTMANAGER_H
 #define PROJECTMANAGER_H
 
+#define _HAS_STD_BYTE 0
 
 #define GLEW_STATIC
-#include "ThirdParty/OpenGL/include/glew.h"
+#include <GL/glew.h>
+
+#define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
 
 #include "Core/Setting/interfaces/ISettingObject.h"
 #include "Core/SaveSystem/SaveSystem.h"
@@ -15,14 +19,15 @@
 
 
 #include "DataStructures/TranslatorOutput.h"
-#include "ThirdParty/TextEditor.h"
+#include "GUI/Widgets/CodeEditor/TextEditor.h"
 
-#include "Utils/File_Utils.h"
+#include "Utils/File/File.h"
+#include "Utils/Text/Encoding/Wstring/Wstring.h"
 
 #include "GUI/Notification/NotificationManager.h"
-#include "GUI/Widgets/I8080.UI.MnemoCodeViewer.h"
-#include "GUI/Widgets/I8080.UI.RegisterFlagsInfo.h"
-#include "GUI/Widgets/I8080.UI.CodeEditor.h"
+#include "GUI/Widgets/MnemoCodeViewer/Widget.MnemoCodeViewer.h"
+#include "GUI/Widgets/RegisterFlagsInfo/Widget.RegisterFlagsInfo.h"
+#include "GUI/Widgets/CodeEditor/Widget.CodeEditor.h"
 
 #include <robin_hood.h>
 #include <string>

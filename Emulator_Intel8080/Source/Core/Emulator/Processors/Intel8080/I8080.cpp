@@ -967,15 +967,15 @@ void I8080::_OUTPUT_COM() {
 void I8080::_XTHL() {
 	CountTicks += 18;
 
-	swap(H, Memory[SP + 1]);
-	swap(L, Memory[SP]);
+	std::swap(H, Memory[SP + 1]);
+	std::swap(L, Memory[SP]);
 
 	IncrementPC();
 }
 void I8080::_XCHG() {
 	CountTicks += 4;
-	swap(D, H);
-	swap(E, L);
+	std::swap(D, H);
+	std::swap(E, L);
 	IncrementPC();
 }
 void I8080::_PCHL() {
@@ -2100,8 +2100,8 @@ void I8080::Hi_XTHL() {
 	CountTicks += 18;
 	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {uint16_t(SP),Memory[SP]},{uint16_t(SP + 1),Memory[SP + 1]} });
 
-	swap(H, Memory[SP + 1]);
-	swap(L, Memory[SP]);
+	std::swap(H, Memory[SP + 1]);
+	std::swap(L, Memory[SP]);
 
 
 	IncrementPC();

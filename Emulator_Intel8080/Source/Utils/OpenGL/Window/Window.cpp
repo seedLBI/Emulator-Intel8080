@@ -5,7 +5,10 @@ void Window::InitGlew() {
 	glewExperimental = GL_TRUE;
 
 	if (glewInit() != GLEW_OK) {
+#ifdef _DEBUG
 		std::cout << "Failed to initialize GLEW" << std::endl;
+#endif // _DEBUG
+
 		exit(-2);
 	}
 
@@ -24,7 +27,7 @@ void Window::SetPosition(const glm::vec2& pos) {
 }
 void Window::SetSize(const glm::vec2& size) {
 	glfwSetWindowSize(handleWindow, static_cast<int>(size.x), static_cast<int>(size.y));
-	glViewport(0, 0, size.x, size.y);
+	glViewport(0, 0, (GLsizei)size.x, (GLsizei)size.y);
 }
 
 
@@ -79,7 +82,9 @@ GLFWwindow* Window::GetHandle() {
 Window::Window(const int& width, const int& height, const int& PosX, const int& PosY, const std::string& Title) {
 	handleWindow = glfwCreateWindow(width, height, Title.c_str(), NULL, NULL);
 	if (handleWindow == NULL) {
+#ifdef _DEBUG
 		std::cout << "Failed to create GLFW window" << std::endl;
+#endif
 		glfwTerminate();
 		exit(-1);
 	}
@@ -93,7 +98,9 @@ Window::Window(const int& width, const int& height, const int& PosX, const int& 
 Window::Window(const int& width, const int& height, const std::string& Title) {
 	handleWindow = glfwCreateWindow(width, height, Title.c_str(), NULL, NULL);
 	if (handleWindow == NULL) {
+#ifdef _DEBUG
 		std::cout << "Failed to create GLFW window" << std::endl;
+#endif
 		glfwTerminate();
 		exit(-1);
 	}
@@ -107,7 +114,9 @@ Window::Window(const int& width, const int& height, const std::string& Title) {
 Window::Window(const std::string& title) {
 	handleWindow = glfwCreateWindow(800, 600, title.c_str(), NULL, NULL);
 	if (handleWindow == NULL) {
+#ifdef _DEBUG
 		std::cout << "Failed to create GLFW window" << std::endl;
+#endif
 		glfwTerminate();
 		exit(-1);
 	}
@@ -121,7 +130,9 @@ Window::Window(const std::string& title) {
 Window::Window() {
 	handleWindow = glfwCreateWindow(800, 600, "Unknown window...", NULL, NULL);
 	if (handleWindow == NULL) {
+#ifdef _DEBUG
 		std::cout << "Failed to create GLFW window" << std::endl;
+#endif
 		glfwTerminate();
 		exit(-1);
 	}

@@ -479,7 +479,7 @@ std::vector<uint8_t> Compiler::TranslateInstruction(const std::vector<std::strin
 
 	switch (type_instruction) {
 	case imm8: {
-		int value = FromString2Int(params[0]).first;
+		int value = (int)FromString2Int(params[0]).first;
 
 		if (value > MAX8BIT) {
 			CompilerOutput.Error = ERROR_OVERFLOW_VALUE_8BIT;
@@ -492,7 +492,7 @@ std::vector<uint8_t> Compiler::TranslateInstruction(const std::vector<std::strin
 		break;
 	}
 	case imm16: {
-		int value = FromString2Int(params[0]).first;
+		int value = (int)FromString2Int(params[0]).first;
 
 		if (value > MAX16BIT) {
 			CompilerOutput.Error = ERROR_OVERFLOW_VALUE_16BIT;
@@ -536,7 +536,7 @@ std::vector<uint8_t> Compiler::TranslateInstruction(const std::vector<std::strin
 			return result;
 		}
 
-		int value = FromString2Int(params[1]).first;
+		int value = (int)FromString2Int(params[1]).first;
 		if (value > MAX8BIT) {
 			CompilerOutput.Error = ERROR_OVERFLOW_VALUE_8BIT;
 			return result;
@@ -631,7 +631,7 @@ std::vector<uint8_t> Compiler::TranslateInstruction(const std::vector<std::strin
 			return result;
 		}
 
-		int value = FromString2Int(params[1]).first;
+		int value = (int)FromString2Int(params[1]).first;
 
 		if (value > MAX16BIT){
 			CompilerOutput.Error = ERROR_OVERFLOW_VALUE_16BIT;

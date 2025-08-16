@@ -68,7 +68,7 @@ void ProjectManager::NewFile() {
 	static const ImVec4 color_GRAY{ 0.3f,0.3f,0.3f,1.0f };
 	static const ImVec4 color_WHITE{ 1.f,1.f,1.f,1.f };
 
-	string text = u8"Создан новый проект.";
+	std::string text = u8"Создан новый проект.";
 
 	notificationManager->AddNottification(Notification(color_GRAY, 2.f, std::vector<N_Element*>{
 		new N_Message(color_WHITE, text)
@@ -123,7 +123,7 @@ bool ProjectManager::OpenFileWithPath(const std::string& path) {
 			widget_CodeEditor->GetPtrTextEditor()->SetTextLines({});
 			widget_CodeEditor->GetPtrTextEditor()->SetReadOnly(true);
 
-			auto data = readFileToByteArray(path);
+			auto data = ReadFileToByteArray(path);
 
 			processor->LoadMemoryFromCOM(data);
 		}
@@ -134,7 +134,7 @@ bool ProjectManager::OpenFileWithPath(const std::string& path) {
 			widget_CodeEditor->GetPtrTextEditor()->SetTextLines({});
 			widget_CodeEditor->GetPtrTextEditor()->SetReadOnly(true);
 
-			auto data = readFileToByteArray(path);
+			auto data = ReadFileToByteArray(path);
 
 			processor->LoadMemoryFromBinary(data);
 		}
@@ -145,7 +145,7 @@ bool ProjectManager::OpenFileWithPath(const std::string& path) {
 			static const ImVec4 color_GRAY{ 0.3f,0.3f,0.3f,1.0f };
 			static const ImVec4 color_WHITE{ 1.f,1.f,1.f,1.f };
 
-			string text = u8"Файл успешно открыт.";
+			std::string text = u8"Файл успешно открыт.";
 
 			notificationManager->AddNottification(Notification(color_GRAY, 2.f, std::vector<N_Element*>{
 				new N_Message(color_WHITE, text)
@@ -160,8 +160,8 @@ bool ProjectManager::OpenFileWithPath(const std::string& path) {
 	return false;
 }
 void ProjectManager::OpenFile() {
-	string path = OpenFileDialog();
-	OpenFileWithPath(path);
+	std::wstring path = Open_FileDialog(L"Выбери файл проекта для открытия",L"Файл с ассемблерным кодом (.I8080)\0*.I8080;*.BIN\0");
+	OpenFileWithPath(wstring_to_stringUTF8(path));
 }
 
 
@@ -173,7 +173,7 @@ void ProjectManager::SaveFile() {
 		static const ImVec4 color_RED{ 0.45f,0.2f,0.2f,1.0f };
 		static const ImVec4 color_WHITE{ 1.f,1.f,1.f,1.f };
 
-		string text = u8"Нельзя сохранять бинарные файлы их можно лишь открыть.";
+		std::string text = u8"Нельзя сохранять бинарные файлы их можно лишь открыть.";
 
 		notificationManager->AddNottification(Notification(color_RED, 2.f, std::vector<N_Element*>{
 			new N_Message(color_WHITE, text)
@@ -190,14 +190,14 @@ void ProjectManager::SaveFile() {
 		LinesCode = widget_CodeEditor->GetPtrTextEditor()->GetTextLines();
 
 		widget_CodeEditor->SetFlagWindow(0);
-		ofstream ofn;
+		std::ofstream ofn;
 		ofn.open(stringUTF8_to_wstring(Path_LoadedFile));
 
 		for (int i = 0; i < LinesCode.size(); i++){
 			if (i == LinesCode.size() - 1)
 				ofn << LinesCode[i];
 			else
-				ofn << LinesCode[i] << endl;
+				ofn << LinesCode[i] << std::endl;
 		}
 
 		ofn.close();
@@ -207,7 +207,7 @@ void ProjectManager::SaveFile() {
 			static const ImVec4 color_GRAY{ 0.3f,0.3f,0.3f,1.0f };
 			static const ImVec4 color_WHITE{ 1.f,1.f,1.f,1.f };
 
-			string text = u8"Файл сохранён.";
+			std::string text = u8"Файл сохранён.";
 
 			notificationManager->AddNottification(Notification(color_GRAY, 2.f, std::vector<N_Element*>{
 				new N_Message(color_WHITE, text)
@@ -224,7 +224,7 @@ void ProjectManager::SaveFileAs() {
 		static const ImVec4 color_RED{ 0.45f,0.2f,0.2f,1.0f };
 		static const ImVec4 color_WHITE{ 1.f,1.f,1.f,1.f };
 
-		string text = u8"Нельзя сохранять бинарные файлы их можно лишь открыть.";
+		std::string text = u8"Нельзя сохранять бинарные файлы их можно лишь открыть.";
 
 		notificationManager->AddNottification(Notification(color_RED, 2.f, std::vector<N_Element*>{
 			new N_Message(color_WHITE, text)
@@ -235,7 +235,7 @@ void ProjectManager::SaveFileAs() {
 	}
 
 
-	string nameFile = SaveFileDialogI8080();
+	std::string nameFile = Save_FileDialog(u8"Выбери путь для сохранения", u8"Файл с ассемблерным кодом (.I8080)\0*.I8080;");
 
 	if (nameFile.empty()) {
 		return;
@@ -243,12 +243,12 @@ void ProjectManager::SaveFileAs() {
 
 	widget_CodeEditor->SetFlagWindow(0);
 
-	string Path2NewFile = nameFile + ".I8080";
+	std::string Path2NewFile = nameFile + ".I8080";
 
 	lastPathManager->AddPath(Path2NewFile);
 
 	LinesCode = widget_CodeEditor->GetPtrTextEditor()->GetTextLines();
-	ofstream ofn;
+	std::ofstream ofn;
 	ofn.open(stringUTF8_to_wstring(Path2NewFile));
 
 
@@ -256,7 +256,7 @@ void ProjectManager::SaveFileAs() {
 		if (i == LinesCode.size() - 1)
 			ofn << LinesCode[i];
 		else
-			ofn << LinesCode[i] << endl;
+			ofn << LinesCode[i] << std::endl;
 	}
 
 
@@ -268,7 +268,7 @@ void ProjectManager::SaveFileAs() {
 		static const ImVec4 color_GRAY{ 0.3f,0.3f,0.3f,1.0f };
 		static const ImVec4 color_WHITE{ 1.f,1.f,1.f,1.f };
 
-		string text = u8"Файл сохранён.";
+		std::string text = u8"Файл сохранён.";
 
 		notificationManager->AddNottification(Notification(color_GRAY, 2.f, std::vector<N_Element*>{
 			new N_Message(color_WHITE, text)
@@ -297,7 +297,7 @@ void ProjectManager::SaveFileIntoBinary() {
 		return;
 
 
-	std::string path = SaveFileDialogROM();
+	std::string path = Save_FileDialog(u8"Выбери путь для сохранения", u8"Бинарный файл (.BIN)\0*.BIN;");
 	if (path.empty())
 		return;
 
@@ -320,7 +320,9 @@ void ProjectManager::SaveFileIntoBinary() {
 	std::ofstream file(stringUTF8_to_wstring(path), std::ios::binary);
 
 	if (!file) {
+#ifdef _DEBUG
 		std::cerr << "Error opening file for writing: " << path << std::endl;
+#endif
 		return;
 	}
 
@@ -340,7 +342,7 @@ void ProjectManager::Compile() {
 		static const ImVec4 color_RED{ 0.45f,0.2f,0.2f,1.0f };
 		static const ImVec4 color_WHITE{ 1.f,1.f,1.f,1.f };
 
-		string text = u8"Нельзя компилировать бинарные файлы, ведь они уже откомпилированны...";
+		std::string text = u8"Нельзя компилировать бинарные файлы, ведь они уже откомпилированны...";
 
 		notificationManager->AddNottification(Notification(color_RED, 2.f, std::vector<N_Element*>{
 			new N_Message(color_WHITE, text)
@@ -404,10 +406,10 @@ void ProjectManager::DrawSetting() {
 void ProjectManager::Update() {
 	wasFirstUpdate = true;
 
-	static float startTimer = glfwGetTime();
+	static float startTimer = (float)glfwGetTime();
 
 	if (AutoTimingAchived(startTimer)) {
-		startTimer = glfwGetTime();
+		startTimer = (float)glfwGetTime();
 
 		if (Path_LoadedFile.empty())
 			return;
@@ -423,7 +425,7 @@ TranslatorOutput* ProjectManager::GetPtrTranslatorOutput() {
 
 
 bool ProjectManager::AutoTimingAchived(const float& timeStart) {
-	float timeCurrent = glfwGetTime();
+	float timeCurrent = (float)glfwGetTime();
 	float elapsed = timeCurrent - timeStart;
 
 	switch (setedAutoTiming)
@@ -533,7 +535,7 @@ void ProjectManager::TryTranslateCode() {
 			static const ImVec4 color_RED{ 0.45f,0.2f,0.2f,1.0f };
 			static const ImVec4 color_WHITE{ 1.f,1.f,1.f,1.f };
 
-			string UNsuccess = u8"При компиляции найдена ошибка.\nНомер строки в коде: " + std::to_string(coord.mLine + 1) + u8"\nОписание: " + GetErrorInfo(translatorOutput.Error);
+			std::string UNsuccess = u8"При компиляции найдена ошибка.\nНомер строки в коде: " + std::to_string(coord.mLine + 1) + u8"\nОписание: " + GetErrorInfo(translatorOutput.Error);
 
 			notificationManager->AddNottification(Notification(color_RED, 3.f, std::vector<N_Element*>{
 				new N_Message(color_WHITE, UNsuccess)
@@ -578,13 +580,13 @@ void ProjectManager::TryTranslateCode() {
 		{
 			static const ImVec4 color_GREEN{ 0.2f,0.45f,0.2f,1.0f };
 			static const ImVec4 color_WHITE{ 1.f,1.f,1.f,1.f };
-			string success = u8"Компиляция прошла успешно.";
-			string time_info = u8"Затраченное время: " + cutFloat(std::to_string(timeElapsed), 4.f) + u8" сек.";
+			std::string success = u8"Компиляция прошла успешно.";
+			std::string time_info = u8"Затраченное время: " + cutFloat(std::to_string(timeElapsed), 4) + u8" сек.";
 
 			notificationManager->AddNottification(Notification(color_GREEN, 2.f, std::vector<N_Element*>{
 				new N_Message(color_WHITE, success),
 					new N_Message(color_WHITE, time_info),
-					new N_Progress(color_WHITE, u8"Память", u8" байт", translatorOutput.Opcodes.size(), 65535.f, false)
+					new N_Progress(color_WHITE, u8"Память", u8" байт", (float)translatorOutput.Opcodes.size(), 65535.f, false)
 			},
 				nullptr));
 		}

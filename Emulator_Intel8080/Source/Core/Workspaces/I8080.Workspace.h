@@ -3,12 +3,10 @@
 
 #include "Config_Compilier.h"
 
-#include "OpenglWindow/OpenglWindow.h"
-
 #include "Core/Widget/I8080.WidgetManager.h"
 #include "Core/SaveSystem/SaveSystem.h"
 
-#include "Utils/TextUtils.h"
+#include "Utils/Text/Text.h"
 
 #include <vector>
 #include <string>

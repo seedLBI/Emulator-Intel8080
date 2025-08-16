@@ -65,10 +65,10 @@
 #pragma warning (disable: 4996) // warning C4996: 'sprintf': This function or variable may be unsafe.
 #endif
 
-#include "Emulator\Processors\Intel8080\I8080.h"
-#include "UI/Theme/interface/IThemeLoadable.h"
-#include "UI/HighlighterInstruction/I8080/I8080.HighlighterInstruction.h"
-#include "UI/Widgets/I8080.UI.MnemoCodeViewer.h"
+#include "Core/Emulator/Processors/Intel8080/I8080.h"
+#include "Core/Theme/interface/IThemeLoadable.h"
+#include "GUI/HighlighterInstruction/I8080/I8080.HighlighterInstruction.h"
+#include "GUI/Widgets/MnemoCodeViewer/Widget.MnemoCodeViewer.h"
 
 struct MemoryEditor : public IThemeLoadable
 {
@@ -248,7 +248,7 @@ struct MemoryEditor : public IThemeLoadable
 
 
 
-    void DrawWindow(const char* title, bool *Open, I8080* processor, Widget_MnemocodeViewer* widget_MnemocodeViewer,const vector<OpcodeAdressed> &ca, const vector<ImVec4>& colorsCommand) {
+    void DrawWindow(const char* title, bool *Open, I8080* processor, Widget_MnemocodeViewer* widget_MnemocodeViewer,const std::vector<OpcodeAdressed> &ca, const std::vector<ImVec4>& colorsCommand) {
         size_t base_display_addr = 0x0000;
         Sizes s;
         CalcSizes(s, SIZE_MEMORY, base_display_addr);
@@ -270,7 +270,7 @@ struct MemoryEditor : public IThemeLoadable
     }
 
     // Memory Editor contents only
-    void DrawContents(I8080 * processor, Widget_MnemocodeViewer* widget_MnemocodeViewer, const vector<OpcodeAdressed>& ca, const vector<ImVec4>& colorsCommand)
+    void DrawContents(I8080 * processor, Widget_MnemocodeViewer* widget_MnemocodeViewer, const std::vector<OpcodeAdressed>& ca, const std::vector<ImVec4>& colorsCommand)
     {
         unsigned int cursor = processor->GetProgrammCounter();
         size_t mem_size = SIZE_MEMORY;
@@ -511,11 +511,11 @@ struct MemoryEditor : public IThemeLoadable
                         {
                             draw_list->AddRectFilled(pos, ImVec2(pos.x + highlight_width, pos.y + s.LineHeight), ImGui::GetColorU32(ImVec4(1.0f, 1.0f, 1.0f, 0.5f)));
                             if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
-                                processor->SetProgrammCounter(addr);
+                                processor->SetProgrammCounter((uint16_t)addr);
                             else if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
-                                processor->ToggleBreakPointPosition(addr);
+                                processor->ToggleBreakPointPosition((uint16_t)addr);
                             else if (ImGui::IsMouseClicked(ImGuiMouseButton_Middle))
-                                widget_MnemocodeViewer->FollowCursor(addr);
+                                widget_MnemocodeViewer->FollowCursor((int)addr);
 
 
                             //DataEditingTakeFocus = true;

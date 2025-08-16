@@ -1,7 +1,7 @@
 #ifndef HIGHLIGHTER_H
 #define HIGHLIGHTER_H
 
-#include "Utils/TextUtils.h"
+#include "Utils/Text/Text.h"
 #include "Core/Theme/interface/IThemeLoadable.h"
 #include "robin_hood.h"
 #include <vector>

@@ -3,8 +3,8 @@
 
 #include <string>
 #include <vector>
-#include "Utils/TextUtils.h"
-#include "imgui.h"
+#include "Utils/Text/Text.h"
+#include "ThirdParty/ImGui/imgui.h"
 
 enum TypesCommands {
     MovingData,

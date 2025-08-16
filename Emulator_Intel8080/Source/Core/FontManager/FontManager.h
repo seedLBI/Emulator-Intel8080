@@ -23,7 +23,9 @@
 
 #include <string>
 #include <vector>
+#ifdef _DEBUG
 #include <iostream>
+#endif
 
 
 struct FontInfo {

@@ -4254,7 +4254,7 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
     if (is_multiline) // Open group before calling GetID() because groups tracks id created within their scope (including the scrollbar)
         BeginGroup();
     const ImGuiID id = window->GetID(label);
-    const ImVec2 label_size = (flags & ImGuiInputTextFlags_NoLabel != 0) == true? ImVec2(0, CalcTextSize(label, NULL, true).y) : CalcTextSize(label, NULL, true);
+    const ImVec2 label_size = ((flags & ImGuiInputTextFlags_NoLabel) != 0) == true? ImVec2(0, CalcTextSize(label, NULL, true).y) : CalcTextSize(label, NULL, true);
 
 
 

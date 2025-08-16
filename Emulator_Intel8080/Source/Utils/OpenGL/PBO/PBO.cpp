@@ -82,12 +82,12 @@ PBO::PBO(GLFWwindow* window) {
     buffers[1] = &buffers_data[SIZE * SIZE * 4];
 
     // create texture 
-    std::vector< char > tc(SIZE * SIZE * 4, 128);
+    std::vector< uint8_t > tc(SIZE * SIZE * 4, 128);
     for (size_t i = 0; i < SIZE * SIZE; i++) {
         tc[i * 4 + 0] = 0;
         tc[i * 4 + 1] = 0;
         tc[i * 4 + 2] = 0;
-        tc[i * 4 + 3] = 256;
+        tc[i * 4 + 3] = (uint8_t)256;
     }
     glGenTextures(1, &tex_id);
     glBindTexture(GL_TEXTURE_2D, tex_id);
@@ -141,6 +141,39 @@ PBO::~PBO() {
     glDeleteBuffers(1, &uv_id);
     glDeleteVertexArrays(1, &vao_id);
     glDeleteTextures(1, &tex_id);
+}
+
+
+void PBO::draw() {
+
+    float ratio;
+    int width, height;
+
+    glfwGetFramebufferSize(window, &width, &height);
+    ratio = width / (float)height;
+    glViewport(0, 0, width, height);
+
+    glUseProgram(program); {
+        glm::mat4 m = glm::mat4(1.0f);
+        m = glm::rotate(m, 3.141f, glm::vec3(0.0f, 0.0f, 1.0f));
+        glm::mat4 p = glm::ortho(-ratio, ratio, -1.0f, 1.0f, 1.0f, -1.0f);
+        glm::mat4 mvp = p * m;
+        glUniformMatrix4fv(mvp_loc, 1, GL_FALSE, glm::value_ptr(mvp));
+
+        // select geometry
+        glBindVertexArray(vao_id);
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
+        glBindTexture(GL_TEXTURE_2D, tex_id);
+        //draw
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        // unbind
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glBindVertexArray(0);
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
+    }
+    glUseProgram(0);
 }
 
 
@@ -198,7 +231,9 @@ GLuint create_program(const char* vertexSrc, const char* fragmentSrc) {
     if (logsize > 1) {
         std::vector<char> errmsg(logsize + 1, 0);
         glGetShaderInfoLog(vs, logsize, 0, &errmsg[0]);
+#ifdef _DEBUG
         std::cout << &errmsg[0] << std::endl;
+#endif // _DEBUG
     }
     // Compile Fragment Shader
     glShaderSource(fs, 1, &fragmentSrc, 0);
@@ -210,7 +245,9 @@ GLuint create_program(const char* vertexSrc, const char* fragmentSrc) {
     if (logsize > 1) {
         std::vector<char> errmsg(logsize + 1, 0);
         glGetShaderInfoLog(fs, logsize, 0, &errmsg[0]);
+#ifdef _DEBUG
         std::cout << &errmsg[0] << std::endl;
+#endif // _DEBUG
     }
 
     // Link the program
@@ -225,7 +262,9 @@ GLuint create_program(const char* vertexSrc, const char* fragmentSrc) {
     if (logsize > 1) {
         std::vector<char> errmsg(logsize + 1, 0);
         glGetShaderInfoLog(program, logsize, 0, &errmsg[0]);
+#ifdef _DEBUG
         std::cout << &errmsg[0] << std::endl;
+#endif // _DEBUG
     }
 
     glDeleteShader(vs);

@@ -1,7 +1,9 @@
 #ifndef BASE_COLORS_H
 #define BASE_COLORS_H
 
+#ifdef _DEBUG
 #include <iostream>
+#endif
 #include <memory>
 #include <robin_hood.h>
 #include "ThirdParty/ImGui/imgui.h"

@@ -73,6 +73,11 @@ void FontManager::LoadNewFont() {
 }
 
 void FontManager::LoadFontFromFile(std::string Path2File) {
+
+	if (Path2File.empty()){
+		return;
+	}
+
 	std::string name = Path2File.substr(Path2File.find_last_of('\\') + 1);
 	name.erase(name.begin() + name.find_last_of("."), name.end());
 
@@ -103,7 +108,9 @@ void FontManager::ReloadFont() {
 		ImGuiIO& io = ImGui::GetIO();
 		if (io.Fonts->Locked)
 		{
+#ifdef _DEBUG
 			std::cout << "cannot resize font(((" << std::endl;
+#endif
 			return;
 		}
 
@@ -136,9 +143,9 @@ void FontManager::ReloadFont() {
 		};
 
 
-		MainFont = io.Fonts->AddFontFromMemoryTTF(MainFontData.data(), MainFontData.size(), Current_Scale, &font_cfg, ranges);
+		MainFont = io.Fonts->AddFontFromMemoryTTF(MainFontData.data(), (int)MainFontData.size(), (float)Current_Scale, &font_cfg, ranges);
 
-		float iconFontSize = Current_Scale * 2.0f / 3.0f;
+		float iconFontSize = (float)Current_Scale * 2.0f / 3.0f;
 		static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_16_FA, 0 };
 		ImFontConfig icons_config;
 		icons_config.MergeMode = true;
@@ -150,7 +157,7 @@ void FontManager::ReloadFont() {
 			IconsFont->ClearOutputData();
 		}
 
-		IconsFont = io.Fonts->AddFontFromMemoryTTF(IconsFontData.data(), IconsFontData.size(), iconFontSize, &icons_config, icons_ranges);
+		IconsFont = io.Fonts->AddFontFromMemoryTTF(IconsFontData.data(), (int)IconsFontData.size(), iconFontSize, &icons_config, icons_ranges);
 
 		io.Fonts->Build();  // Перестроить атлас шрифтов
 
@@ -158,11 +165,15 @@ void FontManager::ReloadFont() {
 		ImGui_ImplOpenGL3_DestroyDeviceObjects();
 		if (ImGui_ImplOpenGL3_CreateDeviceObjects() == false)
 		{
+#ifdef _DEBUG
 			std::cout << "Error CreateDeviceObjects" << std::endl;
+#endif
 		}
 		ImGui_ImplOpenGL3_DestroyFontsTexture();
 		if (ImGui_ImplOpenGL3_CreateFontsTexture() == false) {
+#ifdef _DEBUG
 			std::cout << "Error CreateFontsTexture" << std::endl;
+#endif
 		}
 
 
@@ -280,7 +291,7 @@ void FontManager::LoadSetting(const nlohmann::json& Data) {
 
 
 	if (Data.contains("paths")) {
-		for (auto& [number, path] : Data["CustomSpeed"].items()) {
+		for (auto& [number, path] : Data["paths"].items()) {
 			LoadFontFromFile(path.get<std::string>());
 		}
 	}

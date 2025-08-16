@@ -1,7 +1,10 @@
 #ifndef ISETTING_SAVABLE_H
 #define ISETTING_SAVABLE_H
 
+#ifdef _DEBUG
 #include <iostream>
+#endif
+
 #include <string>
 #include <vector>
 #include <nlohmann/json.hpp>

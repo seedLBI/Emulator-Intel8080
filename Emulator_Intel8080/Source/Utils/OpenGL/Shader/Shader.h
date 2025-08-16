@@ -4,7 +4,11 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+
+#ifdef _DEBUG
 #include <iostream>
+#endif
+
 #include <vector>
 
 #define GLEW_STATIC
@@ -59,9 +63,11 @@ public:
     Shader(std::string vertexPath, std::string fragmentPath)
     {
 
-
+#ifdef _DEBUG
         std::cout << "Trying compile shader programm\n\t[" << vertexPath << "]\n\t[" << fragmentPath << "]\n";
+#endif // _DEBUG
 
+        
         // 1. Получение исходного кода вершинного/фрагментного шейдера из переменной filePath
         std::string vertexCode;
         std::string fragmentCode;
@@ -92,7 +98,9 @@ public:
         }
         catch (std::ifstream::failure& e)
         {
+#ifdef _DEBUG
             std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+#endif
         }
         const char* vShaderCode = vertexCode.c_str();
         const char* fShaderCode = fragmentCode.c_str();
@@ -123,8 +131,9 @@ public:
         glDeleteShader(vertex);
         glDeleteShader(fragment);
 
-
+#ifdef _DEBUG
         std::cout << "CORRECT shader\n";
+#endif
     }
 
     // Конструктор, принимающий исходный код для вершинного, геометрического и фрагментного шейдеров
@@ -207,7 +216,9 @@ public:
         }
         catch (std::ifstream::failure& e)
         {
+#ifdef _DEBUG
             std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+#endif
         }
         const char* vShaderCode = vertexCode.c_str();
         const char* gShaderCode = geometryCode.c_str();
@@ -360,13 +371,19 @@ private:
             if (!success)
             {
                 glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+#ifdef _DEBUG
                 std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+#endif
                 exit(0);
             }
             else {
 #ifdef WITH_DEBUG_OUTPUT
                 glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+
+#ifdef _DEBUG
                 std::cout << "SUCCESS::SHADER_COMPILED of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+#endif
+
 #endif
             }
         }
@@ -376,7 +393,9 @@ private:
             if (!success)
             {
                 glGetProgramInfoLog(shader, 1024, NULL, infoLog);
+#ifdef _DEBUG
                 std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+#endif
                 exit(0);
             }
             else {

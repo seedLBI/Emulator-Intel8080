@@ -47,7 +47,7 @@ std::vector<std::pair<std::string, std::string>> Caretaker_Momento::GetHistory()
 }
 
 void	 Caretaker_Momento::SetMaxCount(uint64_t count) {
-	MaxCount = count;
+	MaxCount = (int)count;
 	momentos.resize(count);
 }
 uint64_t Caretaker_Momento::GetMaxCount() {

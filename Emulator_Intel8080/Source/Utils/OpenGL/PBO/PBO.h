@@ -16,7 +16,9 @@
 
 #include <vector>
 
+#ifdef _DEBUG
 #include <iostream>
+#endif
 
 
 extern const char* vertex_shader_text;
@@ -30,6 +32,7 @@ public:
 	~PBO();
 
 	void fill(unsigned char* src);
+	void draw();
 
 	GLuint tex_id;
 

@@ -92,10 +92,26 @@ void Texture::LoadTexture(const std::string& Path2Image, const int& desiredCount
 	stbi_set_flip_vertically_on_load(true);
 	dataImage = stbi_load(Path2Image.c_str(), &info.width, &info.height, &info.channels, desiredCount_channels);
 
+#ifdef _DEBUG
+
 	std::cout << "[Info Texture] [" << Path2Image << "]\n";
 	std::cout << "\t\tWidth:   [" << info.width << "]\n";
 	std::cout << "\t\tHeight:  [" << info.height << "]\n";
 	std::cout << "\t\tChannels:[" << info.channels << "]\n";
+
+#endif // _DEBUG
+
+}
+
+void Texture::LoadTexture(const uint8_t* data, const int& len) {
+	stbi_set_flip_vertically_on_load(true);
+	dataImage = stbi_load_from_memory(data, len, &info.width, &info.height, &info.channels, 0);
+#ifdef _DEBUG
+	std::cout << "[Info Texture]\n";
+	std::cout << "\t\tWidth:   [" << info.width << "]\n";
+	std::cout << "\t\tHeight:  [" << info.height << "]\n";
+	std::cout << "\t\tChannels:[" << info.channels << "]\n";
+#endif // _DEBUG
 
 }
 

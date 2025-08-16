@@ -66,7 +66,7 @@ void I8080_Widget::UpdateFocus() {
 		ImGui::SetWindowFocus(Name_c_str);
 		flag_FocusSeted = false;
 	}
-	TimerFocus -= fps_timer->GetDeltaTime();
+	TimerFocus -= (float)fps_timer->GetDeltaTime();
 	if (TimerFocus < 0.f)
 		TimerFocus = 0.f;
 }
@@ -105,4 +105,22 @@ void I8080_Widget::Load(const nlohmann::json& Data) {
 }
 nlohmann::json I8080_Widget::Save() {
 	return nlohmann::json{};
+}
+
+nlohmann::json I8080_Widget::SaveDefaultParameters() {
+	nlohmann::json result;
+
+	result["flag_Show"] = GetFlagShow();
+	result["flag_Active"] = WindowIsVisiable();
+
+	return result;
+}
+void I8080_Widget::ReadDefaultParameters(const nlohmann::json& Data) {
+	if (Data.contains("flag_Show"))
+		SetFlagShow(Data["flag_Show"].get<bool>());
+
+	if (Data.contains("flag_Active")) {
+		if (Data["flag_Active"].get<bool>())
+			SetActive();
+	}
 }

@@ -3,10 +3,9 @@
 
 #include <vector>
 #include <string>
-#include "Utils/MathUtils.h"
+#include "Utils/Math/Math.Lerp.h"
 
 #include "ThirdParty/ImGui/imgui.h"
-#include "OpenglWindow/OpenglWindow.h"
 
 #include "interface/Notification.Element.h"
 #include "Notification.Message.h"
@@ -14,8 +13,7 @@
 
 
 
-class Notification
-{
+class Notification {
 private:
 
 	std::vector<N_Element*> elements;
@@ -70,7 +68,7 @@ public:
 
 	void Draw();
 
-	void Update();
+	void Update(const float& deltaTime);
 
 	bool isEnd();
 
