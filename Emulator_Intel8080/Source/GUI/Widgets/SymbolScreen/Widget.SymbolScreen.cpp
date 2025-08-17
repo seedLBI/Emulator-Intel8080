@@ -200,11 +200,11 @@ void Widget_SymbolScreen::Load(const nlohmann::json& Data) {
 		DrawLines = Data["DrawGrid"].get<bool>();
 
 	if (Data.contains("Line")) {
-		ThiknessLines = Data["thikness"].get<int>();
-		ColorsLine[0] = Data["color"]["red"].get<float>();
-		ColorsLine[1] = Data["color"]["blue"].get<float>();
-		ColorsLine[2] = Data["color"]["green"].get<float>();
-		ColorsLine[3] = Data["color"]["alpha"].get<float>();
+		ThiknessLines = Data["Line"]["thikness"].get<int>();
+		ColorsLine[0] = Data["Line"]["color"]["red"].get<float>();
+		ColorsLine[1] = Data["Line"]["color"]["blue"].get<float>();
+		ColorsLine[2] = Data["Line"]["color"]["green"].get<float>();
+		ColorsLine[3] = Data["Line"]["color"]["alpha"].get<float>();
 	}
 }
 

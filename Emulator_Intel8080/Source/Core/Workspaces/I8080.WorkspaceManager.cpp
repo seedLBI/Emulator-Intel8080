@@ -69,7 +69,10 @@ void I8080_WorkspaceManager::Load(const nlohmann::json& Data) {
 
 	if (Data.contains("workspaces")) {
 
+		//std::cout << Data.dump(4) << std::endl;
+
 		for (auto& [index, DataWorkspace] : Data["workspaces"].items()) {
+			//std::cout << DataWorkspace.dump(4) << std::endl;
 			workspaces.emplace_back(I8080_Workspace(DataWorkspace, widget_manager));
 		}
 
@@ -415,10 +418,14 @@ void I8080_WorkspaceManager::Draw() {
 			workspaces.erase(workspaces.begin() + i);
 			IndexChoosed = 200000;
 		}
-		if (DrawText(i)) {
-			IndexChoosed = i;
-			NeedLoadIni = true;
+		if (workspaces.empty() == false && workspaces.size() - 1 >= i) {
+			if (DrawText(i)) {
+				IndexChoosed = i;
+				NeedLoadIni = true;
+			}
+
 		}
+		
 
 
 

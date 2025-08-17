@@ -1,7 +1,7 @@
 #include "I8080.Workspace.h"
 
 
-I8080_Workspace::I8080_Workspace(const std::string& Data, I8080_WidgetManager* WidgetManager) : SaveSystem("Workspace") {
+I8080_Workspace::I8080_Workspace(const nlohmann::json& Data, I8080_WidgetManager* WidgetManager) : SaveSystem("Workspace") {
 #ifdef WITH_DEBUG_OUTPUT
 	std::cout << "I8080_Workspace::I8080_Workspace(const std::string& Data, I8080_WidgetManager* WidgetManager) : SaveSystem(\"Workspace\")\n";
 #endif // WITH_DEBUG_OUTPUT

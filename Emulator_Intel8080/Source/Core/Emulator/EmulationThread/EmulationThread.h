@@ -17,6 +17,7 @@
 #include "Utils/ImGui/Utils.ImGui.h"
 
 #include <thread>
+#include <GLFW/glfw3.h>
 
 
 enum class SpeedMode{

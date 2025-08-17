@@ -72,6 +72,14 @@ void I8080_WidgetManager::AddWidgetPtr(I8080_Widget* ptr_widget) {
 		indexHelp = (int)ptr_widgets.size() - 1;
 }
 
+I8080_Widget* I8080_WidgetManager::GetWidgetPtr(const std::string& NameObject) {
+	for (int i = 0; i < ptr_widgets.size(); i++)
+		if (ptr_widgets[i]->GetName() == NameObject) {
+			return ptr_widgets[i];
+		}
+	return nullptr;
+}
+
 void I8080_WidgetManager::LoadVisibilitySettings(std::vector<std::pair<std::string, bool>> settingData) {
 	for (int i = 0; i < settingData.size(); i++) {
 		int index = FindIndex(settingData[i].first);

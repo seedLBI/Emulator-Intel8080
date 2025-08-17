@@ -19,6 +19,7 @@ public:
 	void Update();
 
 	void AddWidgetPtr(I8080_Widget* ptr_widget);
+	I8080_Widget* GetWidgetPtr(const std::string& NameObject);
 
 	void Load(const nlohmann::json& Data) override;
 	nlohmann::json Save() override;

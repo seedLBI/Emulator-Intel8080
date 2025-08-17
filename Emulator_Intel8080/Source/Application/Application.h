@@ -74,8 +74,6 @@
 #include "GUI/Widgets/MarkerList/Widget.ListMarker.h"
 #include "GUI/Widgets/VarList/Widget.ListVar.h"
 
-#include "GUI/AuthorPopup/AuthorPopup.h"
-
 #include "Utils/File/File.h"
 
 #include "GUI/MainMenuBar/MainMenuBar.h"
@@ -113,7 +111,6 @@ private:
 	EmulationThread* emulationThread = nullptr;
 	EmulationControls* emulationControls = nullptr;
 
-	AuthorPopup* authorPopup;
 
 	IntroManager* introManager = nullptr;
 	SaveSystemManager* saveSystemManager = nullptr;

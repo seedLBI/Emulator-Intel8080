@@ -1,7 +1,6 @@
 #ifndef EMULATION_CONTROLS_H
 #define EMULATION_CONTROLS_H
 
-#define _HAS_STD_BYTE 0
 #include "Config_Compilier.h"
 
 #include "GUI/Widgets/RegisterFlagsInfo/Widget.RegisterFlagsInfo.h"

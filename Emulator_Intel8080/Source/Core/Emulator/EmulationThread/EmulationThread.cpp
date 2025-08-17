@@ -348,13 +348,32 @@ int EmulationThread::InputTextCallback(ImGuiInputTextCallbackData* data) {
 
 
 void EmulationThread::DrawMainMenu() {
-	if (Speed == SpeedMode::Infinity)
-		ImGui::Text(("  " + std::string(ICON_FA_INFINITY) + u8" √ц").c_str());
-	else
-		ImGui::Text(("  " + TicksToString(targetTicksPerSecond)).c_str());
+	if (Speed == SpeedMode::Infinity) {
+		TextWithTooltipInMainMenuBar((std::string(ICON_FA_INFINITY) + u8" √ц").c_str(), u8"ќграничение количества тактов в секунду");
+	}
+	else {
 
-	if (ImGui::IsItemHovered())
-		ImGui::SetTooltip(u8"”становленное ограничение на кол-во тактов, которое может выполнить процессор за секунду времени.\nЁто ограничение можно убрать или изменить в настройках.");
+		static float LastTimeOneSecond = 0.f;
+
+		static uint64_t LastCountTicksInSeconds = 0;
+		static uint64_t LastCountTicksInSeconds_temp = 0;
+
+
+		if (glfwGetTime() - LastTimeOneSecond > .5f) {
+
+			LastTimeOneSecond = glfwGetTime();
+
+			LastCountTicksInSeconds = processor->GetCountTicks() - LastCountTicksInSeconds_temp;
+			LastCountTicksInSeconds_temp = processor->GetCountTicks();
+		}
+
+		float percent = (float)LastCountTicksInSeconds / (float)targetTicksPerSecond * 100.f * 2.f;
+
+		std::string percentString = cutFloat(std::to_string(percent),2) + "%";
+
+		TextWithTooltipInMainMenuBar((TicksToString(targetTicksPerSecond) + " | " + percentString).c_str(), u8"ќграничение количества тактов в секунду");
+	}
+
 }
 
 void EmulationThread::DrawSetting() {
@@ -672,9 +691,6 @@ nlohmann::json EmulationThread::SaveSetting() {
 
 void EmulationThread::LoadSetting(const nlohmann::json& Data) {
 
-	if (Data.contains("SpeedMode"))
-		Speed = toSpeedMode(Data["SpeedMode"].get<std::string>());
-
 	if (Data.contains("flag_HistoryModeEnabled"))
 		processor->Set_HistoryMode(Data["flag_HistoryModeEnabled"].get<bool>());
 
@@ -696,6 +712,12 @@ void EmulationThread::LoadSetting(const nlohmann::json& Data) {
 			CustomSpeed tempSpeed;
 			tempSpeed.name = info["name"].get<std::string>();
 			tempSpeed.targetTicksPerSecond = info["value"].get<uint64_t>();
+
+			UserSpeeds.emplace_back(tempSpeed);
 		}
 	}
+
+	if (Data.contains("SpeedMode"))
+		SetSpeedMode(toSpeedMode(Data["SpeedMode"].get<std::string>()));
+
 }

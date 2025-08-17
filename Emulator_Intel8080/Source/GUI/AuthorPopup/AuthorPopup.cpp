@@ -4,6 +4,18 @@
 AuthorPopup::AuthorPopup(GLFWwindow* window) {
 	this->window = window;
 
+	TextureSetting settingFlags;
+	settingFlags.Min = TextureFilter::LINEAR_MIPMAP_LINEAR;
+	settingFlags.Max = TextureFilter::LINEAR_MIPMAP_LINEAR;
+	settingFlags.WrapX = TextureWrap::CLAMP_TO_EDGE;
+	settingFlags.WrapY = TextureWrap::CLAMP_TO_EDGE;
+
+	Backend.SetSetting(settingFlags);
+	Close.SetSetting(settingFlags);
+	EyeTransparent.SetSetting(settingFlags);
+	Front.SetSetting(settingFlags);
+	LeftEye.SetSetting(settingFlags);
+	RightEye.SetSetting(settingFlags);
 
 	Backend.LoadTexture(Author_Backend.data(), (int)Author_Backend.size());
 	Close.LoadTexture(Author_Close.data(), (int)Author_Close.size());
@@ -12,7 +24,12 @@ AuthorPopup::AuthorPopup(GLFWwindow* window) {
 	LeftEye.LoadTexture(Author_LeftEye.data(), (int)Author_LeftEye.size());
 	RightEye.LoadTexture(Author_RightEye.data(), (int)Author_RightEye.size());
 
-
+	Backend.Init();
+	Close.Init();
+	EyeTransparent.Init();
+	Front.Init();
+	LeftEye.Init();
+	RightEye.Init();
 }
 
 AuthorPopup::~AuthorPopup()
@@ -30,38 +47,44 @@ void AuthorPopup::Draw() {
 	if (!isOpen)
 		return;
 
-	ImGui::OpenPopup(u8"О программе");
+	ImGui::OpenPopup(u8"О авторе");
 
 	static const ImGuiWindowFlags flagsWindow =
 		ImGuiWindowFlags_NoDocking |
 		ImGuiWindowFlags_NoMove |
 		ImGuiWindowFlags_NoResize |
 		ImGuiWindowFlags_NoCollapse |
-		ImGuiWindowFlags_NoScrollbar;
+		ImGuiWindowFlags_NoScrollbar |
+		ImGuiWindowFlags_NoScrollWithMouse;
 
-	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+	
 
 	ImVec2 size = ImGui::GetMainViewport()->WorkSize;
 
 	float width_window = ImGui::CalcTextSize(u8"Чё то какая-то инфа в одну строчку должна вмешаться в это окно?!?!?!?!?!?!??!?!?!?!!&!.").x;
 	float height_window = ImGui::GetTextLineHeight() * 18.f;
-	ImGui::SetNextWindowSize(ImVec2(width_window, height_window));
+	
 
+	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+	center.x -= width_window / 2;
+	center.y -= height_window / 2;
 
 	float asp = (height_window-70) / SizePicture.y;
 
 	ImVec2 SizeImage_asp = ImVec2(SizePicture.x * asp, SizePicture.y * asp);
 
 
+	ImGui::SetNextWindowSize(ImVec2(width_window, height_window));
+	ImGui::SetNextWindowPos(center);
+
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, ImVec2(0.5, 0.5));
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
-	if (ImGui::BeginPopupModal(u8"О программе", &isOpen, flagsWindow)) {
+	if (ImGui::BeginPopupModal(u8"О авторе", &isOpen, flagsWindow)) {
 
 
-		center.x -= ImGui::GetCurrentWindow()->Size.x / 2;
-		center.y -= ImGui::GetCurrentWindow()->Size.y / 2;
-		ImGui::GetCurrentWindow()->Pos = center;
+
+
 
 		ImGui::BeginChild("left Author", ImVec2(SizeImage_asp.x + 20, 0));
 
@@ -69,20 +92,20 @@ void AuthorPopup::Draw() {
 		ImGui::SetCursorPos({ aa.x + 20, aa.y + 20 });
 		aa = ImGui::GetCursorPos();
 
-		ImGui::Image((ImTextureID)(intptr_t)Backend.GetID(), SizeImage_asp);
+		ImGui::Image((ImTextureID)(intptr_t)Backend.GetID(), SizeImage_asp,uv0,uv1);
 		ImGui::SetCursorPos(aa);
-		ImGui::Image((ImTextureID)(intptr_t)EyeTransparent.GetID(), SizeImage_asp);
+		ImGui::Image((ImTextureID)(intptr_t)EyeTransparent.GetID(), SizeImage_asp, uv0, uv1);
 
 		ImGui::SetCursorPos(aa);
 		DrawEyes(ImGui::GetCursorScreenPos(), SizeImage_asp,asp);
 
 
 		ImGui::SetCursorPos(aa);
-		ImGui::Image((ImTextureID)(intptr_t)Front.GetID(), SizeImage_asp);
+		ImGui::Image((ImTextureID)(intptr_t)Front.GetID(), SizeImage_asp, uv0, uv1);
 		
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
 			ImGui::SetCursorPos(aa);
-			ImGui::Image((ImTextureID)(intptr_t)Close.GetID(), SizeImage_asp);
+			ImGui::Image((ImTextureID)(intptr_t)Close.GetID(), SizeImage_asp, uv0, uv1);
 		}
 
 		ImGui::EndChild();
@@ -144,7 +167,7 @@ void AuthorPopup::Draw() {
 		
 
 		
-
+		ImGui::EndPopup();
 
 	}
 
@@ -178,10 +201,10 @@ void AuthorPopup::DrawEyes(ImVec2 PosDraww, const ImVec2& SizeImage, const float
 	ImVec2 NewRight = { PosDraww.x + RightEyeCenter.x - 1.6f * RightDeltaCenterNormal.x * (15 - 10) - RightEyeOffset.x,PosDraww.y + RightEyeCenter.y - RightDeltaCenterNormal.y * (15 - 10) - RightEyeOffset.y };
 
 	ImGui::SetCursorScreenPos({ NewLeft.x,NewLeft.y });
-	ImGui::Image((ImTextureID)(intptr_t)LeftEye.GetID(), SizeImage);
+	ImGui::Image((ImTextureID)(intptr_t)LeftEye.GetID(), SizeImage, uv0, uv1);
 
 	ImGui::SetCursorScreenPos({ NewRight.x,NewRight.y });
-	ImGui::Image((ImTextureID)(intptr_t)RightEye.GetID(), SizeImage);
+	ImGui::Image((ImTextureID)(intptr_t)RightEye.GetID(), SizeImage, uv0, uv1);
 
 
 	// DEBUG

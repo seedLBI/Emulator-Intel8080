@@ -33,6 +33,8 @@ private:
 
 	ImVec2 SizePicture{ 460, 458 };
 
+	ImVec2 uv0{ 0,1 };
+	ImVec2 uv1{ 1,0 };
 
 	Texture Backend;
 	Texture Close;

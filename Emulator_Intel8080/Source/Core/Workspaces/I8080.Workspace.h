@@ -15,7 +15,7 @@ class I8080_Workspace : SaveSystem
 {
 public:
 	I8080_Workspace(const std::string& Name, const bool& LoadStyle, I8080_WidgetManager* WidgetManager);
-	I8080_Workspace(const std::string& Data, I8080_WidgetManager* WidgetManager);
+	I8080_Workspace(const nlohmann::json& Data, I8080_WidgetManager* WidgetManager);
 	~I8080_Workspace();
 
 	void			SetAsCurrent();

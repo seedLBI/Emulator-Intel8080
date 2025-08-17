@@ -23,7 +23,10 @@ std::pair<std::vector<std::string>, int> Instructuion_to_String(const uint8_t& o
 	};
 
 	std::string result = translate[opcode][0];
-	result.append(5, ' ');
+	if (result.size() < 5) {
+		result.append(5 - result.size(), ' ');
+	}
+
 
 	if (translate[opcode].size() == 2){
 		if (translate[opcode][1] == "8")

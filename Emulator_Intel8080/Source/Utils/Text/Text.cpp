@@ -4,7 +4,7 @@
 
 std::string to_hex_string(const uint8_t& value) {
     std::stringstream sstream;
-    sstream << std::hex << value;
+    sstream << std::hex << (uint16_t)value;
 
     if (sstream.str().size() == 1)
         return "0" + sstream.str();

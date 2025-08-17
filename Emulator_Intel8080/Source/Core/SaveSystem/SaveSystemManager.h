@@ -7,6 +7,8 @@
 #include "Utils/Text/Text.h"
 #include "Utils/Text/Encoding/Wstring/Wstring.h"
 
+#include "Core/Workspaces/Workspace.DefaultSave.h"
+
 #include <vector>
 #include <string>
 #include <sstream>

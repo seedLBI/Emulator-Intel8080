@@ -140,6 +140,59 @@ void TextCenteredOnLine(const char* label, int col, int row) {
 	ImGui::Text(label, col, row);
 }
 
+void TextWithTooltipInMainMenuBar(const char* label, const char* tooltip) {
+	const std::string projectName = label;
+
+	// Размер текста и паддингов
+	ImVec2 padding = ImGui::GetStyle().FramePadding;
+	ImVec2 textSize = ImGui::CalcTextSize(projectName.c_str());
+	float totalW = textSize.x + padding.x * 2.0f;
+	float totalH = textSize.y + padding.y * 2.0f;
+
+	// Уменьшаем высоту (пример: на 20%)
+	float shrinkFactor = 0.8f;
+	float newH = totalH * shrinkFactor;
+
+	// Получаем высоту строки (frame) — это высота меню/фрейма
+	float frameH = ImGui::GetFrameHeight();
+
+	// Считаем, на сколько нужно опустить наш элемент, чтобы центрировать по высоте
+	float vertOffset = (frameH - newH) * 0.5f;
+
+	// Позиционируемся на той же линии и со смещением по Y
+	ImGui::SameLine(0.0f, ImGui::GetStyle().ItemSpacing.x + 10.0f);
+	ImGui::SetCursorPosY(ImGui::GetCursorPosY() + vertOffset);
+
+	// Резервируем область под наш элемент
+	ImGui::Dummy(ImVec2(totalW, newH));
+
+	if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayNone)) {
+		ImGui::BeginTooltip();
+		ImGui::Text(tooltip);
+		ImGui::EndTooltip();
+	}
+
+	// Координаты прямоугольника
+	ImVec2 bb_min = ImGui::GetItemRectMin();
+	ImVec2 bb_max = ImGui::GetItemRectMax();
+
+	// Сдвиг текста внутри рамки для вертикального центрирования
+	float textOffsetY = (newH - textSize.y) * 0.5f;
+
+	// Рисуем рамку и текст
+	ImDrawList* draw = ImGui::GetWindowDrawList();
+	ImU32 col_text = ImGui::GetColorU32(ImGuiCol_Text);
+	ImU32 col_back = ImGui::GetColorU32(ImGuiCol_FrameBg);
+
+	draw->AddRectFilled(ImVec2(bb_min.x, bb_min.y + 3.f), bb_max, col_back, 0.0f);
+	draw->AddText(
+		ImVec2(bb_min.x + padding.x,
+			bb_min.y + textOffsetY),
+		col_text,
+		projectName.c_str()
+	);
+}
+
 void MyHelpMarker(const char* desc)
 {
 	ImGui::TextDisabled("(?)");

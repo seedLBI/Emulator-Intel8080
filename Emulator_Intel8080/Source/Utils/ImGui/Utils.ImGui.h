@@ -16,6 +16,7 @@ void TextCenteredOnLine(const char* label, int col, int row, float alignment, bo
 
 void TextCenteredOnLine(const char* label, int col, int row);
 
+void TextWithTooltipInMainMenuBar(const char* label, const char* tooltip);
 
 void RenderTextAlignedClipped(const char* text, const char* text_end = NULL, const ImVec2* p_text_size_if_avail = NULL, float align_x = 1.0f);
 

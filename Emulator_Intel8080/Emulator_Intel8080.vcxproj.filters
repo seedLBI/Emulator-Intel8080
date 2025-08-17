@@ -386,6 +386,9 @@
     <ClCompile Include="Source\GUI\MainMenuBar\logo_transparent.cpp">
       <Filter>Source\GUI\MainMenuBar</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Core\Workspaces\Workspace.DefaultSave.cpp">
+      <Filter>Source\Core\Workspace</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -1137,6 +1140,9 @@
     </ClInclude>
     <ClInclude Include="Source\GUI\MainMenuBar\logo_transparent.h">
       <Filter>Source\GUI\MainMenuBar</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Workspaces\Workspace.DefaultSave.h">
+      <Filter>Source\Core\Workspace</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

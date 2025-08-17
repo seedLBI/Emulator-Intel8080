@@ -81,41 +81,61 @@ void WindowManager::DrawSetting() {
 
 
 bool WindowManager::SetFullscreen() {
-	if (IsWindowed) {
-		IsWindowed = false;
 
-
-		glfwGetWindowPos(window, &LastPos_x, &LastPos_y);
-		glfwGetWindowSize(window, &LastSize_x, &LastSize_y);
-
-		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-
-		glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
-
+	if (glfwGetWindowMonitor(window))
 		return true;
-	}
 
-	return false;
+	glfwGetWindowPos(window, &LastPos_x, &LastPos_y);
+	glfwGetWindowSize(window, &LastSize_x, &LastSize_y);
+
+	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+	if (!monitor) return false;
+
+	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+	glfwSetWindowMonitor(
+		window,
+		monitor,
+		0, 0,                     // позиция окна на мониторе
+		mode->width, mode->height, // размер на весь экран
+		mode->refreshRate          // частота обновления
+	);
+
+	IsWindowed = false;
+
+	return true;
 }
 bool WindowManager::SetWindowed() {
-	if (!IsWindowed) {
-		IsWindowed = true;
 
-		glfwSetWindowMonitor(window, NULL, LastPos_x, LastPos_y, LastSize_x, LastSize_y, 0);
 
+	// Если уже в оконном режиме — ничего не делаем
+	if (!glfwGetWindowMonitor(window))
 		return true;
-	}
 
-	return false;
+	// Восстановим сохранённые размеры/позицию
+	glfwSetWindowMonitor(
+		window,
+		nullptr,                 // = оконный режим
+		LastPos_x, LastPos_y,  // старая позиция
+		LastSize_x, LastSize_y, // старый размер
+		0                        // игнорируется в оконном режиме
+	);
+
+	IsWindowed = true;
+
+	return true;
 }
+
 void WindowManager::ToggleFullscreen() {
-	if (SetFullscreen())
-		return;
-	SetWindowed();
+	if (glfwGetWindowMonitor(window)) {
+		SetWindowed();
+	}
+	else {
+		SetFullscreen();
+	}
 }
 bool WindowManager::GetStateFullscreen() {
-	return IsWindowed == false;
+	return glfwGetWindowMonitor(window) != nullptr;
 }
 
 
@@ -160,6 +180,7 @@ bool WindowManager::GetStateVSync() {
 
 
 nlohmann::json WindowManager::SaveSetting() {
+
 
 	nlohmann::json result;
 

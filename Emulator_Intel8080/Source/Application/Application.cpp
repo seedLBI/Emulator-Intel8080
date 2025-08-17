@@ -53,7 +53,7 @@ Application::Application() {
 		widget_MnemocodeViewer,
 		widget_CodeEditor);
 
-	mainMenuBar = new MainMenuBar(windowManager, WidgetManager);
+
 
 	Init_Setting();
 	Init_SaveManager();
@@ -67,7 +67,18 @@ Application::Application() {
 
 	saveSystemManager->Load();
 
-	authorPopup = new AuthorPopup(windowManager->GetMainWindow()->GetHandle());
+	mainMenuBar = new MainMenuBar(
+		windowManager,
+		WidgetManager,
+		lastPathManager,
+		settings,
+		projectManager,
+		window_manager,
+		keyCombination_handler,
+		emulationControls,
+		emulationThread,
+		WorkspaceManager,
+		processor);
 }
 
 
@@ -276,8 +287,6 @@ void Application::Draw() {
 	notificationManager->Draw();
 	settings->Draw();
 
-	authorPopup->Draw();
-
 }
 void Application::Update() {
 	projectManager->Update();
@@ -297,6 +306,8 @@ void Application::BeginDraw() {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
+
+	ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
 
 }
 
@@ -350,6 +361,7 @@ LRESULT CALLBACK custom_wndproc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 		break;
 	}
 	case WM_NCHITTEST: {
+
 		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
 		ScreenToClient(hwnd, &pt);
 

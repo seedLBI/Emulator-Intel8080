@@ -48,12 +48,16 @@ void SaveSystemManager::Load() {
 #ifdef _DEBUG
 		std::cout << "File save [not exist]\n";
 #endif
-		//ReadFromMemory(DefaultSaveData);
+
+		int workspace_index = GetIndexSaveObject("Workspaces");
+		objects[workspace_index]->Load(nlohmann::json::parse(workspace_default_save)["Workspaces"]);
 	}
 	else if (isFileNotEmpty(FileSave) == false) {
 #ifdef _DEBUG
 		std::cout << "File save [empty]\n";
 #endif
+		int workspace_index = GetIndexSaveObject("Workspaces");
+		objects[workspace_index]->Load(nlohmann::json::parse(workspace_default_save)["Workspaces"]);
 	}
 	else {
 #ifdef _DEBUG

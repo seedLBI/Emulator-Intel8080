@@ -147,6 +147,8 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -209,6 +211,7 @@
     <ClCompile Include="Source\Core\WindowManager\WindowManager.cpp" />
     <ClCompile Include="Source\Core\Workspaces\I8080.Workspace.cpp" />
     <ClCompile Include="Source\Core\Workspaces\I8080.WorkspaceManager.cpp" />
+    <ClCompile Include="Source\Core\Workspaces\Workspace.DefaultSave.cpp" />
     <ClCompile Include="Source\DataStructures\ModeProject.cpp" />
     <ClCompile Include="Source\DataStructures\RingBuffer.cpp" />
     <ClCompile Include="Source\DataStructures\TypesCommand.cpp" />
@@ -342,6 +345,7 @@
     <ClInclude Include="Source\Core\WindowManager\WindowManager.h" />
     <ClInclude Include="Source\Core\Workspaces\I8080.Workspace.h" />
     <ClInclude Include="Source\Core\Workspaces\I8080.WorkspaceManager.h" />
+    <ClInclude Include="Source\Core\Workspaces\Workspace.DefaultSave.h" />
     <ClInclude Include="Source\DataStructures\CurrentStateProcessor.h" />
     <ClInclude Include="Source\DataStructures\ModeProject.h" />
     <ClInclude Include="Source\DataStructures\OpcodeAdressed.h" />

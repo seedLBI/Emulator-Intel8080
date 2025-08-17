@@ -116,7 +116,7 @@ void LastPathManager::Load(const nlohmann::json& Data) {
 
 
 	if (Data.contains("paths")) {
-		for (auto& [index, PathData] : Data["Paths"].items()) {
+		for (auto& [index, PathData] : Data["paths"].items()) {
 			AddPath(PathData.get<std::string>());
 		}
 	}

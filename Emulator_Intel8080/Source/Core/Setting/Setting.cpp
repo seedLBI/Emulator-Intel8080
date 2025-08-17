@@ -105,7 +105,6 @@ void Setting::Draw() {
 		ImGui::TextColored(ImVec4(1, 1, 1, 0.2), WaterMark.c_str());
 		*/
 
-
 		ImGui::EndPopup();
 	}
 
