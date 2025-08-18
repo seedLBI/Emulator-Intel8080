@@ -1,0 +1,505 @@
+{
+    "LastPaths": {
+        "paths": [
+            "C:\\Users\\sosn2\\OneDrive\\Desktop\\last_old_release\\Examples\\MBGame.I8080",
+            "C:\\Users\\sosn2\\OneDrive\\Desktop\\last_old_release\\Examples\\ИграЖизнь_ПиксельныйЭкран.I8080",
+            "C:\\Users\\sosn2\\OneDrive\\Desktop\\last_old_release\\COM_TestInstruction\\8080EXM.COM",
+            "C:\\Users\\sosn2\\OneDrive\\Desktop\\last_old_release\\Бинс\\Mario.BIN"
+        ]
+    },
+    "Setting": {
+        "Видео": {
+            "Изображение": {
+                "fps": 120,
+                "is_fullscreen": false,
+                "is_maximazed": 1,
+                "position.x": 0,
+                "position.y": 0,
+                "size.x": 1920,
+                "size.y": 1160,
+                "vsync": false
+            },
+            "Шрифт": {
+                "paths": [
+                    "",
+                    "C:\\Users\\sosn2\\OneDrive\\Desktop\\LatinmodernmathRegular-z8EBa.otf",
+                    "C:\\Users\\sosn2\\OneDrive\\Desktop\\msdf\\AtlasLaTeXFont\\cmunci.ttf"
+                ],
+                "scale": 26,
+                "selected": "JetBrainsMonoNL"
+            }
+        },
+        "Общие": {
+            "Интро": {
+                "flag_NeedDraw": true
+            },
+            "Последние проекты": {
+                "flag_ShowAllPath": true
+            },
+            "Просмотр кода": {
+                "flag_EnableAlwaysFocus": true
+            },
+            "Рабочие пространства": {
+                "SaveCurrentWorkspaceBeforeClosingApp": true
+            },
+            "Редактор кода": {
+                "flag_AnalyzeLineForInstruction": true,
+                "flag_EnableAutoTab": true
+            },
+            "Уведомления": {
+                "flag_Enabled": true
+            }
+        },
+        "Проект": {
+            "Проект": {
+                "LastLoadedPathFile": "C:\\Users\\sosn2\\OneDrive\\Desktop\\last_old_release\\Examples\\MBGame.I8080",
+                "flag_CompileAfterOpen": true,
+                "flag_OpenLastFileWithOpenProgramm": false,
+                "flag_SaveAfterCompile": true,
+                "setedAutoTiming": "5 минут"
+            }
+        },
+        "Управление": {
+            "KeyCombination": {
+                "Cледующая скорость процессора": "",
+                "Запуск": "F5",
+                "Компилировать": "F2",
+                "Настройки": "",
+                "Новый файл": "",
+                "Открыть файл": "",
+                "Пауза": "F12",
+                "Полноэкранный\\Оконный": "F11",
+                "Постоянный фокус в просмотре памяти": "",
+                "Предыдущая скорость процессора": "",
+                "Предыдущее рабочее пространство": "LCtrl + LBracket",
+                "Режим сохранения истории (вкл\\выкл)": "",
+                "Сбросить состояние": "",
+                "Следующее рабочее пространство": "LCtrl + RBracket",
+                "Сохранить": "LCtrl + S",
+                "Сохранить в бинарный файл": "",
+                "Сохранить как": "",
+                "Стоп": "Esc",
+                "Увеличить шрифт на 1": "LCtrl + Equal",
+                "Удалить точки останова": "",
+                "Уменьшить шрифт на 1": "LCtrl + Minus",
+                "Шаг вперёд": "F9",
+                "Шаг назад": ""
+            }
+        },
+        "Цветовая тема": {
+            "Themes": {
+                "indexChoosed": 1
+            }
+        },
+        "Эмуляция": {
+            "Эмуляция": {
+                "IndexChoosedCustomSpeedMode": -1,
+                "MaxCountHistoryElements": 100,
+                "SpeedMode": "Infinity",
+                "flag_HistoryModeEnabled": false,
+                "flag_ReturnStateAfterChangeSpeed": true
+            }
+        }
+    },
+    "Workspaces": {
+        "index_choosed": 0,
+        "workspaces": [
+            {
+                "flag_LoadStyle": false,
+                "imgui": "[Window][WindowOverViewport_11111111]\nPos=0,72\nSize=1920,1088\nCollapsed=0\n\n[Window][Все цвета]\nPos=647,628\nSize=513,532\nCollapsed=0\nDockId=0x00000006,0\n\n[Window][Все символы]\nPos=647,628\nSize=513,532\nCollapsed=0\nDockId=0x00000006,1\n\n[Window][Символьный экран]\nPos=647,72\nSize=513,554\nCollapsed=0\nDockId=0x00000005,0\n\n[Window][Пиксельный экран]\nPos=647,72\nSize=513,554\nCollapsed=0\nDockId=0x00000005,2\n\n[Window][Продвинутый пиксельный экран]\nPos=647,72\nSize=513,554\nCollapsed=0\nDockId=0x00000005,1\n\n[Window][Окно ввода]\nPos=1162,618\nSize=758,542\nCollapsed=0\nDockId=0x0000000A,2\n\n[Window][Окно вывода]\nPos=1162,618\nSize=758,542\nCollapsed=0\nDockId=0x0000000A,3\n\n[Window][Таймер]\nPos=1162,618\nSize=758,542\nCollapsed=0\nDockId=0x0000000A,1\n\n[Window][Редактор кода]\nPos=0,72\nSize=645,687\nCollapsed=0\nDockId=0x00000003,0\n\n[Window][Мнемо код]\nPos=1162,72\nSize=758,544\nCollapsed=0\nDockId=0x00000009,0\n\n[Window][Регистры и флаги]\nPos=1162,618\nSize=758,542\nCollapsed=0\nDockId=0x0000000A,0\n\n[Window][Маркеры]\nPos=0,761\nSize=645,399\nCollapsed=0\nDockId=0x00000004,0\n\n[Window][Переменные]\nPos=0,761\nSize=645,399\nCollapsed=0\nDockId=0x00000004,2\n\n[Window][Постоянные]\nPos=0,761\nSize=645,399\nCollapsed=0\nDockId=0x00000004,1\n\n[Window][Быстродействие]\nPos=0,761\nSize=645,399\nCollapsed=0\nDockId=0x00000004,3\n\n[Window][Debug##Default]\nPos=60,43\nSize=400,400\nCollapsed=0\n\n[Window][Настройки]\nPos=213,141\nSize=853,437\nCollapsed=0\n\n[Window][Создание рабочего пространства]\nPos=720,484\nSize=480,192\nCollapsed=0\n\n[Window][Руководство]\nPos=982,62\nSize=938,988\nCollapsed=0\n\n[Window][Таблица инструкций]\nPos=0,68\nSize=1728,982\nCollapsed=0\n\n[Window][История выполнения]\nPos=1162,72\nSize=758,544\nCollapsed=0\nDockId=0x00000009,1\n\n[Window][О программе]\nPos=544,391\nSize=831,378\nCollapsed=0\n\n[Window][О авторе]\nPos=524,382\nSize=871,396\nCollapsed=0\n\n[Window][Просмотр памяти]\nPos=647,628\nSize=513,532\nCollapsed=0\nDockId=0x00000006,2\n\n[Window][Dear ImGui Style Editor]\nPos=982,62\nSize=938,1098\nCollapsed=0\n\n[Window][Dear ImGui Demo]\nPos=982,62\nSize=938,1098\nCollapsed=0\n\n[Docking][Data]\nDockSpace       ID=0x7C6B3D9B Window=0xA87D555D Pos=0,72 Size=1920,1088 Split=X\n  DockNode      ID=0x00000007 Parent=0x7C6B3D9B SizeRef=1160,1092 Split=X\n    DockNode    ID=0x00000001 Parent=0x00000007 SizeRef=645,1092 Split=Y Selected=0x2996B9AD\n      DockNode  ID=0x00000003 Parent=0x00000001 SizeRef=732,693 Selected=0x2996B9AD\n      DockNode  ID=0x00000004 Parent=0x00000001 SizeRef=732,403 Selected=0xA30FB8D9\n    DockNode    ID=0x00000002 Parent=0x00000007 SizeRef=513,1092 Split=Y Selected=0x2E6B7412\n      DockNode  ID=0x00000005 Parent=0x00000002 SizeRef=1186,554 Selected=0xF4077C9C\n      DockNode  ID=0x00000006 Parent=0x00000002 SizeRef=1186,536 CentralNode=1 Selected=0x8070AB6B\n  DockNode      ID=0x00000008 Parent=0x7C6B3D9B SizeRef=758,1092 Split=Y Selected=0x82F0852A\n    DockNode    ID=0x00000009 Parent=0x00000008 SizeRef=664,546 Selected=0x82F0852A\n    DockNode    ID=0x0000000A Parent=0x00000008 SizeRef=664,544 Selected=0x5D79DED8\n\n",
+                "name": "Всё и сразу",
+                "widgets": {
+                    "Быстродействие": {
+                        "flag_Active": false,
+                        "flag_Show": true
+                    },
+                    "Все символы": {
+                        "flag_Active": false,
+                        "flag_Show": true
+                    },
+                    "Все цвета": {
+                        "flag_Active": false,
+                        "flag_Show": true
+                    },
+                    "История выполнения": {
+                        "flag_Active": false,
+                        "flag_Show": true
+                    },
+                    "Клавиатура": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Маркеры": {
+                        "flag_Active": true,
+                        "flag_Show": true
+                    },
+                    "Мнемо код": {
+                        "flag_Active": true,
+                        "flag_Show": true
+                    },
+                    "Мнемо код (нацеленный)": {
+                        "Target": "PC",
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Окно ввода": {
+                        "flag_Active": false,
+                        "flag_Show": true
+                    },
+                    "Окно вывода": {
+                        "Bin_enable": false,
+                        "Char_enable": true,
+                        "Dec_enable": false,
+                        "Hex_enable": false,
+                        "flag_Active": false,
+                        "flag_Show": true,
+                        "mode_output": true
+                    },
+                    "Переменные": {
+                        "flag_Active": false,
+                        "flag_Show": true
+                    },
+                    "Пиксельный экран": {
+                        "DrawGrid": false,
+                        "Line": {
+                            "color": {
+                                "alpha": 0.20000000298023224,
+                                "blue": 0.0,
+                                "green": 0.0,
+                                "red": 0.0
+                            },
+                            "thikness": 1
+                        },
+                        "Ratio_Mode": 0,
+                        "flag_Active": false,
+                        "flag_Show": true
+                    },
+                    "Постоянные": {
+                        "flag_Active": false,
+                        "flag_Show": true
+                    },
+                    "Продвинутый пиксельный экран": {
+                        "DrawFrontBuffer": 1,
+                        "DrawGrid": false,
+                        "Line": {
+                            "color": {
+                                "alpha": 0.20000000298023224,
+                                "blue": 0.0,
+                                "green": 0.0,
+                                "red": 0.0
+                            },
+                            "thikness": 1
+                        },
+                        "Ratio_Mode": 0,
+                        "flag_Active": true,
+                        "flag_Show": true
+                    },
+                    "Просмотр памяти": {
+                        "flag_Active": true,
+                        "flag_Show": true
+                    },
+                    "Регистры и флаги": {
+                        "flag_Active": true,
+                        "flag_Show": true
+                    },
+                    "Редактор кода": {
+                        "flag_Active": true,
+                        "flag_Show": true
+                    },
+                    "Руководство": {
+                        "flag_Active": false,
+                        "flag_EnableWrapedText": true,
+                        "flag_Show": false
+                    },
+                    "Символьный экран": {
+                        "DrawGrid": true,
+                        "Line": {
+                            "color": {
+                                "alpha": 0.30000001192092896,
+                                "blue": 1.0,
+                                "green": 1.0,
+                                "red": 1.0
+                            },
+                            "thikness": 1
+                        },
+                        "Ratio_Mode": 0,
+                        "flag_Active": false,
+                        "flag_Show": true
+                    },
+                    "Таблица инструкций": {
+                        "flag_Active": true,
+                        "flag_Show": false
+                    },
+                    "Таймер": {
+                        "flag_Active": false,
+                        "flag_Show": true
+                    }
+                }
+            },
+            {
+                "flag_LoadStyle": false,
+                "imgui": "[Window][WindowOverViewport_11111111]\nPos=0,66\nSize=1920,1094\nCollapsed=0\n\n[Window][Все цвета]\nPos=734,624\nSize=520,536\nCollapsed=0\nDockId=0x00000006,0\n\n[Window][Все символы]\nPos=734,624\nSize=520,536\nCollapsed=0\nDockId=0x00000006,1\n\n[Window][Символьный экран]\nPos=734,68\nSize=520,554\nCollapsed=0\nDockId=0x00000005,0\n\n[Window][Пиксельный экран]\nPos=734,68\nSize=520,554\nCollapsed=0\nDockId=0x00000005,2\n\n[Window][Продвинутый пиксельный экран]\nPos=734,68\nSize=520,554\nCollapsed=0\nDockId=0x00000005,1\n\n[Window][Окно ввода]\nPos=1256,616\nSize=664,544\nCollapsed=0\nDockId=0x00000008,2\n\n[Window][Окно вывода]\nPos=1256,616\nSize=664,544\nCollapsed=0\nDockId=0x00000008,3\n\n[Window][Таймер]\nPos=1256,616\nSize=664,544\nCollapsed=0\nDockId=0x00000008,1\n\n[Window][Редактор кода]\nPos=0,66\nSize=980,547\nCollapsed=0\nDockId=0x00000009,0\n\n[Window][Мнемо код]\nPos=0,615\nSize=980,545\nCollapsed=0\nDockId=0x0000000A,0\n\n[Window][Регистры и флаги]\nPos=1256,616\nSize=664,544\nCollapsed=0\nDockId=0x00000008,0\n\n[Window][Маркеры]\nPos=0,759\nSize=732,401\nCollapsed=0\nDockId=0x00000004,0\n\n[Window][Переменные]\nPos=0,759\nSize=732,401\nCollapsed=0\nDockId=0x00000004,2\n\n[Window][Постоянные]\nPos=0,759\nSize=732,401\nCollapsed=0\nDockId=0x00000004,1\n\n[Window][Быстродействие]\nPos=0,759\nSize=732,401\nCollapsed=0\nDockId=0x00000004,0\n\n[Window][Debug##Default]\nPos=60,43\nSize=400,400\nCollapsed=0\n\n[Window][Настройки]\nPos=320,215\nSize=1280,729\nCollapsed=0\n\n[Window][Создание рабочего пространства]\nPos=720,484\nSize=480,192\nCollapsed=0\n\n[Window][Руководство]\nPos=982,66\nSize=938,1094\nCollapsed=0\nDockId=0x00000006,0\n\n[Window][Таблица инструкций]\nPos=0,68\nSize=1728,982\nCollapsed=0\n\n[Window][История выполнения]\nPos=1266,62\nSize=654,549\nCollapsed=0\n\n[Window][О программе]\nPos=544,391\nSize=831,378\nCollapsed=0\n\n[Window][О авторе]\nPos=505,373\nSize=910,414\nCollapsed=0\n\n[Window][Просмотр памяти]\nPos=652,62\nSize=612,988\nCollapsed=0\n\n[Window][Dear ImGui Style Editor]\nPos=982,62\nSize=938,1098\nCollapsed=0\nDockId=0x00000006,1\n\n[Window][Dear ImGui Demo]\nPos=982,62\nSize=938,1098\nCollapsed=0\nDockId=0x00000006,2\n\n[Docking][Data]\nDockSpace         ID=0x7C6B3D9B Window=0xA87D555D Pos=0,66 Size=1920,1094 Split=X\n  DockNode        ID=0x00000007 Parent=0x7C6B3D9B SizeRef=1254,1092 Split=X\n    DockNode      ID=0x00000001 Parent=0x00000007 SizeRef=980,1092 Split=Y Selected=0x2996B9AD\n      DockNode    ID=0x00000003 Parent=0x00000001 SizeRef=732,689 Split=Y Selected=0x2996B9AD\n        DockNode  ID=0x00000009 Parent=0x00000003 SizeRef=732,546 Selected=0x2996B9AD\n        DockNode  ID=0x0000000A Parent=0x00000003 SizeRef=732,544 Selected=0x82F0852A\n      DockNode    ID=0x00000004 Parent=0x00000001 SizeRef=732,401 Selected=0xC97C99AA\n    DockNode      ID=0x00000002 Parent=0x00000007 SizeRef=938,1092 Split=Y Selected=0x2E6B7412\n      DockNode    ID=0x00000005 Parent=0x00000002 SizeRef=1186,554 Selected=0x16A5F508\n      DockNode    ID=0x00000006 Parent=0x00000002 SizeRef=1186,536 CentralNode=1 Selected=0x98FFBC6D\n  DockNode        ID=0x00000008 Parent=0x7C6B3D9B SizeRef=664,1092 Selected=0x5D79DED8\n\n",
+                "name": "Минимум",
+                "widgets": {
+                    "Быстродействие": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Все символы": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Все цвета": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "История выполнения": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Клавиатура": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Маркеры": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Мнемо код": {
+                        "flag_Active": true,
+                        "flag_Show": true
+                    },
+                    "Мнемо код (нацеленный)": {
+                        "Target": "PC",
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Окно ввода": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Окно вывода": {
+                        "Bin_enable": false,
+                        "Char_enable": false,
+                        "Dec_enable": true,
+                        "Hex_enable": false,
+                        "flag_Active": false,
+                        "flag_Show": false,
+                        "mode_output": true
+                    },
+                    "Переменные": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Пиксельный экран": {
+                        "DrawGrid": false,
+                        "Line": {
+                            "color": {
+                                "alpha": 0.20000000298023224,
+                                "blue": 0.0,
+                                "green": 0.0,
+                                "red": 0.0
+                            },
+                            "thikness": 1
+                        },
+                        "Ratio_Mode": 0,
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Постоянные": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Продвинутый пиксельный экран": {
+                        "DrawFrontBuffer": 1,
+                        "DrawGrid": false,
+                        "Line": {
+                            "color": {
+                                "alpha": 0.20000000298023224,
+                                "blue": 0.0,
+                                "green": 0.0,
+                                "red": 0.0
+                            },
+                            "thikness": 1
+                        },
+                        "Ratio_Mode": 0,
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Просмотр памяти": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Регистры и флаги": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Редактор кода": {
+                        "flag_Active": true,
+                        "flag_Show": true
+                    },
+                    "Руководство": {
+                        "flag_Active": true,
+                        "flag_EnableWrapedText": false,
+                        "flag_Show": true
+                    },
+                    "Символьный экран": {
+                        "DrawGrid": true,
+                        "Line": {
+                            "color": {
+                                "alpha": 0.30000001192092896,
+                                "blue": 1.0,
+                                "green": 1.0,
+                                "red": 1.0
+                            },
+                            "thikness": 1
+                        },
+                        "Ratio_Mode": 0,
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Таблица инструкций": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Таймер": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    }
+                }
+            },
+            {
+                "flag_LoadStyle": false,
+                "imgui": "[Window][WindowOverViewport_11111111]\nPos=0,64\nSize=1920,1096\nCollapsed=0\n\n[Window][Все цвета]\nPos=734,624\nSize=520,536\nCollapsed=0\nDockId=0x00000006,0\n\n[Window][Все символы]\nPos=734,624\nSize=520,536\nCollapsed=0\nDockId=0x00000006,1\n\n[Window][Символьный экран]\nPos=734,68\nSize=520,554\nCollapsed=0\nDockId=0x00000005,0\n\n[Window][Пиксельный экран]\nPos=734,68\nSize=520,554\nCollapsed=0\nDockId=0x00000005,2\n\n[Window][Продвинутый пиксельный экран]\nPos=734,68\nSize=520,554\nCollapsed=0\nDockId=0x00000005,1\n\n[Window][Окно ввода]\nPos=1256,616\nSize=664,544\nCollapsed=0\nDockId=0x00000008,2\n\n[Window][Окно вывода]\nPos=1256,616\nSize=664,544\nCollapsed=0\nDockId=0x00000008,3\n\n[Window][Таймер]\nPos=1256,616\nSize=664,544\nCollapsed=0\nDockId=0x00000008,1\n\n[Window][Редактор кода]\nPos=0,68\nSize=980,546\nCollapsed=0\nDockId=0x00000009,0\n\n[Window][Мнемо код]\nPos=0,616\nSize=980,544\nCollapsed=0\nDockId=0x0000000A,0\n\n[Window][Регистры и флаги]\nPos=1256,616\nSize=664,544\nCollapsed=0\nDockId=0x00000008,0\n\n[Window][Маркеры]\nPos=0,759\nSize=732,401\nCollapsed=0\nDockId=0x00000004,0\n\n[Window][Переменные]\nPos=0,759\nSize=732,401\nCollapsed=0\nDockId=0x00000004,2\n\n[Window][Постоянные]\nPos=0,759\nSize=732,401\nCollapsed=0\nDockId=0x00000004,1\n\n[Window][Быстродействие]\nPos=0,759\nSize=732,401\nCollapsed=0\nDockId=0x00000004,0\n\n[Window][Debug##Default]\nPos=60,43\nSize=400,400\nCollapsed=0\n\n[Window][Настройки]\nPos=320,216\nSize=1280,728\nCollapsed=0\n\n[Window][Создание рабочего пространства]\nPos=720,484\nSize=480,192\nCollapsed=0\n\n[Window][Руководство]\nPos=982,68\nSize=938,1092\nCollapsed=0\nDockId=0x00000006,0\n\n[Window][Таблица инструкций]\nPos=0,64\nSize=1920,1096\nCollapsed=0\nDockId=0x00000006,0\n\n[Window][История выполнения]\nPos=1162,64\nSize=758,548\nCollapsed=0\n\n[Window][О программе]\nPos=544,391\nSize=831,378\nCollapsed=0\n\n[Window][О авторе]\nPos=524,382\nSize=871,396\nCollapsed=0\n\n[Window][Просмотр памяти]\nPos=647,64\nSize=513,986\nCollapsed=0\n\n[Window][Dear ImGui Style Editor]\nPos=982,62\nSize=938,1098\nCollapsed=0\n\n[Window][Dear ImGui Demo]\nPos=982,62\nSize=938,1098\nCollapsed=0\n\n[Docking][Data]\nDockSpace         ID=0x7C6B3D9B Window=0xA87D555D Pos=0,64 Size=1920,1096 Split=X\n  DockNode        ID=0x00000007 Parent=0x7C6B3D9B SizeRef=1254,1092 Split=X\n    DockNode      ID=0x00000001 Parent=0x00000007 SizeRef=980,1092 Split=Y Selected=0x2996B9AD\n      DockNode    ID=0x00000003 Parent=0x00000001 SizeRef=732,689 Split=Y Selected=0x2996B9AD\n        DockNode  ID=0x00000009 Parent=0x00000003 SizeRef=732,546 Selected=0x2996B9AD\n        DockNode  ID=0x0000000A Parent=0x00000003 SizeRef=732,544 Selected=0x82F0852A\n      DockNode    ID=0x00000004 Parent=0x00000001 SizeRef=732,401 Selected=0xC97C99AA\n    DockNode      ID=0x00000002 Parent=0x00000007 SizeRef=938,1092 Split=Y Selected=0x2E6B7412\n      DockNode    ID=0x00000005 Parent=0x00000002 SizeRef=1186,554 Selected=0x16A5F508\n      DockNode    ID=0x00000006 Parent=0x00000002 SizeRef=1186,536 CentralNode=1 Selected=0xE334999E\n  DockNode        ID=0x00000008 Parent=0x7C6B3D9B SizeRef=664,1092 Selected=0x5D79DED8\n\n",
+                "name": "Таблица",
+                "widgets": {
+                    "Быстродействие": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Все символы": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Все цвета": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "История выполнения": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Клавиатура": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Маркеры": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Мнемо код": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Мнемо код (нацеленный)": {
+                        "Target": "PC",
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Окно ввода": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Окно вывода": {
+                        "Bin_enable": false,
+                        "Char_enable": false,
+                        "Dec_enable": true,
+                        "Hex_enable": false,
+                        "flag_Active": false,
+                        "flag_Show": false,
+                        "mode_output": true
+                    },
+                    "Переменные": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Пиксельный экран": {
+                        "DrawGrid": false,
+                        "Line": {
+                            "color": {
+                                "alpha": 0.20000000298023224,
+                                "blue": 0.0,
+                                "green": 0.0,
+                                "red": 0.0
+                            },
+                            "thikness": 1
+                        },
+                        "Ratio_Mode": 0,
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Постоянные": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Продвинутый пиксельный экран": {
+                        "DrawFrontBuffer": 1,
+                        "DrawGrid": false,
+                        "Line": {
+                            "color": {
+                                "alpha": 0.20000000298023224,
+                                "blue": 0.0,
+                                "green": 0.0,
+                                "red": 0.0
+                            },
+                            "thikness": 1
+                        },
+                        "Ratio_Mode": 0,
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Просмотр памяти": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Регистры и флаги": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Редактор кода": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Руководство": {
+                        "flag_Active": false,
+                        "flag_EnableWrapedText": true,
+                        "flag_Show": false
+                    },
+                    "Символьный экран": {
+                        "DrawGrid": true,
+                        "Line": {
+                            "color": {
+                                "alpha": 0.30000001192092896,
+                                "blue": 1.0,
+                                "green": 1.0,
+                                "red": 1.0
+                            },
+                            "thikness": 1
+                        },
+                        "Ratio_Mode": 0,
+                        "flag_Active": false,
+                        "flag_Show": false
+                    },
+                    "Таблица инструкций": {
+                        "flag_Active": true,
+                        "flag_Show": true
+                    },
+                    "Таймер": {
+                        "flag_Active": false,
+                        "flag_Show": false
+                    }
+                }
+            }
+        ]
+    }
+}
