@@ -73,18 +73,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LibraryPath>$(SolutionDir)\Emulator_Intel8080\Third-Person\Opengl\lib\Release;$(LibraryPath)</LibraryPath>
-    <SourcePath>$(SolutionDir)\Emulator_Intel8080\Third-Person\Opengl\include;$(SolutionDir)\Emulator_Intel8080\Source\;$(SolutionDir)\Emulator_Intel8080\Third-Person\;$(SourcePath)</SourcePath>
+    <SourcePath>$(SolutionDir)\Emulator_Intel8080\Third-Person\Opengl\include;$(SolutionDir)\Emulator_Intel8080\Source;$(SolutionDir)\Emulator_Intel8080\Third-Person\;$(SourcePath)</SourcePath>
     <ExcludePath>$(ExcludePath)</ExcludePath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>$(SolutionDir)\Emulator_Intel8080\Third-Person\Opengl\lib\Release;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
-    <SourcePath>$(SolutionDir)\Emulator_Intel8080\Third-Person\Opengl\include;$(SolutionDir)\Emulator_Intel8080\Source\;$(SolutionDir)\Emulator_Intel8080\Third-Person\;$(VC_SourcePath);</SourcePath>
-  </PropertyGroup>
-  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <VcpkgUseStatic>true</VcpkgUseStatic>
-  </PropertyGroup>
-  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <VcpkgUseStatic>true</VcpkgUseStatic>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -120,8 +110,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Emulator_Intel8080\Third-Person\Opengl\include;$(SolutionDir)\Emulator_Intel8080\Source;$(SolutionDir)\Emulator_Intel8080\Third-Person;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -146,206 +134,140 @@
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <FloatingPointModel>Fast</FloatingPointModel>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32s.lib;SOIL.lib;gdi32.lib;shell32.lib;nfd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Source\Application\Application.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Compiler\Compiler.cpp" />
-    <ClCompile Include="Source\Core\Emulator\EmulationControls\EmulationControls.cpp" />
-    <ClCompile Include="Source\Core\Emulator\EmulationThread\EmulationThread.cpp" />
-    <ClCompile Include="Source\Core\Emulator\History\Caretaker.Momento.cpp" />
-    <ClCompile Include="Source\Core\Emulator\History\Momento.cpp" />
-    <ClCompile Include="Source\Core\Emulator\History\Originator.Momento.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Port\AsyncKeyboard\AsyncKeyboard.Port.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Port\AsyncKeyboard\Momento\AsyncKeyboard.Momento.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Port\ConsoleOutput\ConsoleOutput.Port.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Port\ConsoleOutput\Momento\ConsoleOutput.Momento.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Port\GeneratorRandomValues\GeneratorRandomValues.Port.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Port\GeneratorRandomValues\Momento\GeneratorRandomValues.Momento.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Port\PixelScreenTwoBuffers\Momento\PixelScreenTwoBuffers.Momento.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Port\PixelScreenTwoBuffers\PixelScreenTwoBuffers.Port.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Port\PixelScreen\Momento\PixelScreen.Momento.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Port\PixelScreen\PixelScreen.Port.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Port\Port.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Port\SymbolScreen\Momento\SymbolScreen.Momento.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Port\SymbolScreen\SymbolScreen.Port.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Port\Timer\Momento\Timer.Momento.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Port\Timer\Timer.Port.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Processors\Intel8080\Compiler\I8080.Compiler.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Processors\Intel8080\Disassembler\I8080.Disassembler.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Processors\Intel8080\History\Caretaker\I8080.Caretaker.Momento.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Processors\Intel8080\History\Momento\I8080.Momento.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Processors\Intel8080\I8080.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Data.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Display.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Structures.cpp" />
-    <ClCompile Include="Source\Core\Emulator\Processor\Processor.cpp" />
-    <ClCompile Include="Source\Core\FontManager\FontManager.cpp" />
-    <ClCompile Include="Source\Core\IntroManager\IntroManager.cpp" />
-    <ClCompile Include="Source\Core\KeyCombination\KeyCombinationHandler.cpp" />
-    <ClCompile Include="Source\Core\LastPathManager\LastPathManager.cpp" />
-    <ClCompile Include="Source\Core\ProjectManager\ProjectManager.cpp" />
-    <ClCompile Include="Source\Core\SaveSystem\SaveSystem.cpp" />
-    <ClCompile Include="Source\Core\SaveSystem\SaveSystemManager.cpp" />
-    <ClCompile Include="Source\Core\Setting\interfaces\ISettingDrawable.cpp" />
-    <ClCompile Include="Source\Core\Setting\interfaces\ISettingObject.cpp" />
-    <ClCompile Include="Source\Core\Setting\interfaces\ISettingSavable.cpp" />
-    <ClCompile Include="Source\Core\Setting\Setting.cpp" />
-    <ClCompile Include="Source\Core\Theme\BaseColors\BaseColors.cpp" />
-    <ClCompile Include="Source\Core\Theme\interface\IThemeLoadable.cpp" />
-    <ClCompile Include="Source\Core\Theme\ThemeManager\ThemeManager.cpp" />
-    <ClCompile Include="Source\Core\Widget\I8080.Widget.cpp" />
-    <ClCompile Include="Source\Core\Widget\I8080.WidgetManager.cpp" />
-    <ClCompile Include="Source\Core\WindowManager\WindowManager.cpp" />
-    <ClCompile Include="Source\Core\Workspaces\I8080.Workspace.cpp" />
-    <ClCompile Include="Source\Core\Workspaces\I8080.WorkspaceManager.cpp" />
-    <ClCompile Include="Source\Core\Workspaces\Workspace.DefaultSave.cpp" />
     <ClCompile Include="Source\DataStructures\ModeProject.cpp" />
     <ClCompile Include="Source\DataStructures\RingBuffer.cpp" />
     <ClCompile Include="Source\DataStructures\TypesCommand.cpp" />
     <ClCompile Include="Source\DataStructures\TypeTranslatorError.cpp" />
-    <ClCompile Include="Source\Data\Fonts\IconsFont.cpp" />
-    <ClCompile Include="Source\Data\Fonts\MainFont.cpp" />
-    <ClCompile Include="Source\Data\Images\AuthorPicture\Image.Author.Backend.cpp" />
-    <ClCompile Include="Source\Data\Images\AuthorPicture\Image.Author.Close.cpp" />
-    <ClCompile Include="Source\Data\Images\AuthorPicture\Image.Author.EyeTransparent.cpp" />
-    <ClCompile Include="Source\Data\Images\AuthorPicture\Image.Author.Front.cpp" />
-    <ClCompile Include="Source\Data\Images\AuthorPicture\Image.Author.LeftEye.cpp" />
-    <ClCompile Include="Source\Data\Images\AuthorPicture\Image.Author.RightEye.cpp" />
-    <ClCompile Include="Source\Data\Images\Image_LogoApplicationArrayPngBytes.cpp" />
-    <ClCompile Include="Source\Data\Images\Image_MSDF_ATLAS.cpp" />
-    <ClCompile Include="Source\Data\Images\Image_MSDF_DESIGN_8080.cpp" />
-    <ClCompile Include="Source\Data\Images\Image_MSDF_DESIGN_seedLBI_production.cpp" />
-    <ClCompile Include="Source\GUI\AuthorPopup\AuthorPopup.cpp" />
-    <ClCompile Include="Source\GUI\HighlighterInstruction\Highlighter.cpp" />
-    <ClCompile Include="Source\GUI\HighlighterInstruction\I8080\I8080.HighlighterInstruction.cpp" />
-    <ClCompile Include="Source\GUI\MainMenuBar\logo_transparent.cpp" />
-    <ClCompile Include="Source\GUI\MainMenuBar\MainMenuBar.cpp" />
-    <ClCompile Include="Source\GUI\Notification\interface\Notification.Element.cpp" />
-    <ClCompile Include="Source\GUI\Notification\Notification.cpp" />
-    <ClCompile Include="Source\GUI\Notification\Notification.Message.cpp" />
-    <ClCompile Include="Source\GUI\Notification\Notification.Progress.cpp" />
-    <ClCompile Include="Source\GUI\Notification\NotificationManager.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\CodeEditor\TextEditor.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\CodeEditor\Widget.CodeEditor.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\ColorPicker\Widget.ColorPicker.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\ConstList\Widget.ListConst.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\Disassembler\Widget.Disassembler.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\EmulatorInfo\Widget.EmulatorInfo.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\Help\Help.Data.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\Help\Widget.Help.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\HexViewer\Widget.HexViewer.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\HistoryInstruction\Widget.HistoryInstruction.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\Input0x08\Widget.Input0x08.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\Keyboard\Widget.Keyboard.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\ListInstruction\Widget.ListInstruction.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\MarkerList\Widget.ListMarker.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\MnemoCodeViewerTargeted\Widget.MnemoCodeViewerTargeted.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\MnemoCodeViewer\Widget.MnemoCodeViewer.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\Output0x02\Widget.Output0x02.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\PixelScreenTwoBuffers\Widget.PixelScreenTwoBuffers.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\PixelScreen\Widget.PixelScreen.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\RegisterFlagsInfo\Widget.RegisterFlagsInfo.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\SymbolPicker\Widget.SymbolPicker.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\SymbolScreen\Widget.SymbolScreen.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\TableInstruction\Widget.TableInstruction.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\Timer\Widget.Timer.cpp" />
-    <ClCompile Include="Source\GUI\Widgets\VarList\Widget.ListVar.cpp" />
-    <ClCompile Include="Source\ThirdParty\ImGui\imgui.cpp" />
-    <ClCompile Include="Source\ThirdParty\ImGui\imgui_demo.cpp" />
-    <ClCompile Include="Source\ThirdParty\ImGui\imgui_draw.cpp" />
-    <ClCompile Include="Source\ThirdParty\ImGui\imgui_impl_glfw.cpp" />
-    <ClCompile Include="Source\ThirdParty\ImGui\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="Source\ThirdParty\ImGui\imgui_tables.cpp" />
-    <ClCompile Include="Source\ThirdParty\ImGui\imgui_widgets.cpp" />
-    <ClCompile Include="Source\ThirdParty\LodePNG\lodepng.cpp" />
+    <ClCompile Include="Source\Emulator\Compiler\Compiler.cpp" />
+    <ClCompile Include="Source\Emulator\EmulationControls\EmulationControls.cpp" />
+    <ClCompile Include="Source\Emulator\EmulationThread\EmulationThread.cpp" />
+    <ClCompile Include="Source\Emulator\History\Caretaker.Momento.cpp" />
+    <ClCompile Include="Source\Emulator\History\Momento.cpp" />
+    <ClCompile Include="Source\Emulator\History\Originator.Momento.cpp" />
+    <ClCompile Include="Source\Emulator\Port\AsyncKeyboard\I8080.Port.AsyncKeyboard.cpp" />
+    <ClCompile Include="Source\Emulator\Port\AsyncKeyboard\Momento\AsyncKeyboard.Momento.cpp" />
+    <ClCompile Include="Source\Emulator\Port\ConsoleOutput\I8080.Port.ConsoleOutput.cpp" />
+    <ClCompile Include="Source\Emulator\Port\ConsoleOutput\Momento\ConsoleOutput.Momento.cpp" />
+    <ClCompile Include="Source\Emulator\Port\GeneratorRandomValues\I8080.Port.GeneratorRandomValues.cpp" />
+    <ClCompile Include="Source\Emulator\Port\GeneratorRandomValues\Momento\GeneratorRandomValues.Momento.cpp" />
+    <ClCompile Include="Source\Emulator\Port\I8080.Port.cpp" />
+    <ClCompile Include="Source\Emulator\Port\PixelScreenTwoBuffers\I8080.Port.PixelScreenTwoBuffers.cpp" />
+    <ClCompile Include="Source\Emulator\Port\PixelScreenTwoBuffers\Momento\PixelScreenTwoBuffers.Momento.cpp" />
+    <ClCompile Include="Source\Emulator\Port\PixelScreen\I8080.Port.PixelScreen.cpp" />
+    <ClCompile Include="Source\Emulator\Port\PixelScreen\Momento\PixelScreen.Momento.cpp" />
+    <ClCompile Include="Source\Emulator\Port\SymbolScreen\I8080.Port.SymbolScreen.cpp" />
+    <ClCompile Include="Source\Emulator\Port\SymbolScreen\Momento\SymbolScreen.Momento.cpp" />
+    <ClCompile Include="Source\Emulator\Port\Timer\I8080.Port.Timer.cpp" />
+    <ClCompile Include="Source\Emulator\Port\Timer\Momento\Timer.Momento.cpp" />
+    <ClCompile Include="Source\Emulator\Processors\Intel8080\Compiler\I8080.Compiler.cpp" />
+    <ClCompile Include="Source\Emulator\Processors\Intel8080\Disassembler\I8080.Disassembler.cpp" />
+    <ClCompile Include="Source\Emulator\Processors\Intel8080\History\Caretaker\I8080.Caretaker.Momento.cpp" />
+    <ClCompile Include="Source\Emulator\Processors\Intel8080\History\Momento\I8080.Momento.cpp" />
+    <ClCompile Include="Source\Emulator\Processors\Intel8080\I8080.cpp" />
+    <ClCompile Include="Source\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Data.cpp" />
+    <ClCompile Include="Source\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Display.cpp" />
+    <ClCompile Include="Source\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Structures.cpp" />
+    <ClCompile Include="Source\Emulator\Processors\Processor.cpp" />
+    <ClCompile Include="Source\FontsData\IconsFont.cpp" />
+    <ClCompile Include="Source\FontsData\MainFont.cpp" />
+    <ClCompile Include="Source\ImagesData\AuthorPicture\Image.Author.Backend.cpp" />
+    <ClCompile Include="Source\ImagesData\AuthorPicture\Image.Author.Close.cpp" />
+    <ClCompile Include="Source\ImagesData\AuthorPicture\Image.Author.EyeTransparent.cpp" />
+    <ClCompile Include="Source\ImagesData\AuthorPicture\Image.Author.Front.cpp" />
+    <ClCompile Include="Source\ImagesData\AuthorPicture\Image.Author.LeftEye.cpp" />
+    <ClCompile Include="Source\ImagesData\AuthorPicture\Image.Author.RightEye.cpp" />
+    <ClCompile Include="Source\ImagesData\Image_LogoApplicationArrayPngBytes.cpp" />
+    <ClCompile Include="Source\ImagesData\Image_MSDF_ATLAS.cpp" />
+    <ClCompile Include="Source\ImagesData\Image_MSDF_DESIGN_8080.cpp" />
+    <ClCompile Include="Source\ImagesData\Image_MSDF_DESIGN_seedLBI_production.cpp" />
+    <ClCompile Include="Source\Notification\interface\Notification.Element.cpp" />
+    <ClCompile Include="Source\Notification\Notification.cpp" />
+    <ClCompile Include="Source\Notification\Notification.Message.cpp" />
+    <ClCompile Include="Source\Notification\Notification.Progress.cpp" />
+    <ClCompile Include="Source\Notification\NotificationManager.cpp" />
+    <ClCompile Include="Source\OpenglWindow\OpenglWindow.cpp" />
+    <ClCompile Include="Source\SaveSystem\DefaultSaveData.cpp" />
+    <ClCompile Include="Source\SaveSystem\SaveSystem.cpp" />
+    <ClCompile Include="Source\SaveSystem\SaveSystemManager.cpp" />
+    <ClCompile Include="Source\UI\AuthorPopup\AuthorPopup.cpp" />
+    <ClCompile Include="Source\UI\FontManager\FontManager.cpp" />
+    <ClCompile Include="Source\UI\HighlighterInstruction\Highlighter.cpp" />
+    <ClCompile Include="Source\UI\HighlighterInstruction\I8080\I8080.HighlighterInstruction.cpp" />
+    <ClCompile Include="Source\UI\I8080.UI.cpp" />
+    <ClCompile Include="Source\UI\IntroManager\IntroManager.cpp" />
+    <ClCompile Include="Source\UI\KeyCombination\KeyCombinationHandler.cpp" />
+    <ClCompile Include="Source\UI\LastPathManager\LastPathManager.cpp" />
+    <ClCompile Include="Source\UI\ProjectManager\ProjectManager.cpp" />
+    <ClCompile Include="Source\UI\Setting\ISettingDrawable.cpp" />
+    <ClCompile Include="Source\UI\Setting\ISettingObject.cpp" />
+    <ClCompile Include="Source\UI\Setting\ISettingSavable.cpp" />
+    <ClCompile Include="Source\UI\Setting\Setting.cpp" />
+    <ClCompile Include="Source\UI\Theme\BaseColors\BaseColors.cpp" />
+    <ClCompile Include="Source\UI\Theme\interface\IThemeLoadable.cpp" />
+    <ClCompile Include="Source\UI\Theme\ThemeManager\ThemeManager.cpp" />
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.CodeEditor.cpp" />
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.ColorPicker.cpp" />
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.ConstList.cpp" />
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.Disassembler.cpp" />
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.EmulatorInfo.cpp" />
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.Help.cpp" />
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.HexViewer.cpp" />
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.Input0x08.cpp" />
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.Keyboard.cpp" />
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.MarkerList.cpp" />
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.MemoryMonoPixelScreen.cpp" />
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.MnemoCodeViewer.cpp" />
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.MnemoCodeViewerTargeted.cpp" />
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.Output0x02.cpp" />
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.PixelScreen.cpp" />
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.PixelScreenTwoBuffers.cpp" />
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.RegisterFlagsInfo.cpp" />
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.SymbolPicker.cpp" />
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.SymbolScreen.cpp" />
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.Timer.cpp" />
+    <ClCompile Include="Source\UI\Widgets\I8080.UI.VarList.cpp" />
+    <ClCompile Include="Source\UI\Widgets\UI.HistoryInstruction.cpp" />
+    <ClCompile Include="Source\UI\Widgets\UI.ListInstruction.cpp" />
+    <ClCompile Include="Source\UI\Widgets\UI.TableInstruction.cpp" />
+    <ClCompile Include="Source\UI\Widget\I8080.Widget.cpp" />
+    <ClCompile Include="Source\UI\Widget\I8080.WidgetManager.cpp" />
+    <ClCompile Include="Source\UI\WindowManager\WindowManager.cpp" />
+    <ClCompile Include="Source\UI\Workspaces\I8080.Workspace.cpp" />
+    <ClCompile Include="Source\UI\Workspaces\I8080.WorkspaceManager.cpp" />
     <ClCompile Include="Source\Utils\ColorUtilities.cpp" />
-    <ClCompile Include="Source\Utils\File\File.cpp" />
-    <ClCompile Include="Source\Utils\ImGui\Utils.ImGui.cpp" />
-    <ClCompile Include="Source\Utils\Keyboard\Keyboard.cpp" />
-    <ClCompile Include="Source\Utils\Math\Math.Lerp.cpp" />
-    <ClCompile Include="Source\Utils\OpenGL\Framebuffer\Framebuffer.cpp" />
-    <ClCompile Include="Source\Utils\OpenGL\PBO\PBO.cpp" />
-    <ClCompile Include="Source\Utils\OpenGL\Renderbuffer\Renderbuffer.cpp" />
-    <ClCompile Include="Source\Utils\OpenGL\Texture\Texture.cpp" />
-    <ClCompile Include="Source\Utils\OpenGL\Window\Manager\OpenGL.WindowManager.cpp" />
-    <ClCompile Include="Source\Utils\OpenGL\Window\Window.cpp" />
-    <ClCompile Include="Source\Utils\Text\Encoding\Unicode\Unicode.cpp" />
-    <ClCompile Include="Source\Utils\Text\Encoding\UTF8\UTF8.cpp" />
-    <ClCompile Include="Source\Utils\Text\Encoding\Wstring\Wstring.cpp" />
-    <ClCompile Include="Source\Utils\Text\Text.cpp" />
-    <ClCompile Include="Source\Utils\Timer\Timer.cpp" />
-    <ClCompile Include="Source\Utils\Timer\Timer.Framerate.cpp" />
-    <ClCompile Include="Source\Utils\Time\Time.cpp" />
-    <ClCompile Include="Source\Utils\Values\Values.cpp" />
+    <ClCompile Include="Source\Utils\File_Utils.cpp" />
+    <ClCompile Include="Source\Utils\ImGui.Utils.cpp" />
+    <ClCompile Include="Source\Utils\Keyboard.Utils.cpp" />
+    <ClCompile Include="Source\Utils\MathUtils.cpp" />
+    <ClCompile Include="Source\Utils\TextUtils.cpp" />
+    <ClCompile Include="Source\Utils\Unicode.cpp" />
+    <ClCompile Include="Source\Utils\UTF8.cpp" />
+    <ClCompile Include="Source\Utils\Values\Values.Utils.cpp" />
+    <ClCompile Include="Third-Person\imgui.cpp" />
+    <ClCompile Include="Third-Person\imgui_demo.cpp" />
+    <ClCompile Include="Third-Person\imgui_draw.cpp" />
+    <ClCompile Include="Third-Person\imgui_impl_glfw.cpp" />
+    <ClCompile Include="Third-Person\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="Third-Person\imgui_tables.cpp" />
+    <ClCompile Include="Third-Person\imgui_widgets.cpp" />
+    <ClCompile Include="Third-Person\lodepng.cpp" />
+    <ClCompile Include="Third-Person\PBO.cpp" />
+    <ClCompile Include="Third-Person\TextEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource1.h" />
-    <ClInclude Include="Source\Application\Application.h" />
-    <ClInclude Include="Source\Core\Emulator\Compiler\Compiler.h" />
-    <ClInclude Include="Source\Core\Emulator\EmulationControls\EmulationControls.h" />
-    <ClInclude Include="Source\Core\Emulator\EmulationThread\EmulationThread.h" />
-    <ClInclude Include="Source\Core\Emulator\History\Caretaker.Momento.h" />
-    <ClInclude Include="Source\Core\Emulator\History\Momento.h" />
-    <ClInclude Include="Source\Core\Emulator\History\Originator.Momento.h" />
-    <ClInclude Include="Source\Core\Emulator\Port\AsyncKeyboard\AsyncKeyboard.Port.h" />
-    <ClInclude Include="Source\Core\Emulator\Port\AsyncKeyboard\Momento\AsyncKeyboard.Momento.h" />
-    <ClInclude Include="Source\Core\Emulator\Port\ConsoleOutput\ConsoleOutput.Port.h" />
-    <ClInclude Include="Source\Core\Emulator\Port\ConsoleOutput\Momento\ConsoleOutput.Momento.h" />
-    <ClInclude Include="Source\Core\Emulator\Port\GeneratorRandomValues\GeneratorRandomValues.Port.h" />
-    <ClInclude Include="Source\Core\Emulator\Port\GeneratorRandomValues\Momento\GeneratorRandomValues.Momento.h" />
-    <ClInclude Include="Source\Core\Emulator\Port\PixelScreenTwoBuffers\Momento\PixelScreenTwoBuffers.Momento.h" />
-    <ClInclude Include="Source\Core\Emulator\Port\PixelScreenTwoBuffers\PixelScreenTwoBuffers.Port.h" />
-    <ClInclude Include="Source\Core\Emulator\Port\PixelScreen\Momento\PixelScreen.Momento.h" />
-    <ClInclude Include="Source\Core\Emulator\Port\PixelScreen\PixelScreen.Port.h" />
-    <ClInclude Include="Source\Core\Emulator\Port\Port.h" />
-    <ClInclude Include="Source\Core\Emulator\Port\SymbolScreen\Momento\SymbolScreen.Momento.h" />
-    <ClInclude Include="Source\Core\Emulator\Port\SymbolScreen\SymbolScreen.Port.h" />
-    <ClInclude Include="Source\Core\Emulator\Port\Timer\Momento\Timer.Momento.h" />
-    <ClInclude Include="Source\Core\Emulator\Port\Timer\Timer.Port.h" />
-    <ClInclude Include="Source\Core\Emulator\Processors\Intel8080\Compiler\I8080.Compiler.h" />
-    <ClInclude Include="Source\Core\Emulator\Processors\Intel8080\Disassembler\I8080.Disassembler.h" />
-    <ClInclude Include="Source\Core\Emulator\Processors\Intel8080\History\Caretaker\I8080.Caretaker.Momento.h" />
-    <ClInclude Include="Source\Core\Emulator\Processors\Intel8080\History\Momento\I8080.Momento.h" />
-    <ClInclude Include="Source\Core\Emulator\Processors\Intel8080\I8080.h" />
-    <ClInclude Include="Source\Core\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Data.h" />
-    <ClInclude Include="Source\Core\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Display.h" />
-    <ClInclude Include="Source\Core\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Structures.h" />
-    <ClInclude Include="Source\Core\Emulator\Processor\Processor.h" />
-    <ClInclude Include="Source\Core\FontManager\FontManager.h" />
-    <ClInclude Include="Source\Core\IntroManager\IntroManager.h" />
-    <ClInclude Include="Source\Core\KeyCombination\KeyCombination.h" />
-    <ClInclude Include="Source\Core\KeyCombination\KeyCombinationHandler.h" />
-    <ClInclude Include="Source\Core\LastPathManager\LastPathManager.h" />
-    <ClInclude Include="Source\Core\ProjectManager\ProjectManager.h" />
-    <ClInclude Include="Source\Core\SaveSystem\SaveSystem.h" />
-    <ClInclude Include="Source\Core\SaveSystem\SaveSystemManager.h" />
-    <ClInclude Include="Source\Core\Setting\interfaces\ISettingDrawable.h" />
-    <ClInclude Include="Source\Core\Setting\interfaces\ISettingObject.h" />
-    <ClInclude Include="Source\Core\Setting\interfaces\ISettingSavable.h" />
-    <ClInclude Include="Source\Core\Setting\Setting.h" />
-    <ClInclude Include="Source\Core\Theme\BaseColors\BaseColors.h" />
-    <ClInclude Include="Source\Core\Theme\interface\IThemeLoadable.h" />
-    <ClInclude Include="Source\Core\Theme\Theme.h" />
-    <ClInclude Include="Source\Core\Theme\ThemeManager\ThemeManager.h" />
-    <ClInclude Include="Source\Core\Widget\I8080.Widget.h" />
-    <ClInclude Include="Source\Core\Widget\I8080.WidgetManager.h" />
-    <ClInclude Include="Source\Core\WindowManager\WindowManager.h" />
-    <ClInclude Include="Source\Core\Workspaces\I8080.Workspace.h" />
-    <ClInclude Include="Source\Core\Workspaces\I8080.WorkspaceManager.h" />
-    <ClInclude Include="Source\Core\Workspaces\Workspace.DefaultSave.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Source\Config_Compilier.h" />
     <ClInclude Include="Source\DataStructures\CurrentStateProcessor.h" />
     <ClInclude Include="Source\DataStructures\ModeProject.h" />
     <ClInclude Include="Source\DataStructures\OpcodeAdressed.h" />
@@ -354,93 +276,153 @@
     <ClInclude Include="Source\DataStructures\TypesCommand.h" />
     <ClInclude Include="Source\DataStructures\TypeTranslatorError.h" />
     <ClInclude Include="Source\DataStructures\VarsDebug.h" />
-    <ClInclude Include="Source\Data\Fonts\IconsFont.h" />
-    <ClInclude Include="Source\Data\Fonts\MainFont.h" />
-    <ClInclude Include="Source\Data\Images\AuthorPicture\Image.Author.Backend.h" />
-    <ClInclude Include="Source\Data\Images\AuthorPicture\Image.Author.Close.h" />
-    <ClInclude Include="Source\Data\Images\AuthorPicture\Image.Author.EyeTransparent.h" />
-    <ClInclude Include="Source\Data\Images\AuthorPicture\Image.Author.Front.h" />
-    <ClInclude Include="Source\Data\Images\AuthorPicture\Image.Author.LeftEye.h" />
-    <ClInclude Include="Source\Data\Images\AuthorPicture\Image.Author.RightEye.h" />
-    <ClInclude Include="Source\Data\Images\Image_LogoApplicationArrayPngBytes.h" />
-    <ClInclude Include="Source\Data\Images\Image_MSDF_ATLAS.h" />
-    <ClInclude Include="Source\Data\Images\Image_MSDF_DESIGN_8080.h" />
-    <ClInclude Include="Source\Data\Images\Image_MSDF_DESIGN_seedLBI_production.h" />
-    <ClInclude Include="Source\GUI\AuthorPopup\AuthorPopup.h" />
-    <ClInclude Include="Source\GUI\HighlighterInstruction\Highlighter.h" />
-    <ClInclude Include="Source\GUI\HighlighterInstruction\I8080\I8080.HighlighterInstruction.h" />
-    <ClInclude Include="Source\GUI\MainMenuBar\logo_transparent.h" />
-    <ClInclude Include="Source\GUI\MainMenuBar\MainMenuBar.h" />
-    <ClInclude Include="Source\GUI\Notification\interface\Notification.Element.h" />
-    <ClInclude Include="Source\GUI\Notification\Notification.h" />
-    <ClInclude Include="Source\GUI\Notification\Notification.Message.h" />
-    <ClInclude Include="Source\GUI\Notification\Notification.Progress.h" />
-    <ClInclude Include="Source\GUI\Notification\NotificationManager.h" />
-    <ClInclude Include="Source\GUI\Widgets\CodeEditor\TextEditor.h" />
-    <ClInclude Include="Source\GUI\Widgets\CodeEditor\Widget.CodeEditor.h" />
-    <ClInclude Include="Source\GUI\Widgets\ColorPicker\Widget.ColorPicker.h" />
-    <ClInclude Include="Source\GUI\Widgets\ConstList\Widget.ListConst.h" />
-    <ClInclude Include="Source\GUI\Widgets\Disassembler\Widget.Disassembler.h" />
-    <ClInclude Include="Source\GUI\Widgets\EmulatorInfo\Widget.EmulatorInfo.h" />
-    <ClInclude Include="Source\GUI\Widgets\Help\Help.Data.h" />
-    <ClInclude Include="Source\GUI\Widgets\Help\Widget.Help.h" />
-    <ClInclude Include="Source\GUI\Widgets\HexViewer\Widget.HexViewer.h" />
-    <ClInclude Include="Source\GUI\Widgets\HistoryInstruction\Widget.HistoryInstruction.h" />
-    <ClInclude Include="Source\GUI\Widgets\Input0x08\Widget.Input0x08.h" />
-    <ClInclude Include="Source\GUI\Widgets\Keyboard\Widget.Keyboard.h" />
-    <ClInclude Include="Source\GUI\Widgets\ListInstruction\Widget.ListInstruction.h" />
-    <ClInclude Include="Source\GUI\Widgets\MarkerList\Widget.ListMarker.h" />
-    <ClInclude Include="Source\GUI\Widgets\MnemoCodeViewerTargeted\Widget.MnemoCodeViewerTargeted.h" />
-    <ClInclude Include="Source\GUI\Widgets\MnemoCodeViewer\Widget.MnemoCodeViewer.h" />
-    <ClInclude Include="Source\GUI\Widgets\Output0x02\Widget.Output0x02.h" />
-    <ClInclude Include="Source\GUI\Widgets\PixelScreenTwoBuffers\Widget.PixelScreenTwoBuffers.h" />
-    <ClInclude Include="Source\GUI\Widgets\PixelScreen\Widget.PixelScreen.h" />
-    <ClInclude Include="Source\GUI\Widgets\RegisterFlagsInfo\Widget.RegisterFlagsInfo.h" />
-    <ClInclude Include="Source\GUI\Widgets\SymbolPicker\Widget.SymbolPicker.h" />
-    <ClInclude Include="Source\GUI\Widgets\SymbolScreen\Widget.SymbolScreen.h" />
-    <ClInclude Include="Source\GUI\Widgets\TableInstruction\Widget.TableInstruction.h" />
-    <ClInclude Include="Source\GUI\Widgets\Timer\Widget.Timer.h" />
-    <ClInclude Include="Source\GUI\Widgets\VarList\Widget.ListVar.h" />
-    <ClInclude Include="Source\ThirdParty\IconFontCppHeaders\IconsFontAwesome6.h" />
-    <ClInclude Include="Source\ThirdParty\ImGui\imconfig.h" />
-    <ClInclude Include="Source\ThirdParty\ImGui\imgui.h" />
-    <ClInclude Include="Source\ThirdParty\ImGui\imgui_impl_glfw.h" />
-    <ClInclude Include="Source\ThirdParty\ImGui\imgui_impl_opengl3.h" />
-    <ClInclude Include="Source\ThirdParty\ImGui\imgui_impl_opengl3_loader.h" />
-    <ClInclude Include="Source\ThirdParty\ImGui\imgui_internal.h" />
-    <ClInclude Include="Source\ThirdParty\ImGui\imgui_markdown.h" />
-    <ClInclude Include="Source\ThirdParty\ImGui\imgui_memory_editor.h" />
-    <ClInclude Include="Source\ThirdParty\ImGui\imstb_rectpack.h" />
-    <ClInclude Include="Source\ThirdParty\ImGui\imstb_textedit.h" />
-    <ClInclude Include="Source\ThirdParty\ImGui\imstb_truetype.h" />
-    <ClInclude Include="Source\ThirdParty\LodePNG\lodepng.h" />
-    <ClInclude Include="Source\ThirdParty\snappy.h" />
+    <ClInclude Include="Source\Emulator\Compiler\Compiler.h" />
+    <ClInclude Include="Source\Emulator\EmulationControls\EmulationControls.h" />
+    <ClInclude Include="Source\Emulator\EmulationThread\EmulationThread.h" />
+    <ClInclude Include="Source\Emulator\History\Caretaker.Momento.h" />
+    <ClInclude Include="Source\Emulator\History\Momento.h" />
+    <ClInclude Include="Source\Emulator\History\Originator.Momento.h" />
+    <ClInclude Include="Source\Emulator\Port\AsyncKeyboard\I8080.Port.AsyncKeyboard.h" />
+    <ClInclude Include="Source\Emulator\Port\AsyncKeyboard\Momento\AsyncKeyboard.Momento.h" />
+    <ClInclude Include="Source\Emulator\Port\ConsoleOutput\I8080.Port.ConsoleOutput.h" />
+    <ClInclude Include="Source\Emulator\Port\ConsoleOutput\Momento\ConsoleOutput.Momento.h" />
+    <ClInclude Include="Source\Emulator\Port\GeneratorRandomValues\I8080.Port.GeneratorRandomValues.h" />
+    <ClInclude Include="Source\Emulator\Port\GeneratorRandomValues\Momento\GeneratorRandomValues.Momento.h" />
+    <ClInclude Include="Source\Emulator\Port\I8080.Port.h" />
+    <ClInclude Include="Source\Emulator\Port\PixelScreenTwoBuffers\I8080.Port.PixelScreenTwoBuffers.h" />
+    <ClInclude Include="Source\Emulator\Port\PixelScreenTwoBuffers\Momento\PixelScreenTwoBuffers.Momento.h" />
+    <ClInclude Include="Source\Emulator\Port\PixelScreen\I8080.Port.PixelScreen.h" />
+    <ClInclude Include="Source\Emulator\Port\PixelScreen\Momento\PixelScreen.Momento.h" />
+    <ClInclude Include="Source\Emulator\Port\SymbolScreen\I8080.Port.SymbolScreen.h" />
+    <ClInclude Include="Source\Emulator\Port\SymbolScreen\Momento\SymbolScreen.Momento.h" />
+    <ClInclude Include="Source\Emulator\Port\Timer\I8080.Port.Timer.h" />
+    <ClInclude Include="Source\Emulator\Port\Timer\Momento\Timer.Momento.h" />
+    <ClInclude Include="Source\Emulator\Processors\Intel8080\Compiler\I8080.Compiler.h" />
+    <ClInclude Include="Source\Emulator\Processors\Intel8080\Disassembler\I8080.Disassembler.h" />
+    <ClInclude Include="Source\Emulator\Processors\Intel8080\History\Caretaker\I8080.Caretaker.Momento.h" />
+    <ClInclude Include="Source\Emulator\Processors\Intel8080\History\Momento\I8080.Momento.h" />
+    <ClInclude Include="Source\Emulator\Processors\Intel8080\I8080.h" />
+    <ClInclude Include="Source\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Data.h" />
+    <ClInclude Include="Source\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Display.h" />
+    <ClInclude Include="Source\Emulator\Processors\Intel8080\InfoInstruction\InfoInstruction.Structures.h" />
+    <ClInclude Include="Source\Emulator\Processors\Processor.h" />
+    <ClInclude Include="Source\FontsData\IconsFont.h" />
+    <ClInclude Include="Source\FontsData\MainFont.h" />
+    <ClInclude Include="Source\ImagesData\AuthorPicture\Image.Author.Backend.h" />
+    <ClInclude Include="Source\ImagesData\AuthorPicture\Image.Author.Close.h" />
+    <ClInclude Include="Source\ImagesData\AuthorPicture\Image.Author.EyeTransparent.h" />
+    <ClInclude Include="Source\ImagesData\AuthorPicture\Image.Author.Front.h" />
+    <ClInclude Include="Source\ImagesData\AuthorPicture\Image.Author.LeftEye.h" />
+    <ClInclude Include="Source\ImagesData\AuthorPicture\Image.Author.RightEye.h" />
+    <ClInclude Include="Source\ImagesData\Image_LogoApplicationArrayPngBytes.h" />
+    <ClInclude Include="Source\ImagesData\Image_MSDF_ATLAS.h" />
+    <ClInclude Include="Source\ImagesData\Image_MSDF_DESIGN_8080.h" />
+    <ClInclude Include="Source\ImagesData\Image_MSDF_DESIGN_seedLBI_production.h" />
+    <ClInclude Include="Source\Notification\interface\Notification.Element.h" />
+    <ClInclude Include="Source\Notification\Notification.h" />
+    <ClInclude Include="Source\Notification\Notification.Message.h" />
+    <ClInclude Include="Source\Notification\Notification.Progress.h" />
+    <ClInclude Include="Source\Notification\NotificationManager.h" />
+    <ClInclude Include="Source\OpenglWindow\OpenglWindow.h" />
+    <ClInclude Include="Source\SaveSystem\DefaultSaveData.h" />
+    <ClInclude Include="Source\SaveSystem\SaveSystem.h" />
+    <ClInclude Include="Source\SaveSystem\SaveSystemManager.h" />
+    <ClInclude Include="Source\Scene_Intro\I8080.Scene.Intro.h" />
+    <ClInclude Include="Source\Scene_Intro\Shaders\Intro.Shader.Fragment.CreatingVelocity.h" />
+    <ClInclude Include="Source\Scene_Intro\Shaders\Intro.Shader.Fragment.FinalImage.h" />
+    <ClInclude Include="Source\Scene_Intro\Shaders\Intro.Shader.Fragment.GradientMSDF.h" />
+    <ClInclude Include="Source\Scene_Intro\Shaders\Intro.Shader.Fragment.Solid.h" />
+    <ClInclude Include="Source\Scene_Intro\Shaders\Intro.Shader.Fragment.SolidMSDF.h" />
+    <ClInclude Include="Source\Scene_Intro\Shaders\Intro.Shader.Vertex.DefaultObject.h" />
+    <ClInclude Include="Source\Scene_Intro\Shaders\Intro.Shader.Vertex.VelocityObject.h" />
+    <ClInclude Include="Source\Scene_Intro\Shaders\Intro.Shaders.h" />
+    <ClInclude Include="Source\Shader\Shader.h" />
+    <ClInclude Include="Source\UI\AuthorPopup\AuthorPopup.h" />
+    <ClInclude Include="Source\UI\AuthorPopup\OpenglTexture.h" />
+    <ClInclude Include="Source\UI\FontManager\FontManager.h" />
+    <ClInclude Include="Source\UI\HighlighterInstruction\Highlighter.h" />
+    <ClInclude Include="Source\UI\HighlighterInstruction\I8080\I8080.HighlighterInstruction.h" />
+    <ClInclude Include="Source\UI\I8080.UI.h" />
+    <ClInclude Include="Source\UI\IntroManager\IntroManager.h" />
+    <ClInclude Include="Source\UI\KeyCombination\KeyCombination.h" />
+    <ClInclude Include="Source\UI\KeyCombination\KeyCombinationHandler.h" />
+    <ClInclude Include="Source\UI\LastPathManager\LastPathManager.h" />
+    <ClInclude Include="Source\UI\ProjectManager\ProjectManager.h" />
+    <ClInclude Include="Source\UI\Setting\ISettingDrawable.h" />
+    <ClInclude Include="Source\UI\Setting\ISettingObject.h" />
+    <ClInclude Include="Source\UI\Setting\ISettingSavable.h" />
+    <ClInclude Include="Source\UI\Setting\Setting.h" />
+    <ClInclude Include="Source\UI\Theme\BaseColors\BaseColors.h" />
+    <ClInclude Include="Source\UI\Theme\interface\IThemeLoadable.h" />
+    <ClInclude Include="Source\UI\Theme\Theme.h" />
+    <ClInclude Include="Source\UI\Theme\ThemeManager\ThemeManager.h" />
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.CodeEditor.h" />
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.ColorPicker.h" />
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.ConstList.h" />
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.Disassembler.h" />
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.EmulatorInfo.h" />
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.Help.h" />
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.HexViewer.h" />
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.Input0x08.h" />
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.Keyboard.h" />
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.MarkerList.h" />
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.MemoryMonoPixelScreen.h" />
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.MnemoCodeViewer.h" />
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.MnemoCodeViewerTargeted.h" />
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.Output0x02.h" />
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.PixelScreen.h" />
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.PixelScreenTwoBuffers.h" />
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.RegisterFlagsInfo.h" />
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.SymbolPicker.h" />
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.SymbolScreen.h" />
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.Timer.h" />
+    <ClInclude Include="Source\UI\Widgets\I8080.UI.VarList.h" />
+    <ClInclude Include="Source\UI\Widgets\UI.HistoryInstruction.h" />
+    <ClInclude Include="Source\UI\Widgets\UI.ListInstruction.h" />
+    <ClInclude Include="Source\UI\Widgets\UI.TableInstruction.h" />
+    <ClInclude Include="Source\UI\Widget\I8080.Widget.h" />
+    <ClInclude Include="Source\UI\Widget\I8080.WidgetManager.h" />
+    <ClInclude Include="Source\UI\WindowManager\WindowManager.h" />
+    <ClInclude Include="Source\UI\Workspaces\I8080.Workspace.h" />
+    <ClInclude Include="Source\UI\Workspaces\I8080.WorkspaceManager.h" />
     <ClInclude Include="Source\Utils\ColorUtilities.h" />
-    <ClInclude Include="Source\Utils\File\File.h" />
-    <ClInclude Include="Source\Utils\ImGui\Utils.ImGui.h" />
-    <ClInclude Include="Source\Utils\Keyboard\Keyboard.h" />
-    <ClInclude Include="Source\Utils\Math\Math.Lerp.h" />
-    <ClInclude Include="Source\Utils\OpenGL\Framebuffer\Framebuffer.h" />
-    <ClInclude Include="Source\Utils\OpenGL\PBO\PBO.h" />
-    <ClInclude Include="Source\Utils\OpenGL\Renderbuffer\Renderbuffer.h" />
-    <ClInclude Include="Source\Utils\OpenGL\Shader\Shader.h" />
-    <ClInclude Include="Source\Utils\OpenGL\Texture\Texture.h" />
-    <ClInclude Include="Source\Utils\OpenGL\Window\Manager\OpenGL.WindowManager.h" />
-    <ClInclude Include="Source\Utils\OpenGL\Window\Window.h" />
-    <ClInclude Include="Source\Utils\Text\Encoding\Unicode\Unicode.h" />
-    <ClInclude Include="Source\Utils\Text\Encoding\UTF8\UTF8.h" />
-    <ClInclude Include="Source\Utils\Text\Encoding\Wstring\Wstring.h" />
-    <ClInclude Include="Source\Utils\Text\Text.h" />
-    <ClInclude Include="Source\Utils\Timer\Timer.Framerate.h" />
-    <ClInclude Include="Source\Utils\Timer\Timer.h" />
-    <ClInclude Include="Source\Utils\Time\Time.h" />
-    <ClInclude Include="Source\Utils\Values\Values.h" />
+    <ClInclude Include="Source\Utils\File_Utils.h" />
+    <ClInclude Include="Source\Utils\ImGui.Utils.h" />
+    <ClInclude Include="Source\Utils\Keyboard.Utils.h" />
+    <ClInclude Include="Source\Utils\MathUtils.h" />
+    <ClInclude Include="Source\Utils\TextUtils.h" />
+    <ClInclude Include="Source\Utils\Unicode.h" />
+    <ClInclude Include="Source\Utils\UTF8.h" />
+    <ClInclude Include="Source\Utils\Values\Values.Utils.h" />
+    <ClInclude Include="Third-Person\IconFontCppHeaders\IconsFontAwesome6.h" />
+    <ClInclude Include="Third-Person\imconfig.h" />
+    <ClInclude Include="Third-Person\imgui.h" />
+    <ClInclude Include="Third-Person\imgui_impl_glfw.h" />
+    <ClInclude Include="Third-Person\imgui_impl_opengl3.h" />
+    <ClInclude Include="Third-Person\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="Third-Person\imgui_internal.h" />
+    <ClInclude Include="Third-Person\imgui_markdown.h" />
+    <ClInclude Include="Third-Person\imgui_memory_editor.h" />
+    <ClInclude Include="Third-Person\imstb_rectpack.h" />
+    <ClInclude Include="Third-Person\imstb_textedit.h" />
+    <ClInclude Include="Third-Person\imstb_truetype.h" />
+    <ClInclude Include="Third-Person\linmath.h" />
+    <ClInclude Include="Third-Person\lodepng.h" />
+    <ClInclude Include="Third-Person\PBO.h" />
+    <ClInclude Include="Third-Person\TextEditor.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="I8080 Emulator.rc" />
+    <ResourceCompile Include="I8080_Emulator.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="logo512_otd_icon512.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Help.data">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
+    </CopyFileToFolders>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

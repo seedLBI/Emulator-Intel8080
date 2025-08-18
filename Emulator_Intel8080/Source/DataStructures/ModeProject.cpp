@@ -1,4 +1,4 @@
-#include "ModeProject.h"
+#include "DataStructures/ModeProject.h"
 
 std::string ModeProject_To_Str(const ModeProject& mode) {
     switch (mode) {

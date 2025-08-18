@@ -1,13 +1,9 @@
 #ifndef RINGBUFFER_H
 #define RINGBUFFER_H
-
-
 #include <memory>
 #include <vector>
 #include <string>
 #include <stdexcept>
-
-
 
 template <typename T>
 class RingBuffer {
@@ -70,8 +66,7 @@ public:
         std::vector<T> new_buffer(new_capacity);
 
         // Сохраняем элементы, если новая емкость больше или равна текущему размеру
-        size_t num_elements_to_copy = _size < new_capacity ? _size: new_capacity;
-
+        size_t num_elements_to_copy = std::min(_size, new_capacity);
         for (size_t i = 0; i < num_elements_to_copy; ++i) {
             new_buffer[i] = buffer[(head + i) % _capacity];
         }

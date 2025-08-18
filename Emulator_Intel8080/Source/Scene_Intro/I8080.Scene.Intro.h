@@ -2,20 +2,19 @@
 #ifndef I8080_SCENE_INTRO_H
 #define I8080_SCENE_INTRO_H
 
-#include <SOIL/SOIL.h>
 #include "Config_Compilier.h"
 
-#include "OpenglWindow/OpenglWindow.h"
-#include "Scene_Intro/Shaders/Intro.Shaders.h"
+#include "OpenglWindow\OpenglWindow.h"
 
+#include "Shader\Shader.h"
 
-#include "Utils/OpenGL/Shader/Shader.h"
-#include "Utils/TextUtils.h"
+#include "Scene_Intro\Shaders\Intro.Shaders.h"
 
-#include "Data/Images/Image_MSDF_ATLAS.h"
-#include "Data/Images/Image_MSDF_DESIGN_8080.h"
-#include "Data/Images/Image_MSDF_DESIGN_seedLBI_production.h"
+#include "ImagesData\Image_MSDF_ATLAS.h"
+#include "ImagesData\Image_MSDF_DESIGN_8080.h"
+#include "ImagesData\Image_MSDF_DESIGN_seedLBI_production.h"
 
+#include "Utils\TextUtils.h"
 
 #include <string>
 #include <unordered_map>
@@ -94,7 +93,6 @@ struct Rectanglee {
 	float X = 0.f, Y = 0.f;
 	float Width = 0.f, Height = 0.f;
 };
-
 struct Glyph {
 	float advance = 0.f;
 
