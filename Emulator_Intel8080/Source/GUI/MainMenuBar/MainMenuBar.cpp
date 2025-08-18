@@ -67,6 +67,8 @@ void MainMenuBar::Draw_MainMenu() {
 
 		DrawLogo();
 
+		ImGui::PopStyleColor();
+
 		Draw_MainMenu_File();
 		Draw_MainMenu_View();
 		Draw_MainMenu_Emulator();
@@ -76,7 +78,12 @@ void MainMenuBar::Draw_MainMenu() {
 		Draw_ProjectMode();
 		Draw_Speedometer();
 
+
+		ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.f, 0.f, 0.f, 0.f));
+
 		DrawWindowButtons();
+
+
 
 		ImGui::EndMainMenuBar();
 	}
@@ -115,7 +122,7 @@ void MainMenuBar::Draw_SecondaryMenu() {
 
 			ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical,2.f);
 			
-			const char* text_compile_button = std::string("  " + std::string(ICON_FA_MICROCHIP) + u8" Компилировать  ").c_str();
+			const char* text_compile_button = std::string("  " + std::string(ICON_FA_MICROCHIP) + u8" Компилировать   ").c_str();
 			if (ImGui::Button(text_compile_button, ImVec2(ImGui::CalcTextSize(text_compile_button).x, 0))) {
 				projectManager->Compile();
 			}
@@ -301,6 +308,7 @@ void MainMenuBar::DrawWindowButtons() {
 inline void MainMenuBar::Draw_MainMenu_File() {
 	if (ImGui::BeginMenu(u8" Файл ")) {
 
+
 		if (ImGui::MenuItem((std::string(ICON_FA_FILE) + u8" Новый файл").c_str(), keyCombinationHandler->GetStrCombinationByName(u8"Новый файл").c_str())) {
 			projectManager->NewFile();
 		}
@@ -330,6 +338,9 @@ inline void MainMenuBar::Draw_MainMenu_File() {
 			//ExitButton = true;
 		}
 		PushSizeButtonIntoList();
+
+
+
 
 		ImGui::EndMenu();
 	}

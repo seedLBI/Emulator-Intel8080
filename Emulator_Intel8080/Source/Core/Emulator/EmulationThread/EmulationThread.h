@@ -15,6 +15,7 @@
 #include "Core/Emulator/Processors/Intel8080/I8080.h"
 
 #include "Utils/ImGui/Utils.ImGui.h"
+#include "Utils/Values/Values.h"
 
 #include <thread>
 #include <GLFW/glfw3.h>

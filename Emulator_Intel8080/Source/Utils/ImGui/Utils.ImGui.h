@@ -35,4 +35,6 @@ void ButtonCheckBox(const char* label, const char* help, bool& state);
 
 bool ButtonDelete(ImGuiWindow* imgui_window, ImDrawList* draw_list, const char* nameIndex, const ImU32& ColorText);
 
+void MyImageRounded(ImTextureID user_texture_id, const ImVec2& size, const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1), float rounding = 0.0f, ImU32 col = IM_COL32_WHITE);
+
 #endif

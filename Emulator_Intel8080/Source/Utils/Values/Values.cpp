@@ -127,3 +127,48 @@ std::string Value2strHex_without0x(const uint64_t& value) {
 std::string Value2strDec(const uint64_t& value) {
     return std::to_string(value);
 }
+
+std::string ConvertToSI(const uint64_t& value, const char* unit) {
+    int Kilo = int(value / (uint64_t)1'000);
+    int Mega = int(value / (uint64_t)1'000'000);
+    int Giga = int(value / (uint64_t)1'000'000'000);
+    int Tera = int(value / (uint64_t)1'000'000'000'000);
+
+    std::string output;
+    std::string AfterDot;
+
+    if (Tera > 0) {
+        output = std::to_string(Tera);
+        AfterDot = std::to_string(value).substr(output.size());
+        if (AfterDot.size() > 3)
+            AfterDot.erase(AfterDot.begin() + 3, AfterDot.end());
+        return output + "," + AfterDot + u8" Ò" + unit;
+    }
+    if (Giga > 0) {
+        output = std::to_string(Giga);
+        AfterDot = std::to_string(value).substr(output.size());
+        if (AfterDot.size() > 3)
+            AfterDot.erase(AfterDot.begin() + 3, AfterDot.end());
+        return output + "," + AfterDot + u8" Ã" + unit;
+    }
+    if (Mega > 0) {
+        output = std::to_string(Mega);
+        AfterDot = std::to_string(value).substr(output.size());
+        if (AfterDot.size() > 3)
+            AfterDot.erase(AfterDot.begin() + 3, AfterDot.end());
+        return output + "," + AfterDot + u8" Ì" + unit;
+    }
+    if (Kilo > 0) {
+        output = std::to_string(Kilo);
+        AfterDot = std::to_string(value).substr(output.size());
+        if (AfterDot.size() > 3)
+            AfterDot.erase(AfterDot.begin() + 3, AfterDot.end());
+        return output + "," + AfterDot + u8" Ê" + unit;
+    }
+
+
+
+
+    return std::to_string(value) + u8" " + unit;
+
+}

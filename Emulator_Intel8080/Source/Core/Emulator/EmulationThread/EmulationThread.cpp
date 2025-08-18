@@ -252,7 +252,6 @@ void EmulationThread::ThreadLoop() {
 	}
 }
 
-
 void EmulationThread::LoadNextSpeed() {
 	if (Speed == SpeedMode::Infinity)
 		SetSpeedMode(SpeedMode::Intel4004);
@@ -311,7 +310,6 @@ void EmulationThread::LoadPreviousSpeed() {
 	}
 }
 
-
 int EmulationThread::InputTextCallback(ImGuiInputTextCallbackData* data) {
 	if (data->EventFlag == ImGuiInputTextFlags_CallbackCharFilter) {
 		if (data->EventChar < '0' || data->EventChar > '9') {
@@ -346,32 +344,41 @@ int EmulationThread::InputTextCallback(ImGuiInputTextCallbackData* data) {
 	return 0;  // Возвращаем 0, если все ок
 }
 
-
 void EmulationThread::DrawMainMenu() {
-	if (Speed == SpeedMode::Infinity) {
-		TextWithTooltipInMainMenuBar((std::string(ICON_FA_INFINITY) + u8" Гц").c_str(), u8"Ограничение количества тактов в секунду");
-	}
-	else {
 
-		static float LastTimeOneSecond = 0.f;
+	static float LastTimeOneSecond = 0.f;
 
-		static uint64_t LastCountTicksInSeconds = 0;
-		static uint64_t LastCountTicksInSeconds_temp = 0;
+	static uint64_t LastCountTicksInSeconds = 0;
+	static uint64_t LastCountTicksInSeconds_temp = 0;
 
 
-		if (glfwGetTime() - LastTimeOneSecond > .5f) {
+	if (glfwGetTime() - LastTimeOneSecond > .25f) {
 
-			LastTimeOneSecond = glfwGetTime();
+		LastTimeOneSecond = glfwGetTime();
 
+		if (LastCountTicksInSeconds_temp > processor->GetCountTicks()) {
+			LastCountTicksInSeconds = 0;
+			LastCountTicksInSeconds_temp = 0;
+		}
+		else {
 			LastCountTicksInSeconds = processor->GetCountTicks() - LastCountTicksInSeconds_temp;
 			LastCountTicksInSeconds_temp = processor->GetCountTicks();
 		}
+	}
 
-		float percent = (float)LastCountTicksInSeconds / (float)targetTicksPerSecond * 100.f * 2.f;
+	if (Speed == SpeedMode::Infinity) {
+
+
+		TextWithTooltipInMainMenuBar((std::string(ICON_FA_INFINITY) + u8" Гц" + " | " + ConvertToSI(LastCountTicksInSeconds * 4, u8"Гц")).c_str(), u8"Отсутствие ограничений | Текущая производительность");
+	}
+	else {
+
+
+		float percent = (float)LastCountTicksInSeconds / (float)targetTicksPerSecond * 100.f * 4.f;
 
 		std::string percentString = cutFloat(std::to_string(percent),2) + "%";
 
-		TextWithTooltipInMainMenuBar((TicksToString(targetTicksPerSecond) + " | " + percentString).c_str(), u8"Ограничение количества тактов в секунду");
+		TextWithTooltipInMainMenuBar((TicksToString(targetTicksPerSecond) + " | " + percentString).c_str(), u8"Ограничение количества тактов в секунду | Загрузка эмулятора");
 	}
 
 }

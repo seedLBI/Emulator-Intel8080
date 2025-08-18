@@ -92,7 +92,9 @@ void AuthorPopup::Draw() {
 		ImGui::SetCursorPos({ aa.x + 20, aa.y + 20 });
 		aa = ImGui::GetCursorPos();
 
-		ImGui::Image((ImTextureID)(intptr_t)Backend.GetID(), SizeImage_asp,uv0,uv1);
+
+
+		ImGui::Image((ImTextureID)(intptr_t)Backend.GetID(), SizeImage_asp, uv0, uv1);
 		ImGui::SetCursorPos(aa);
 		ImGui::Image((ImTextureID)(intptr_t)EyeTransparent.GetID(), SizeImage_asp, uv0, uv1);
 
@@ -101,7 +103,7 @@ void AuthorPopup::Draw() {
 
 
 		ImGui::SetCursorPos(aa);
-		ImGui::Image((ImTextureID)(intptr_t)Front.GetID(), SizeImage_asp, uv0, uv1);
+		MyImageRounded((ImTextureID)(intptr_t)Front.GetID(), SizeImage_asp, uv0, uv1);
 		
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
 			ImGui::SetCursorPos(aa);

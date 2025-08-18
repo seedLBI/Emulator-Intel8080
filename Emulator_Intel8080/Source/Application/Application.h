@@ -76,6 +76,8 @@
 
 #include "Utils/File/File.h"
 
+#include "Data/Images/Image_LogoApplicationArrayPngBytes.h"
+
 #include "GUI/MainMenuBar/MainMenuBar.h"
 
 static WNDPROC orig_wndproc = nullptr;
@@ -168,6 +170,7 @@ private:
 	void Update();
 
 	void Init_OpenGL();
+	void Init_IconApplication();
 	void Init_BorderWindow();
 	void Init_ImGui();
 	void Init_Setting();

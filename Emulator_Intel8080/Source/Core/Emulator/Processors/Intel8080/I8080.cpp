@@ -161,17 +161,18 @@ uint8_t I8080::GetRegisterFlags() {
 
 
 uint16_t I8080::GetBC() {
-	return B * 255 + C;
+	return (B << 8) | C;
 }
 uint16_t I8080::GetDE() {
-	return D * 255 + E;
+	return (D << 8) | E;
 }
+inline int I8080::GetAdressHL() { return (H << 8) | L; }
 uint16_t I8080::GetSP() {
 	return SP;
 }
 
 inline void I8080::SetSP_nextAdress(const uint16_t& next_adress) {
-	Memory[SP]				 = (next_adress & 0x00ff);	  // next.low
+	Memory[SP]				 = (next_adress & 0x00ff);	    // next.low
 	Memory[uint16_t(SP + 1)] = (next_adress & 0xff00) >> 8; // next.high
 }
 
@@ -199,10 +200,28 @@ inline void I8080::IncrementPC(const uint8_t& count) {
 */
 
 inline void I8080::IncrementPC(const uint8_t& count) {
-	if (count >= 1) Viseted_Memory[PC] = true;
-	if (count >= 2) Viseted_Memory[PC + 1] = true;
-	if (count >= 3) Viseted_Memory[PC + 2] = true;
-	PC += count;
+	switch (count) {
+	case 1:
+		Viseted_Memory[PC] = true;
+		PC++;
+		break;
+	case 2:
+		Viseted_Memory[PC] = true;
+		Viseted_Memory[PC + 1] = true;
+		PC += 2;
+		break;
+	case 3:
+		Viseted_Memory[PC] = true;
+		Viseted_Memory[PC + 1] = true;
+		Viseted_Memory[PC + 2] = true;
+		PC += 3;
+		break;
+	default:
+		for (uint8_t i = 0; i < count; i++) {
+			Viseted_Memory[PC + i] = true;
+		}
+		PC += count;
+	}
 }
 
 inline void I8080::IncrementPC() {
@@ -210,7 +229,6 @@ inline void I8080::IncrementPC() {
 	++PC;
 }
 
-inline int I8080::GetAdressHL() { return (H << 8) | L; }
 
 
 void I8080::EraseMemory() {
@@ -222,14 +240,22 @@ void I8080::EraseMemory() {
 }
 
 void I8080::LoadMemory(const std::vector<OpcodeAdressed>& array) {
-	EraseMemory();
+
+	std::memset(Memory, 0, SIZE_MEMORY);
+	std::memset(Viseted_Memory, false, SIZE_MEMORY);
+
+	changedMemory.clear();
+	changedMemory.reserve(array.size());
 
 	project_DATA.clear();
 
-	for (unsigned int i = 0; i < array.size(); ++i)
-		Memory[array[i].adress_h * 256 + array[i].adress_l] = array[i].opcode;
+	for (const auto& item : array) {
+		uint16_t addr = (item.adress_h << 8) | item.adress_l;
+		Memory[addr] = item.opcode;
+	}
 
 	SetModeProject(ModeProject::USER);
+
 }
 void I8080::LoadMemoryFromBinary(const std::vector<uint8_t>& array) {
 	EraseMemory();
@@ -1437,16 +1463,12 @@ inline void I8080::_INX(uint8_t& pair_element1, uint8_t& pair_element2) {
 	IncrementPC();
 }
 inline void I8080::_INCREMENT(uint8_t& value) {
-	CountTicks += 5;
 
 	AuxiliaryCarry = auxAddTable[value][1][0];
 	++value;
 	_SetFlagSignParutyZero(value);
 
-
-	//AuxiliaryCarry = ((value & 0b00001111) == 0);
-
-
+	CountTicks += 5;
 	IncrementPC();
 }
 

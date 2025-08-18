@@ -160,7 +160,7 @@ bool ProjectManager::OpenFileWithPath(const std::string& path) {
 	return false;
 }
 void ProjectManager::OpenFile() {
-	std::wstring path = Open_FileDialog(L"Выбери файл проекта для открытия",L"Файл с ассемблерным кодом (.I8080)\0*.I8080;*.BIN\0");
+	std::wstring path = Open_FileDialog(L"Выбери файл проекта для открытия",L"Файл с ассемблерным кодом (.I8080)\0*.I8080;*.BIN;*.COM\0");
 	OpenFileWithPath(wstring_to_stringUTF8(path));
 }
 

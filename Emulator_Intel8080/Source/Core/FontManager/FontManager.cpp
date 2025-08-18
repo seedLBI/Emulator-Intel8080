@@ -224,23 +224,14 @@ void FontManager::DrawSetting() {
 		}
 
 
-		/*
+		
 		if (ButtonCenteredOnLine(u8"ִמבאגטעü סגמי רנטפע", 0.5f)) {
-			nfdchar_t* outPath = NULL;
-			nfdresult_t result = NFD_OpenDialog("ttf,otf", NULL, &outPath);
-			if (result == NFD_OKAY) {
-				LoadFontFromFile(outPath);
-			}
-			else if (result == NFD_CANCEL) {
-#ifdef WITH_DEBUG_OUTPUT
-				std::cout << "User pressed cancel.\n";
-#endif
-			}
-			else {
-				printf("Error: %s\n", NFD_GetError());
+			std::wstring outPath = Open_FileDialog(L"ֲûבונט פאיכ רנטפעא", L"װאיכ רנטפעא (*.ttf;*.otf)\0*.ttf;*.otf\0");
+			if (!outPath.empty()) {
+				LoadFontFromFile(wstring_to_stringUTF8(outPath));
 			}
 		}
-		*/
+		
 
 		ImGui::EndCombo();
 	}

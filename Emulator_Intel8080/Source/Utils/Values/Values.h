@@ -27,6 +27,7 @@ std::string Value2strHex_without0x(const uint64_t& value);
 //std::string Value2strBin(const uint64_t& value);
 std::string Value2strDec(const uint64_t& value);
 
+std::string ConvertToSI(const uint64_t& value, const char* unit);
 
 #endif // !VALUES_UTILS_H
 

@@ -5,6 +5,7 @@ LRESULT CALLBACK custom_wndproc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 Application::Application() {
 
 	Init_OpenGL();
+	Init_IconApplication();
 	Init_BorderWindow();
 	Init_ImGui();
 
@@ -93,7 +94,14 @@ void Application::Init_OpenGL() {
 	windowManager = new OpenGL_WindowManager(Title, 1280, 720, 100, 100);
 
 }
-
+void Application::Init_IconApplication() {
+	GLFWimage icon;
+	icon.pixels = stbi_load_from_memory(logo48, 2404, &icon.width, &icon.height, nullptr, 4);
+	if (icon.pixels) {
+		glfwSetWindowIcon(windowManager->GetMainWindow()->GetHandle(), 1, &icon);
+		stbi_image_free(icon.pixels);
+	}
+}
 void Application::Init_BorderWindow() {
 	GLFWwindow* win = windowManager->GetMainWindow()->GetHandle();
 	
@@ -125,7 +133,6 @@ void Application::Init_BorderWindow() {
 
 	glfwSetWindowUserPointer(win, this);
 }
-
 void Application::Init_ImGui() {
 	ImGui::CreateContext();
 
@@ -142,9 +149,29 @@ void Application::Init_ImGui() {
 
 	auto& s = ImGui::GetStyle();
 	//s.ImageBorderSize = 1.f;
+	s.SeparatorTextAlign.x = 0.5f;
+	s.SeparatorTextAlign.y = 0.5f;
+	s.SeparatorTextBorderSize = 9;
+
+	s.FrameRounding = 6.f;
+
+	s.WindowBorderSize = 1.f;
+	s.FrameBorderSize = 1.f;
+	s.PopupBorderSize = 1.f;
+
+	s.WindowRounding = 12.f;
+	s.ChildRounding = 12.f;
+
+
 
 	ImGui::GetIO().IniFilename = NULL;
 	ImGui::GetIO().LogFilename = NULL;
+
+
+
+
+
+
 }
 
 void Application::Init_Setting() {

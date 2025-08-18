@@ -27,11 +27,12 @@ void Singletone_InfoInstruction::Display(const std::string& name_instruction, co
 
 
 	ImGui::PushStyleColor(ImGuiCol_ChildBg, Colors[PaletteIndex::Background]);
-	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(10.0f, 10.0f));
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4.0f, 0.0f));
+
 
 	ImGui::SetWindowFontScale(1.f);
-	ImVec2 sizeText1 = ImGui::CalcTextSize("                               ");
+	ImVec2 sizeText1 = ImGui::CalcTextSize("                                 ");
 	ImVec2 sizeText2 = ImGui::CalcTextSize("                                             ");
 
 	ImGui::SetNextWindowSize(ImVec2(sizeText1.x + sizeText2.x, 0));
@@ -39,14 +40,13 @@ void Singletone_InfoInstruction::Display(const std::string& name_instruction, co
 
 	ImGui::BeginTooltip();
 
-	DrawLeftBlock();
+		DrawLeftBlock();
 
-	ImGui::SameLine(0.f, 8.f);
-	ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical, 4.f);
-	ImGui::SameLine(0.f, 8.f);
+		ImGui::SameLine(0.f, 8.f);
+		ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical, 4.f);
+		ImGui::SameLine(0.f, 8.f);
 
-	DrawRightBlock(dublicate);
-
+		DrawRightBlock(dublicate);
 
 	ImGui::EndTooltip();
 
@@ -299,7 +299,9 @@ inline void Singletone_InfoInstruction::DrawLeftBlock() {
 
 	ImGui::BeginChild("LeftBlock_Instruction", ImVec2(sizeText1.x, 0), ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_Border); {
 
+
 		ImGui::SeparatorText(u8"Аргументы");
+
 
 		std::string command = str_NameInstruction;
 
