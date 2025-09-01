@@ -2,13 +2,12 @@
 #define CARATAKER_MOMENTO_H
 
 #include "DataStructures/RingBuffer.h"
-#include "Core/Emulator/Processor/Processor.h"
 #include "Momento.h"
 #include <memory>
-#include <deque>
 #include <vector>
 #include <string>
 
+class Processor;
 
 class Caretaker_Momento
 {
@@ -27,7 +26,6 @@ public:
 protected:
 	Processor* processor;
 	RingBuffer<std::shared_ptr<Momento>> momentos;
-	//std::deque< std::shared_ptr<Momento>> momentos;
 	int MaxCount = 100;
 
 	bool changed = true;

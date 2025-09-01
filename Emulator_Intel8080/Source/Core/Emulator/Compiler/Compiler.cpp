@@ -1,5 +1,10 @@
 #include "Compiler.h"
 
+#include "Utils/Values/Values.h"
+#include "Utils/File/File.h"
+#include "Utils/Text/Text.h"
+#include "Utils/Text/Encoding/UTF8/UTF8.h"
+#include <robin_hood.h>
 
 Compiler::Compiler() = default;
 Compiler::~Compiler() = default;

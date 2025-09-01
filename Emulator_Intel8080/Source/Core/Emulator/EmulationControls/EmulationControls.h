@@ -1,16 +1,13 @@
 #ifndef EMULATION_CONTROLS_H
 #define EMULATION_CONTROLS_H
 
-#include "Config_Compilier.h"
-
-#include "GUI/Widgets/RegisterFlagsInfo/Widget.RegisterFlagsInfo.h"
-#include "GUI/Widgets/MnemoCodeViewer/Widget.MnemoCodeViewer.h"
-#include "GUI/Widgets/CodeEditor/Widget.CodeEditor.h"
-
-#include "Core/ProjectManager/ProjectManager.h"
-#include "Core/Emulator/EmulationThread/EmulationThread.h"
-#include "Core/Emulator/History/Caretaker.Momento.h"
-#include "Core/Emulator/Processor/Processor.h"
+class Processor;
+class Caretaker_Momento;
+class EmulationThread;
+class ProjectManager;
+class Widget_RegisterFlagsInfo;
+class Widget_MnemocodeViewer;
+class Widget_CodeEditor;
 
 
 class EmulationControls

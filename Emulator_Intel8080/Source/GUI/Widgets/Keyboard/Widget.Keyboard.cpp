@@ -54,7 +54,7 @@ void Widget_Keyboard::Draw() {
 			{0.f,0.f,0.f,0.f,0.f}
 		};
 
-		float TimesLerping = powf(0.01f, fps_timer->GetDeltaTime());
+		float TimesLerping = powf(0.01f, (float)fps_timer->GetDeltaTime());
 
 
 		for (int i = 0; i < layers_names_array.size(); i++)
@@ -86,7 +86,7 @@ void Widget_Keyboard::Draw() {
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ResultColor);
 
 				ImVec2 SizeText = ImGui::CalcTextSize(layers_names_array[i][j].c_str());
-				if (ImGui::Button(std::string(layers_names_array[i][j]).c_str(), ImVec2((SizeText.x * 1.2f) * layers_sizes_array[i][j], SizeText.y * 1.1))) {
+				if (ImGui::Button(std::string(layers_names_array[i][j]).c_str(), ImVec2((SizeText.x * 1.2f) * layers_sizes_array[i][j], SizeText.y * 1.1f))) {
 					editor->InsertText(layers_values_array[i][j]);
 				}
 

@@ -101,7 +101,7 @@ void Widget_EmulatorInfo::Draw() {
 
 			if (glfwGetTime() - LastTimeOneSecond > 1.f) {
 
-				LastTimeOneSecond = glfwGetTime();
+				LastTimeOneSecond = (float)glfwGetTime();
 
 
 				LastCountInstructionInSeconds = *current_state.CountInstruction - LastCountInstructionInSeconds_temp;

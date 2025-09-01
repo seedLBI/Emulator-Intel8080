@@ -1,5 +1,17 @@
 #include "EmulationControls.h"
 
+#include "Config_Compilier.h"
+
+#include "GUI/Widgets/RegisterFlagsInfo/Widget.RegisterFlagsInfo.h"
+#include "GUI/Widgets/MnemoCodeViewer/Widget.MnemoCodeViewer.h"
+#include "GUI/Widgets/CodeEditor/Widget.CodeEditor.h"
+
+#include "Core/ProjectManager/ProjectManager.h"
+#include "Core/Emulator/EmulationThread/EmulationThread.h"
+#include "Core/Emulator/History/Caretaker.Momento.h"
+#include "Core/Emulator/Processor/Processor.h"
+
+
 EmulationControls::EmulationControls(
 	Processor* processor,
 	Caretaker_Momento* processor_CaretakerMomento,

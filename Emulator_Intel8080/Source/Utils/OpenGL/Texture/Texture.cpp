@@ -80,6 +80,7 @@ int Texture::GetTypeImageData(const int& channels) {
 		exit(100);
 		break;
 	default:
+		return GL_RGBA;
 		break;
 	}
 }

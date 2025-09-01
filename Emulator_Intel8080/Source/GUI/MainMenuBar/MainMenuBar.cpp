@@ -11,7 +11,7 @@ MainMenuBar::MainMenuBar(
 	EmulationControls* emulationControls,
 	EmulationThread* emulationThread,
 	I8080_WorkspaceManager* WorkspaceManager,
-	I8080* processor) {
+	I8080* processor) : IThemeLoadable(u8"Главное меню") {
 
 	this->openglWindowManager = openglWindowManager;
 	this->widgetManager = widgetManager;
@@ -29,11 +29,36 @@ MainMenuBar::MainMenuBar(
 	window = openglWindowManager->GetMainWindow()->GetHandle();
 	authorPopup = new AuthorPopup(window);
 	LoadIcon();
+
+	IThemeLoadable::InitListWord(
+		{
+			u8"Логотип"
+		});
+
+
 }
 
 MainMenuBar::~MainMenuBar() {
 
 }
+
+void MainMenuBar::LoadColors() {
+	for (int i = 0; i < object_colors.colors.size(); i++) {
+		if (object_colors.colors[i].nameColor == u8"Логотип")
+			colorLogo = object_colors.colors[i].color;
+	}
+}
+std::vector<NamedColor> MainMenuBar::GetDefaultLightColors() {
+	return {
+		{ u8"Логотип",ImColor(237, 168, 79,255) }
+	};
+}
+std::vector<NamedColor> MainMenuBar::GetDefaultDarkColors() {
+	return {
+		{ u8"Логотип",ImColor(0.476, 0.631, 0.820, 1.f) }
+	};
+}
+
 
 void MainMenuBar::Draw() {
 
@@ -99,10 +124,6 @@ void MainMenuBar::Draw_SecondaryMenu() {
 
 
 			ImGui::Dummy(ImVec2(20.f, 0.f));
-
-			//ImGui::Text(u8"Привет мир:)");
-
-			// code...
 
 			ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetColorU32(ImGuiCol_MenuBarBg));
 
@@ -184,7 +205,7 @@ void MainMenuBar::Draw_SecondaryMenu() {
 
 			ImGui::PopItemWidth();
 
-			width += ImGui::CalcTextSize(u8"Рабочее пространство").x * 1.05;
+			width += ImGui::CalcTextSize(u8"Рабочее пространство").x * 1.05f;
 
 
 			ImGui::SetCursorPos(ImVec2(menuBar_rect.Max.x - width, 0.0f));
@@ -583,7 +604,7 @@ void MainMenuBar::LoadIcon() {
 	settingFlags.WrapX = TextureWrap::CLAMP_TO_EDGE;
 	settingFlags.WrapY = TextureWrap::CLAMP_TO_EDGE;
 	icon_logo.SetSetting(settingFlags);
-	icon_logo.LoadTexture(logo_transparent_data.data(), logo_transparent_data.size());
+	icon_logo.LoadTexture(logo_transparent_data.data(), (int)logo_transparent_data.size());
 	icon_logo.Init();
 
 }

@@ -95,18 +95,34 @@ void Widget_SymbolScreen::Draw() {
 					char char_symbol = array_symbols[i][j];
 					std::string str_symbol = GetSymbol_1251_OnNumber(char_symbol);
 					
-					unsigned int bg_color_symbol = string_formatted_to_value("0b00000" + to_bin_string(array_colors[i][j]).substr(2, 3));
-					unsigned int fg_color_symbol = string_formatted_to_value("0b00000" + to_bin_string(array_colors[i][j]).substr(5, 3));
+					uint64_t bg_color_symbol = string_formatted_to_value("0b00000" + to_bin_string(array_colors[i][j]).substr(2, 3));
+					uint64_t fg_color_symbol = string_formatted_to_value("0b00000" + to_bin_string(array_colors[i][j]).substr(5, 3));
 
-					ImVec2 sizeText = ImGui::CalcTextSize(str_symbol.c_str());
+					
 					ImVec2 CurrentPos = pos;
 					CurrentPos.x += j * stepX;
 					CurrentPos.y += i * stepY;
 
 					window->DrawList->AddRectFilled(CurrentPos, ImVec2(CurrentPos.x + stepX, CurrentPos.y + stepY), ImGui::ColorConvertFloat4ToU32(array_index_colors[bg_color_symbol]));
 
-					ImGui::SetCursorScreenPos(ImVec2(CurrentPos.x + stepX / 2 - sizeText.x / 2, CurrentPos.y + stepY / 2 - sizeText.y / 2));
-					ImGui::TextColored(array_index_colors[fg_color_symbol], str_symbol.c_str());
+
+					ImVec2 sizeText = ImGui::CalcTextSize(str_symbol.c_str());
+					const float font_scaller = 1.1f;
+					ImGui::SetCursorScreenPos(ImVec2(CurrentPos.x + stepX / 2.f - (sizeText.x * font_scaller) / 2.f, CurrentPos.y + stepY / 2.f - (sizeText.y* font_scaller) / 2.f));
+					//ImGui::TextColored(array_index_colors[fg_color_symbol], str_symbol.c_str());
+
+					// push symbol to drawlist in center of cell with max size
+
+
+
+					window->DrawList->AddText(
+						ImGui::GetFont(), 
+						ImGui::GetFontSize() * font_scaller,
+						ImVec2(
+							CurrentPos.x + stepX / 2.f - (sizeText.x * font_scaller) /2.f ,
+							CurrentPos.y + stepY / 2.f - (sizeText.y * font_scaller) /2.f),
+						ImGui::ColorConvertFloat4ToU32(array_index_colors[fg_color_symbol]), 
+						str_symbol.c_str());
 
 					
 
@@ -164,9 +180,9 @@ void Widget_SymbolScreen::Draw() {
 				ImVec4 colorLine = ImVec4(ColorsLine[0], ColorsLine[1], ColorsLine[2], ColorsLine[3]);
 
 				for (float i = 0; i <= SizeWindowX; i += stepX)
-					window->DrawList->AddLine(ImVec2(pos.x + i, pos.y), ImVec2(pos.x + i, pos.y + SizeWindowY), ImGui::ColorConvertFloat4ToU32(colorLine), ThiknessLines);
+					window->DrawList->AddLine(ImVec2(pos.x + i, pos.y), ImVec2(pos.x + i, pos.y + SizeWindowY), ImGui::ColorConvertFloat4ToU32(colorLine), (float)ThiknessLines);
 				for (float i = stepY; i < SizeWindowY - 2; i += stepY)
-					window->DrawList->AddLine(ImVec2(pos.x, pos.y + i), ImVec2(pos.x + SizeWindowX, pos.y + i), ImGui::ColorConvertFloat4ToU32(colorLine), ThiknessLines);
+					window->DrawList->AddLine(ImVec2(pos.x, pos.y + i), ImVec2(pos.x + SizeWindowX, pos.y + i), ImGui::ColorConvertFloat4ToU32(colorLine), (float)ThiknessLines);
 			}
 		}
 		ImGui::End();

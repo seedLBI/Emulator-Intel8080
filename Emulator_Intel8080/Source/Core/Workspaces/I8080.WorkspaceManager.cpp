@@ -109,7 +109,7 @@ std::string I8080_WorkspaceManager::GetNameCurrentWorkspace() {
 }
 
 int I8080_WorkspaceManager::GetCount() {
-	return workspaces.size();
+	return (int)workspaces.size();
 }
 
 int I8080_WorkspaceManager::GetIndexChoosed() {
@@ -501,7 +501,7 @@ void I8080_WorkspaceManager::SetNeedLoad() {
 void I8080_WorkspaceManager::LoadPrevious() {
 
 	if (IndexChoosed - 1 < 0)
-		IndexChoosed = workspaces.size() - 1;
+		IndexChoosed = (int)workspaces.size() - 1;
 	else
 		IndexChoosed = (IndexChoosed - 1) % workspaces.size();
 	LoadChoosed();

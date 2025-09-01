@@ -1,5 +1,12 @@
 #include "AsyncKeyboard.Port.h"
 
+#include "Config_Compilier.h"
+#include "ThirdParty/ImGui/imgui.h"
+#include <vector>
+#ifdef _DEBUG
+#include <iostream>
+#endif
+
 Port_AsyncKeyboard::Port_AsyncKeyboard() : Port(0x10) {
 #ifdef WITH_DEBUG_OUTPUT
 	std::cout << "init port Async keyboard: 0x10" << std::endl;

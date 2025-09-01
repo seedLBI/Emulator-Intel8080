@@ -21,7 +21,6 @@ void Widget_HistoryInstruction::Draw() {
 
 
 	ImGuiStyle& style = ImGui::GetStyle();
-	int prev_cellPadding = style.CellPadding.y;
 	style.CellPadding.y = 1;
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
@@ -57,7 +56,7 @@ void Widget_HistoryInstruction::Draw() {
 				ImGui::TableHeadersRow();
 
 				ImGuiListClipper clipper;
-				clipper.Begin(data.size());
+				clipper.Begin((int)data.size());
 
 				while (clipper.Step())
 				{

@@ -1,5 +1,6 @@
 #include "Caretaker.Momento.h"
 
+#include "Core/Emulator/Processor/Processor.h"
 
 Caretaker_Momento::Caretaker_Momento(Processor* processor) {
 	this->processor = processor;

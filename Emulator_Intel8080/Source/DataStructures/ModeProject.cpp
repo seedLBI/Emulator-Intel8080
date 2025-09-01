@@ -12,6 +12,7 @@ std::string ModeProject_To_Str(const ModeProject& mode) {
         return u8"COM";
         break;
     default:
+		return u8"UNKNOWN";
         break;
     }
 }

@@ -40,7 +40,7 @@ void Widget_MnemocodeViewerTargeted::Draw() {
 		return;
 
 	ImGuiStyle& style = ImGui::GetStyle();
-	int prev_cellPadding = style.CellPadding.y;
+	float prev_cellPadding = style.CellPadding.y;
 	style.CellPadding.y = 1;
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
@@ -131,7 +131,7 @@ void Widget_MnemocodeViewerTargeted::Draw() {
 
 						double koef = ImGui::GetFontSize() + 2;
 
-						ImGui::SetScrollY((pos_follow - count / 2 - 2) * koef);
+						ImGui::SetScrollY(float(pos_follow - count / 2 - 2) * (float)koef);
 					}
 
 
@@ -226,8 +226,9 @@ Widget_MnemocodeViewerTargeted::TargetType Widget_MnemocodeViewerTargeted::str_t
 		return TargetType::DE;
 	else if (str_target == u8"BC")
 		return TargetType::BC;
-	else
-		return TargetType::PC;
+	
+	return TargetType::PC;
+
 }
 
 nlohmann::json Widget_MnemocodeViewerTargeted::Save() {

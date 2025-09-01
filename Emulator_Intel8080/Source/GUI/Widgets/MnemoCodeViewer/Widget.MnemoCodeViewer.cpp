@@ -53,7 +53,7 @@ void Widget_MnemocodeViewer::Draw() {
 		return;
 
 	ImGuiStyle& style = ImGui::GetStyle();
-	int prev_cellPadding = style.CellPadding.y;
+	float prev_cellPadding = style.CellPadding.y;
 	style.CellPadding.y = 1;
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
@@ -109,7 +109,7 @@ void Widget_MnemocodeViewer::Draw() {
 
 						double koef = ImGui::GetFontSize() + 2;
 
-						ImGui::SetScrollY(pos_follow * koef);
+						ImGui::SetScrollY((float)pos_follow * (float)koef);
 
 
 						pos_follow = -1;

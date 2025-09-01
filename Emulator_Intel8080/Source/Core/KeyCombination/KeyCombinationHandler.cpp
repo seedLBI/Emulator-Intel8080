@@ -551,6 +551,7 @@ std::string KeyCombinationHandler::ErrorCombination_To_string(const ErrorCombina
 		return u8"Зачем устанавливать ту же самую комбинацию?";
 		break;
 	default:
+		return u8"Неизвестная ошибка.";
 		break;
 	}
 }

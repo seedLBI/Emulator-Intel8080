@@ -16,7 +16,6 @@ void Widget_ListInstruction::Draw() {
 
 
 	ImGuiStyle& style = ImGui::GetStyle();
-	int prev_cellPadding = style.CellPadding.y;
 	style.CellPadding.y = 1;
 
 	ImGui::SetNextWindowSize(ImVec2(200, 200), ImGuiCond_FirstUseEver);

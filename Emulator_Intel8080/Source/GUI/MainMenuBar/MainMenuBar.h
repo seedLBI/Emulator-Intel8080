@@ -15,6 +15,7 @@
 #include "Core/ProjectManager/ProjectManager.h"
 #include "Core/LastPathManager/LastPathManager.h"
 #include "Core/Setting/Setting.h"
+#include "Core/Theme/interface/IThemeLoadable.h"
 #include "Core/Workspaces/I8080.WorkspaceManager.h"
 #include "Core/WindowManager/WindowManager.h"
 #include "Core/Emulator/EmulationControls/EmulationControls.h"
@@ -29,11 +30,12 @@
 
 #include <string>
 
-class MainMenuBar {
+class MainMenuBar : public IThemeLoadable {
 private:
 	ImVec4 colorLogo = ImVec4(0.476, 0.631, 0.820, 1.f);
 public:
-	MainMenuBar(OpenGL_WindowManager* openglWindowManager,
+	MainMenuBar(
+		OpenGL_WindowManager* openglWindowManager,
 		I8080_WidgetManager* widgetManager, 
 		LastPathManager* lastPathManager, 
 		Setting* setting,
@@ -48,6 +50,11 @@ public:
 
 	void Draw();
 	bool IsPointOverTitleButton(const POINT& pt) const;
+
+	void LoadColors() override;
+	std::vector<NamedColor> GetDefaultLightColors() override;
+	std::vector<NamedColor> GetDefaultDarkColors() override;
+
 private:
 	OpenGL_WindowManager* openglWindowManager = nullptr;
 	I8080_WidgetManager* widgetManager = nullptr;

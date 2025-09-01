@@ -1,6 +1,7 @@
 {
     "LastPaths": {
         "paths": [
+            "C:\\Users\\sosn2\\OneDrive\\Desktop\\last_old_release\\Бинс\\Snake.BIN",
             "C:\\Users\\sosn2\\OneDrive\\Desktop\\last_old_release\\Examples\\MBGame.I8080",
             "C:\\Users\\sosn2\\OneDrive\\Desktop\\last_old_release\\Examples\\ИграЖизнь_ПиксельныйЭкран.I8080",
             "C:\\Users\\sosn2\\OneDrive\\Desktop\\last_old_release\\COM_TestInstruction\\8080EXM.COM",
@@ -25,7 +26,7 @@
                     "C:\\Users\\sosn2\\OneDrive\\Desktop\\LatinmodernmathRegular-z8EBa.otf",
                     "C:\\Users\\sosn2\\OneDrive\\Desktop\\msdf\\AtlasLaTeXFont\\cmunci.ttf"
                 ],
-                "scale": 26,
+                "scale": 22,
                 "selected": "JetBrainsMonoNL"
             }
         },
@@ -52,7 +53,6 @@
         },
         "Проект": {
             "Проект": {
-                "LastLoadedPathFile": "C:\\Users\\sosn2\\OneDrive\\Desktop\\last_old_release\\Examples\\MBGame.I8080",
                 "flag_CompileAfterOpen": true,
                 "flag_OpenLastFileWithOpenProgramm": false,
                 "flag_SaveAfterCompile": true,
@@ -88,7 +88,7 @@
         },
         "Цветовая тема": {
             "Themes": {
-                "indexChoosed": 1
+                "indexChoosed": 0
             }
         },
         "Эмуляция": {
@@ -106,7 +106,7 @@
         "workspaces": [
             {
                 "flag_LoadStyle": false,
-                "imgui": "[Window][WindowOverViewport_11111111]\nPos=0,72\nSize=1920,1088\nCollapsed=0\n\n[Window][Все цвета]\nPos=647,628\nSize=513,532\nCollapsed=0\nDockId=0x00000006,0\n\n[Window][Все символы]\nPos=647,628\nSize=513,532\nCollapsed=0\nDockId=0x00000006,1\n\n[Window][Символьный экран]\nPos=647,72\nSize=513,554\nCollapsed=0\nDockId=0x00000005,0\n\n[Window][Пиксельный экран]\nPos=647,72\nSize=513,554\nCollapsed=0\nDockId=0x00000005,2\n\n[Window][Продвинутый пиксельный экран]\nPos=647,72\nSize=513,554\nCollapsed=0\nDockId=0x00000005,1\n\n[Window][Окно ввода]\nPos=1162,618\nSize=758,542\nCollapsed=0\nDockId=0x0000000A,2\n\n[Window][Окно вывода]\nPos=1162,618\nSize=758,542\nCollapsed=0\nDockId=0x0000000A,3\n\n[Window][Таймер]\nPos=1162,618\nSize=758,542\nCollapsed=0\nDockId=0x0000000A,1\n\n[Window][Редактор кода]\nPos=0,72\nSize=645,687\nCollapsed=0\nDockId=0x00000003,0\n\n[Window][Мнемо код]\nPos=1162,72\nSize=758,544\nCollapsed=0\nDockId=0x00000009,0\n\n[Window][Регистры и флаги]\nPos=1162,618\nSize=758,542\nCollapsed=0\nDockId=0x0000000A,0\n\n[Window][Маркеры]\nPos=0,761\nSize=645,399\nCollapsed=0\nDockId=0x00000004,0\n\n[Window][Переменные]\nPos=0,761\nSize=645,399\nCollapsed=0\nDockId=0x00000004,2\n\n[Window][Постоянные]\nPos=0,761\nSize=645,399\nCollapsed=0\nDockId=0x00000004,1\n\n[Window][Быстродействие]\nPos=0,761\nSize=645,399\nCollapsed=0\nDockId=0x00000004,3\n\n[Window][Debug##Default]\nPos=60,43\nSize=400,400\nCollapsed=0\n\n[Window][Настройки]\nPos=213,141\nSize=853,437\nCollapsed=0\n\n[Window][Создание рабочего пространства]\nPos=720,484\nSize=480,192\nCollapsed=0\n\n[Window][Руководство]\nPos=982,62\nSize=938,988\nCollapsed=0\n\n[Window][Таблица инструкций]\nPos=0,68\nSize=1728,982\nCollapsed=0\n\n[Window][История выполнения]\nPos=1162,72\nSize=758,544\nCollapsed=0\nDockId=0x00000009,1\n\n[Window][О программе]\nPos=544,391\nSize=831,378\nCollapsed=0\n\n[Window][О авторе]\nPos=524,382\nSize=871,396\nCollapsed=0\n\n[Window][Просмотр памяти]\nPos=647,628\nSize=513,532\nCollapsed=0\nDockId=0x00000006,2\n\n[Window][Dear ImGui Style Editor]\nPos=982,62\nSize=938,1098\nCollapsed=0\n\n[Window][Dear ImGui Demo]\nPos=982,62\nSize=938,1098\nCollapsed=0\n\n[Docking][Data]\nDockSpace       ID=0x7C6B3D9B Window=0xA87D555D Pos=0,72 Size=1920,1088 Split=X\n  DockNode      ID=0x00000007 Parent=0x7C6B3D9B SizeRef=1160,1092 Split=X\n    DockNode    ID=0x00000001 Parent=0x00000007 SizeRef=645,1092 Split=Y Selected=0x2996B9AD\n      DockNode  ID=0x00000003 Parent=0x00000001 SizeRef=732,693 Selected=0x2996B9AD\n      DockNode  ID=0x00000004 Parent=0x00000001 SizeRef=732,403 Selected=0xA30FB8D9\n    DockNode    ID=0x00000002 Parent=0x00000007 SizeRef=513,1092 Split=Y Selected=0x2E6B7412\n      DockNode  ID=0x00000005 Parent=0x00000002 SizeRef=1186,554 Selected=0xF4077C9C\n      DockNode  ID=0x00000006 Parent=0x00000002 SizeRef=1186,536 CentralNode=1 Selected=0x8070AB6B\n  DockNode      ID=0x00000008 Parent=0x7C6B3D9B SizeRef=758,1092 Split=Y Selected=0x82F0852A\n    DockNode    ID=0x00000009 Parent=0x00000008 SizeRef=664,546 Selected=0x82F0852A\n    DockNode    ID=0x0000000A Parent=0x00000008 SizeRef=664,544 Selected=0x5D79DED8\n\n",
+                "imgui": "[Window][WindowOverViewport_11111111]\nPos=0,64\nSize=1920,1096\nCollapsed=0\n\n[Window][Все цвета]\nPos=647,549\nSize=624,611\nCollapsed=0\nDockId=0x00000006,0\n\n[Window][Все символы]\nPos=647,549\nSize=624,611\nCollapsed=0\nDockId=0x00000006,1\n\n[Window][Символьный экран]\nPos=647,64\nSize=624,483\nCollapsed=0\nDockId=0x00000005,0\n\n[Window][Пиксельный экран]\nPos=647,64\nSize=624,483\nCollapsed=0\nDockId=0x00000005,2\n\n[Window][Продвинутый пиксельный экран]\nPos=647,64\nSize=624,483\nCollapsed=0\nDockId=0x00000005,1\n\n[Window][Окно ввода]\nPos=1273,614\nSize=647,546\nCollapsed=0\nDockId=0x0000000A,2\n\n[Window][Окно вывода]\nPos=1273,614\nSize=647,546\nCollapsed=0\nDockId=0x0000000A,3\n\n[Window][Таймер]\nPos=1273,614\nSize=647,546\nCollapsed=0\nDockId=0x0000000A,1\n\n[Window][Редактор кода]\nPos=0,64\nSize=645,692\nCollapsed=0\nDockId=0x00000003,0\n\n[Window][Мнемо код]\nPos=1273,64\nSize=647,548\nCollapsed=0\nDockId=0x00000009,0\n\n[Window][Регистры и флаги]\nPos=1273,614\nSize=647,546\nCollapsed=0\nDockId=0x0000000A,0\n\n[Window][Маркеры]\nPos=0,758\nSize=645,402\nCollapsed=0\nDockId=0x00000004,0\n\n[Window][Переменные]\nPos=0,758\nSize=645,402\nCollapsed=0\nDockId=0x00000004,2\n\n[Window][Постоянные]\nPos=0,758\nSize=645,402\nCollapsed=0\nDockId=0x00000004,1\n\n[Window][Быстродействие]\nPos=0,758\nSize=645,402\nCollapsed=0\nDockId=0x00000004,3\n\n[Window][Debug##Default]\nPos=60,43\nSize=400,400\nCollapsed=0\n\n[Window][Настройки]\nPos=320,215\nSize=1280,730\nCollapsed=0\n\n[Window][Создание рабочего пространства]\nPos=720,484\nSize=480,192\nCollapsed=0\n\n[Window][Руководство]\nPos=982,62\nSize=938,988\nCollapsed=0\n\n[Window][Таблица инструкций]\nPos=0,68\nSize=1728,982\nCollapsed=0\n\n[Window][История выполнения]\nPos=1273,64\nSize=647,548\nCollapsed=0\nDockId=0x00000009,1\n\n[Window][О программе]\nPos=544,391\nSize=831,378\nCollapsed=0\n\n[Window][О авторе]\nPos=524,382\nSize=871,396\nCollapsed=0\n\n[Window][Просмотр памяти]\nPos=647,549\nSize=624,611\nCollapsed=0\nDockId=0x00000006,2\n\n[Window][Dear ImGui Style Editor]\nPos=982,62\nSize=938,1098\nCollapsed=0\n\n[Window][Dear ImGui Demo]\nPos=982,62\nSize=938,1098\nCollapsed=0\n\n[Docking][Data]\nDockSpace       ID=0x7C6B3D9B Window=0xA87D555D Pos=0,64 Size=1920,1096 Split=X\n  DockNode      ID=0x00000007 Parent=0x7C6B3D9B SizeRef=1271,1092 Split=X\n    DockNode    ID=0x00000001 Parent=0x00000007 SizeRef=645,1092 Split=Y Selected=0x2996B9AD\n      DockNode  ID=0x00000003 Parent=0x00000001 SizeRef=732,693 Selected=0x2996B9AD\n      DockNode  ID=0x00000004 Parent=0x00000001 SizeRef=732,403 Selected=0xA30FB8D9\n    DockNode    ID=0x00000002 Parent=0x00000007 SizeRef=624,1092 Split=Y Selected=0x2E6B7412\n      DockNode  ID=0x00000005 Parent=0x00000002 SizeRef=1186,483 Selected=0x3E1490AF\n      DockNode  ID=0x00000006 Parent=0x00000002 SizeRef=1186,266 CentralNode=1 Selected=0x8070AB6B\n  DockNode      ID=0x00000008 Parent=0x7C6B3D9B SizeRef=647,1092 Split=Y Selected=0x82F0852A\n    DockNode    ID=0x00000009 Parent=0x00000008 SizeRef=664,546 Selected=0x82F0852A\n    DockNode    ID=0x0000000A Parent=0x00000008 SizeRef=664,544 Selected=0x5D79DED8\n\n",
                 "name": "Всё и сразу",
                 "widgets": {
                     "Быстродействие": {
@@ -191,7 +191,7 @@
                             "thikness": 1
                         },
                         "Ratio_Mode": 0,
-                        "flag_Active": true,
+                        "flag_Active": false,
                         "flag_Show": true
                     },
                     "Просмотр памяти": {
@@ -207,7 +207,7 @@
                         "flag_Show": true
                     },
                     "Руководство": {
-                        "flag_Active": false,
+                        "flag_Active": true,
                         "flag_EnableWrapedText": true,
                         "flag_Show": false
                     },
@@ -223,7 +223,7 @@
                             "thikness": 1
                         },
                         "Ratio_Mode": 0,
-                        "flag_Active": false,
+                        "flag_Active": true,
                         "flag_Show": true
                     },
                     "Таблица инструкций": {

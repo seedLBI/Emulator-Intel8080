@@ -1,5 +1,63 @@
 #include "Application.h"
 
+#include "Utils/OpenGL/Window/Manager/OpenGL.WindowManager.h"
+#include "Utils/Timer/Timer.Framerate.h"
+#include "Core/FontManager/FontManager.h"
+#include "Core/Emulator/Processors/Intel8080/I8080.h"
+#include "Core/Emulator/Processors/Intel8080/History/Caretaker/I8080.Caretaker.Momento.h"
+#include "Core/Emulator/Processors/Intel8080/Compiler/I8080.Compiler.h"
+#include "Core/Emulator/EmulationControls/EmulationControls.h"
+#include "Core/Emulator/EmulationThread/EmulationThread.h"
+#include "Core/IntroManager/IntroManager.h"
+#include "Core/SaveSystem/SaveSystemManager.h"
+#include "Core/WindowManager/WindowManager.h"
+#include "Core/KeyCombination/KeyCombinationHandler.h"
+#include "Core/LastPathManager/LastPathManager.h"
+#include "Core/Setting/Setting.h"
+#include "Core/Theme/ThemeManager/ThemeManager.h"
+#include "Core/Theme/BaseColors/BaseColors.h"
+#include "Core/Widget/I8080.WidgetManager.h"
+#include "Core/Workspaces/I8080.WorkspaceManager.h"
+
+#include "GUI/Widgets/CodeEditor/Widget.CodeEditor.h"
+#include "GUI/Widgets/ColorPicker/Widget.ColorPicker.h"
+#include "GUI/Widgets/Disassembler/Widget.Disassembler.h"
+#include "GUI/Widgets/EmulatorInfo/Widget.EmulatorInfo.h"
+#include "GUI/Widgets/Help/Widget.Help.h"
+#include "GUI/Widgets/HexViewer/Widget.HexViewer.h"
+#include "GUI/Widgets/HistoryInstruction/Widget.HistoryInstruction.h"
+#include "GUI/Widgets/Input0x08/Widget.Input0x08.h"
+#include "GUI/Widgets/Keyboard/Widget.Keyboard.h"
+#include "GUI/Widgets/MnemoCodeViewer/Widget.MnemoCodeViewer.h"
+#include "GUI/Widgets/MnemoCodeViewerTargeted/Widget.MnemoCodeViewerTargeted.h"
+#include "GUI/Widgets/Output0x02/Widget.Output0x02.h"
+#include "GUI/Widgets/PixelScreen/Widget.PixelScreen.h"
+#include "GUI/Widgets/PixelScreenTwoBuffers/Widget.PixelScreenTwoBuffers.h"
+#include "GUI/Widgets/RegisterFlagsInfo/Widget.RegisterFlagsInfo.h"
+#include "GUI/Widgets/SymbolPicker/Widget.SymbolPicker.h"
+#include "GUI/Widgets/SymbolScreen/Widget.SymbolScreen.h"
+#include "GUI/Widgets/TableInstruction/Widget.TableInstruction.h"
+#include "GUI/Widgets/Timer/Widget.Timer.h"
+#include "GUI/Widgets/ListInstruction/Widget.ListInstruction.h"
+#include "GUI/Widgets/ConstList/Widget.ListConst.h"
+#include "GUI/Widgets/MarkerList/Widget.ListMarker.h"
+#include "GUI/Widgets/VarList/Widget.ListVar.h"
+
+#include "Utils/File/File.h"
+#include "Data/Images/Image_LogoApplicationArrayPngBytes.h"
+#include "GUI/MainMenuBar/MainMenuBar.h"
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#include "ThirdParty/ImGui/imgui.h"
+#include "ThirdParty/ImGui/imgui_internal.h"
+#include "ThirdParty/ImGui/imgui_impl_glfw.h"
+#include "ThirdParty/ImGui/imgui_impl_opengl3.h"
+
+#include <stb_image.h>
+
 LRESULT CALLBACK custom_wndproc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 Application::Application() {
@@ -59,14 +117,12 @@ Application::Application() {
 	Init_Setting();
 	Init_SaveManager();
 	Init_KeyCombinationHandler();
-	Init_ThemeManager();
+
 
 	projectManager->InitWidgets(
 		widget_MnemocodeViewer,
 		widget_RegisterFlagsInfo,
 		widget_CodeEditor);
-
-	saveSystemManager->Load();
 
 	mainMenuBar = new MainMenuBar(
 		windowManager,
@@ -80,6 +136,12 @@ Application::Application() {
 		emulationThread,
 		WorkspaceManager,
 		processor);
+
+	Init_ThemeManager();
+
+	saveSystemManager->Load();
+
+
 }
 
 
@@ -200,6 +262,7 @@ void Application::Init_ThemeManager() {
 	themeManager->AddObject(widget_HexViewer->GetPtrMemoryEditor());
 	themeManager->AddObject(&Singletone_InfoInstruction::Instance());
 	themeManager->AddObject(&Singleton_I8080_HighlighterInstruction::Instance());
+	themeManager->AddObject(mainMenuBar);
 }
 void Application::Init_Widgets() {
 	widget_CodeEditor = new Widget_CodeEditor(fps_limiter);

@@ -97,7 +97,7 @@ void Widget_Input0x08::Draw() {
 	ImVec4 NewColorBG;
 
 	if (processor->IsWaitingPortInput()) {
-		float t = abs( sin(glfwGetTime() * 8.f ) * 0.5f + 0.5f);
+		float t = abs( sinf((float)glfwGetTime() * 8.f ) * 0.5f + 0.5f);
 
 
 		NewColorBG.x = color_Active.Value.x * t + ColorBG.x * (1.f - t);

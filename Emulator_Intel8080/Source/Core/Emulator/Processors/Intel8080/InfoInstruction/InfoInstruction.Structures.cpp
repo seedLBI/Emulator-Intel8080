@@ -43,6 +43,7 @@ CommandArguments ENUM_Arguments_to_CommandArguments(const InstructionArguments& 
 		return CommandArguments{ u8"Число.Спец",{"0-8","0x00-0x08"} };
 		break;
 	default:
+		return CommandArguments{ u8"Неизвестно",{} };
 		break;
 	}
 
@@ -102,6 +103,8 @@ std::string Get_info_ticks_mean(std::vector<int> ticks, InstructionTicksMean mea
 		return std::to_string(ticks[0]) + u8" - Используется регистр M.\n" + std::to_string(ticks[1]) + u8" - Иначе.";
 	else if (mean == InstructionTicksMean::Always)
 		return std::to_string(ticks[0]) + u8" - Всегда.";
+
+	return std::to_string(ticks[0]) + u8" - Неизвестно.";
 }
 
 std::string ENUM_Branching_to_str(const InstructionBranching& object) {
@@ -113,6 +116,7 @@ std::string ENUM_Branching_to_str(const InstructionBranching& object) {
 		return u8"Иначе:";
 		break;
 	default:
+		return u8"Неизвестно";
 		break;
 	}
 }

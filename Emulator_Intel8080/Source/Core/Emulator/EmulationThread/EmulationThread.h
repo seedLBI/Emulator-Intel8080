@@ -1,35 +1,15 @@
 #ifndef EMULATION_THREAD_H
 #define EMULATION_THREAD_H
 
-
-#include "Config_Compilier.h"
-
-#include "ThirdParty/IconFontCppHeaders/IconsFontAwesome6.h"
-#include "ThirdParty/ImGui/imgui.h"
-#include "ThirdParty/ImGui/imgui_internal.h"
-
 #include "Core/Setting/interfaces/ISettingObject.h"
 #include "Core/SaveSystem/SaveSystem.h"
-#include "Core/Emulator/Processor/Processor.h"
-#include "Core/Emulator/History/Caretaker.Momento.h"
-#include "Core/Emulator/Processors/Intel8080/I8080.h"
 
-#include "Utils/ImGui/Utils.ImGui.h"
-#include "Utils/Values/Values.h"
-
-#include <thread>
 #include <GLFW/glfw3.h>
 
+#include <thread>
+#include <string>
 
-enum class SpeedMode{
-	Infinity,
-	Intel4004,
-	Intel8008,
-	Intel8080,
-	Intel8085,
-	Intel8086,
-	Custom
-};
+enum class SpeedMode{ Infinity, Intel4004, Intel8008, Intel8080, Intel8085, Intel8086, Custom };
 
 namespace speed_name {
 	const std::string infinity = u8"Infinity";
@@ -47,11 +27,10 @@ namespace speed_name {
 std::string toString(SpeedMode mode);
 SpeedMode toSpeedMode(const std::string& mode);
 
-enum class ControlMode {
-	Stop,
-	StepByStep,
-	Continous
-};
+enum class ControlMode { Stop, StepByStep, Continous };
+
+class Processor;
+class Caretaker_Momento;
 
 class EmulationThread : public ISettingObject {
 public:

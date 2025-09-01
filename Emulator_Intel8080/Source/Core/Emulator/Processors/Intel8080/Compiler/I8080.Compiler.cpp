@@ -1,5 +1,7 @@
 #include "I8080.Compiler.h"
 
+#include "Utils/Text/Text.h"
+
 I8080_Compiler::I8080_Compiler() : Compiler(){
 
 }

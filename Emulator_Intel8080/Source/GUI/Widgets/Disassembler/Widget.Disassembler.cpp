@@ -79,7 +79,7 @@ void Widget_Disassembler::Draw() {
 				std::string IntructionInfo = info.first[0];
 
 				if (info.first.size() == 2){
-					uint16_t value2Find = string_formatted_to_value(info.first[1]);
+					uint16_t value2Find = (uint16_t)string_formatted_to_value(info.first[1]);
 
 
 					bool Finded = false;
@@ -172,7 +172,7 @@ void Widget_Disassembler::Draw() {
 
 				if (temp_adress.empty() == false && temp_name.empty() == false) {
 
-					uint16_t Adress_value = string_formatted_to_value("0x" + temp_adress);
+					uint16_t Adress_value = (uint16_t)string_formatted_to_value("0x" + temp_adress);
 
 					bool FindSameAdressOrName = false;
 

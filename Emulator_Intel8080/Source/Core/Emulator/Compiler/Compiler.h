@@ -4,17 +4,9 @@
 #include <vector>
 #include <string>
 #include "DataStructures/TranslatorOutput.h"
-#include "Utils/Values/Values.h"
-#include "Utils/File/File.h"
-#include "Utils/Text/Text.h"
-#include "Utils/Text/Encoding/UTF8/UTF8.h"
-#include <robin_hood.h>
 
 #define MAX16BIT 65535
 #define MAX8BIT 255
-
-
-
 
 class Compiler{
 public:
@@ -34,15 +26,8 @@ protected:
 
 	bool IsAllSpecialSymbols(const std::string& command);
 
-    enum class TypeValue {
-        DEC,
-        HEX,
-        BIN,
-        UNKNOWN
-    };
-
+    enum class TypeValue { DEC, HEX, BIN, UNKNOWN };
     static std::pair<uint64_t, TypeValue> FromString2Int(const std::string& value);
-
 
     bool CheckName(const std::string& name);
 

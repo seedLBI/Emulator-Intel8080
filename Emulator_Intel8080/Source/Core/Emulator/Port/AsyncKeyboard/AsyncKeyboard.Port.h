@@ -1,16 +1,9 @@
 #ifndef I8080_PORT_ASYNCKEYBOARD
 #define I8080_PORT_ASYNCKEYBOARD
 
-#include "ThirdParty/ImGui/imgui.h"
 
 #include "Momento/AsyncKeyboard.Momento.h"
-#include "Config_Compilier.h"
 #include "Core/Emulator/Port/Port.h"
-#include <vector>
-#ifdef _DEBUG
-#include <iostream>
-#endif
-
 
 class Port_AsyncKeyboard : public Port {
 public:

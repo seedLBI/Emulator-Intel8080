@@ -1,6 +1,18 @@
 #include "EmulationThread.h"
 
+#include "Config_Compilier.h"
 
+#include "ThirdParty/IconFontCppHeaders/IconsFontAwesome6.h"
+#include "ThirdParty/ImGui/imgui.h"
+#include "ThirdParty/ImGui/imgui_internal.h"
+
+
+#include "Core/Emulator/Processor/Processor.h"
+#include "Core/Emulator/History/Caretaker.Momento.h"
+#include "Core/Emulator/Processors/Intel8080/I8080.h"
+
+#include "Utils/ImGui/Utils.ImGui.h"
+#include "Utils/Values/Values.h"
 
 std::string toString(SpeedMode mode) {
 	switch (mode){

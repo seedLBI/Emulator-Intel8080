@@ -7,12 +7,10 @@
 #define WIN32_LEAN_AND_MEAN
 
 #include <Windows.h>
-#include <stb_image.h>
 #include <dwmapi.h>
 #include <windowsx.h>
 #include <string>
 #include <unordered_map>
-
 
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -21,64 +19,59 @@
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
 
-#include "ThirdParty/ImGui/imgui.h"
-#include "ThirdParty/ImGui/imgui_internal.h"
-#include "ThirdParty/ImGui/imgui_impl_glfw.h"
-#include "ThirdParty/ImGui/imgui_impl_opengl3.h"
+class FPS_Timer;
+class OpenGL_WindowManager;
+class MainMenuBar;
 
+class I8080;
+class I8080_Caretaker_Momento;
+class I8080_Compiler;
+class EmulationThread;
+class EmulationControls;
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+class IntroManager;
+class SaveSystemManager;
+class NotificationManager;
+class FontManager;
+class WindowManager;
+class KeyCombinationHandler;
+class ProjectManager;
+class Setting;
+class ThemeManager;
+class BaseColors;
 
-#include "Utils/OpenGL/Window/Manager/OpenGL.WindowManager.h"
-#include "Utils/Timer/Timer.Framerate.h"
-#include "Core/FontManager/FontManager.h"
-#include "Core/Emulator/Processors/Intel8080/I8080.h"
-#include "Core/Emulator/Processors/Intel8080/History/Caretaker/I8080.Caretaker.Momento.h"
-#include "Core/Emulator/Processors/Intel8080/Compiler/I8080.Compiler.h"
-#include "Core/Emulator/EmulationControls/EmulationControls.h"
-#include "Core/Emulator/EmulationThread/EmulationThread.h"
-#include "Core/IntroManager/IntroManager.h"
-#include "Core/SaveSystem/SaveSystemManager.h"
-#include "Core/WindowManager/WindowManager.h"
-#include "Core/KeyCombination/KeyCombinationHandler.h"
-#include "Core/LastPathManager/LastPathManager.h"
-#include "Core/Setting/Setting.h"
-#include "Core/Theme/ThemeManager/ThemeManager.h"
-#include "Core/Theme/BaseColors/BaseColors.h"
-#include "Core/Widget/I8080.WidgetManager.h"
-#include "Core/Workspaces/I8080.WorkspaceManager.h"
+class LastPathManager;
+class I8080_WorkspaceManager;
+class I8080_WidgetManager;
+class I8080_WidgetManager;
 
-#include "GUI/Widgets/CodeEditor/Widget.CodeEditor.h"
-#include "GUI/Widgets/ColorPicker/Widget.ColorPicker.h"
-#include "GUI/Widgets/Disassembler/Widget.Disassembler.h"
-#include "GUI/Widgets/EmulatorInfo/Widget.EmulatorInfo.h"
-#include "GUI/Widgets/Help/Widget.Help.h"
-#include "GUI/Widgets/HexViewer/Widget.HexViewer.h"
-#include "GUI/Widgets/HistoryInstruction/Widget.HistoryInstruction.h"
-#include "GUI/Widgets/Input0x08/Widget.Input0x08.h"
-#include "GUI/Widgets/Keyboard/Widget.Keyboard.h"
-#include "GUI/Widgets/MnemoCodeViewer/Widget.MnemoCodeViewer.h"
-#include "GUI/Widgets/MnemoCodeViewerTargeted/Widget.MnemoCodeViewerTargeted.h"
-#include "GUI/Widgets/Output0x02/Widget.Output0x02.h"
-#include "GUI/Widgets/PixelScreen/Widget.PixelScreen.h"
-#include "GUI/Widgets/PixelScreenTwoBuffers/Widget.PixelScreenTwoBuffers.h"
-#include "GUI/Widgets/RegisterFlagsInfo/Widget.RegisterFlagsInfo.h"
-#include "GUI/Widgets/SymbolPicker/Widget.SymbolPicker.h"
-#include "GUI/Widgets/SymbolScreen/Widget.SymbolScreen.h"
-#include "GUI/Widgets/TableInstruction/Widget.TableInstruction.h"
-#include "GUI/Widgets/Timer/Widget.Timer.h"
-#include "GUI/Widgets/ListInstruction/Widget.ListInstruction.h"
-#include "GUI/Widgets/ConstList/Widget.ListConst.h"
-#include "GUI/Widgets/MarkerList/Widget.ListMarker.h"
-#include "GUI/Widgets/VarList/Widget.ListVar.h"
+class Widget_Help;
+class Widget_ListVar;
+class Widget_HexViewer;
+class Widget_ListConst;
+class Widget_CodeEditor;
+class Widget_ListMarker;
+class Widget_Disassembler;
+class Widget_EmulatorInfo;
+class Widget_MnemocodeViewer;
+class Widget_ListInstruction;
+class Widget_TableInstruction;
+class Widget_RegisterFlagsInfo;
+class Widget_HistoryInstruction;
+class Widget_MnemocodeViewerTargeted;
 
-#include "Utils/File/File.h"
+// port widgets
+class Widget_Timer;
+class Widget_Keyboard;
+class Widget_Input0x08;
+class Widget_Output0x02;
+class Widget_PixelScreen;
+class Widget_SymbolScreen;
+class Widget_PixelScreenTwoBuffers;
 
-#include "Data/Images/Image_LogoApplicationArrayPngBytes.h"
-
-#include "GUI/MainMenuBar/MainMenuBar.h"
+// port widgets (helper)
+class Widget_ColorPicker;
+class Widget_SymbolPicker;
 
 static WNDPROC orig_wndproc = nullptr;
 static std::unordered_map<HWND, GLFWwindow*> g_hwnd_to_window;
