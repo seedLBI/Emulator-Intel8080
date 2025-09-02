@@ -31,17 +31,20 @@ enum class InstructionBytes {
 	Adress_high,
 	MAX
 };
+
 enum class InstructionFlagsState {
 	Unaffected,
 	Affected,
 	Reset,
 	Set
 };
+
 enum class InstructionTicksMean {
 	Condition,
 	M_Used,
 	Always
 };
+
 enum class InstructionCategory {
 	MOVE_LOAD_STORE,
 	STACK_OPS,
@@ -86,17 +89,19 @@ struct FlagsList {
 		this->Carry = Carry;
 	}
 };
+
 struct InstructionInfo {
-	std::vector<InstructionArguments>			_Arguments;
-	std::vector<InstructionBytes>				_Bytes;
+	std::vector<InstructionArguments>	_Arguments;
+	std::vector<InstructionBytes>		_Bytes;
 	std::string							_Declaration;
 	std::vector<std::vector<std::any>>	_PseudoCode;
 	std::vector<int>					_Ticks;
-	InstructionTicksMean						_TicksMean;
+	InstructionTicksMean				_TicksMean;
 	FlagsList							_Flags_status;
-	std::vector<InstructionCategory>			_Categories;
+	std::vector<InstructionCategory>	_Categories;
 	std::vector<uint8_t>				_Opcodes;
 };
+
 struct CommandArguments {
 	std::string type_argument;
 	std::vector<std::string> available_values;

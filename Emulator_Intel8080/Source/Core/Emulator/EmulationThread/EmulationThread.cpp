@@ -366,7 +366,7 @@ void EmulationThread::DrawMainMenu() {
 
 	if (glfwGetTime() - LastTimeOneSecond > .25f) {
 
-		LastTimeOneSecond = glfwGetTime();
+		LastTimeOneSecond = (float)glfwGetTime();
 
 		if (LastCountTicksInSeconds_temp > processor->GetCountTicks()) {
 			LastCountTicksInSeconds = 0;

@@ -47,7 +47,11 @@
 #include <unordered_map>
 #include <unordered_set>
 
-
+enum BreakPointStates {
+    Disabled = 0,
+    Enabled = 1,
+    Enabled_Delete_After_Visit = 2
+};
 
 class I8080 : public Processor
 {
@@ -80,7 +84,7 @@ public:
 	void InputAnswer2Port(const uint8_t& Answer);
 
 	void ToggleBreakPointPosition(const uint16_t& Position);
-    void SetBreakPointPosition(const uint16_t& Position, const bool& state);
+    void SetBreakPointPosition(const uint16_t& Position, const BreakPointStates& state);
 
     uint8_t  GetRegisterFlags();
 
@@ -89,6 +93,9 @@ public:
     uint16_t GetSP();
 
 
+    uint16_t GetAdressCurrentInstruction() override;
+    uint16_t GetAdressNextInstruction() override;
+
 
 	uint16_t GetProgrammCounter();
     void     SetProgrammCounter(const uint16_t& index);
@@ -96,9 +103,9 @@ public:
     inline int GetAdressHL();
 
 	std::vector<Port*> Get_External_Peripherals();
-    bool*                    GetBreakpointsInMemory();
-    uint8_t*                 GetMemory();
-	bool*                    GetVisetedMemory();
+    uint8_t*           GetBreakpointsInMemory();
+    uint8_t*           GetMemory();
+	bool*              GetVisetedMemory();
 
 private:
 
@@ -139,10 +146,9 @@ private:
     std::vector<uint8_t> project_DATA;
     void ReloadProjectData();
 
-	uint8_t Memory[SIZE_MEMORY] = { 0, };
-	bool Viseted_Memory[SIZE_MEMORY] = { 0, };
-    bool BreakPoints[SIZE_MEMORY] = { 0, };
-
+	uint8_t Memory[SIZE_MEMORY];
+	bool Viseted_Memory[SIZE_MEMORY];
+    uint8_t BreakPoints[SIZE_MEMORY];
 
     bool parityTable[256];
     bool signTable[256];

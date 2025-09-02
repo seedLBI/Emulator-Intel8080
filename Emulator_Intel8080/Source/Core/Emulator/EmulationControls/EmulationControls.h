@@ -26,8 +26,9 @@ public:
 	void Play();
 	void Pause();
 	void Stop();
-	void Undo_step();
-	void Next_step();
+	void Undo_step_into();
+	void Next_step_into();
+	void Next_step_over();
 	void FullReset();
 
 

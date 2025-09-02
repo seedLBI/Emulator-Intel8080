@@ -73,7 +73,7 @@ void EmulationControls::Stop() {
 	widget_RegisterFlagsInfo->InitLastState();
 	widget_MnemocodeViewer->FollowCursorPC();
 }
-void EmulationControls::Undo_step() {
+void EmulationControls::Undo_step_into() {
 #ifdef WITH_DEBUG_OUTPUT
 	cout << "Pressed Emulator_Undo_step() \n";
 #endif
@@ -90,7 +90,7 @@ void EmulationControls::Undo_step() {
 	processor_CaretakerMomento->Undo();
 	widget_MnemocodeViewer->FollowCursorPC();
 }
-void EmulationControls::Next_step() {
+void EmulationControls::Next_step_into() {
 #ifdef WITH_DEBUG_OUTPUT
 	cout << "Pressed Emulator_Next_step() \n";
 #endif
@@ -117,6 +117,18 @@ void EmulationControls::Next_step() {
 	auto data = processor_CaretakerMomento->GetHistory();
 
 }
+
+void EmulationControls::Next_step_over() {
+
+	emulationThread->SetControlMode(ControlMode::StepByStep);
+	emulationThread->WaitThread();
+
+	const uint16_t adressNextInstruction = processor->GetAdressNextInstruction();
+	((I8080*)processor)->SetBreakPointPosition(adressNextInstruction, BreakPointStates::Enabled_Delete_After_Visit);
+
+	emulationThread->SetControlMode(ControlMode::Continous);
+}
+
 void EmulationControls::FullReset() {
 #ifdef WITH_DEBUG_OUTPUT
 	cout << "Pressed Emulator_FullReset()\n";

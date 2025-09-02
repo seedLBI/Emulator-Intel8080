@@ -8,6 +8,10 @@ I8080::I8080() : Processor(u8"Intel 8080") {
 	InitSignTable();
 	InitZeroTable();
 	InitAuxiliaryCarryTables();
+
+	Reset();
+	EraseMemory();
+
 }
 
 
@@ -229,7 +233,135 @@ inline void I8080::IncrementPC() {
 	++PC;
 }
 
+uint16_t I8080::GetAdressCurrentInstruction() {
+	return PC;
+}
 
+uint16_t I8080::GetAdressNextInstruction() {
+
+	enum JMP_ENUMS {
+		JUMP_IF_ZERO = 0xCA,
+		JUMP_IF_CARRY = 0xDA,
+		JUMP_IF_PARITY_EVEN = 0xEA,
+		JUMP_IF_MINUS = 0xFA,
+		JUMP_IF_NOT_ZERO = 0xC2,
+		JUMP_IF_NOT_CARRY = 0xD2,
+		JUMP_IF_PARITY_ODD = 0xE2,
+		JUMP_IF_POSITIVE = 0xF2,
+	};
+
+	enum RET_ENUMS {
+		RET_IF_ZERO = 0xC8,
+		RET_IF_CARRY = 0xD8,
+		RET_IF_PARITY_EVEN = 0xE8,
+		RET_IF_MINUS = 0xF8,
+		RET_IF_NOT_ZERO = 0xC0,
+		RET_IF_NOT_CARRY = 0xD0,
+		RET_IF_PARITY_ODD = 0xE0,
+		RET_IF_POSITIVE = 0xF0,
+	};
+
+
+
+	const uint8_t currentOpcode = Memory[PC];
+	const uint16_t nextAdress = PC + GetLengthInstructionFromOpcode(currentOpcode);
+
+	if (isJump(currentOpcode)) {
+		return Memory[PC + 2] * 256 + Memory[PC + 1];
+	}
+	else if (isJumpCondition(currentOpcode)) {
+		const uint16_t nextJmpAdress = Memory[PC + 2] * 256 + Memory[PC + 1];
+
+		switch (currentOpcode)
+		{
+		case JUMP_IF_ZERO:
+			if (Zero)
+				return nextJmpAdress;
+			break;
+		case JUMP_IF_CARRY:
+			if (Carry)
+				return nextJmpAdress;
+			break;
+		case JUMP_IF_PARITY_EVEN:
+			if (Parity)
+				return nextJmpAdress;
+			break;
+		case JUMP_IF_MINUS:
+			if (Sign)
+				return nextJmpAdress;
+			break;
+
+		case JUMP_IF_NOT_ZERO:
+			if (!Zero)
+				return nextJmpAdress;
+			break;
+		case JUMP_IF_NOT_CARRY:
+			if (!Carry)
+				return nextJmpAdress;
+			break;
+		case JUMP_IF_PARITY_ODD:
+			if (!Parity)
+				return nextJmpAdress;
+			break;
+		case JUMP_IF_POSITIVE:
+			if (!Sign)
+				return nextJmpAdress;
+			break;
+
+		default:
+			break;
+		}
+
+	}
+	else if (isRet(currentOpcode)) {
+		return Memory[SP + 1] * 256 + Memory[SP];
+	}
+	else if (isRetCondition(currentOpcode)) {
+		const uint16_t nextRetAdress = Memory[SP + 1] * 256 + Memory[SP];
+
+		switch (currentOpcode)
+		{
+		case RET_IF_ZERO:
+			if (Zero)
+				return nextRetAdress;
+			break;
+		case RET_IF_CARRY:
+			if (Carry)
+				return nextRetAdress;
+			break;
+		case RET_IF_PARITY_EVEN:
+			if (Parity)
+				return nextRetAdress;
+			break;
+		case RET_IF_MINUS:
+			if (Sign)
+				return nextRetAdress;
+			break;
+
+		case RET_IF_NOT_ZERO:
+			if (!Zero)
+				return nextRetAdress;
+			break;
+		case RET_IF_NOT_CARRY:
+			if (!Carry)
+				return nextRetAdress;
+			break;
+		case RET_IF_PARITY_ODD:
+			if (!Parity)
+				return nextRetAdress;
+			break;
+		case RET_IF_POSITIVE:
+			if (!Sign)
+				return nextRetAdress;
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	return nextAdress;
+}
 
 void I8080::EraseMemory() {
 	for (unsigned int i = 0; i < SIZE_MEMORY; ++i) {
@@ -425,23 +557,31 @@ void  I8080::InputAnswer2Port(const uint8_t& Answer) {
 
 	Input = Answer;
 }
-bool* I8080::GetBreakpointsInMemory() {
+uint8_t* I8080::GetBreakpointsInMemory() {
 	return BreakPoints;
 }
 void  I8080::ToggleBreakPointPosition(const uint16_t& Position) {
-	BreakPoints[Position] = !BreakPoints[Position];
+	if (BreakPoints[Position] == BreakPointStates::Disabled)
+		BreakPoints[Position] = BreakPointStates::Enabled;
+	else
+		BreakPoints[Position] = BreakPointStates::Disabled;
 }
 
 
-void I8080::SetBreakPointPosition(const uint16_t& Position, const bool& state) {
+void I8080::SetBreakPointPosition(const uint16_t& Position, const BreakPointStates& state) {
 	BreakPoints[Position] = state;
 }
 void I8080::RemoveAllBreakPoints() {
 	for (int i = 0; i < SIZE_MEMORY; ++i)
-		BreakPoints[i] = false;
+		BreakPoints[i] = BreakPointStates::Disabled;
 }
+
 bool I8080::OnBreakPoint() {
-	return BreakPoints[PC];
+	auto& bp = BreakPoints[PC];
+	bool result = bp >= BreakPointStates::Enabled;
+	if (bp == BreakPointStates::Enabled_Delete_After_Visit)
+		bp = BreakPointStates::Disabled;
+	return result;
 }
 
 uint16_t I8080::GetProgrammCounter() {
@@ -760,7 +900,6 @@ void I8080::_RNZ() {
 		IncrementPC();
 	}
 }
-
 void I8080::_RNC() {
 	if (Carry == 0) {
 		CountTicks += 1;

@@ -31,6 +31,13 @@ void Processor::NextStepWithHistorySaving() {
 
 }
 
+uint16_t Processor::GetAdressCurrentInstruction() {
+	return 0;
+}
+uint16_t Processor::GetAdressNextInstruction() {
+	return 0;
+}
+
 
 uint64_t Processor::GetCountTicks() {
 	return CountTicks;

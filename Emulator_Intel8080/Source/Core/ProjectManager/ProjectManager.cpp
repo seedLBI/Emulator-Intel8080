@@ -633,7 +633,7 @@ void ProjectManager::TryTranslateCode() {
 
 			int adressBreak = translatorOutput.Line_and_Adress[breaks[i] - 1];
 			if (adressBreak != -1)
-				processor->SetBreakPointPosition(adressBreak,true);
+				processor->SetBreakPointPosition(adressBreak, BreakPointStates::Enabled);
 		}
 
 	}

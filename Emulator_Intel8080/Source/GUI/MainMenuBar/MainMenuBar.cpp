@@ -154,24 +154,43 @@ void MainMenuBar::Draw_SecondaryMenu() {
 			if (ImGui::Button(ICON_FA_PLAY, ImVec2(ImGui::CalcTextSize(ICON_FA_PLAY).x * 5, 0)))
 				emulationControls->Play();
 			PushSizeButtonIntoList();
+			if (ImGui::IsItemHovered())
+				ImGui::SetTooltip(u8"Начать эмуляцию");
+
 
 			if (ImGui::Button(ICON_FA_STOP, ImVec2(ImGui::CalcTextSize(ICON_FA_STOP).x * 5, 0)))
 				emulationControls->Stop();
 			PushSizeButtonIntoList();
+			if(ImGui::IsItemHovered())
+				ImGui::SetTooltip(u8"Стоп");
+
 
 			if (ImGui::Button(ICON_FA_PAUSE, ImVec2(ImGui::CalcTextSize(ICON_FA_PAUSE).x * 5, 0)))
 				emulationControls->Pause();
 			PushSizeButtonIntoList();
+			if (ImGui::IsItemHovered())
+				ImGui::SetTooltip(u8"Пауза");
 
 			if (processor->isHistoryModeEnabled()) {
 				if (ImGui::Button(ICON_FA_BACKWARD_STEP, ImVec2(ImGui::CalcTextSize(ICON_FA_BACKWARD_STEP).x * 5, 0)))
-					emulationControls->Undo_step();
+					emulationControls->Undo_step_into();
 				PushSizeButtonIntoList();
+				if (ImGui::IsItemHovered())
+					ImGui::SetTooltip(u8"Шаг назад");
 			}
 
 			if (ImGui::Button(ICON_FA_FORWARD_STEP, ImVec2(ImGui::CalcTextSize(ICON_FA_FORWARD_STEP).x * 5, 0)))
-				emulationControls->Next_step();
+				emulationControls->Next_step_into();
 			PushSizeButtonIntoList();
+			if (ImGui::IsItemHovered())
+				ImGui::SetTooltip(u8"Шаг с заходом");
+
+			if (ImGui::Button(ICON_FA_FORWARD_FAST, ImVec2(ImGui::CalcTextSize(ICON_FA_FORWARD_FAST).x * 5, 0)))
+				emulationControls->Next_step_over();
+			PushSizeButtonIntoList();
+			if (ImGui::IsItemHovered())
+				ImGui::SetTooltip(u8"Шаг с обходом");
+
 
 			ImGui::PopStyleColor();
 
@@ -538,17 +557,17 @@ inline void MainMenuBar::Draw_MainMenu_Emulator() {
 			emulationControls->Play();
 		}
 
-		if (ImGui::MenuItem((std::string(ICON_FA_FORWARD_STEP) + u8" Шаг c заходом").c_str(), keyCombinationHandler->GetStrCombinationByName(u8"Шаг вперёд").c_str())) {
-			emulationControls->Next_step();
+		if (ImGui::MenuItem((std::string(ICON_FA_FORWARD_STEP) + u8" Шаг c заходом").c_str(), keyCombinationHandler->GetStrCombinationByName(u8"Шаг c заходом").c_str())) {
+			emulationControls->Next_step_into();
 		}
 
-		if (ImGui::MenuItem((std::string(ICON_FA_FORWARD_STEP) + u8" Шаг c обходом").c_str(), keyCombinationHandler->GetStrCombinationByName(u8"Шаг вперёд").c_str())) {
-
+		if (ImGui::MenuItem((std::string(ICON_FA_FORWARD_STEP) + u8" Шаг c обходом").c_str(), keyCombinationHandler->GetStrCombinationByName(u8"Шаг c обходом").c_str())) {
+			emulationControls->Next_step_over();
 		}
 
 		if (processor->isHistoryModeEnabled()) {
 			if (ImGui::MenuItem((std::string(ICON_FA_BACKWARD_STEP) + u8" Шаг назад").c_str(), keyCombinationHandler->GetStrCombinationByName(u8"Шаг назад").c_str()))
-				emulationControls->Undo_step();
+				emulationControls->Undo_step_into();
 		}
 
 		if (ImGui::MenuItem((std::string(ICON_FA_PAUSE) + u8" Пауза").c_str(), keyCombinationHandler->GetStrCombinationByName(u8"Пауза").c_str())) {

@@ -323,8 +323,9 @@ void Application::Init_KeyCombinationHandler() {
 	keyCombination_handler->AddCombination(u8"Запуск", KeyCombination({ GLFW_KEY_F5 }, std::bind(&EmulationControls::Play, emulationControls)));
 	keyCombination_handler->AddCombination(u8"Пауза", KeyCombination({ GLFW_KEY_F12 }, std::bind(&EmulationControls::Pause, emulationControls)));
 	keyCombination_handler->AddCombination(u8"Стоп", KeyCombination({ GLFW_KEY_ESCAPE }, std::bind(&EmulationControls::Stop, emulationControls)));
-	keyCombination_handler->AddCombination(u8"Шаг вперёд", KeyCombination({ GLFW_KEY_F9 }, std::bind(&EmulationControls::Next_step, emulationControls)));
-	keyCombination_handler->AddCombination(u8"Шаг назад", KeyCombination({}, std::bind(&EmulationControls::Undo_step, emulationControls)));
+	keyCombination_handler->AddCombination(u8"Шаг c заходом", KeyCombination({ GLFW_KEY_F9 }, std::bind(&EmulationControls::Next_step_into, emulationControls)));
+	keyCombination_handler->AddCombination(u8"Шаг c обходом", KeyCombination({ GLFW_KEY_F10 }, std::bind(&EmulationControls::Next_step_over, emulationControls)));
+	keyCombination_handler->AddCombination(u8"Шаг назад", KeyCombination({}, std::bind(&EmulationControls::Undo_step_into, emulationControls)));
 	keyCombination_handler->AddCombination(u8"Сбросить состояние", KeyCombination({  }, std::bind(&EmulationControls::FullReset, emulationControls)));
 	keyCombination_handler->AddCombination(u8"Удалить точки останова", KeyCombination({  }, std::bind(&I8080::RemoveAllBreakPoints, processor)));
 

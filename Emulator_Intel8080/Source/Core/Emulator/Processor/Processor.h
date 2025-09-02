@@ -25,6 +25,8 @@ public:
 	uint64_t GetCountInstruction();
 	void	 DecreaseCountInstruction();
 
+	virtual uint16_t GetAdressCurrentInstruction();
+	virtual uint16_t GetAdressNextInstruction();
 
 	void ActiveFlagStop();
 	void ResetFlagStop();
