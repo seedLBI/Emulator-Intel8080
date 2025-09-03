@@ -82,8 +82,19 @@ void WindowManager::DrawSetting() {
 
 bool WindowManager::SetFullscreen() {
 
-	if (glfwGetWindowMonitor(window))
+	if (glfwGetWindowMonitor(window)) {
 		return true;
+	}
+
+
+	LastWasMaximized = (glfwGetWindowAttrib(window, GLFW_MAXIMIZED) == GLFW_TRUE);
+
+	// если было максимизировано — вернём в нормальный (restored) режим,
+	// чтобы получить корректные LastPos/LastSize
+	if (LastWasMaximized) {
+		glfwRestoreWindow(window);
+		// Можно тут доп. обработать события, но часто этого достаточно.
+	}
 
 	glfwGetWindowPos(window, &LastPos_x, &LastPos_y);
 	glfwGetWindowSize(window, &LastSize_x, &LastSize_y);
@@ -92,7 +103,8 @@ bool WindowManager::SetFullscreen() {
 	if (!monitor) return false;
 
 	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-
+	if (!mode) return false;
+	
 	glfwSetWindowMonitor(
 		window,
 		monitor,
@@ -100,6 +112,7 @@ bool WindowManager::SetFullscreen() {
 		mode->width, mode->height, // размер на весь экран
 		mode->refreshRate          // частота обновления
 	);
+	
 
 	IsWindowed = false;
 
@@ -120,6 +133,12 @@ bool WindowManager::SetWindowed() {
 		LastSize_x, LastSize_y, // старый размер
 		0                        // игнорируется в оконном режиме
 	);
+
+	if (LastWasMaximized) {
+		// небольшой тайминг/задержка обычно не требуется, но если поведение некорректно,
+		// можно отложить вызов glfwMaximizeWindow до следующего тикa/фрейма.
+		glfwMaximizeWindow(window);
+	}
 
 	IsWindowed = true;
 

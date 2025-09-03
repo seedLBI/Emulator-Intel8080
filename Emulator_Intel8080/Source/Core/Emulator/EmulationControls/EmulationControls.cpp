@@ -126,6 +126,7 @@ void EmulationControls::Next_step_over() {
 	const uint16_t adressNextInstruction = processor->GetAdressNextInstruction();
 	((I8080*)processor)->SetBreakPointPosition(adressNextInstruction, BreakPointStates::Enabled_Delete_After_Visit);
 
+	processor->ResetFlagStop();
 	emulationThread->SetControlMode(ControlMode::Continous);
 }
 

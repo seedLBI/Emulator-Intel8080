@@ -74,6 +74,9 @@ public:
 
 	void Update();
 
+	std::string GetNameOpenedFile();
+
+
 	TranslatorOutput* GetPtrTranslatorOutput();
 
 

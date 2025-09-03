@@ -187,11 +187,10 @@ struct MemoryEditor : public IThemeLoadable
         };
     }
     std::vector<NamedColor> GetDefaultDarkColors() override {
-
         return {
             {u8"Пустые ячейки (текст)", ImVec4(0.5f,0.5f,0.5f,1.f)},
-            {u8"Посещённая ячейка", ImVec4(0.9f, 0.2f, 0.9f, 0.25f)},
-            {u8"Текущая ячейка (PC)", ImVec4(0.3f, 0.9f, 0.3f, 0.25f)},
+            {u8"Посещённая ячейка", ImVec4(0.9f, 0.2f, 0.9f, 0.15f)},
+            {u8"Текущая ячейка (PC)", ImVec4(0.4f, 1.0f, 0.4f, 0.45f)},
             {u8"Ячейка останова", ImVec4(0.9f, 0.9f, 0.3f, 0.45f)},
             {u8"Указатель на память (HL)", ImVec4(0.1f,0.1f,1.f,0.3f)}
         };
@@ -463,9 +462,10 @@ struct MemoryEditor : public IThemeLoadable
                         if (processor->GetBreakpointsInMemory()[addr])
                             draw_list->AddRectFilled(pos, ImVec2(pos.x + highlight_width, pos.y + s.LineHeight), color_Breakpoint);
 
-                        if (cursor == addr)
+                        if (cursor == addr) {
                             draw_list->AddRectFilled(pos, ImVec2(pos.x + highlight_width, pos.y + s.LineHeight), color_PC);
-
+                            draw_list->AddRect(pos, ImVec2(pos.x + highlight_width, pos.y + s.LineHeight), color_PC, 0.f, 0, 5.f);
+                        }
 
 
                         bool finded = false;

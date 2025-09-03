@@ -404,6 +404,14 @@ void ProjectManager::SaveFileIntoBinary() {
 }
 
 
+std::string ProjectManager::GetNameOpenedFile() {
+	if (Path_LoadedFile.empty())
+		return "";
+
+	return Path_LoadedFile.substr(Path_LoadedFile.find_last_of("\\") + 1);
+}
+
+
 void ProjectManager::Compile() {
 
 	if (processor->GetModeProject() != ModeProject::USER) {

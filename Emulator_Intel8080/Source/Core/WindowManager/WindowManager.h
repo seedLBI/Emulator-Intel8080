@@ -50,6 +50,7 @@ private:
 
 	bool IsWindowed = true;
 	int LastPos_x = 0, LastPos_y = 0, LastSize_x = 0, LastSize_y = 0;
+	bool  LastWasMaximized = false;
 
 	bool VSync_state = false;
 

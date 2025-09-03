@@ -90,6 +90,7 @@ private:
 
 	void Draw_ProjectMode();
 	void Draw_Speedometer();
+	void Draw_NameOpenedFile();
 
 	void LoadIcon();
 	Texture icon_logo;

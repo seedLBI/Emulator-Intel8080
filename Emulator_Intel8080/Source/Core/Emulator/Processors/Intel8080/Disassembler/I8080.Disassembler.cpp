@@ -19,7 +19,7 @@ std::pair<std::vector<std::string>, int> Instructuion_to_String(const uint8_t& o
 		{"RNZ"},      {"POP  B"},        {"JNZ ","16"}, {"JMP ","16"},{"CNZ ","16"},{"PUSH B"},   {"ADI ","8"},    {"RST  0"},   {"RZ"},       {"RET"},      {"JZ ","16"},  {"*JMP ", "16"},{"CZ ","16"}, {"CALL ","16"}, {"ACI ","8"},    {"RST  1"},
 		{"RNC"},      {"POP  D"},        {"JNC ","16"}, {"OUT ","8"}, {"CNC ","16"},{"PUSH D"},   {"SUI ","8"},    {"RST  2"},   {"RC"},       {"*RET"},     {"JC ","16"},  {"IN ","8"},    {"CC ","16"}, {"*CALL", "16"},{"SBI ","8"},    {"RST  3"},
 		{"RPO"},      {"POP  H"},        {"JPO ","16"}, {"XTHL"},     {"CPO ","16"},{"PUSH H"},   {"ANI ","8"},    {"RST  4"},   {"RPE"},      {"PCHL"},     {"JPE ","16"}, {"XCHG"},       {"CPE ","16"},{"*CALL", "16"},{"XRI ","8"},    {"RST  5"},
-		{"RP"},       {"POP  PSW"},      {"JP ","16"},  {"DI"},       {"CP ","16"}, {"PUSH PSW"}, {"ORI ","8"},    {"RST  6"},   {"RM"},       {"SPHL"},     {"JM ","16"},  {"EI"},         {"CM ","16"}, {"*CALL", "16"},{"CPI ","8"},    {"RST  7"}
+		{"RP"},       {"POP  PSW"},      {"JP ","16"},  {"DI"},       {"CP ", "16"},{"PUSH PSW"}, {"ORI ","8"},    {"RST  6"},   {"RM"},       {"SPHL"},     {"JM ","16"},  {"EI"},         {"CM ","16"}, {"*CALL", "16"},{"CPI ","8"},    {"RST  7"}
 	};
 
 	std::string result = translate[opcode][0];

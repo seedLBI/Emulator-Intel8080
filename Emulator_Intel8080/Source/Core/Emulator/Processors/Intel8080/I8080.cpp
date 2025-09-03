@@ -290,7 +290,6 @@ uint16_t I8080::GetAdressNextInstruction() {
 			if (Sign)
 				return nextJmpAdress;
 			break;
-
 		case JUMP_IF_NOT_ZERO:
 			if (!Zero)
 				return nextJmpAdress;
@@ -337,7 +336,6 @@ uint16_t I8080::GetAdressNextInstruction() {
 			if (Sign)
 				return nextRetAdress;
 			break;
-
 		case RET_IF_NOT_ZERO:
 			if (!Zero)
 				return nextRetAdress;

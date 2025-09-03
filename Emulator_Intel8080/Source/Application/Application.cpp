@@ -428,6 +428,9 @@ MainMenuBar* Application::GetPTR_MainMenuBar() {
 
 LRESULT CALLBACK custom_wndproc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
+	auto it = g_hwnd_to_window.find(hwnd);
+	GLFWwindow* win = it->second;
+	Application* app = static_cast<Application*>(glfwGetWindowUserPointer(win));
 
 	switch (msg) {
 	case WM_NCCALCSIZE: {
@@ -460,40 +463,40 @@ LRESULT CALLBACK custom_wndproc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 		GetClientRect(hwnd, &rc);
 		const int border = 4;
 
-		bool left = pt.x < border;
-		bool right = pt.x >= rc.right - border;
-		bool top = pt.y < border;
-		bool bottom = pt.y >= rc.bottom - border;
+		if (!IsZoomed(hwnd) && glfwGetWindowMonitor(win) == NULL) {
+			bool left = pt.x < border;
+			bool right = pt.x >= rc.right - border;
+			bool top = pt.y < border;
+			bool bottom = pt.y >= rc.bottom - border;
 
-		if (left && top)     return HTTOPLEFT;
-		if (right && top)    return HTTOPRIGHT;
-		if (left && bottom)  return HTBOTTOMLEFT;
-		if (right && bottom) return HTBOTTOMRIGHT;
+			if (left && top)     return HTTOPLEFT;
+			if (right && top)    return HTTOPRIGHT;
+			if (left && bottom)  return HTBOTTOMLEFT;
+			if (right && bottom) return HTBOTTOMRIGHT;
 
-		if (left)   return HTLEFT;
-		if (right)  return HTRIGHT;
-		if (top)    return HTTOP;
-		if (bottom) return HTBOTTOM;
-
-
-		auto it = g_hwnd_to_window.find(hwnd);
-		if (it != g_hwnd_to_window.end()) {
-			GLFWwindow* win = it->second;
-			Application* app = static_cast<Application*>(glfwGetWindowUserPointer(win));
-
-			float menuHeight = 60.f;
-			if (pt.y >= 0 && pt.y < menuHeight) {
-				if (app->GetPTR_MainMenuBar()->IsPointOverTitleButton(pt)) {
-					return HTCLIENT;
-				}
-				return HTCAPTION;
-			}
+			if (left)   return HTLEFT;
+			if (right)  return HTRIGHT;
+			if (top)    return HTTOP;
+			if (bottom) return HTBOTTOM;
 		}
+
+
+
+
+		float menuHeight = 60.f;
+		if (pt.y >= 0 && pt.y < menuHeight) {
+			if (app->GetPTR_MainMenuBar()->IsPointOverTitleButton(pt)) {
+				return HTCLIENT;
+			}
+			if (glfwGetWindowMonitor(win) == NULL)
+				return HTCAPTION;
+		}
+
 		return HTCLIENT;
 	}
 	case WM_SETCURSOR: {
 
-		if (IsZoomed(hwnd)) {
+		if (IsZoomed(hwnd) || glfwGetWindowMonitor(win)) {
 			SetCursor(LoadCursor(NULL, IDC_ARROW));
 			return TRUE;
 		}

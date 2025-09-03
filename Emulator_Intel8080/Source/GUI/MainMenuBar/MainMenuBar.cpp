@@ -100,8 +100,11 @@ void MainMenuBar::Draw_MainMenu() {
 		Draw_MainMenu_Setting();
 		Draw_MainMenu_About();
 
+
 		Draw_ProjectMode();
 		Draw_Speedometer();
+		Draw_NameOpenedFile();
+
 
 
 		ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.f, 0.f, 0.f, 0.f));
@@ -131,14 +134,38 @@ void MainMenuBar::Draw_SecondaryMenu() {
 			if (ImGui::Button(ICON_FA_FILE_CIRCLE_PLUS, ImVec2(ImGui::CalcTextSize(ICON_FA_PLAY).x * 4, 0))) {
 				projectManager->NewFile();
 			}
+			if (ImGui::IsItemHovered()) {
+				std::string name = u8"Создать новый файл";
+				std::string comb = keyCombinationHandler->GetStrCombinationByName(u8"Новый файл");
+				if (comb.empty() == false)
+					name += "(" + comb + ")";
+				ImGui::SetTooltip(name.c_str());
+			}
+				
 			PushSizeButtonIntoList();
 			if (ImGui::Button(ICON_FA_FOLDER_OPEN, ImVec2(ImGui::CalcTextSize(ICON_FA_PLAY).x * 4, 0))) {
 				projectManager->OpenFile();
 			}
+			if (ImGui::IsItemHovered()) {
+				std::string name = u8"Открыть файл";
+				std::string comb = keyCombinationHandler->GetStrCombinationByName(u8"Открыть файл");
+				if (comb.empty() == false)
+					name += "(" + comb + ")";
+				ImGui::SetTooltip(name.c_str());
+			}
+
 			PushSizeButtonIntoList();
 			if (ImGui::Button(ICON_FA_FLOPPY_DISK, ImVec2(ImGui::CalcTextSize(ICON_FA_PLAY).x * 4, 0))) {
 				projectManager->SaveFile();
 			}
+			if (ImGui::IsItemHovered()) {
+				std::string name = u8"Сохранить файл";
+				std::string comb = keyCombinationHandler->GetStrCombinationByName(u8"Сохранить");
+				if (comb.empty() == false)
+					name += "(" + comb + ")";
+				ImGui::SetTooltip(name.c_str());
+			}
+
 			PushSizeButtonIntoList();
 
 			ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical,2.f);
@@ -220,15 +247,18 @@ void MainMenuBar::Draw_SecondaryMenu() {
 
 				ImGui::EndCombo();
 			}
+			if (ImGui::IsItemHovered())
+				ImGui::SetTooltip(u8"Рабочее пространство");
+
 			PushSizeButtonIntoList();
 
 			ImGui::PopItemWidth();
 
-			width += ImGui::CalcTextSize(u8"Рабочее пространство").x * 1.05f;
 
+			//width += ImGui::CalcTextSize(u8"Рабочее пространство").x * 1.05f;
 
-			ImGui::SetCursorPos(ImVec2(menuBar_rect.Max.x - width, 0.0f));
-			ImGui::Text(u8"Рабочее пространство");
+			//ImGui::SetCursorPos(ImVec2(menuBar_rect.Max.x - width, 0.0f));
+			//ImGui::Text(u8"Рабочее пространство");
 
 
 			ImGui::PopClipRect();
@@ -265,14 +295,23 @@ void MainMenuBar::Draw_DownMenu() {
 	ImGui::PopStyleColor();
 }
 
+
 void MainMenuBar::Draw_ProjectMode() {
 	const char* tooltip = u8"Режим работы с загруженным файлом:\n\n* USER - пользователю доступно всё.\n\n* BIN - отключен редактор и компиляция.\n\n* COM - отключен редактор и компиляция.\nPC установливается в 0x0100 и внедряется несколько\nбайт в начало программы для реализации функций вывода CP/M.";
 	TextWithTooltipInMainMenuBar(ModeProject_To_Str(processor->GetModeProject()).c_str(), tooltip);
 
 }
-
 void MainMenuBar::Draw_Speedometer() {
 	emulationThread->DrawMainMenu();
+}
+void MainMenuBar::Draw_NameOpenedFile() {
+
+	const std::string NameFile = projectManager->GetNameOpenedFile();
+	if (NameFile.empty() == false) {
+		const char* tooltip = u8"Название открытого файла";
+		TextWithTooltipInMainMenuBar(NameFile.c_str(), tooltip);
+	}
+
 }
 
 void MainMenuBar::DrawLogo() {
@@ -322,15 +361,22 @@ void MainMenuBar::DrawWindowButtons() {
 	ImGui::SameLine(0, 0);
 
 
-
-	if (glfwGetWindowAttrib(window, GLFW_MAXIMIZED)) {
+	if (glfwGetWindowMonitor(window))
+	{
 		if (ImGui::Button(ICON_FA_COMPRESS, buttonSize)) {
-			glfwRestoreWindow(window);
+			windowManager->SetWindowed();
 		}
 	}
 	else {
-		if (ImGui::Button(ICON_FA_EXPAND, buttonSize)) {
-			glfwMaximizeWindow(window);
+		if (glfwGetWindowAttrib(window, GLFW_MAXIMIZED)) {
+			if (ImGui::Button(ICON_FA_COMPRESS, buttonSize)) {
+				glfwRestoreWindow(window);
+			}
+		}
+		else {
+			if (ImGui::Button(ICON_FA_EXPAND, buttonSize)) {
+				glfwMaximizeWindow(window);
+			}
 		}
 	}
 	PushSizeButtonIntoList();

@@ -55,7 +55,7 @@ void Setting::Draw() {
 	ImGui::SetNextWindowSize(ImVec2(size.x / 1.5f, size.y / 1.5f));
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, ImVec2(0.5, 0.5));
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 1.0f));
 
 	if (ImGui::BeginPopupModal(u8"Настройки", &Popup_Open, flagsWindow)) {
 
