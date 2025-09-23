@@ -1,0 +1,99 @@
+@keyframes flashing {
+  0%, 100% {
+    text-shadow: 0px 0px 24px rgba(255, 233, 70, 0);
+  }
+  50% {
+    text-shadow: 0px 0px 4px rgba(255, 233, 70, 255);
+  }
+}
+
+@keyframes textColorFlow {
+  0%   { color: rgba(133, 210, 255, 1); }
+  20%  { color: rgba(91, 91, 252, 1); }
+  40%  { color: rgba(129, 57, 253, 1); }
+  60%  { color: rgb(171, 217, 255); }
+  80%  { color: rgba(84, 150, 255, 1); }
+  100% { color: rgba(133, 210, 255, 1); }
+}
+
+
+@keyframes anim_hover_buttons {
+  from {
+    filter:drop-shadow(0px 0px 12px rgba(255, 233, 70, 0));
+    text-shadow: 0px 0px 12px rgba(255, 233, 70, 0);
+  }
+  to {
+    text-shadow: 0px 0px 12px rgba(255, 233, 70, 0.6);
+    filter:drop-shadow(0px 0px 12px rgba(255, 233, 70, 0.6));
+  }
+}
+
+
+@keyframes shimmer_bobbing {
+  0%, 100% {
+    transform:translate(0px,0px);
+	animation-timing-function:cubic-bezier(0.00, 0.82, 0.165, 1);
+  }
+  50% {
+    transform:translate(0px,8px);
+	animation-timing-function:ease-out;
+  }
+}
+
+
+@keyframes slideInTop {
+  from {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutTop {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  from {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+
+}
+
+@keyframes slideOutTop {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+}
+
+
+@keyframes slideInLeft {
+  from {
+    /*transform: translateX(-100vw); /* за экраном слева */
+    opacity: 0;
+  }
+  to {
+    /*transform: translateX(0);*/
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+     /*transform: translateX(100vw); /* за экраном справа */
+    opacity: 0;
+  }
+  to {
+     /*transform: translateX(0);*/
+    opacity: 1;
+  }
+}

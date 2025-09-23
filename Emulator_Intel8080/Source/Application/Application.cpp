@@ -483,7 +483,7 @@ LRESULT CALLBACK custom_wndproc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 
 
 
-		float menuHeight = 60.f;
+		float menuHeight = app->GetPTR_MainMenuBar()->GetHeightMenu();
 		if (pt.y >= 0 && pt.y < menuHeight) {
 			if (app->GetPTR_MainMenuBar()->IsPointOverTitleButton(pt)) {
 				return HTCLIENT;

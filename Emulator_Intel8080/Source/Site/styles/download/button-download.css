@@ -1,0 +1,83 @@
+
+.ButtonDownload{
+    display: inline-flex;
+    align-items: center;
+    --hover:0;
+    width:300px;
+    height:60px;
+
+    background: rgb(87, 130, 183);
+    color:rgb(251, 236, 200);
+
+    align-self: center;
+
+    border-style: solid;
+    border-color: rgb(87, 130, 183);
+    border-width: 2px;
+
+    transition: background .1s, color .1s, border-width .1s;
+        text-decoration: none;
+}
+
+.ButtonDownload:hover{
+    background: rgb(251, 236, 200);
+    color:rgb(87, 130, 183);
+    border-width: 5px;
+    cursor:pointer;
+}
+
+
+.LeftBox-ButtonDownload{
+    width:45px;
+    height:45px;
+    margin-left:7px;
+    color: rgb(87, 130, 183);
+    background: rgb(251, 236, 200);
+    border-style: solid;
+    border-color: rgb(87, 130, 183);
+    border-width: 2px;
+
+    transition: background .1s, color .1s;
+}
+
+.LeftBox-ButtonDownload.hover{
+    color: rgb(251, 236, 200);
+    background: rgb(87, 130, 183);
+}
+
+
+.LeftBox-ButtonDownload #button-download-icon{
+    transform: translateY(-11px);
+    font-size: 21px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.RightBox-ButtonDownload{
+    display: block;
+    margin-left: 7px;
+    font-weight: bold;
+    
+}
+
+.RightBox-ButtonDownload #button-download-text{
+    font-size: 18px;
+    margin-block: 0;
+    margin-bottom: 1px;
+}
+.RightBox-ButtonDownload #button-download-size{
+    font-size: 13px;
+    margin-block: 0;
+}
+
+.RightBox-ButtonDownload #button-download-version {
+    position:relative;
+    left:40px;
+    display:inline-block;
+}
+
+.RightBox-ButtonDownload #button-download-date {
+    display:inline-block;
+    position:relative;
+    left:70px;
+}

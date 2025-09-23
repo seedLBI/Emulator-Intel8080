@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Коржунов А. С." />
+    <meta name="description" content="Сайт эмулятора Intel8080" />
+
+    <title>Эмулятор Intel8080</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+
+
+    <link rel="stylesheet" href="styles/styles.css" />
+    <link rel="stylesheet" href="styles/keyframes.css" />
+    <link rel="stylesheet" href="styles/header.css" />
+    <link rel="stylesheet" href="styles/welcome/welcome.css" />
+    <link rel="stylesheet" href="styles/welcome/welcome-left-box.css" />
+    <link rel="stylesheet" href="styles/welcome/welcome-right-box.css" />
+    <link rel="stylesheet" href="styles/download/download.css" />
+    <link rel="stylesheet" href="styles/download/button-download.css" />
+    <link rel="stylesheet" href="styles/about/about.css" />
+    <link rel="stylesheet" href="styles/update/update.css" />
+
+
+</head>
+
+<body>
+
+    <header>
+
+        <nav class="header-outer">
+            <div class="header-buttons-container">
+
+                <a href="#Welcome" class="header-buttons" id="LogoButton"> <img src="img/logo.png" alt="Logo"></a>
+
+                <ul class="nav-menu">
+                    <li class="header-buttons"><a href="#Download" id="DownloadNavButton"> Скачать </a></li>
+                    <li class="header-buttons"><a href="#About"> Возможности </a></li>
+                    <li class="header-buttons"><a href="#Update"> Обновления </a></li>
+                </ul>
+
+                <div class="header-separator"> </div>
+
+                <ul class="external-links-menu">
+                    <li class="header-buttons"><a href="https://github.com/seedLBI/Emulator-Intel8080" target="_blank">
+                            Github </a></li>
+                    <li class="header-buttons"><a href="https://vk.com/seedlbi" target="_blank"> ВК </a></li>
+                </ul>
+
+                <button id="button-mobile-popup-window"> ≡ </button>
+
+            </div>
+        </nav>
+
+        <nav class="mobile-popup-window hidden">
+            <li><a class="mobile-buttons-popup" href="#Download"> Скачать </a></li>
+            <li><a class="mobile-buttons-popup" href="#About"> Возможности </a></li>
+            <li><a class="mobile-buttons-popup" href="#Update"> Обновления </a></li>
+        </nav>
+
+    </header>
+
+
+
+    <main>
+
+        <div id="Welcome"></div>
+        <section class="Welcome">
+
+            <article class="left-box">
+                <p id="GradientText"> Project page </p>
+
+                <div id="left-center-block">
+                    <h3 id="MainText">Эмулятор<br>Процессора<br>Intel8080</h3>
+                    <p id="Version"> Последняя версия: 15.12.2024</p>
+                </div>
+
+                <p id="Author">Автор: Коржунов А. С.</p>
+            </article>
+
+            <article class="right-box">
+                <div id="information">
+                    <div id="UpperBlock"> </div>
+                    <div id="CenterBlock">
+                        <div id="TextBlock">
+                            <p>#СКРИНШОТЫ</p>
+                        </div>
+                        <div id="ImageBlock">
+                            <div id="LeftSkipImage"></div>
+                            <div id="ImageBox">
+                                <div id="Image"></div>
+                                <div id="ProgressBar">
+                                    <div class="circle" id="1"></div>
+                                    <div class="circle" id="2"></div>
+                                    <div class="circle" id="3"></div>
+                                    <div class="circle" id="4"></div>
+                                </div>
+                            </div>
+                            <div id="RightSkipImage"></div>
+                        </div>
+                    </div>
+                    <p id="BottomBlock"> Пролестни страницу </p>
+                </div>
+            </article>
+
+            <div class="mobile-welcome-variant">
+                <p id="up"> Просто сайт проекта</p>
+                <p id="center"> Эмулятор Процессора Intel8080 </p>
+                <p id="end"> пролестни вниз </p>
+            </div>
+
+        </section>
+
+
+
+        <section class="Download" id="Download">
+            <h2>Скачивание</h2>
+
+            <div class="Download-Info-Block">
+
+                <img class="Download-Left-Block" src="img/screenshot_1.png">
+
+                <article class="Download-Right-Block">
+                    <h3 class="Download-Text-Motivation">
+                        <em>Удобный</em> Эмулятор Intel8080.
+                    </h3>
+
+                    <p class="Download-Text-Quick-Description">
+                        &emsp;&emsp;Эмулятор с открытым исходным кодом, созданный для лёгкой и быстрой работы с
+                        ассемблером
+                        Intel8080.
+                    </p>
+
+                    <a class="ButtonDownload"
+                        href="https://github.com/seedLBI/Emulator-Intel8080/releases/download/v1.0.4/I8080.Emulator.x64.7z"
+                        rel="nofollow">
+                        <div class="LeftBox-ButtonDownload">
+                            <p id="button-download-icon">x64</p>
+                        </div>
+                        <div class="RightBox-ButtonDownload">
+                            <div id="button-download-text">Скачать для Windows x64</div>
+                            <div id="button-download-size">12.4 MB <div id="button-download-version">v1.0.4</div>
+                                <div id="button-download-date">15.12.2024</div>
+                            </div>
+
+                        </div>
+                    </a>
+                </article>
+            </div>
+
+        </section>
+
+
+
+
+        <section class="About" id="About">
+            <h2>Возможности</h2>
+
+            <article class="item-about">
+                <div class="about-image">
+                    <img src="img/EditorCode.PNG">
+                </div>
+                <div class="about-content">
+                    <h3 class="about-title">Редактор кода с подсветкой синтаксиса</h3>
+                    <p class="about-description">
+                        Реализованы все <strong>популярные комбинации клавиш</strong>, есть обратная связь с
+                        компилятором для подсветки
+                        нужной строки
+                    </p>
+                </div>
+
+            </article>
+
+            <article class="item-about">
+                <div class="about-image">
+                    <img src="img/TooltipInstruction.PNG">
+                </div>
+                <div class="about-content">
+                    <h3 class="about-title">Подсказки к инструкциям</h3>
+                    <p class="about-description">
+                        При наведении на подсвеченную инструкцию появляется окно, поясняющее её различную информацию и
+                        как она работает на примере псевдокода.
+                    </p>
+                </div>
+            </article>
+
+            <article class="item-about">
+                <div class="about-image span">
+                    <img src="img/MainMenu.PNG">
+                </div>
+                <div class="about-content span">
+                    <h3 class="about-title">Удобный интерфейс</h3>
+                    <p class="about-description">
+                        Всё самое нужное уже находится на <strong>главной панели</strong>.
+                    </p>
+                </div>
+            </article>
+
+            <article class="item-about">
+                <div class="about-image">
+                    <img src="img/Themes.png">
+                </div>
+                <div class="about-content">
+                    <h3 class="about-title">Различные цветовые темы</h3>
+                    <p class="about-description">
+                        Есть возможность <strong>изменять цвет любого объекта</strong> и сохранить собственную тему
+                    </p>
+                </div>
+            </article>
+
+            <article class="item-about">
+                <div class="about-content span">
+                    <h3 class="about-title">Встроенное руководство</h3>
+                    <p class="about-description">
+                        <strong>Подробное объяснение</strong> работы с эмулятором и инструкций процессора intel8080.
+                    </p>
+                </div>
+
+            </article>
+
+
+
+            <article class="item-about">
+                <div class="about-content span">
+                    <h3 class="about-title">Расширенные возможности эмуляции</h3>
+                    <p class="about-description">
+                        Можно запускать программы с <strong>заданной пользователем скоростью</strong>.
+                    </p>
+                </div>
+
+            </article>
+
+            <article class="item-about">
+
+                <div class="about-content span center">
+                    <h3 class="about-title">Продвинутая отладка</h3>
+                    <p class="about-description"> Есть точки останова, можно делать:</p>
+                    <ul>
+                        <strong><li>шаг назад</li></strong>
+                        <strong><li>шаг с заходом</li></strong>
+                        <strong><li>шаг с обходом</li></strong>
+                    </ul>
+                    
+                </div>
+
+            </article>
+
+
+
+            <article class="item-about">
+                <div class="about-content span">
+                    <h3 class="about-title">Подробные ошибки компиляции</h3>
+                    <p class="about-description">
+                        Написано <strong>более 30 видов ошибок</strong> для подробного пояснения причины.
+                    </p>
+                </div>
+            </article>
+
+            <article class="item-about">
+                <div class="about-content span">
+                    <h3 class="about-title">Высокая производительность</h3>
+                    <p class="about-description">
+                        Частота эмуляции <strong>достигает избыточных 2ГГц</strong> заместо оригиналной частоты в 3МГц.
+                    </p>
+                </div>
+            </article>
+
+        </section>
+
+
+
+
+        <section class="Update" id="Update">
+            <h2>Обновления</h2>
+            <div class="UpdateContainer">
+
+                <article class="UpdateData">
+                    <header>
+                        <h3 id="Version">1.0.5</h3>
+                        <p id="Date">XX.XX.XXXX</p>
+                        <p id="Tag">Too Big Update</p>
+                    </header>
+                    <div id="Info">
+                        <h4 class="section-title">Редактор кода</h4>
+                        <ul class="subsection">
+                            <li class="change-line added">Комбинации клавиш для передвижения строк: Alt + Up, Alt +
+                                Down.</li>
+                            <li class="change-line added">При копировании строки без выделения и последующей её вставке
+                                содержимое будет вставлено на новую строку.</li>
+                            <li class="change-line added">При выделении текста за границы экрана слайдер, отвечающий за
+                                видимую часть текста, будет автоматически изменяться.</li>
+                            <li class="change-line changed">Возможность менять цвет не активных кнопок (Поиск).</li>
+                            <li class="change-line changed">Исправлена возможность добавлять точка останова (теперь они
+                                ставятся при любом расположении редактора на экране).</li>
+                        </ul>
+
+                        <h4 class="section-title">Эмуляция</h4>
+                        <ul class="subsection">
+                            <li class="change-line added">Разделение шагов вперёд: <i>Шаг с заходом</i> и <i>Шаг с
+                                    обходом</i>.</li>
+                            <li class="change-line added">Вывод на главной панели процента производительности эмуляции в
+                                секунду времени.</li>
+                            <li class="change-line changed">Упрощение инструкций INX, DCX.</li>
+                            <li class="change-line changed">Создание предварительно вычисленных состояний флагов для
+                                всех возможных значений, что позволило улучшить производительность эмуляции в среднем на
+                                25%.</li>
+                        </ul>
+
+                        <h4 class="section-title">Порты и буфер обмена</h4>
+                        <ul class="subsection">
+                            <li class="change-line added">Возможность копировать в буфер обмена содержимое порта 0x02.
+                            </li>
+                        </ul>
+
+                        <h4 class="section-title">Интерфейс</h4>
+                        <ul class="subsection">
+                            <li class="change-line added">Возможность отключать начальную заставку.</li>
+                            <li class="change-line added">Подсказка при попытке нажать СКМ в окне Маркеры при включённом
+                                режиме постоянной слежки за PC в окне Мнемокод.</li>
+                            <li class="change-line added">Обновление стилей интерфейса.</li>
+                            <li class="change-line added">Иконка имеет возможность менять цвет в зависимости от
+                                выбранной темы.</li>
+                            <li class="change-line added">Добавление кнопки на главный экран и в клавиши быстрого
+                                доступа.</li>
+                            <li class="change-line changed">Фикс полноэкранного режима.</li>
+                            <li class="change-line removed">Замена стандартного заголовка Windows кастомным.</li>
+                        </ul>
+
+                        <h4 class="section-title">Разработка</h4>
+                        <ul class="subsection">
+                            <li class="change-line added">Все исходные файлы были перемещены соответствуя структуре
+                                проекта.</li>
+                            <li class="change-line added">Переход от собственного формата сохранений на nlohmann::json.
+                            </li>
+                            <li class="change-line changed">Ускорение компиляции проекта посредством перемещения include
+                                в .cpp.</li>
+                            <li class="change-line changed">Избавление от warnings при полной сборке проекта.</li>
+                        </ul>
+                    </div>
+                </article>
+
+                <article class="UpdateData">
+                    <header>
+                        <h3 id="Version">1.0.4</h3>
+                        <p id="Date">15.12.2024</p>
+                        <p id="Tag">QoL</p>
+                    </header>
+                    <div id="Info">
+
+                        <h4 class="section-title">Интерфейс</h4>
+                        <ul class="subsection">
+                            <li class="change-line added">Система цветовых тем.</li>
+                            <li class="change-line added">Подсказка при наведении на инструкции в редакторе кода,
+                                руководстве и таблице инструкций.</li>
+                            <li class="change-line added">Кнопка назад при включенном режиме сохранении выполненных
+                                инструкций.</li>
+                            <li class="change-line added">Вывод ограничения кол-ва герц.</li>
+                            <li class="change-line added">Checkbox для измения состояния нацеленности на регистр PC в
+                                окне Мнемо код.</li>
+                            <li class="change-line changed">Сгруппировал окна по категориям.</li>
+                        </ul>
+
+                        <h4 class="section-title">Эмуляция</h4>
+                        <ul class="subsection">
+                            <li class="change-line changed">Улучшена система ограничений кол-ва инструкций в
+                                секунду.</li>
+                            <li class="change-line changed">Система истории выполнения инструкций. Теперь можно делать
+                                шаг назад при отладке.</li>
+                        </ul>
+
+                        <h4 class="section-title">Существующие виджеты</h4>
+                        <ul class="subsection">
+                            <li class="change-line changed">Продвинутый пиксельный экран: Возможность выбора буфера
+                                для вывода.</li>
+                        </ul>
+
+
+                        <h4 class="section-title">Новые окна</h4>
+                        <ul class="subsection">
+                            <li class="change-line added">Список выполненных инструкций и аналогичный пункт в
+                                настройках.</li>
+                            <li class="change-line added">Таблица инструкций.</li>
+                            <li class="change-line added">Вечно нацеленный просмотр мнемокода для BC, DE, HL, SP,
+                                PC.</li>
+                        </ul>
+
+                        <h4 class="section-title">Редактор кода</h4>
+                        <ul class="subsection">
+                            <li class="change-line changed">Исправления сохранение состояние при стирании
+                                табуляции.</li>
+                            <li class="change-line changed">Для подсветки неважен регистр написания.</li>
+                        </ul>
+
+                    </div>
+                </article>
+
+                <article class="UpdateData">
+                    <header>
+                        <h3 id="Version">1.0.3</h3>
+                        <p id="Date">09.11.2024</p>
+                        <p id="Tag">100% Correct emulation</p>
+                    </header>
+
+                    <div id="Info">
+
+                        <h4 class="section-title">Редактор кода</h4>
+                        <ul class="subsection">
+                            <li class="change-line added">Улучшение вывода подсказок инструкций (добавленно описание в
+                                виде псевдокода).</li>
+                            <li class="change-line added">Добавление автотабуляции.</li>
+                            <li class="change-line changed">Исправление неточностей.</li>
+                        </ul>
+
+                        <h4 class="section-title">Режимы проекта</h4>
+                        <ul class="subsection">
+                            <li class="change-line added">Добавленно разделение на режимы проекта которые зависят от
+                                типа загруженного файла.</li>
+                        </ul>
+
+                        <h4 class="section-title">Эмуляция</h4>
+                        <ul class="subsection">
+                            <li class="change-line added">Добавлена полная поддержка вспомогательного переноса
+                                (Auxiliary Сarry)</li>
+                            <li class="change-line changed">Исправлены все недочёты эмуляции. Точность проверена
+                                специальными COM файлами-тестерами.</li>
+                        </ul>
+
+                        <h4 class="section-title">Компиляция</h4>
+                        <ul class="subsection">
+                            <li class="change-line changed">Исправление неточностей и добавление недостающих
+                                инструкций.</li>
+                        </ul>
+
+                        <h4 class="section-title">Форматы файлов</h4>
+                        <ul class="subsection">
+                            <li class="change-line added">Добавлена возможность сохранять и загружать бинарные
+                                файлы.</li>
+                        </ul>
+
+
+                    </div>
+                </article>
+
+                <article class="UpdateData">
+                    <header>
+                        <h3 id="Version">1.0.2</h3>
+                        <p id="Date">31.10.2024</p>
+                        <p id="Tag">UI fixes & QoL</p>
+                    </header>
+                    <div id="Info">
+                        <h4 class="section-title">Редактор кода</h4>
+                        <ul class="subsection">
+                            <li class="change-line added">Добавление поддержки многострочных комментарий как в
+                                редакторе кода так и в компиляторе.</li>
+                            <li class="change-line added">Добавление нового пункта описания комманд - Флаги.</li>
+                            <li class="change-line changed">Исправление копирования и стирания табуляции.</li>
+                            <li class="change-line changed">Исправление поиска.</li>
+                        </ul>
+
+                        <h4 class="section-title">Окно ввода</h4>
+                        <ul class="subsection">
+                            <li class="change-line added">Добавление ограничения ввода значения на уровне обработки
+                                ввода с клавиатуры.</li>
+                            <li class="change-line changed">Исправление ввода в порт 0x08.</li>
+                        </ul>
+
+                        <h4 class="section-title">Рабочие пространства</h4>
+                        <ul class="subsection">
+                            <li class="change-line added">Сохранение статуса видимости окна в группах окон.</li>
+                            <li class="change-line added">Добавление в настройки: Перезапись текущего рабочего
+                                пространства при выключении.</li>
+                        </ul>
+
+                        <h4 class="section-title">Эмуляция</h4>
+                        <ul class="subsection">
+                            <li class="change-line changed">Исправление неточностей эмуляции.</li>
+                        </ul>
+
+                        <h4 class="section-title">Дизассемблер</h4>
+                        <ul class="subsection">
+                            <li class="change-line added">Начальное внедрение дизассемблера (Окно). </li>
+                        </ul>
+
+                    </div>
+                </article>
+
+                <article class="UpdateData">
+                    <header>
+                        <h3 id="Version">1.0.1</h3>
+                        <p id="Date">12.10.2024</p>
+                        <p id="Tag">UI & Emulation fixes</p>
+                    </header>
+                    <div id="Info">
+                        <h4 class="section-title">Компиляция</h4>
+                        <ul class="subsection">
+                            <li class="change-line changed">Исправлен баг с компилятором при создании локальной метки.
+                                (теперь её можно задавать сразу полностью).</li>
+                        </ul>
+
+                        <h4 class="section-title">Символы</h4>
+                        <ul class="subsection">
+                            <li class="change-line added">Поддержка всех символов ASCII 1251 (Нужно для вывода в
+                                консоль)</li>
+                        </ul>
+
+
+                        <h4 class="section-title">Редактор кода</h4>
+                        <ul class="subsection">
+                            <li class="change-line added">Теперь инстуркции набранные заглавными буквами тоже
+                                подсвечиваются в редакторе кода.</li>
+                            <li class="change-line added">Добавление точек останова прямо из редактора кода.</li>
+                        </ul>
+
+                        <h4 class="section-title">Существующие виджеты</h4>
+                        <ul class="subsection">
+                            <li class="change-line added">Новый режим вывода консоли Char.</li>
+                            <li class="change-line changed">Исправлен баг при создании точки останова из списка
+                                маркеров.</li>
+                            <li class="change-line changed">Исправлен недочёт со слайдером в Мнемокоде.</li>
+                        </ul>
+
+                    </div>
+                </article>
+
+                <article class="UpdateData">
+                    <header>
+                        <h3 id="Version">1.0.0</h3>
+                        <p id="Date">09.10.2024</p>
+                        <p id="Tag">First release</p>
+                    </header>
+                    <div id="Info">
+                        <h4 class="section-title">Увидел свет!</h4>
+                        <ul class="subsection">
+                            <li class="change-line added">Релиз программы в мир! Есть много багов, но с этим можно
+                                работать.</li>
+                        </ul>
+                    </div>
+
+                </article>
+            </div>
+        </section>
+
+
+
+        <footer>
+            <p>© 2025 Коржунов А. С. Все права защищены.</p>
+            <a href="https://github.com/seedLBI/Emulator-Intel8080" target="_blank"> Github </a>
+            <br>
+            <a href="https://vk.com/seedlbi" target="_blank"> ВК </a>
+        </footer>
+
+    </main>
+
+    <script src="scripts/script.js"></script>
+</body>
+
+</html>

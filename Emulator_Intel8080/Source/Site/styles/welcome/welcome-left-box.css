@@ -1,0 +1,58 @@
+.left-box .rightbox{
+    position:relative;
+    height:100%;
+}
+
+
+.left-box{
+    width:60%;
+    background: rgb(251, 236, 200);
+    padding-left: 50px;
+    color:black;
+    font-weight:bold;
+    display: flex;
+    align-items: center;
+}
+
+.left-box #left-center-block{
+    position:relative;
+}
+
+.left-box #GradientText{
+  position: absolute;
+  width:100%;
+  top:90px;
+  font-size:4.5vw;
+  
+  background-size: 100% 100%;
+  background-position: center;
+
+  animation: textColorFlow 8s linear infinite;
+}
+
+
+.left-box #MainText{
+  margin-top: 10%;
+  text-align: left;
+  line-height: 1;
+
+  font-size:5.5vw;
+}
+
+.left-box #Version{
+    position:relative; 
+    margin-top: 3%;
+    font-size:2vw;
+}
+
+.left-box #Author{
+    position:absolute;
+    bottom:3%;
+    font-size:1.5vw;
+}
+
+.left-box{
+    --scalex: 0 px;
+    transform: translateX(var(--scrollX));
+    animation: slideInLeft 2s ease-out ;
+}

@@ -1,0 +1,100 @@
+.Download {
+    position:static;
+    padding-top: 75px;
+    color:black;
+    background: rgb(251, 236, 200,0);
+    font-size: 3vw;
+    margin-top:100vh;
+}
+
+#DownloadAnchor{
+    position:absolute;
+    top:calc(100vh);
+}
+
+
+.Download-Info-Block{
+    position:relative;
+    margin:150px 0px;
+    display: grid;
+    grid-template-columns: 50% 40%;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    align-items: center;
+    justify-items: center;
+}
+
+.Download-Left-Block{
+    max-width: 100%;
+    width:calc(1920px/2);
+    height:auto;
+    filter:drop-shadow(6px 6px 0px rgb(87, 130, 183));
+}
+
+.Download-Left-Block img{
+    width:100%;
+    height:auto;
+}
+
+.Download-Right-Block{
+    max-width: 100%;
+    width:630px;
+    height:auto;
+    padding-left: 20px;
+
+    display:flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+
+}
+
+.Download-Text-Motivation{
+    align-self: center;
+    font-size: 40px;
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+.Download-Text-Motivation em{
+    font-weight: bold;
+    padding-left: 10px;
+    padding-right: 10px;
+    background:rgb(87, 130, 183);
+    color: rgb(251, 236, 200);
+    font-style: normal;
+}
+
+.Download-Text-Quick-Description{
+    font-size: 23px;
+    padding-left: 20px;
+    margin-block: 0 0;
+    margin-bottom: 50px;
+}
+
+@media (max-width: 768px) {
+    .Download h2{
+        margin: 0 0;
+    }
+    .Download {
+        margin:0 0;
+    }
+    .Download-Info-Block{
+        grid-template-columns: 100%;
+        margin:0px 0px;
+        margin-bottom: 90px;
+    }
+    .Download-Left-Block{
+        grid-row:2;
+        
+    }
+    .Download-Right-Block{
+        grid-row:1;
+        margin: 0px 0px;
+        margin-bottom: 50px;
+        padding-left:0px;
+        overflow-wrap: break-word;
+    }
+
+}

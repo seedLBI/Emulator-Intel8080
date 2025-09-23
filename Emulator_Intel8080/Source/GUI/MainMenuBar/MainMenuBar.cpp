@@ -62,6 +62,8 @@ std::vector<NamedColor> MainMenuBar::GetDefaultDarkColors() {
 
 void MainMenuBar::Draw() {
 
+	heightMenu = 0.f;
+
 	authorPopup->Draw();
 
 	titleButtonRects.clear();
@@ -84,7 +86,14 @@ void MainMenuBar::Draw() {
 }
 
 void MainMenuBar::Draw_MainMenu() {
+
+	float height = ImGui::GetFrameHeight();
+	heightMenu += height;
+
 	if (ImGui::BeginMainMenuBar()) {
+
+
+
 
 		menuBarPos = ImGui::GetWindowPos();
 		menuBarSize = ImGui::GetWindowSize();
@@ -119,7 +128,7 @@ void MainMenuBar::Draw_MainMenu() {
 void MainMenuBar::Draw_SecondaryMenu() {
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_MenuBar;
 	float height = ImGui::GetFrameHeight();
-
+	heightMenu += height;
 
 
 	if (ImGui::BeginViewportSideBar("##SecondaryMenuBar", NULL, ImGuiDir_Up, height, window_flags)) {
@@ -138,7 +147,7 @@ void MainMenuBar::Draw_SecondaryMenu() {
 				std::string name = u8"Создать новый файл";
 				std::string comb = keyCombinationHandler->GetStrCombinationByName(u8"Новый файл");
 				if (comb.empty() == false)
-					name += "(" + comb + ")";
+					name += " (" + comb + ")";
 				ImGui::SetTooltip(name.c_str());
 			}
 				
@@ -150,7 +159,7 @@ void MainMenuBar::Draw_SecondaryMenu() {
 				std::string name = u8"Открыть файл";
 				std::string comb = keyCombinationHandler->GetStrCombinationByName(u8"Открыть файл");
 				if (comb.empty() == false)
-					name += "(" + comb + ")";
+					name += " (" + comb + ")";
 				ImGui::SetTooltip(name.c_str());
 			}
 
@@ -162,7 +171,7 @@ void MainMenuBar::Draw_SecondaryMenu() {
 				std::string name = u8"Сохранить файл";
 				std::string comb = keyCombinationHandler->GetStrCombinationByName(u8"Сохранить");
 				if (comb.empty() == false)
-					name += "(" + comb + ")";
+					name += " (" + comb + ")";
 				ImGui::SetTooltip(name.c_str());
 			}
 
@@ -643,13 +652,11 @@ inline void MainMenuBar::Draw_MainMenu_Setting() {
 }
 inline void MainMenuBar::Draw_MainMenu_About() {
 
-
 	if (ImGui::MenuItem(u8" О авторе ")) {
 		authorPopup->Open();
 	}
 	PushSizeButtonIntoList();
 }
-
 
 
 bool MainMenuBar::IsPointOverTitleButton(const POINT& pt) const {
@@ -659,6 +666,10 @@ bool MainMenuBar::IsPointOverTitleButton(const POINT& pt) const {
 			return true;
 	}
 	return false;
+}
+
+int MainMenuBar::GetHeightMenu() {
+	return heightMenu;
 }
 
 void MainMenuBar::LoadIcon() {

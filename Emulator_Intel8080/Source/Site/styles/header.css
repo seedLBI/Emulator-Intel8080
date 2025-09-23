@@ -1,0 +1,161 @@
+header {
+    position: fixed;
+    display: flex;
+    width: 100%;
+    height: auto;
+    max-height: 70px;
+
+    border-bottom-width: 2px;
+    border-bottom-color: rgba(255, 255, 255, 0.316);
+    border-bottom-style: solid;
+
+
+    background: rgba(87, 130, 183,1);
+    font-size: 1.5em;
+
+    animation: slideInTop 0.5s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
+
+    z-index: 50;
+}
+
+header button {
+    display: none;
+}
+
+header a {
+    text-decoration: none;
+    color: rgb(251, 236, 200);
+    margin: 0 8px;
+    text-shadow: 0px 0px 12px rgba(255, 233, 70, 0);
+}
+
+header a:hover {
+    animation: anim_hover_buttons 0.2s ease forwards;
+}
+
+header ul {
+    padding: 0;
+    margin: 0;
+}
+
+header li {
+    display: inline-flex;
+    list-style: none;
+}
+
+.header-separator {
+    display:inline-flex;
+    width:2px;
+    height:25px;
+    background:rgb(251, 236, 200);
+    filter:blur(1px);
+    margin: 0 12px;
+
+}
+
+.header-outer {
+    position: relative;
+    width: 100%;
+}
+
+.header-buttons-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#LogoButton{
+    position: relative;
+    left:-10px;
+}
+
+#LogoButton img {
+    filter: invert(28%) sepia(95%) saturate(5000%) hue-rotate(40deg) brightness(750%) sepia(90%);
+    width: 50px;
+    height: 50px;
+}
+
+
+#DownloadNavButton {
+    animation: flashing 1s ease infinite;
+}
+
+#DownloadNavButton:hover {
+    animation: anim_hover_buttons 0.2s ease forwards;
+}
+
+.header-buttons {
+    margin: 10px 5px;
+}
+
+.mobile-popup-window{
+    display:none;
+}
+
+@media (max-width: 768px) {
+
+    .nav-menu,
+    .external-links-menu,
+    .header-separator {
+        display: none;
+    }
+
+    .header-buttons-container {
+        justify-content: left;
+    }
+
+    #LogoButton {
+        position: relative;
+        left: 10px;
+    }
+
+    header{
+        border-bottom: 2px solid rgba(251, 236, 200, 1);
+    }
+
+    header button {
+        position: relative;
+        display: block;
+        margin-left: auto;
+        right: 20px;
+
+        background: transparent;
+        color: rgb(251, 236, 200);
+        border: none;
+        font-size: 1.5em;
+    }
+
+    header button:hover {
+        animation: anim_hover_buttons 0.2s ease forwards;
+        cursor: pointer;
+    }
+
+    .mobile-popup-window{
+        position:absolute;
+        z-index: -20;
+        
+
+        top:72px;
+        display:block;
+        width:100%;
+        height:auto;
+        background:rgb(87, 130, 183);
+        display:flex;
+        flex-direction: column;
+        animation: slideInTop 0.5s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
+    }
+
+    .mobile-popup-window a{
+        font-size: 1.5em;
+    }
+
+    .mobile-popup-window li{
+        display:block;
+        align-self: center;
+        margin:5px 0;
+    }
+
+    .mobile-popup-window.hidden{
+        animation: slideOutTop 0.5s ease-out forwards;
+    }
+}

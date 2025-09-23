@@ -1,0 +1,160 @@
+.About {
+    position: static;
+    margin-top: 0vh;
+    padding-top: 75px;
+    color: black;
+    background: rgb(251, 236, 200);
+    font-size: 35px;
+    z-index: -4;
+
+}
+
+
+.item-about {
+    max-width: 1200px;
+    margin: 0px auto;
+    display: grid;
+    grid-template-columns: auto auto;
+    margin-bottom: 100px;
+    align-items: center;
+    justify-content: center;
+}
+
+.about-content.span {
+    display: inline-grid;
+    grid-column: span 2;
+    text-align: center;
+    grid-row: 1;
+}
+.about-content.left {
+    text-align: left;
+}
+.about-content.right {
+    text-align: right;
+}
+
+
+.about-image.span {
+    display: inline-grid;
+    grid-column: span 2;
+    grid-row: 2;
+}
+
+.about-image img {
+    max-width: 100%;
+    height: auto;
+    padding: 20px;
+    filter:drop-shadow(6px 6px 0px rgb(87, 130, 183));
+    z-index: 4;
+}
+
+.about-image.span img {
+
+    max-width: 100%;
+    height: auto;
+    padding: 0px;
+    margin-bottom: 6px;
+}
+
+.about-title {
+    margin-block: 0 0;
+    position: relative;
+    font-weight: 900;
+    font-size: 40px;
+    line-height: 40px;
+    margin-bottom: 10px;
+    z-index: 5;
+    background:rgb(251, 236, 200);
+
+    box-shadow: 5px 5px 0px rgb(225, 209, 173);
+}
+
+.about-description {
+    margin-block: 0 0;
+    position: relative;
+    font-size: 23px;
+    background:rgb(251, 236, 200);
+
+    box-shadow: 5px 5px 0px rgb(225, 209, 173);
+}
+
+.about-content.span .about-title{
+    box-shadow: 0px 0px 0px rgb(87, 130, 183);
+}
+
+.about-content.span .about-description{
+    box-shadow: 0px 0px 0px rgb(87, 130, 183);
+}
+
+.item-about strong {
+    color: rgb(87, 130, 183);
+    font-size: 23px;
+}
+
+.item-about ul{
+    text-align: left;
+    width:fit-content;
+    align-self: center;
+    justify-self: center;
+}
+
+
+
+
+@media (max-width: 768px) {
+
+    .item-about {
+        grid-template-columns: 1fr;
+        margin: 20px 5px;
+        gap: 20px;
+    }
+
+    .about-title {
+        font-size: 0.7em;
+        line-height: 1.4;
+        text-align: center;
+        box-shadow: none;
+        margin-bottom: 0px;
+    }
+
+    .about-description {
+        font-size: 1rem;
+        line-height: 1.6;
+        text-align: justify;
+        box-shadow: none;
+        padding: 10px 15px;
+    }
+
+    .item-about strong {
+        font-size: 1rem;
+    }
+
+    .about-image {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        margin: 0px 20px;
+        margin-bottom: 40px;
+
+
+        grid-row: 2;
+    }
+
+    .about-image img {
+        max-width: 90%;
+        height: auto;
+        padding: 0;
+        filter: drop-shadow(3px 3px 0px rgba(87, 130, 183, 0.4));
+    }
+
+    .about-image.span {
+        display: flex;
+        justify-content: center;
+    }
+
+    .about-content {
+        margin-bottom: 0px;
+        grid-row: 1;
+    }
+
+}

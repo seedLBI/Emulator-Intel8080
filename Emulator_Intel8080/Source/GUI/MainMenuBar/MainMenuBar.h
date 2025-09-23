@@ -51,6 +51,9 @@ public:
 	void Draw();
 	bool IsPointOverTitleButton(const POINT& pt) const;
 
+	int GetHeightMenu();
+
+
 	void LoadColors() override;
 	std::vector<NamedColor> GetDefaultLightColors() override;
 	std::vector<NamedColor> GetDefaultDarkColors() override;
@@ -72,6 +75,8 @@ private:
 
 	AuthorPopup* authorPopup = nullptr;
 
+
+	float heightMenu = 0.f;
 
 
 	void DrawLogo();

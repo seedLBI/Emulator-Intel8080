@@ -1,0 +1,160 @@
+.Update {
+    position: static;
+    margin-top: 0vh;
+    padding-top: 75px;
+    color: black;
+    background: rgb(251, 236, 200);
+    font-size: 25px;
+    z-index: -4;
+}
+
+
+.Update p,
+.Update h3{
+    padding:0;
+    margin: 0;
+}
+
+.UpdateContainer {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+
+
+.UpdateData {
+    margin-bottom: 25px;
+}
+
+.UpdateData #Info {
+    padding: 25px;
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+
+
+.UpdateData header {
+    position:relative;
+    display: grid;
+
+    width: auto;
+    height: auto;
+    max-height: 1000px;
+
+    animation:none;
+    font-size: 25px;
+
+    grid-template-columns: 100px 150px auto;
+    background-color: rgb(87, 130, 183);
+    color: rgb(251, 236, 200);
+    padding: 20px 25px;
+    align-items: center;
+}
+
+.UpdateData header #Version {
+    font-weight: 900;
+}
+
+.UpdateData header #Date:before {
+    content: "(";
+}
+
+.UpdateData header #Date:after {
+    content: ")";
+}
+
+.UpdateData header #Date {
+    font-weight: bold;
+    opacity: 0.5;
+}
+
+.UpdateData header #Tag {
+    background: rgb(251, 236, 200);
+    color: rgb(87, 130, 183);
+    padding: 2px 4px;
+    text-align: center;
+    margin: 0px 60px;
+}
+
+.section-title {
+    font-weight: 600;
+    color: black;
+    margin: 15px 0 10px 0;
+    font-size: 1.05rem;
+}
+
+.subsection {
+    margin-left: 20px;
+    padding-left: 15px;
+    border-left: 2px solid rgb(87, 130, 183);
+}
+
+.change-line {
+    display: block;
+    margin-bottom: 12px;
+    padding-left: 30px;
+    position: relative;
+}
+
+.change-line::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 6px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+}
+
+.added::before {
+    background: #48bb78;
+    content: ' ';
+    color: white;
+    font-weight: bolder;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.changed::before {
+    background: #ed8936;
+    content: ' ';
+    color: white;
+    font-weight: bold;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.removed::before {
+    background: #f56565;
+    content: ' ';
+    color: white;
+    font-weight: bold;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+@media (max-width: 768px) {
+
+
+    .Update>p {
+        font-size: 3rem;
+    }
+
+    .UpdateData header {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 10px;
+    }
+
+    #Version {
+        font-size: 1.5rem;
+    }
+}

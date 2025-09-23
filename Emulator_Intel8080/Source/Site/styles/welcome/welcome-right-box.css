@@ -1,0 +1,160 @@
+.right-box {
+    width: 40%;
+    background: rgb(87, 130, 183);
+    color: rgb(251, 236, 200);
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+.right-box #information {
+    position: relative;
+    font-size: 20px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto; 
+    padding-top: 80px;
+}
+
+.right-box #information #UpperBlock {
+    flex: 0 0 auto;
+    width: 100%;
+    height: 9vw;
+    background: url("/img/8080.png") center center/24vw no-repeat;
+    filter: invert(28%) sepia(95%) saturate(5000%) hue-rotate(40deg) brightness(750%) sepia(90%);
+}
+
+
+.right-box #information #CenterBlock {
+    width: 100%;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding-bottom: 3vw;
+}
+
+.right-box #BottomBlock {
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    position:relative;
+    font-size: 3vw;
+    width:100%;
+
+    line-height: 1;
+    text-align: center;
+    animation: shimmer_bobbing 0.7s infinite;
+    flex: 0 0 auto;
+    bottom:5%;
+}
+
+
+.right-box #information #TextBlock {
+    position: relative;
+    width: 100%;
+    height: auto;
+    font-size: 2vw;
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 7px;
+    box-sizing: border-box;
+}
+
+
+.right-box #information #ImageBlock {
+    width: 100%;
+    height:20vw;
+    display: flex;
+    box-sizing: border-box;
+
+}
+
+.right-box #information #ImageBlock #LeftSkipImage {
+    width: 5vw;
+    height: 100%;
+    margin-left: 5px;
+    background: url("/img/arrow_left_handmade.png") center center/50px no-repeat;
+    filter: drop-shadow(0px 0px 3px black);
+    transition: opacity 0.3s ease;
+}
+
+.right-box #information #ImageBlock #RightSkipImage {
+    width: 5vw;
+    height: 100%;
+    margin-right: 5px;
+    background: url("/img/arrow_left_handmade.png") center center/50px no-repeat;
+    transform: scaleX(-1);
+    filter: drop-shadow(0px 0px 3px black);
+    transition: opacity 0.3s ease;
+}
+
+#ImageBlock #LeftSkipImage:hover, #ImageBlock #RightSkipImage:hover {
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+
+.right-box #information #ImageBlock #ImageBox {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.right-box #information #ImageBlock #ImageBox #Image {
+    height: 90%;
+    width: 100%;
+    background: url("/img/screenshot_1.png") center center/100% no-repeat;
+    filter: drop-shadow(0px 0px 26px rgba(0, 0, 0, 0.414));
+    transition: opacity 0.2s ease-in-out;
+}
+
+#Image.fade {
+    opacity: 0;
+}
+
+
+.right-box #information #ImageBlock #ImageBox #ProgressBar {
+    position: relative;
+    height: 10%;
+    width: 100%;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3px;
+}
+
+#ProgressBar .circle {
+    background-color: rgb(251, 236, 200);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    transition: width 0.3s ease, height 0.3s ease, border 0.3s ease;
+}
+
+
+#ProgressBar .circle:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+}
+
+#ProgressBar .circle.selected {
+    background-color: rgb(251, 236, 200);
+    width: 12px;
+    height: 12px;
+    border-color: black;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 50%;
+}
+
+
+
+.right-box {
+    --scalex: 0 px;
+    transform: translateX(var(--scrollX));
+    animation: slideInRight 2s ease-out;
+}
