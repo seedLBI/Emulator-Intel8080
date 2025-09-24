@@ -35,21 +35,14 @@ window.addEventListener('scroll', () => {ChangePositionWelcomeParts(); });
 
 
 
-
-
-
-
-
-
-
 let circles = document.querySelectorAll(".circle");
 let circlesSelected;
 circles[0].classList.toggle("selected")
 circlesSelected = circles[0];
 let currentID_image = 0;
 
-let image_screenshots = document.getElementById("Image")
-
+let image_box = document.getElementById("Image")
+let image_screenshots = document.getElementById("SrcImageWelcome");
 
 function addIndexCurrentID() {
   if (currentID_image === 3)
@@ -75,15 +68,16 @@ function ChangeCircleImage(index) {
   circlesSelected.classList.toggle("selected");
   circles[index] = temp;
 
-  image_screenshots.classList.add("fade");
+  image_box.classList.add("fade");
   setTimeout(() => {
     currentID_image = index;
-    let url_image = `url("img/screenshot_${currentID_image + 1}.png")`;
-    image_screenshots.style.backgroundImage = url_image;
-    image_screenshots.classList.remove("fade");
+    let url_image = `img/screenshot_${currentID_image + 1}.png`;
+    image_screenshots.src = url_image;
+    image_box.classList.remove("fade");
   }, 200);
 
 }
+
 
 
 for (let index = 0; index < circles.length; index++) {
