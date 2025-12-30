@@ -47,7 +47,7 @@ void AuthorPopup::Draw() {
 	if (!isOpen)
 		return;
 
-	ImGui::OpenPopup(u8"О авторе");
+	ImGui::OpenPopup(u8"О программе");
 
 	static const ImGuiWindowFlags flagsWindow =
 		ImGuiWindowFlags_NoDocking |
@@ -80,7 +80,7 @@ void AuthorPopup::Draw() {
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowTitleAlign, ImVec2(0.5, 0.5));
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
-	if (ImGui::BeginPopupModal(u8"О авторе", &isOpen, flagsWindow)) {
+	if (ImGui::BeginPopupModal(u8"О программе", &isOpen, flagsWindow)) {
 
 
 
@@ -147,7 +147,7 @@ void AuthorPopup::Draw() {
 		ImGui::SetCursorPos(aa);
 		ImGui::Text("Github: ");
 		ImGui::SameLine();
-		if (ImGui::Button("github.com/seedLBI/Emulator-Intel8080")) {
+		if (ImGui::Button("https://github.com/seedLBI/IDE-NASM")) {
 			ShellExecute(0, 0, L"https://github.com/seedLBI/Emulator-Intel8080", 0, 0, SW_SHOW);
 		}
 		aa = ImGui::GetCursorPos();

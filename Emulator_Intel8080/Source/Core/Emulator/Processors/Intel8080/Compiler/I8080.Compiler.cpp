@@ -71,7 +71,7 @@ bool I8080_Compiler::Step1_MarkingAdresses() {
 
 	CounterForNeedCheck = 0;
 
-
+	
 
 	std::string LastMarker_name;
 

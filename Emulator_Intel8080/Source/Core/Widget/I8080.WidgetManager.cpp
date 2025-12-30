@@ -31,7 +31,7 @@ void I8080_WidgetManager::Draw() {
 			drawlist->AddRectFilled(
 				window->Pos,
 				{ window->Pos.x + window->Size.x,window->Pos.y + window->Size.y },
-				ImGui::ColorConvertFloat4ToU32(ImVec4(0.f, TimerFocus, 0.f, TimerFocus)));
+				ImGui::ColorConvertFloat4ToU32(ImVec4(0.f, 1.f, 0.f, TimerFocus*0.8f)));
 		}
 	}
 }

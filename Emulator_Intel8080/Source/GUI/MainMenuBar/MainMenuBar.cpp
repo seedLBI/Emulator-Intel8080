@@ -643,8 +643,7 @@ inline void MainMenuBar::Draw_MainMenu_Setting() {
 }
 inline void MainMenuBar::Draw_MainMenu_About() {
 
-
-	if (ImGui::MenuItem(u8" О авторе ")) {
+	if (ImGui::MenuItem(u8" О программе ")) {
 		authorPopup->Open();
 	}
 	PushSizeButtonIntoList();
