@@ -1,4 +1,4 @@
-#ifndef COMPILER_STABLE_H
+﻿#ifndef COMPILER_STABLE_H
 #define COMPILER_STABLE_H
 
 #include "Config_Compilier.h"
@@ -45,6 +45,7 @@ private:
 	std::vector<std::pair<std::string, uint16_t>> ConstsVector;
 	robin_hood::unordered_flat_map<std::string, uint16_t> Consts;
 	robin_hood::unordered_flat_map<std::string, uint16_t> Markers;
+	robin_hood::unordered_flat_map<uint16_t, std::string> AddressToMarker;
 	std::vector<VarsDebug> Vars;
 
 

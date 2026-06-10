@@ -1,4 +1,4 @@
-#include "I8080.Compiler.h"
+ï»¿#include "I8080.Compiler.h"
 
 #include "Utils/Text/Text.h"
 
@@ -45,6 +45,7 @@ TranslatorOutput I8080_Compiler::Compile(const std::vector<std::string>& Code) {
 
 	return Compiler::CompilerOutput;
 }
+
 void I8080_Compiler::Clear() {
 	Compiler::CompilerOutput.Clear();
 	splited_code.clear();
@@ -56,6 +57,7 @@ void I8080_Compiler::Clear() {
 	Vars.clear();
 	PosDotForNeedLine.clear();
 	NeedCheckThatLineIndex.clear();
+	AddressToMarker.clear();
 }
 
 
@@ -251,7 +253,7 @@ bool I8080_Compiler::Step1_MarkingAdresses() {
 					bool is_creating_new_marker = Element[0] == '.';
 					std::string marker = "";
 
-					// Ïîëüçîâàòåëü âðó÷íóþ ïðîïèñàë èìÿ ãëàâíîãî ìàðêåðà
+					// ÐŸÐ¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒ Ð²Ñ€ÑƒÑ‡Ð½ÑƒÑŽ Ð¿Ñ€Ð¾Ð¿Ð¸ÑÐ°Ð» Ð¸Ð¼Ñ Ð³Ð»Ð°Ð²Ð½Ð¾Ð³Ð¾ Ð¼Ð°Ñ€ÐºÐµÑ€Ð°
 
 					if (is_creating_new_marker == false) {
 
@@ -267,7 +269,7 @@ bool I8080_Compiler::Step1_MarkingAdresses() {
 							return false;
 						}
 						else {
-							// Íóæíî ïðîâåðèòü ãëîáàëüíûé ìàðêåð.
+							// ÐÑƒÐ¶Ð½Ð¾ Ð¿Ñ€Ð¾Ð²ÐµÑ€Ð¸Ñ‚ÑŒ Ð³Ð»Ð¾Ð±Ð°Ð»ÑŒÐ½Ñ‹Ð¹ Ð¼Ð°Ñ€ÐºÐµÑ€.
 
 							if (LastGlobalMarker_name.size() == 0) {
 								MakeError(ERROR_CREATE_ANONIM_MARKER, Line);
@@ -285,7 +287,7 @@ bool I8080_Compiler::Step1_MarkingAdresses() {
 					}
 					else {
 
-						// Ïîëüçîâàòåëü ñîçäà¸ò íîâûé ìàðêåð èñïîëüçóÿ ëîêàëüíûé ìåòêè
+						// ÐŸÐ¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒ ÑÐ¾Ð·Ð´Ð°Ñ‘Ñ‚ Ð½Ð¾Ð²Ñ‹Ð¹ Ð¼Ð°Ñ€ÐºÐµÑ€ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÑ Ð»Ð¾ÐºÐ°Ð»ÑŒÐ½Ñ‹Ð¹ Ð¼ÐµÑ‚ÐºÐ¸
 
 						if (LastGlobalMarker_name.size() == 0) {
 							MakeError(ERROR_CREATE_ANONIM_MARKER, Line);
@@ -310,7 +312,7 @@ bool I8080_Compiler::Step1_MarkingAdresses() {
 					Compiler::CompilerOutput.Line_and_Adress[Line] = CurrentAdress;
 
 					Markers[marker] = CurrentAdress;
-
+					AddressToMarker[CurrentAdress] = marker;
 					LastMarker_name = marker;
 
 
@@ -345,6 +347,7 @@ bool I8080_Compiler::Step1_MarkingAdresses() {
 				Compiler::CompilerOutput.Line_and_Adress[Line] = CurrentAdress;
 				adressed_code[Line] = CurrentAdress;
 				Markers[marker] = CurrentAdress;
+				AddressToMarker[CurrentAdress] = marker;
 
 				if (Consts.contains(marker)){
 					MakeError(ERROR_COLLISION_BETWEEN_NAMES_MARKER_AND_CONST, Line);
@@ -664,9 +667,12 @@ bool I8080_Compiler::Step3_MakeByteArray() {
 						Compiler::CompilerOutput.Line_and_Adress[Line] = adressed_code[Line] ;
 						ca.command = ".set: " + splited_code_raw[Line][i_element];
 
-						std::string MarkerName = FindIndexMarkerByAdress(Markers,adressed_code[Line]);
-						if (MarkerName.empty() == false) {
-							ca.marker = MarkerName;
+
+						//std::string MarkerName = FindIndexMarkerByAdress(Markers,adressed_code[Line]);
+
+						auto it = AddressToMarker.find(adressed_code[Line]);
+						if (it != AddressToMarker.end()) {
+							ca.marker = it->second;
 							ca.adress_marker_l = ca.adress_l;
 							ca.adress_marker_h = ca.adress_h;
 						}
@@ -716,9 +722,10 @@ bool I8080_Compiler::Step3_MakeByteArray() {
 						Compiler::CompilerOutput.Line_and_Adress[Line] = adressed_code[Line];
 						ca.command = command;
 
-						std::string MarkerName = FindIndexMarkerByAdress(Markers, adressed_code[Line]);
-						if (MarkerName.empty() == false) {
-							ca.marker = MarkerName;
+						//std::string MarkerName = FindIndexMarkerByAdress(Markers, adressed_code[Line]);
+						auto it = AddressToMarker.find(adressed_code[Line]);
+						if (it != AddressToMarker.end()) {
+							ca.marker = it->second;
 							ca.adress_marker_l = ca.adress_l;
 							ca.adress_marker_h = ca.adress_h;
 						}

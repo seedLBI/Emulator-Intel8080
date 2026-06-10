@@ -1,4 +1,4 @@
-#define SIZE_MEMORY 65536
+﻿#define SIZE_MEMORY 65536
 
 
 #ifndef I8080_H
@@ -75,16 +75,16 @@ public:
     std::shared_ptr<Momento> SaveState() override;
     void                     RestoreState(const std::shared_ptr<Momento>& momento) override;
 
-    void        SetModeProject(const ModeProject& mode);
+    void        SetModeProject( ModeProject mode);
     ModeProject GetModeProject();
 
 
 	bool IsWaitingPortInput();
 
-	void InputAnswer2Port(const uint8_t& Answer);
+	void InputAnswer2Port( uint8_t Answer);
 
-	void ToggleBreakPointPosition(const uint16_t& Position);
-    void SetBreakPointPosition(const uint16_t& Position, const BreakPointStates& state);
+	void ToggleBreakPointPosition( uint16_t Position);
+    void SetBreakPointPosition( uint16_t Position,  BreakPointStates state);
 
     uint8_t  GetRegisterFlags();
 
@@ -98,18 +98,17 @@ public:
 
 
 	uint16_t GetProgrammCounter();
-    void     SetProgrammCounter(const uint16_t& index);
+    void     SetProgrammCounter( uint16_t index);
 
     inline int GetAdressHL();
 
-	std::vector<Port*> Get_External_Peripherals();
-    uint8_t*           GetBreakpointsInMemory();
-    uint8_t*           GetMemory();
-	bool*              GetVisetedMemory();
+    std::array<Port*, 256>  Get_External_Peripherals();
+    uint8_t*                GetBreakpointsInMemory();
+    uint8_t*                GetMemory();
+	bool*                   GetVisetedMemory();
 
 private:
-
-	std::vector<Port*> External_Peripherals;
+    std::array<Port*, 256> External_Peripherals;
 
 	bool Flag_Waiting_Input = false;
 	bool Flag_GetAnswer = false;
@@ -150,57 +149,53 @@ private:
 	bool Viseted_Memory[SIZE_MEMORY];
     uint8_t BreakPoints[SIZE_MEMORY];
 
-    bool parityTable[256];
-    bool signTable[256];
-    bool zeroTable[256];
-    bool auxAddTable[256][256][2];
-    bool auxSubTable[256][256][2];
+    uint8_t signParityZeroTable[256];
+    void InitSignParityZeroTable();
     void InitParityTable();
     void InitSignTable();
     void InitZeroTable();
-    void InitAuxiliaryCarryTables();
 
-    inline void ALU(const uint8_t& opcode);
-    inline void ALU_WithHistorySaving(const uint8_t& opcode);
+    inline void ALU( uint8_t opcode);
+    inline void ALU_WithHistorySaving( uint8_t opcode);
 
-    inline void SetSP_nextAdress(const uint16_t& next_adress);
-    inline void SetPC(const uint16_t& adress);
-    inline void IncrementPC(const uint8_t& count);
+    inline void SetSP_nextAdress( uint16_t next_adress);
+    inline void SetPC( uint16_t adress);
+    inline void IncrementPC( uint8_t count);
     inline void IncrementPC();
 
-    inline void SetVisitedMemoryFromPC(const int& count);
+    inline void SetVisitedMemoryFromPC( int count);
     inline void SetVisitedMemoryFromPC();
 
 
-    inline void _SetFlagSign(const uint8_t& value);
-    inline void _SetFlagParuty(const uint8_t& value);
-    inline void _SetFlagZero(const uint8_t& value);
+    inline void _SetFlagSign( uint8_t value);
+    inline void _SetFlagParuty( uint8_t value);
+    inline void _SetFlagZero( uint8_t value);
 
-    inline void _SetFlagSignParutyZero(const uint8_t& value);
+    inline void _SetFlagSignParutyZero( uint8_t value);
 
     void _INPUT();
     void _OUTPUT();
     void _OUTPUT_COM();
 
-    inline void _MOV(uint8_t& valueTo, const uint8_t& valueFrom);
+    inline void _MOV(uint8_t& valueTo, uint8_t valueFrom);
     inline void _MVI(uint8_t& valueTo);
     inline void _CALL();
     inline void _JMP();
     inline void _RET();
-    inline void _ADD(const uint8_t& value);
-    inline void _ADC(const uint8_t& value);
-    inline void _DAD(const uint8_t& pair_element1, const uint8_t& pair_element2);
+    inline void _ADD( uint8_t value);
+    inline void _ADC( uint8_t value);
+    inline void _DAD( uint8_t pair_element1, uint8_t pair_element2);
     inline void _INX(uint8_t& pair_element1, uint8_t& pair_element2);
     inline void _DCX(uint8_t& pair_element1, uint8_t& pair_element2);
-    inline void _SUB(const uint8_t& value);
-    inline void _SBB(const uint8_t& value);
+    inline void _SUB( uint8_t value);
+    inline void _SBB( uint8_t value);
     inline void _INCREMENT(uint8_t& value);
     inline void _DECREMENT(uint8_t& value);
-    inline void _COMPARE(const uint8_t& value);
-    inline void _ANA(const uint8_t& value);
-    inline void _ORA(const uint8_t& value);
-    inline void _XRA(const uint8_t& value);
-    inline void _RST(const uint8_t& N);
+    inline void _COMPARE( uint8_t value);
+    inline void _ANA( uint8_t value);
+    inline void _ORA( uint8_t value);
+    inline void _XRA( uint8_t value);
+    inline void _RST( uint8_t N);
     void _MVI_A_imm8(); void _MVI_B_imm8(); void _MVI_C_imm8(); void _MVI_D_imm8(); void _MVI_E_imm8(); void _MVI_H_imm8(); void _MVI_L_imm8(); void _MVI_M_imm8();
     void _MOV_A_A(); void _MOV_A_B(); void _MOV_A_C(); void _MOV_A_D(); void _MOV_A_E(); void _MOV_A_H(); void _MOV_A_L(); void _MOV_A_M();
     void _MOV_B_A(); void _MOV_B_B(); void _MOV_B_C(); void _MOV_B_D(); void _MOV_B_E(); void _MOV_B_H(); void _MOV_B_L(); void _MOV_B_M();
@@ -241,7 +236,7 @@ private:
     void _EI(); void _DI();
     void _DAA();
 
-    inline void HiSetSP_nextAdress(const uint16_t& next_adress);
+    inline void HiSetSP_nextAdress( uint16_t next_adress);
     inline void Hi_CALL();
     void Hi_STAX_B(); void Hi_STAX_D(); void Hi_SHLD_addr16(); void Hi_STA_addr16();
     void Hi_PUSH_B();  void Hi_PUSH_D();  void Hi_PUSH_H();  void Hi_PUSH_PSW();
@@ -249,7 +244,7 @@ private:
     void Hi_MOV_M_A(); void Hi_MOV_M_B(); void Hi_MOV_M_C(); void Hi_MOV_M_D(); void Hi_MOV_M_E(); void Hi_MOV_M_H(); void Hi_MOV_M_L();
     void Hi_MVI_M_imm8();
     void Hi_RST_0();   void Hi_RST_1();  void Hi_RST_2();  void Hi_RST_3();  void Hi_RST_4();   void Hi_RST_5();  void Hi_RST_6();  void Hi_RST_7();
-    inline void Hi_RST(const uint8_t& N);
+    inline void Hi_RST( uint8_t N);
     void Hi_XTHL();
     void Hi_INR_M();
     void Hi_DCR_M();

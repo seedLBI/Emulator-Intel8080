@@ -1,13 +1,10 @@
-#include "I8080.h"
+ï»¿#include "I8080.h"
 
 I8080::I8080() : Processor(u8"Intel 8080") {
 	Init_External_Peripherals();
 	InitInstructions();
 	InitInstructionsWithHistory();
-	InitParityTable();
-	InitSignTable();
-	InitZeroTable();
-	InitAuxiliaryCarryTables();
+	InitSignParityZeroTable();
 
 	Reset();
 	EraseMemory();
@@ -15,56 +12,36 @@ I8080::I8080() : Processor(u8"Intel 8080") {
 }
 
 
-void I8080::InitParityTable() {
+void I8080::InitSignParityZeroTable() {
+
 	for (int value = 0; value < 256; value++) {
+
 		int count = 0;
-		for (uint8_t i = 0; i < 8; ++i) {
-			count += (((value) & (1 << i)) == (1 << i));
+		for (uint8_t j = 0; j < 8; ++j) {
+			count += (((value) & (1 << j)) == (1 << j));
 		}
-		parityTable[value] = (count % 2 == 0);
-	}
-}
-void I8080::InitSignTable() {
-	for (int value = 0; value < 256; value++) {
-		signTable[value] = value & 128;
-	}
-}
-void I8080::InitZeroTable() {
-	for (int value = 0; value < 256; value++) {
-		zeroTable[value] = (value == 0);
-	}
-}
-void I8080::InitAuxiliaryCarryTables() {
-	for (int a = 0; a < 256; a++) {
-		for (int b = 0; b < 256; b++) {
-			for (int c = 0; c < 2; c++) {
-				int lower_a = a & 0x0F;
-				int lower_b = b & 0x0F;
-				int sum = lower_a + lower_b + c;
-				auxAddTable[a][b][c] = (sum > 0x0F);
 
-				int diff = lower_a - lower_b - c;
-				auxSubTable[a][b][c] = (diff >= 0);
-			}
-		}
+		signParityZeroTable[value] =
+			(bool(value & 0x80) << 2)
+			| ((count % 2 == 0) << 1)
+			| (value == 0);
 	}
 }
 
-
-
-inline void I8080::_SetFlagSign(const uint8_t& value) {
-	Sign = signTable[value];
+inline void I8080::_SetFlagSign(uint8_t value) {
+	Sign = (signParityZeroTable[value] >> 2) & 0x01;
 }
-inline void I8080::_SetFlagParuty(const uint8_t& value) {
-	Parity = parityTable[value];
+inline void I8080::_SetFlagParuty(uint8_t value) {
+	Parity = (signParityZeroTable[value] >> 1) & 0x01;
 }
-inline void I8080::_SetFlagZero(const uint8_t& value) {
-	Zero = zeroTable[value];
+inline void I8080::_SetFlagZero(uint8_t value) {
+	Zero = signParityZeroTable[value] & 0x01;
 }
-inline void I8080::_SetFlagSignParutyZero(const uint8_t& value) {
-	Sign = signTable[value];
-	Parity = parityTable[value];
-	Zero = zeroTable[value];
+inline void I8080::_SetFlagSignParutyZero(uint8_t value) {
+	uint8_t f = signParityZeroTable[value];
+	Zero = f & 0x01;
+	Parity = (f >> 1) & 0x01;
+	Sign = (f >> 2) & 0x01;
 }
 
 
@@ -73,9 +50,7 @@ void I8080::Init_External_Peripherals() {
 	cout << "init ports processor:" << endl;
 #endif
 
-	External_Peripherals.resize(255);
-
-	for (int i = 0x00; i < 0xff; i++)
+	for (int i = 0x00; i < 256; i++)
 		External_Peripherals[i] = new Port(i);
 
 	External_Peripherals[ 0x02 ] = new Port_ConsoleOutput();
@@ -91,7 +66,7 @@ void I8080::Init_External_Peripherals() {
 
 void I8080::RestoreState(const std::shared_ptr<Momento>& momento) {
 
-	I8080_Momento* i8080_momento = dynamic_cast<I8080_Momento*>(momento.get());
+	I8080_Momento* i8080_momento = static_cast<I8080_Momento*>(momento.get());
 
 	A				   = i8080_momento->Get_A();
 	B				   = i8080_momento->Get_B();
@@ -175,17 +150,17 @@ uint16_t I8080::GetSP() {
 	return SP;
 }
 
-inline void I8080::SetSP_nextAdress(const uint16_t& next_adress) {
+inline void I8080::SetSP_nextAdress(uint16_t next_adress) {
 	Memory[SP]				 = (next_adress & 0x00ff);	    // next.low
 	Memory[uint16_t(SP + 1)] = (next_adress & 0xff00) >> 8; // next.high
 }
 
-inline void I8080::SetPC(const uint16_t& adress) {
+inline void I8080::SetPC(uint16_t adress) {
 	Viseted_Memory[adress] = true;
 	PC = adress;
 }
 
-inline void I8080::SetVisitedMemoryFromPC(const int& count) {
+inline void I8080::SetVisitedMemoryFromPC(int count) {
 	for (int i = PC; i < (PC + count); ++i) {
 		Viseted_Memory[i] = true;
 	}
@@ -203,7 +178,7 @@ inline void I8080::IncrementPC(const uint8_t& count) {
 }
 */
 
-inline void I8080::IncrementPC(const uint8_t& count) {
+inline void I8080::IncrementPC(uint8_t count) {
 	switch (count) {
 	case 1:
 		Viseted_Memory[PC] = true;
@@ -457,7 +432,7 @@ void I8080::ReloadProjectData() {
 	}
 }
 
-void I8080::SetModeProject(const ModeProject& mode) {
+void I8080::SetModeProject(ModeProject mode) {
 	if (mode != _ModeProject){
 
 		if (mode == ModeProject::COM) {
@@ -549,7 +524,7 @@ void I8080::Reset() {
 bool  I8080::IsWaitingPortInput() {
 	return Flag_Waiting_Input;
 }
-void  I8080::InputAnswer2Port(const uint8_t& Answer) {
+void  I8080::InputAnswer2Port(uint8_t Answer) {
 	Flag_GetAnswer = true;
 	Flag_Waiting_Input = false;
 
@@ -558,7 +533,7 @@ void  I8080::InputAnswer2Port(const uint8_t& Answer) {
 uint8_t* I8080::GetBreakpointsInMemory() {
 	return BreakPoints;
 }
-void  I8080::ToggleBreakPointPosition(const uint16_t& Position) {
+void  I8080::ToggleBreakPointPosition(uint16_t Position) {
 	if (BreakPoints[Position] == BreakPointStates::Disabled)
 		BreakPoints[Position] = BreakPointStates::Enabled;
 	else
@@ -566,7 +541,7 @@ void  I8080::ToggleBreakPointPosition(const uint16_t& Position) {
 }
 
 
-void I8080::SetBreakPointPosition(const uint16_t& Position, const BreakPointStates& state) {
+void I8080::SetBreakPointPosition(uint16_t Position, BreakPointStates state) {
 	BreakPoints[Position] = state;
 }
 void I8080::RemoveAllBreakPoints() {
@@ -586,12 +561,12 @@ uint16_t I8080::GetProgrammCounter() {
 	return PC;
 }
 
-void I8080::SetProgrammCounter(const uint16_t& index) {
+void I8080::SetProgrammCounter(uint16_t index) {
 	SetPC(index);
 	SetFlagStop(false);
 }
 
-std::vector<Port*> I8080::Get_External_Peripherals() {
+std::array<Port*,256> I8080::Get_External_Peripherals() {
 	return External_Peripherals;
 }
 
@@ -647,7 +622,7 @@ void I8080::_DI() {
 	IncrementPC();
 }
 
-void I8080::_XRA(const uint8_t& value) {
+void I8080::_XRA(uint8_t value) {
 	CountTicks += 4;
 
 	A = A ^ value;
@@ -690,11 +665,11 @@ void I8080::_XRI_imm8() {
 	_XRA(Memory[PC]);
 }
 
-void I8080::_SUB(const uint8_t& value) {
+void I8080::_SUB(uint8_t value) {
 	CountTicks += 4;
 
 	
-	AuxiliaryCarry = auxSubTable[A][value][0];
+	AuxiliaryCarry = ((A & 0x0F) >= (value & 0x0F));
 	Carry = (A < value);
 
 	A -= value;
@@ -763,11 +738,11 @@ void I8080::_RAR() {
 	IncrementPC();
 }
 
-void I8080::_SBB(const uint8_t& value) {
+void I8080::_SBB(uint8_t value) {
 	CountTicks += 4;
 
 	bool C_old = Carry;
-	AuxiliaryCarry = auxSubTable[A][value][Carry];
+	AuxiliaryCarry = (((A & 0x0F) - (value & 0x0F) - Carry) >= 0);
 	Carry = (uint16_t(A) < uint16_t(value) + uint16_t(Carry));
 
 	A -= value;
@@ -840,7 +815,7 @@ void I8080::_STA_addr16() {
 	IncrementPC(3);
 }
 
-inline void I8080::_RST(const uint8_t& N) {
+inline void I8080::_RST(uint8_t N) {
 	CountTicks += 11;
 
 	SP = SP - 2;
@@ -1164,7 +1139,7 @@ void I8080::_HLT() {
 	SetFlagStop(true);
 }
 
-inline void I8080::_ORA(const uint8_t& value) {
+inline void I8080::_ORA(uint8_t value) {
 	CountTicks += 4;
 
 
@@ -1241,7 +1216,7 @@ void I8080::_MVI_M_imm8() {
 	_MVI(Memory[GetAdressHL()]);
 }
 
-inline void I8080::_MOV(uint8_t& valueTo, const uint8_t& valueFrom) {
+inline void I8080::_MOV(uint8_t& valueTo, uint8_t valueFrom) {
 	CountTicks += 5;
 	valueTo = valueFrom;
 	IncrementPC();
@@ -1507,8 +1482,9 @@ void I8080::_LDAX_D() {
 }
 void I8080::_LHLD_addr16() {
 	CountTicks += 16;
-	L = Memory[Memory[PC + 2] * 256 + Memory[PC + 1]];
-	H = Memory[Memory[PC + 2] * 256 + Memory[PC + 1] + 1];
+	const uint16_t addr = (Memory[PC + 2] << 8) | Memory[PC + 1];
+	L = Memory[addr];
+	H = Memory[addr + 1];
 	IncrementPC(3);
 }
 void I8080::_LDA_addr16() {
@@ -1600,8 +1576,8 @@ inline void I8080::_INX(uint8_t& pair_element1, uint8_t& pair_element2) {
 	IncrementPC();
 }
 inline void I8080::_INCREMENT(uint8_t& value) {
-
-	AuxiliaryCarry = auxAddTable[value][1][0];
+	//
+	AuxiliaryCarry = (value & 0x0F) == 0x0F;
 	++value;
 	_SetFlagSignParutyZero(value);
 
@@ -1645,16 +1621,15 @@ void I8080::_INX_H() {
 	_INX(H, L);
 }
 void I8080::_INX_SP() {
-	unsigned char f = SP / 256, s = SP % 256;
+	uint8_t f = SP >> 8, s = SP & 0xFF;
 	_INX(f, s);
-	SP = f * 256 + s;
+	SP = (uint16_t(f) << 8) | s;
 }
 
 inline void I8080::_DECREMENT(uint8_t& value) {
 	CountTicks += 5;
 
-
-	AuxiliaryCarry = auxSubTable[value][1][0];
+	AuxiliaryCarry = (value & 0x0F) != 0x00;
 	--value;
 	_SetFlagSignParutyZero(value);
 
@@ -1709,12 +1684,12 @@ void I8080::_DCX_H() {
 	_DCX(H, L);
 }
 void I8080::_DCX_SP() {
-	uint8_t f = SP / 256, s = SP % 256;
+	uint8_t f = SP >> 8, s = SP & 0xFF;
 	_DCX(f, s);
-	SP = f * 256 + s;
+	SP = (uint16_t(f) << 8) | s;
 }
 
-inline void I8080::_DAD(const uint8_t& pair_element1, const uint8_t& pair_element2) {
+inline void I8080::_DAD(uint8_t pair_element1, uint8_t pair_element2) {
 	CountTicks += 10;
 
 	const uint32_t value = (static_cast<uint16_t>(pair_element1) << 8) | pair_element2;
@@ -1722,7 +1697,7 @@ inline void I8080::_DAD(const uint8_t& pair_element1, const uint8_t& pair_elemen
 
 	HL += value;
 
-	Carry = (HL > 0xFFFF) ? 1 : 0;  // Àëüòåðíàòèâíî: (HL >> 16) & 1
+	Carry = (HL > 0xFFFF) ? 1 : 0;  // ÐÐ»ÑŒÑ‚ÐµÑ€Ð½Ð°Ñ‚Ð¸Ð²Ð½Ð¾: (HL >> 16) & 1
 
 	H = static_cast<uint8_t>(HL >> 8);
 	L = static_cast<uint8_t>(HL);
@@ -1741,12 +1716,11 @@ void I8080::_DAD_H() {
 	_DAD(H, L);
 }
 void I8080::_DAD_SP() {
-	_DAD(SP / 256, SP % 256);
+	_DAD(SP >> 8, SP & 0xFF);
 }
-inline void I8080::_COMPARE(const uint8_t& value) {
+inline void I8080::_COMPARE(uint8_t value) {
 	CountTicks += 4;
-
-	AuxiliaryCarry = auxSubTable[A][value][0];
+	AuxiliaryCarry = ((A & 0x0F) >= (value & 0x0F));
 	Carry = A < value;
 
 	const uint8_t temp = A - value;
@@ -1863,7 +1837,7 @@ void I8080::_CM() {
 	}
 }
 
-inline void I8080::_ANA(const uint8_t& value) {
+inline void I8080::_ANA(uint8_t value) {
 	CountTicks += 4;
 
 	Carry = 0;
@@ -1907,10 +1881,10 @@ void I8080::_ANI_imm8() {
 	_ANA(Memory[PC]);
 }
 
-inline void I8080::_ADD(const uint8_t& value) {
+inline void I8080::_ADD(uint8_t value) {
 	CountTicks += 4;
 
-	AuxiliaryCarry = auxAddTable[A][value][0];
+	AuxiliaryCarry = (((A & 0x0F) + (value & 0x0F) + 0) > 0x0F);
 
 	//AuxiliaryCarry = (A&0b00001111) + (value&0b00001111) > 0b00001111;
 	Carry = (uint16_t(A) + uint16_t(value) > 0x00ff);
@@ -1954,11 +1928,11 @@ void I8080::_ADI_imm8() {
 }
 
 
-void I8080::_ADC(const uint8_t& value) {
+void I8080::_ADC(uint8_t value) {
 	CountTicks += 4;
 
 	bool C_old = Carry;
-	AuxiliaryCarry = auxAddTable[A][value][Carry];
+	AuxiliaryCarry = (((A & 0x0F) + (value & 0x0F) + Carry) > 0x0F);
 	Carry = uint16_t(A) + uint16_t(value) + Carry > 0x00FF;
 
 	A += value;
@@ -2003,8 +1977,8 @@ void I8080::_ACI_imm8() {
 
 
 
-inline void I8080::HiSetSP_nextAdress(const uint16_t& next_adress) {
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {SP,Memory[SP]},{uint16_t(SP + 1),Memory[uint16_t(SP + 1)]} });
+inline void I8080::HiSetSP_nextAdress(uint16_t next_adress) {
+	static_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {SP,Memory[SP]},{uint16_t(SP + 1),Memory[uint16_t(SP + 1)]} });
 
 	Memory[SP]               = (next_adress & 0x00ff);	    // next.low
 	Memory[uint16_t(SP + 1)] = (next_adress & 0xff00) >> 8; // next.high
@@ -2022,13 +1996,13 @@ inline void I8080::Hi_CALL() {
 }
 void I8080::Hi_STAX_B() {
 	CountTicks += 7;
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {B * 256 + C,Memory[B * 256 + C]} });
+	static_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {B * 256 + C,Memory[B * 256 + C]} });
 	Memory[B * 256 + C] = A;
 	IncrementPC();
 }
 void I8080::Hi_STAX_D() {
 	CountTicks += 7;
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({{ D * 256 + E,Memory[D * 256 + E] }});
+	static_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({{ D * 256 + E,Memory[D * 256 + E] }});
 	Memory[D * 256 + E] = A;
 	IncrementPC();
 }
@@ -2038,7 +2012,7 @@ void I8080::Hi_SHLD_addr16() {
 	unsigned int l = Memory[PC + 1];
 	unsigned int h = Memory[PC + 2];
 
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {h * 256 + l,Memory[h * 256 + l]},  {h * 256 + l + 1,Memory[h * 256 + l + 1]} });
+	static_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {h * 256 + l,Memory[h * 256 + l]},  {h * 256 + l + 1,Memory[h * 256 + l + 1]} });
 
 	Memory[h * 256 + l] = L;
 	Memory[h * 256 + l + 1] = H;
@@ -2050,7 +2024,7 @@ void I8080::Hi_STA_addr16() {
 	unsigned int l = Memory[PC + 1];
 	unsigned int h = Memory[PC + 2];
 
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {h * 256 + l,Memory[h * 256 + l]} });
+	static_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {h * 256 + l,Memory[h * 256 + l]} });
 
 	Memory[h * 256 + l] = A;
 
@@ -2124,7 +2098,7 @@ void I8080::Hi_CM() {
 }
 
 
-inline void I8080::Hi_RST(const uint8_t& N) {
+inline void I8080::Hi_RST( uint8_t N) {
 	CountTicks += 11;
 
 	SP = SP - 2;
@@ -2167,7 +2141,7 @@ void I8080::Hi_RST_7() {
 void I8080::Hi_PUSH_B() {
 	CountTicks += 11;
 
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {uint16_t(SP - 1),Memory[uint16_t(SP - 1)]},{uint16_t(SP - 2),Memory[uint16_t(SP - 2)]} });
+	static_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {uint16_t(SP - 1),Memory[uint16_t(SP - 1)]},{uint16_t(SP - 2),Memory[uint16_t(SP - 2)]} });
 
 	SP--;
 	Memory[SP] = B;
@@ -2178,7 +2152,7 @@ void I8080::Hi_PUSH_B() {
 void I8080::Hi_PUSH_D() {
 	CountTicks += 11;
 
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {uint16_t(SP - 1),Memory[uint16_t(SP - 1)]},{uint16_t(SP - 2),Memory[uint16_t(SP - 2)]} });
+	static_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {uint16_t(SP - 1),Memory[uint16_t(SP - 1)]},{uint16_t(SP - 2),Memory[uint16_t(SP - 2)]} });
 	SP--;
 	Memory[SP] = D;
 	SP--;
@@ -2188,7 +2162,7 @@ void I8080::Hi_PUSH_D() {
 void I8080::Hi_PUSH_H() {
 	CountTicks += 11;
 
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {uint16_t(SP - 1),Memory[uint16_t(SP - 1)]},{uint16_t(SP - 2),Memory[uint16_t(SP - 2)]} });
+	static_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {uint16_t(SP - 1),Memory[uint16_t(SP - 1)]},{uint16_t(SP - 2),Memory[uint16_t(SP - 2)]} });
 	SP--;
 	Memory[SP] = H;
 	SP--;
@@ -2200,7 +2174,7 @@ void I8080::Hi_PUSH_PSW() {
 
 	uint8_t Flags = GetRegisterFlags();
 
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {uint16_t(SP - 1),Memory[uint16_t(SP - 1)]},{uint16_t(SP - 2),Memory[uint16_t(SP - 2)]} });
+	static_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {uint16_t(SP - 1),Memory[uint16_t(SP - 1)]},{uint16_t(SP - 2),Memory[uint16_t(SP - 2)]} });
 	SP--;
 	Memory[SP] = A;
 	SP--;
@@ -2214,50 +2188,50 @@ void I8080::Hi_PUSH_PSW() {
 
 void I8080::Hi_MOV_M_A() {
 	CountTicks += 2;
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {GetAdressHL(),Memory[GetAdressHL()]} });
+	static_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {GetAdressHL(),Memory[GetAdressHL()]} });
 	_MOV(Memory[GetAdressHL()], A);
 
 }
 void I8080::Hi_MOV_M_B() {
 	CountTicks += 2;
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {GetAdressHL(),Memory[GetAdressHL()]} });
+	static_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {GetAdressHL(),Memory[GetAdressHL()]} });
 	_MOV(Memory[GetAdressHL()], B);
 }
 void I8080::Hi_MOV_M_C() {
 	CountTicks += 2;
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {GetAdressHL(),Memory[GetAdressHL()]} });
+	static_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {GetAdressHL(),Memory[GetAdressHL()]} });
 	_MOV(Memory[GetAdressHL()], C);
 }
 void I8080::Hi_MOV_M_D() {
 	CountTicks += 2;
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {GetAdressHL(),Memory[GetAdressHL()]} });
+	static_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {GetAdressHL(),Memory[GetAdressHL()]} });
 	_MOV(Memory[GetAdressHL()], D);
 }
 void I8080::Hi_MOV_M_E() {
 	CountTicks += 2;
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {GetAdressHL(),Memory[GetAdressHL()]} });
+	static_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {GetAdressHL(),Memory[GetAdressHL()]} });
 	_MOV(Memory[GetAdressHL()], E);
 }
 void I8080::Hi_MOV_M_H() {
 	CountTicks += 2;
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {GetAdressHL(),Memory[GetAdressHL()]} });
+	static_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {GetAdressHL(),Memory[GetAdressHL()]} });
 	_MOV(Memory[GetAdressHL()], H);
 }
 void I8080::Hi_MOV_M_L() {
 	CountTicks += 2;
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {GetAdressHL(),Memory[GetAdressHL()]} });
+	static_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {GetAdressHL(),Memory[GetAdressHL()]} });
 	_MOV(Memory[GetAdressHL()], L);
 }
 
 void I8080::Hi_MVI_M_imm8() {
 	CountTicks += 3;
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {GetAdressHL(),Memory[GetAdressHL()]} });
+	static_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {GetAdressHL(),Memory[GetAdressHL()]} });
 	_MVI(Memory[GetAdressHL()]);
 }
 
 void I8080::Hi_XTHL() {
 	CountTicks += 18;
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {uint16_t(SP),Memory[SP]},{uint16_t(SP + 1),Memory[SP + 1]} });
+	static_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {uint16_t(SP),Memory[SP]},{uint16_t(SP + 1),Memory[SP + 1]} });
 
 	std::swap(H, Memory[SP + 1]);
 	std::swap(L, Memory[SP]);
@@ -2268,12 +2242,12 @@ void I8080::Hi_XTHL() {
 
 void I8080::Hi_INR_M() {
 	CountTicks += 5;
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {GetAdressHL(),Memory[GetAdressHL()]} });
+	static_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {GetAdressHL(),Memory[GetAdressHL()]} });
 	_INCREMENT(Memory[GetAdressHL()]);
 }
 void I8080::Hi_DCR_M() {
 	CountTicks += 5;
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {GetAdressHL(),Memory[GetAdressHL()]} });
+	static_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_changedMemory({ {GetAdressHL(),Memory[GetAdressHL()]} });
 	_DECREMENT(Memory[GetAdressHL()]);
 }
 
@@ -2303,7 +2277,7 @@ void I8080::Hi_INPUT() {
 
 	}
 
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_MomentoPort(External_Peripherals[Memory[PC + 1]]->SaveState());
+	static_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_MomentoPort(External_Peripherals[Memory[PC + 1]]->SaveState());
 
 	A = External_Peripherals[Memory[PC + 1]]->GetOutput();
 	CountTicks += 10;
@@ -2312,7 +2286,7 @@ void I8080::Hi_INPUT() {
 void I8080::Hi_OUTPUT() {
 	CountTicks += 10;
 
-	dynamic_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_MomentoPort(External_Peripherals[Memory[PC + 1]]->SaveState());
+	static_cast<I8080_Momento*>(ptr_To_Last_Momento.get())->Set_MomentoPort(External_Peripherals[Memory[PC + 1]]->SaveState());
 
 	External_Peripherals[Memory[PC + 1]]->SetInput(A);
 	IncrementPC(2);
@@ -2320,11 +2294,11 @@ void I8080::Hi_OUTPUT() {
 
 
 
-inline void I8080::ALU(const uint8_t& opcode) {
+inline void I8080::ALU( uint8_t opcode) {
 	(this->*instructions[opcode])();
 }
 
-inline void I8080::ALU_WithHistorySaving(const uint8_t& opcode) {
+inline void I8080::ALU_WithHistorySaving( uint8_t opcode) {
 	(this->*instructionsWithHistory[opcode])();
 }
 
